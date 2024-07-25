@@ -1,0 +1,29 @@
+
+
+```{r}
+hrs16_cog <- readRDS(fs::path(r_objects_folder, "016_hrs16_cog.rds"))
+```
+
+# Rescaling cognitive items
+
+The cognitive items were rescaled using the min/max normalization.
+
+```{r}
+#| tbl-cap: Descriptive statistics of cognitive items after rescaling
+
+hrs16_cog %>%
+  select(starts_with("vd") & ends_with("z")) %>%
+  gtsummary::tbl_summary(
+    type = c(starts_with("vd")) ~ "continuous2",
+    statistic = gtsummary::all_continuous() ~ c(
+      "{N_nonmiss}",
+      "{mean} ({sd})",
+      "{median} ({p25}, {p75})",
+      "{min}, {max}"
+    )
+  )
+
+```
+
+
+

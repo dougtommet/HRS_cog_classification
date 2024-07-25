@@ -1,0 +1,34 @@
+---
+title: "HRS 2016 - Cognition classification"
+author: "Doug Tommet"
+date: '`r Sys.Date()`'
+format: 
+  html:
+    toc: true
+    self-contained: true
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+
+```{r}
+source(here::here("R", "001-libraries.R"))
+source(here::here("R", "002-folder_paths.R"))
+
+```
+
+```{r}
+source(here::here("R", "005-read_data.R"))
+source(here::here("R", "010-select_data.R"))
+source(here::here("R", "015-recode_cog_items.R"))
+source(here::here("R", "016-rescale_cog_items.R"))
+```
+
+
+
+{{< include _015-recode_cog_items.qmd >}}
+
+{{< include _016-rescale_cog_items.qmd >}}
+

@@ -1,0 +1,198 @@
+
+
+```{r}
+hrs16_cog <- readRDS(fs::path(r_objects_folder, "015_hrs16_cog.rds"))
+```
+
+# Recoding Cognitive Items
+
+This section show preliminary recoding of the cognitive items.
+
+In general, I tried to have higher values indicate correct or better performance.
+
+I recoded "don't know" and "refusal" to incorrect. These could be changed.
+
+If all the component values of a vd variable are NA, then I set the vd variable to NA.
+
+The tables show the recoded variable on the left column, the original variable in the center, and the sample size on the right column.
+
+## Orientation
+
+The number correct of the four orientation to time questions - Month, Day, Year and Day of week.
+
+```{r}
+#| tbl-cap: "vdori - Orientation to time - number correct"
+
+QSPtools::checkvar(hrs16_cog, vdori, PD151, PD152, PD153, PD154) %>%
+  gt::gt()
+```
+
+```{r}
+hrs16_cog %>%
+  select(vdori) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary(
+    type = c(starts_with("vd")) ~ "categorical"
+  )
+```
+
+## Count backwards
+
+
+```{r}
+#| tbl-cap: "vdcount: Count backwards"
+
+QSPtools::checkvar(hrs16_cog, vdcount, PD124, PD129) %>%
+  gt::gt()
+```
+
+```{r}
+hrs16_cog %>%
+  select(vdcount) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary(
+    type = c(starts_with("vd")) ~ "categorical"
+  )
+```
+
+## Object naming
+
+The scissors and cactus naming items have been combined into one item.
+
+```{r}
+#| tbl-cap: "vdlfl2: Scissors & Cactus - number correct"
+
+QSPtools::checkvar(hrs16_cog, vdlfl2, PD155, PD156) %>%
+  gt::gt()
+```
+
+```{r}
+hrs16_cog %>%
+  select(vdlfl2) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary(
+    type = c(starts_with("vd")) ~ "categorical"
+  )
+```
+
+## President/Vice-president
+
+The president and vice-president naming items have been combined into one item.
+
+```{r}
+#| tbl-cap: "vdlfl3: President and vice-president - number correct"
+
+QSPtools::checkvar(hrs16_cog, vdlfl3, PD157, PD158) %>%
+  gt::gt()
+```
+
+```{r}
+hrs16_cog %>%
+  select(vdlfl3) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary(
+    type = c(starts_with("vd")) ~ "categorical"
+  )
+```
+
+## Serial 7
+
+The new variable counts the number of correct responses on the serial 7.  Each item was checked so that the difference between consecutive items is 7.  So if a mistake was made early on, there is an opportunity to get the remaining items correct.
+
+```{r}
+#| tbl-cap: "PD142-PD146: Serial 7"
+QSPtools::checkvar(hrs16_cog, vdsevens, rPD142, rPD143, rPD144, rPD145, rPD146) %>%
+  gt::gt()
+```
+
+```{r}
+hrs16_cog %>%
+  select(vdsevens) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary(
+    type = c(starts_with("vd")) ~ "categorical"
+  )
+```
+
+## Animal naming
+
+This variable is the number of correct responses minus the number of errors.
+
+```{r}
+#| tbl-cap: "PD196: Animal naming"
+QSPtools::checkvar(hrs16_cog, vdlfl1, PD196, PD198) %>%
+  gt::gt()
+```
+
+```{r}
+hrs16_cog %>%
+  select(vdlfl1) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary(
+    type = c(starts_with("r")) ~ "categorical"
+  )
+```
+
+## Word recall
+
+I found two variables PD174 and PD184 that are the number of words recalled correctly, so we don't need to recreate these scores with PD182M1-PD182M13 and PD183M1-PD183M13.
+
+No recoding was done.
+
+Are we going to use both immediate and delayed recall? Or just delayed recall?
+
+```{r}
+#| tbl-cap: "vdwdimm: Immediate word recall"
+
+QSPtools::checkvar(hrs16_cog, vdwdimm, PD174) %>%
+  gt::gt()
+```
+
+```{r}
+hrs16_cog %>%
+  select(vdwdimm) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary(
+    type = c(starts_with("vd")) ~ "categorical"
+  )
+```
+
+
+```{r}
+#| tbl-cap: "vdwddel: Delayed word recall"
+
+QSPtools::checkvar(hrs16_cog, vdwddel, PD184) %>%
+  gt::gt()
+```
+
+```{r}
+hrs16_cog %>%
+  select(vdwddel) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary(
+    type = c(starts_with("vd")) ~ "categorical"
+  )
+```
+
+## Numeracy
+
+Recoded 996, 997, and 999 as missing.
+
+What do these scores mean? They range from 409 - 584.  Do they need to be standardized?
+
+```{r}
+#| tbl-cap: "vdexf7: Number series score"
+
+QSPtools::checkvar(hrs16_cog, vdexf7, PNSSCORE) %>%
+  gt::gt()
+```
+
+```{r}
+hrs16_cog %>%
+  select(vdexf7) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary(
+    type = c(starts_with("vd")) ~ "categorical"
+  )
+```
+
