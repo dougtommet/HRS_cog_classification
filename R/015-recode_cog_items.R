@@ -1,5 +1,5 @@
 
-hrs16_cog <- readRDS(fs::path(r_objects_folder, "010_hrs16_cog.rds"))
+hrs16_cog <- readRDS(fs::path(r_objects_folder, "011_hrs16_cog.rds"))
 
 hrs16_cog <- hrs16_cog %>%
   mutate(
@@ -69,7 +69,8 @@ hrs16_cog <- hrs16_cog %>%
                        PD146==999 ~ 0,  # refuse
                        !is.na(PD146) ~ 0   # incorrect number
     ),
-    rPD198 = case_when(PD198==98 ~ NA, # Animal errors
+    rPD198 = case_when(PD198==98 ~ 1, # Animal errors, considering the 98 to be a missing value
+                       is.na(PD198) ~ 1, # Replacing the missing values with the median value
                        TRUE ~ PD198),
     vdcount = case_when(PD124==1 | PD129==1 ~ 1, # Count backwards, 1st or 2nd try - correct
                         PD124==5 ~ 0,  # 1st try - incorrect
@@ -254,10 +255,10 @@ hrs16_cog_notes <- tribble(~v, ~notes,
   "vdlfl3", "This is the number of correct responses to the president/vice-president naming items.  It ranges from 0 - 2.",
   "vdcount", "This is an indicator for whether the count backwards from 20 item was correct on either the first or second try.",
   "vdsevens", "This is the number of correct responses to the serial sevens subtraction items.  It ranges from 0 - 5.",
-  "vdlfl1", "This is the score on the animal naming item. It is calculated as the number of animals correctly named minus the errors.",
+  "vdlfl1", "This is the score on the animal naming item. It is calculated as the number of animals correctly named minus the errors. Missing values on errors are set to 1 (the median value of errors).",
   "vdwdimm", "This is the number of words correctly recalled on immediate recall.  It ranges from 0 - 10.",
   "vdwddel", "This is the number of words correctly recalled on delayed recall.  It ranges from 0 - 10.",
-  "vdexf7", "This is the score on the number series test.  I am unfamiliar with this test."
+  "vdexf7", "This is the score on the number series test."
                            )
 
 # # This was from before deciding to use PD174

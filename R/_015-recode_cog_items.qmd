@@ -4,9 +4,9 @@
 hrs16_cog <- readRDS(fs::path(r_objects_folder, "015_hrs16_cog.rds"))
 ```
 
-# Recoding Cognitive Items
+# Recode cognitive items
 
-This section show preliminary recoding of the cognitive items.
+This section shows the recoding of the cognitive items.
 
 In general, I tried to have higher values indicate correct or better performance.
 
@@ -116,7 +116,7 @@ hrs16_cog %>%
 
 ## Animal naming
 
-This variable is the number of correct responses minus the number of errors.
+This variable is the number of correct responses minus the number of errors.  Missing values are set at the median value of errors.
 
 ```{r}
 #| tbl-cap: "PD196: Animal naming"
@@ -129,7 +129,7 @@ hrs16_cog %>%
   select(vdlfl1) %>%
   labelled::to_factor() %>%
   gtsummary::tbl_summary(
-    type = c(starts_with("r")) ~ "categorical"
+    type = c(starts_with("vd")) ~ "categorical"
   )
 ```
 
@@ -177,8 +177,6 @@ hrs16_cog %>%
 ## Numeracy
 
 Recoded 996, 997, and 999 as missing.
-
-What do these scores mean? They range from 409 - 584.  Do they need to be standardized?
 
 ```{r}
 #| tbl-cap: "vdexf7: Number series score"

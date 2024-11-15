@@ -1,0 +1,15 @@
+# Data
+
+The data used in this analysis comes from the 2016 wave of the HRS study. The data was directly downloaded from their website.
+
+The files used are:
+
+-   `trk2022tr_r.dta`
+
+-   `H16A_R.dta`
+
+-   `H16C_R.dta`
+
+-   `H16D_R.dta`
+
+To norm the factor scores, RNJ provided a dataset that identified the participants with normal cognition in the HCAP sample.

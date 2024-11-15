@@ -1,0 +1,40 @@
+
+```{r}
+hrs16_cog <- readRDS(fs::path(r_objects_folder, "011_hrs16_cog.rds"))
+
+```
+
+# Recode demographic variables
+
+This section shows the recoding of the demographic variables.
+
+Age came from the variable `PA019` and no recoding was done.
+
+Years of education came from the variable `SCHLYRS` and no recoding was done.  Five participants had their values changed based on RNJ's code.
+
+Female came from the variable `GENDER`.
+
+```{r}
+#| tbl-cap: "Coding of female indicator"
+
+QSPtools::checkvar(hrs16_cog, female, GENDER) %>%
+  gt::gt()
+```
+
+Black came from the variables `RACE` and `HISPANIC`.
+
+```{r}
+#| tbl-cap: "Coding of Black or African-American indicator"
+
+QSPtools::checkvar(hrs16_cog, black, RACE, HISPANIC) %>%
+  gt::gt()
+```
+
+Hispanic came from the variable `HISPANIC`.
+
+```{r}
+#| tbl-cap: "Coding of Hispanic indicator"
+
+QSPtools::checkvar(hrs16_cog, hisp, HISPANIC) %>%
+  gt::gt()
+```

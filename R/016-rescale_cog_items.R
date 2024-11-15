@@ -11,7 +11,7 @@ minmax <- function(x){
 }
 
 hrs16_cog <- hrs16_cog %>%
-  mutate(vdzoriz = minmax(vdori),
+  mutate(vdoriz = minmax(vdori),
          vdlfl2z = minmax(vdlfl2),
          vdlfl3z = minmax(vdlfl3),
          vdlfl1z = minmax(vdlfl1),

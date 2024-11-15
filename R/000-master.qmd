@@ -20,15 +20,26 @@ source(here::here("R", "002-folder_paths.R"))
 ```
 
 ```{r}
+#| eval: false
+
 source(here::here("R", "005-read_data.R"))
 source(here::here("R", "010-select_data.R"))
+source(here::here("R", "011-recode_demographics.R"))
 source(here::here("R", "015-recode_cog_items.R"))
 source(here::here("R", "016-rescale_cog_items.R"))
+source(here::here("R", "020-fit_models.R"))
+source(here::here("R", "025-norm_factor_score.R"))
 ```
 
+{{< include _005-read_data.qmd >}}
 
+{{< include _011-recode_demographics.qmd >}}
 
 {{< include _015-recode_cog_items.qmd >}}
 
 {{< include _016-rescale_cog_items.qmd >}}
+
+{{< include _020-fit_models.qmd >}}
+
+{{< include _025-norm_factor_score.qmd >}}
 

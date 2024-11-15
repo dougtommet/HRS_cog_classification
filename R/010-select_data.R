@@ -1,5 +1,9 @@
 
+
+tracker <- readRDS(fs::path(r_objects_folder, "005_tracker.rds"))
+h16a_r <- readRDS(fs::path(r_objects_folder, "005_h16a_r.rds"))
 h16d_r <- readRDS(fs::path(r_objects_folder, "005_h16d_r.rds"))
+normexcld <- readRDS(fs::path(r_objects_folder, "005_normexcld.rds"))
 
 hrs16_cog <- h16d_r %>%
   select(HHID, PN, PSUBHH,
@@ -25,6 +29,24 @@ hrs16_func <- h16d_r %>%
          PD531, PD532, PD533, PD534, PD535, PD536, PD537, PD538, PD539, PD540,
          PD541, PD542, PD543, PD544, PD545, PD546, PD547, PD548, PD549, PD550,
          PD551, PD552, PD553)
+
+
+tracker_demo <- tracker %>%
+  select(HHID, PN, PSUBHH,
+         GENDER, HISPANIC, RACE, SCHLYRS)
+
+h16a_r_demo <- h16a_r %>%
+  select(HHID, PN, PSUBHH,
+         PA019)
+
+hrs16_cog <- hrs16_cog %>%
+  left_join(tracker_demo, by = c("HHID" = "HHID", "PN" = "PN", "PSUBHH" = "PSUBHH")) %>%
+  left_join(h16a_r_demo, by = c("HHID" = "HHID", "PN" = "PN", "PSUBHH" = "PSUBHH")) %>%
+  left_join(normexcld, by = c("HHID" = "hhid", "PN" = "pn"))
+
+
+
+
 
 # From dropbox/work/pitch/posted/analysis/hrs coda/extract hrscogdata170322.do
 # callhrs_lg , datadrive($d/Laura/PITCH/HRS) substublist(2014) h(h)

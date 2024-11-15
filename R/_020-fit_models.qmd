@@ -1,0 +1,116 @@
+
+
+
+```{r}
+model1_h5_path <- here::here("mplus_output", "model1", "model1.h5")
+model2_h5_path <- here::here("mplus_output", "model2", "model2.h5")
+```
+
+```{r}
+item_df <- tribble(~item, ~label,
+"vdoriz",  "Orientation to time",
+"vdlfl1z",  "Animal naming",
+"vdlfl2z",  "Scissors & cactus",
+"vdlfl3z",  "President & vice-president",
+"vdcountz", "Count backwards from 20",
+"vdsevensz", "Serial sevens",
+"vdwdimmz", "Immediate word recall",
+"vdwddelz", "Delayed word recall",
+"vdexf7z", "Number series"
+)
+
+```
+
+# Model results
+
+A single factor CFA model was fit to the items.
+
+## Model 1
+
+The first model used all the items.
+
+The model fit for this model was "poor".
+
+```{r}
+mplush5::mplus.print.model.fit.information(model1_h5_path) %>%
+  filter(grepl("RMSEA : E", description) |
+         grepl("SRMR", description) |
+         grepl("CFI", description) ) %>%
+  gt::gt() %>%
+  gt::fmt_number(
+    columns = value,
+    decimals = 3
+  ) %>%
+  gt::cols_label(
+    description = "Fit statistic",
+    value = "Value"
+  )
+
+```
+
+
+```{r}
+mplush5::mplus.print.standardized.model.results(model1_h5_path, "stdyx") %>%
+  filter(grepl("F BY", Statement))  %>%
+  separate(Statement, into = c("f", "by", "item"), sep = " ") %>%
+  mutate(item = str_to_lower(item)) %>%
+  left_join(item_df, by = c("item" = "item")) %>%
+  select(item, label, Estimate) %>%
+  gt::gt() %>%
+  gt::fmt_number(
+    columns = Estimate,
+    decimals = 3
+  ) %>%
+  gt::cols_label(
+    item = "Item",
+    label = "Label",
+    Estimate = "Std Factor Loading"
+  )
+
+```
+
+
+## Model 2
+
+The second model removed the immediate word recall item.
+
+The model fit for this model was "good".
+
+```{r}
+mplush5::mplus.print.model.fit.information(model2_h5_path) %>%
+  filter(grepl("RMSEA : E", description) |
+         grepl("SRMR", description) |
+         grepl("CFI", description) ) %>%
+  gt::gt() %>%
+  gt::fmt_number(
+    columns = value,
+    decimals = 3
+  ) %>%
+  gt::cols_label(
+    description = "Fit statistic",
+    value = "Value"
+  )
+
+```
+
+
+```{r}
+mplush5::mplus.print.standardized.model.results(model2_h5_path, "stdyx") %>%
+  filter(grepl("F BY", Statement))  %>%
+  separate(Statement, into = c("f", "by", "item"), sep = " ") %>%
+  mutate(item = str_to_lower(item)) %>%
+  left_join(item_df, by = c("item" = "item")) %>%
+  select(item, label, Estimate) %>%
+  gt::gt() %>%
+  gt::fmt_number(
+    columns = Estimate,
+    decimals = 3
+  ) %>%
+  gt::cols_label(
+    item = "Item",
+    label = "Label",
+    Estimate = "Std Factor Loading"
+  )
+
+```
+
