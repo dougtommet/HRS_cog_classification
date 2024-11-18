@@ -17,7 +17,9 @@ Female came from the variable `GENDER`.
 ```{r}
 #| tbl-cap: "Coding of female indicator"
 
-QSPtools::checkvar(hrs16_cog, female, GENDER) %>%
+hrs16_cog %>%
+  mutate(GENDER = factor(GENDER, levels = c(1, 2),  labels = c("1.  Male", "2.  Female")) ) %>%
+  QSPtools::checkvar(female, GENDER) %>%
   gt::gt()
 ```
 
@@ -26,7 +28,15 @@ Black came from the variables `RACE` and `HISPANIC`.
 ```{r}
 #| tbl-cap: "Coding of Black or African-American indicator"
 
-QSPtools::checkvar(hrs16_cog, black, RACE, HISPANIC) %>%
+hrs16_cog %>%
+  mutate(
+    RACE = factor(RACE, levels = c(0, 1, 2, 7), 
+                  labels = c("0.  Not obtained", "1.  White/Caucasian", 
+                             "2.  Black or African American", "7.  Other")),
+    HISPANIC = factor(HISPANIC, levels = c(0, 1, 2, 3, 5),  
+                      labels = c("0.  Not obtained", "1.  Hispanic, Mexican", "2.  Hispanic, Other",
+                                 "3.  Hispanic, type unknown", "5.  Non-Hispanic"))) %>%
+  QSPtools::checkvar(black, RACE, HISPANIC) %>%
   gt::gt()
 ```
 
@@ -35,6 +45,11 @@ Hispanic came from the variable `HISPANIC`.
 ```{r}
 #| tbl-cap: "Coding of Hispanic indicator"
 
-QSPtools::checkvar(hrs16_cog, hisp, HISPANIC) %>%
+hrs16_cog %>%
+  mutate(
+    HISPANIC = factor(HISPANIC, levels = c(0, 1, 2, 3, 5),  
+                      labels = c("0.  Not obtained", "1.  Hispanic, Mexican", "2.  Hispanic, Other", 
+                                 "3.  Hispanic, type unknown", "5.  Non-Hispanic"))) %>%
+  QSPtools::checkvar(hisp, HISPANIC) %>%
   gt::gt()
 ```

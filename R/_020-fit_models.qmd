@@ -4,16 +4,18 @@
 ```{r}
 model1_h5_path <- here::here("mplus_output", "model1", "model1.h5")
 model2_h5_path <- here::here("mplus_output", "model2", "model2.h5")
+
+hrs16_cog <- readRDS(fs::path(r_objects_folder, "020_hrs16_cog.rds"))
 ```
 
 ```{r}
 item_df <- tribble(~item, ~label,
-"vdoriz",  "Orientation to time",
+"vdori",  "Orientation to time",
 "vdlfl1z",  "Animal naming",
-"vdlfl2z",  "Scissors & cactus",
-"vdlfl3z",  "President & vice-president",
-"vdcountz", "Count backwards from 20",
-"vdsevensz", "Serial sevens",
+"vdlfl2",  "Scissors & cactus",
+"vdlfl3",  "President & vice-president",
+"vdcount", "Count backwards from 20",
+"vdsevens", "Serial sevens",
 "vdwdimmz", "Immediate word recall",
 "vdwddelz", "Delayed word recall",
 "vdexf7z", "Number series"
@@ -114,3 +116,51 @@ mplush5::mplus.print.standardized.model.results(model2_h5_path, "stdyx") %>%
 
 ```
 
+### Factor scores
+
+This is the distribution of the factor scores from the final model.
+
+```{r}
+#| fig-cap: Distribution of factor scores by HCAP inclusion status
+
+
+F_mean <- hrs16_cog %>%
+  filter(!is.na(normexcld)) %>%
+  mutate(normexcld_f = factor(normexcld, labels = c("HCAP - Included sample", "HCAP - Excluded sample"))) %>%
+  group_by(normexcld_f) %>%
+  summarize(mean = mean(F, na.rm=TRUE))
+
+hrs16_cog %>%
+  filter(!is.na(normexcld)) %>%
+  mutate(normexcld_f = factor(normexcld, labels = c("HCAP - Included sample", "HCAP - Excluded sample"))) %>%
+  ggplot(aes(x = F)) +
+  geom_histogram() +
+  geom_vline(data = F_mean, aes(xintercept = mean), color = "red") +
+  facet_wrap(~normexcld_f, ncol=1) +
+  hrbrthemes::theme_ipsum()
+```
+
+
+```{r}
+#| fig-cap: Distribution of factor scores by HCAP inclusion status, including HRS sample
+
+F_mean <- hrs16_cog %>%
+  mutate(
+    f = factor(normexcld, labels = c("HCAP - Included sample", "HCAP - Excluded sample")),
+    normexcld_f = forcats::fct_explicit_na(f, "Non-HCAP HRS")
+    ) %>%
+  group_by(normexcld_f) %>%
+  summarize(mean = mean(F, na.rm=TRUE))
+
+hrs16_cog %>%
+  mutate(
+    f = factor(normexcld, labels = c("HCAP - Included sample", "HCAP - Excluded sample")),
+    normexcld_f = forcats::fct_explicit_na(f, "Non-HCAP HRS")
+    ) %>%
+  ggplot(aes(x = F)) +
+  geom_histogram() +
+  geom_vline(data = F_mean, aes(xintercept = mean), color = "red") +
+  facet_wrap(~normexcld_f, ncol=1) +
+  hrbrthemes::theme_ipsum()
+
+```

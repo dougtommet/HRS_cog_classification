@@ -11,15 +11,17 @@ minmax <- function(x){
 }
 
 hrs16_cog <- hrs16_cog %>%
-  mutate(vdoriz = minmax(vdori),
-         vdlfl2z = minmax(vdlfl2),
-         vdlfl3z = minmax(vdlfl3),
-         vdlfl1z = minmax(vdlfl1),
-         vdwdimmz = minmax(vdwdimm),
-         vdwddelz = minmax(vdwddel),
-         vdexf7z = minmax(vdexf7),
-         vdsevensz = minmax(vdsevens),
-         vdcountz = vdcount)
+  mutate(
+    # vdoriz = minmax(vdori),
+    # vdlfl2z = minmax(vdlfl2),
+    # vdlfl3z = minmax(vdlfl3),
+    vdlfl1z = minmax(vdlfl1),
+    vdwdimmz = minmax(vdwdimm),
+    vdwddelz = minmax(vdwddel),
+    vdexf7z = minmax(vdexf7),
+    # vdsevensz = minmax(vdsevens),
+    # vdcountz = vdcount
+    )
 
 
 

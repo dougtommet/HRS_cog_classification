@@ -23,8 +23,24 @@ The number correct of the four orientation to time questions - Month, Day, Year 
 ```{r}
 #| tbl-cap: "vdori - Orientation to time - number correct"
 
-QSPtools::checkvar(hrs16_cog, vdori, PD151, PD152, PD153, PD154) %>%
+hrs16_cog %>%
+  mutate(
+    PD151 = factor(PD151, levels = c(1, 5, 8, 9),  
+                      labels = c("1.  MONTH OK", "5.  MONTH NOT OK", "8.  DK (Don't Know)", 
+                                 "9.  RF (Refused)")),
+    PD152 = factor(PD152, levels = c(1, 5, 8, 9),  
+                      labels = c("1.  DAY OF MONTH OK", "5.  DAY OF MONTH NOT OK", "8.  DK (Don't Know)", 
+                                 "9.  RF (Refused)")),
+    PD153 = factor(PD153, levels = c(1, 5, 8, 9),  
+                      labels = c("1.  YEAR OK", "5.  YEAR NOT OK", "8.  DK (Don't Know)", 
+                                 "9.  RF (Refused)")),
+    PD154 = factor(PD154, levels = c(1, 5, 8, 9),  
+                      labels = c("1.  DAY OK", "5.  DAY NOT OK", "8.  DK (Don't Know)", 
+                                 "9.  RF (Refused)"))
+    ) %>%
+  QSPtools::checkvar(vdori, PD151, PD152, PD153, PD154) %>%
   gt::gt()
+
 ```
 
 ```{r}
@@ -42,7 +58,15 @@ hrs16_cog %>%
 ```{r}
 #| tbl-cap: "vdcount: Count backwards"
 
-QSPtools::checkvar(hrs16_cog, vdcount, PD124, PD129) %>%
+hrs16_cog %>%
+  mutate(
+    PD124 = factor(PD124, levels = c(1, 5, 6, 9),  
+                      labels = c("1.  CORRECT", "5.  INCORRECT", "6.  WANTS TO START OVER", 
+                                 "9.  RF (Refused)")),
+    PD129 = factor(PD129, levels = c(1, 5, 9),  
+                      labels = c("1.  CORRECT", "5.  INCORRECT", "9.  RF (Refused)"))
+    ) %>%
+  QSPtools::checkvar(vdcount, PD124, PD129) %>%
   gt::gt()
 ```
 
@@ -62,7 +86,16 @@ The scissors and cactus naming items have been combined into one item.
 ```{r}
 #| tbl-cap: "vdlfl2: Scissors & Cactus - number correct"
 
-QSPtools::checkvar(hrs16_cog, vdlfl2, PD155, PD156) %>%
+hrs16_cog %>%
+  mutate(
+    PD155 = factor(PD155, levels = c(1, 5, 8, 9),  
+                      labels = c("1.  SCISSORS OR SHEARS ONLY", "5.  NOT CORRECT", "8.  DK (Don't Know)", 
+                                 "9.  RF (Refused)")),
+    PD156 = factor(PD156, levels = c(1, 5, 8, 9),  
+                      labels = c("1.  CACTUS OR NAME OF KIND OF CACTUS", "5.  NOT CORRECT", "8.  DK (Don't Know)",
+                                 "9.  RF (Refused)"))
+    ) %>%
+  QSPtools::checkvar(vdlfl2, PD155, PD156) %>%
   gt::gt()
 ```
 
@@ -82,7 +115,16 @@ The president and vice-president naming items have been combined into one item.
 ```{r}
 #| tbl-cap: "vdlfl3: President and vice-president - number correct"
 
-QSPtools::checkvar(hrs16_cog, vdlfl3, PD157, PD158) %>%
+hrs16_cog %>%
+  mutate(
+    PD157 = factor(PD157, levels = c(1, 5, 8, 9),  
+                      labels = c("1.  LAST NAME CORRECT", "5.  NOT CORRECT", "8.  DK (Don't Know)", 
+                                 "9.  RF (Refused)")),
+    PD158 = factor(PD158, levels = c(1, 5, 8, 9),  
+                      labels = c("1.  LAST NAME CORRECT", "5.  NOT CORRECT", "8.  DK (Don't Know)",
+                                 "9.  RF (Refused)"))
+    ) %>%
+  QSPtools::checkvar(vdlfl3, PD157, PD158) %>%
   gt::gt()
 ```
 
@@ -101,7 +143,21 @@ The new variable counts the number of correct responses on the serial 7.  Each i
 
 ```{r}
 #| tbl-cap: "PD142-PD146: Serial 7"
-QSPtools::checkvar(hrs16_cog, vdsevens, rPD142, rPD143, rPD144, rPD145, rPD146) %>%
+
+hrs16_cog %>%
+  mutate(
+    rPD142 = factor(rPD142, levels = c(0, 1),  
+                      labels = c("0. Incorrect", "1. Correct")),
+    rPD143 = factor(rPD143, levels = c(0, 1),  
+                      labels = c("0. Incorrect", "1. Correct")),
+    rPD144 = factor(rPD144, levels = c(0, 1),  
+                      labels = c("0. Incorrect", "1. Correct")),
+    rPD145 = factor(rPD145, levels = c(0, 1),  
+                      labels = c("0. Incorrect", "1. Correct")),
+    rPD146 = factor(rPD146, levels = c(0, 1),  
+                      labels = c("0. Incorrect", "1. Correct"))
+    ) %>%
+  QSPtools::checkvar(vdsevens, rPD142, rPD143, rPD144, rPD145, rPD146) %>%
   gt::gt()
 ```
 

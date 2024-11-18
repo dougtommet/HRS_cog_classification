@@ -1,6 +1,6 @@
 Mplus VERSION 8.11 (Mac)
 MUTHEN & MUTHEN
-11/12/2024   3:40 PM
+11/18/2024   2:34 PM
 
 INPUT INSTRUCTIONS
 
@@ -24,16 +24,16 @@ INPUT INSTRUCTIONS
   vdexf7 - Number series
 
   DATA:
-  FILE = "model2a_54f9428d590c9c8a412aeb7b79c75e11.dat";
+  FILE = "model2a_b9997f17e50dc6784a8239a39345d2f9.dat";
 
   VARIABLE:
-  NAMES = vdoriz vdlfl1z vdlfl2z vdlfl3z vdwddelz vdexf7z vdsevensz vdcountz id;
+  NAMES = vdori vdlfl1z vdlfl2 vdlfl3 vdwddelz vdexf7z vdsevens vdcount id;
    MISSING=.;
-   categorical = vdcountz; idvariable = id;
+   categorical = vdori  vdlfl2 vdlfl3 vdsevens vdcount; idvariable = id;
   ANALYSIS:
   estimator = mlr; COVERAGE=0; link=PROBIT;
   MODEL:
-  f by vdoriz* vdlfl1z vdlfl2z vdlfl3z vdwddelz vdexf7z vdsevensz vdcountz;
+  f by vdori* vdlfl1z vdlfl2 vdlfl3 vdwddelz vdexf7z vdsevens vdcount;
     f @1;
   OUTPUT:
   standardized;
@@ -42,14 +42,11 @@ INPUT INSTRUCTIONS
 
 
 
-*** WARNING in VARIABLE command
-  Note that only the first 8 characters of variable names are used in the output.
-  Shorten variable names to avoid any confusion.
 *** WARNING
   Data set contains cases with missing on all variables.
   These cases were not included in the analysis.
   Number of cases with missing on all variables:  942
-   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
 
 
 
@@ -84,11 +81,10 @@ Number of continuous latent variables                            1
 Observed dependent variables
 
   Continuous
-   VDORIZ      VDLFL1Z     VDLFL2Z     VDLFL3Z     VDWDDELZ    VDEXF7Z
-   VDSEVENSZ
+   VDLFL1Z     VDWDDELZ    VDEXF7Z
 
   Binary and ordered categorical (ordinal)
-   VDCOUNTZ
+   VDORI       VDLFL2      VDLFL3      VDSEVENS    VDCOUNT
 
 Continuous latent variables
    F
@@ -135,15 +131,15 @@ Link                                                        PROBIT
 Cholesky                                                        ON
 
 Input data file(s)
-  model2a_54f9428d590c9c8a412aeb7b79c75e11.dat
+  model2a_b9997f17e50dc6784a8239a39345d2f9.dat
 Input data format  FREE
 
 
 SUMMARY OF DATA
 
      Number of missing data patterns            22
-     Number of y missing data patterns          13
-     Number of u missing data patterns           2
+     Number of y missing data patterns           8
+     Number of u missing data patterns           5
 
 
 COVARIANCE COVERAGE OF DATA
@@ -155,60 +151,74 @@ Minimum covariance coverage value   0.000
 
 
            Covariance Coverage
-              VDCOUNTZ      VDORIZ        VDLFL1Z       VDLFL2Z       VDLFL3Z
+              VDORI         VDLFL2        VDLFL3        VDSEVENS      VDCOUNT
               ________      ________      ________      ________      ________
- VDCOUNTZ       0.997
- VDORIZ         0.684         0.686
- VDLFL1Z        0.677         0.679         0.679
- VDLFL2Z        0.684         0.686         0.679         0.686
- VDLFL3Z        0.684         0.686         0.679         0.686         0.686
- VDWDDELZ       0.994         0.682         0.676         0.682         0.682
- VDEXF7Z        0.893         0.607         0.602         0.607         0.607
- VDSEVENS       0.997         0.686         0.679         0.686         0.686
+ VDORI          0.686
+ VDLFL2         0.686         0.686
+ VDLFL3         0.686         0.686         0.686
+ VDSEVENS       0.686         0.686         0.686         1.000
+ VDCOUNT        0.684         0.684         0.684         0.997         0.997
+ VDLFL1Z        0.679         0.679         0.679         0.679         0.677
+ VDWDDELZ       0.682         0.682         0.682         0.995         0.994
+ VDEXF7Z        0.607         0.607         0.607         0.894         0.893
 
 
            Covariance Coverage
-              VDWDDELZ      VDEXF7Z       VDSEVENS
+              VDLFL1Z       VDWDDELZ      VDEXF7Z
               ________      ________      ________
- VDWDDELZ       0.995
- VDEXF7Z        0.892         0.894
- VDSEVENS       0.995         0.894         1.000
+ VDLFL1Z        0.679
+ VDWDDELZ       0.676         0.995
+ VDEXF7Z        0.602         0.892         0.894
 
 
      PROPORTION OF DATA PRESENT FOR U
 
 
            Covariance Coverage
-              VDCOUNTZ
-              ________
- VDCOUNTZ       0.997
+              VDORI         VDLFL2        VDLFL3        VDSEVENS      VDCOUNT
+              ________      ________      ________      ________      ________
+ VDORI          0.686
+ VDLFL2         0.686         0.686
+ VDLFL3         0.686         0.686         0.686
+ VDSEVENS       0.686         0.686         0.686         1.000
+ VDCOUNT        0.684         0.684         0.684         0.997         0.997
 
 
      PROPORTION OF DATA PRESENT FOR Y
 
 
            Covariance Coverage
-              VDORIZ        VDLFL1Z       VDLFL2Z       VDLFL3Z       VDWDDELZ
-              ________      ________      ________      ________      ________
- VDORIZ         0.686
- VDLFL1Z        0.679         0.679
- VDLFL2Z        0.686         0.679         0.686
- VDLFL3Z        0.686         0.679         0.686         0.686
- VDWDDELZ       0.682         0.676         0.682         0.682         0.995
- VDEXF7Z        0.607         0.602         0.607         0.607         0.892
- VDSEVENS       0.686         0.679         0.686         0.686         0.995
-
-
-           Covariance Coverage
-              VDEXF7Z       VDSEVENS
-              ________      ________
- VDEXF7Z        0.894
- VDSEVENS       0.894         1.000
+              VDLFL1Z       VDWDDELZ      VDEXF7Z
+              ________      ________      ________
+ VDLFL1Z        0.679
+ VDWDDELZ       0.676         0.995
+ VDEXF7Z        0.602         0.892         0.894
 
 
 UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
 
-    VDCOUNTZ
+    VDORI
+      Category 1    0.010          138.000
+      Category 2    0.012          171.000
+      Category 3    0.031          420.000
+      Category 4    0.181         2481.000
+      Category 5    0.766        10490.000
+    VDLFL2
+      Category 1    0.007           94.000
+      Category 2    0.084         1144.000
+      Category 3    0.910        12462.000
+    VDLFL3
+      Category 1    0.027          376.000
+      Category 2    0.346         4738.000
+      Category 3    0.627         8585.000
+    VDSEVENS
+      Category 1    0.092         1845.000
+      Category 2    0.106         2113.000
+      Category 3    0.085         1698.000
+      Category 4    0.134         2676.000
+      Category 5    0.187         3739.000
+      Category 6    0.396         7899.000
+    VDCOUNT
       Category 1    0.068         1357.000
       Category 2    0.932        18554.000
 
@@ -222,20 +232,12 @@ UNIVARIATE SAMPLE STATISTICS
          Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
         Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
 
-     VDORIZ                0.920      -2.810       0.000    1.01%       0.750      1.000      1.000
-           13700.000       0.030       9.343       1.000   76.57%       1.000      1.000
      VDLFL1Z               0.183       0.600       0.000    0.50%       0.114      0.159      0.182
            13553.000       0.007       2.290       1.000    0.01%       0.205      0.250
-     VDLFL2Z               0.951      -3.336       0.000    0.69%       1.000      1.000      1.000
-           13700.000       0.025      11.123       1.000   90.96%       1.000      1.000
-     VDLFL3Z               0.800      -0.913       0.000    2.74%       0.500      1.000      1.000
-           13699.000       0.074      -0.240       1.000   62.67%       1.000      1.000
      VDWDDELZ              0.426      -0.185       0.000    6.32%       0.300      0.400      0.400
            19864.000       0.041      -0.149       1.000    0.31%       0.500      0.600
      VDEXF7Z               0.639      -0.936       0.000    0.89%       0.526      0.623      0.657
            17845.000       0.033       1.838       1.000    2.52%       0.686      0.783
-     VDSEVENSZ             0.681      -0.735       0.000    9.24%       0.400      0.600      0.800
-           19970.000       0.118      -0.825       1.000   39.55%       0.800      1.000
 
 
 THE MODEL ESTIMATION TERMINATED NORMALLY
@@ -244,46 +246,51 @@ THE MODEL ESTIMATION TERMINATED NORMALLY
 
 MODEL FIT INFORMATION
 
-Number of Free Parameters                       23
+Number of Free Parameters                       28
 
 Loglikelihood
 
-          H0 Value                       30026.588
-          H0 Scaling Correction Factor      1.6120
+          H0 Value                      -29390.643
+          H0 Scaling Correction Factor      1.1363
             for MLR
 
 Information Criteria
 
-          Akaike (AIC)                  -60007.176
-          Bayesian (BIC)                -59825.431
-          Sample-Size Adjusted BIC      -59898.524
+          Akaike (AIC)                   58837.287
+          Bayesian (BIC)                 59058.542
+          Sample-Size Adjusted BIC       58969.560
             (n* = (n + 2) / 24)
 
 Chi-Square Test of Model Fit for the Binary and Ordered Categorical
-(Ordinal) Outcomes
+(Ordinal) Outcomes**
 
           Pearson Chi-Square
 
-          Value                              0.222
-          Degrees of freedom cannot be computed for this model part.
+          Value                           1621.819
+          Degrees of Freedom                   515
+          P-Value                           0.0000
 
           Likelihood Ratio Chi-Square
 
-          Value                              0.221
-          Degrees of freedom cannot be computed for this model part.
+          Value                            899.554
+          Degrees of Freedom                   515
+          P-Value                           0.0000
+
+** Of the 1008 cells in the frequency table, 5
+   were deleted in the calculation of chi-square due to extreme values.
 
 Chi-Square Test for MCAR under the Unrestricted Latent Class Indicator Model
 
           Pearson Chi-Square
 
-          Value                              0.000
-          Degrees of Freedom                     0
-          P-Value                           1.0000
+          Value                            598.386
+          Degrees of Freedom                   464
+          P-Value                           0.0000
 
           Likelihood Ratio Chi-Square
 
-          Value                              0.000
-          Degrees of Freedom                     0
+          Value                            182.165
+          Degrees of Freedom                   464
           P-Value                           1.0000
 
 
@@ -294,43 +301,48 @@ MODEL RESULTS
                     Estimate       S.E.  Est./S.E.    P-Value
 
  F        BY
-    VDORIZ             0.071      0.003     26.985      0.000
-    VDLFL1Z            0.046      0.001     69.450      0.000
-    VDLFL2Z            0.065      0.002     27.674      0.000
-    VDLFL3Z            0.136      0.003     49.293      0.000
-    VDWDDELZ           0.116      0.002     72.683      0.000
-    VDEXF7Z            0.139      0.002     77.625      0.000
-    VDSEVENSZ          0.228      0.002     97.763      0.000
-    VDCOUNTZ           0.596      0.019     31.523      0.000
+    VDORI              0.510      0.017     30.508      0.000
+    VDLFL1Z            0.047      0.001     66.706      0.000
+    VDLFL2             0.779      0.026     29.982      0.000
+    VDLFL3             0.712      0.017     40.908      0.000
+    VDWDDELZ           0.116      0.002     72.232      0.000
+    VDEXF7Z            0.135      0.002     81.743      0.000
+    VDSEVENS           0.998      0.017     58.315      0.000
+    VDCOUNT            0.636      0.022     29.314      0.000
 
  Intercepts
-    VDORIZ             0.924      0.001    682.491      0.000
-    VDLFL1Z            0.186      0.001    275.639      0.000
-    VDLFL2Z            0.955      0.001    767.043      0.000
-    VDLFL3Z            0.808      0.002    365.898      0.000
-    VDWDDELZ           0.425      0.001    294.104      0.000
-    VDEXF7Z            0.623      0.001    432.873      0.000
-    VDSEVENSZ          0.681      0.002    280.387      0.000
+    VDLFL1Z            0.186      0.001    275.672      0.000
+    VDWDDELZ           0.425      0.001    294.187      0.000
+    VDEXF7Z            0.624      0.001    437.499      0.000
 
  Thresholds
-    VDCOUNTZ$1        -1.742      0.021    -84.380      0.000
+    VDORI$1           -2.737      0.038    -72.718      0.000
+    VDORI$2           -2.329      0.026    -88.771      0.000
+    VDORI$3           -1.849      0.020    -92.124      0.000
+    VDORI$4           -0.830      0.014    -59.426      0.000
+    VDLFL2$1          -3.255      0.059    -55.429      0.000
+    VDLFL2$2          -1.753      0.028    -62.305      0.000
+    VDLFL3$1          -2.447      0.030    -80.789      0.000
+    VDLFL3$2          -0.425      0.013    -31.587      0.000
+    VDSEVENS$1        -1.893      0.021    -88.769      0.000
+    VDSEVENS$2        -1.188      0.016    -74.671      0.000
+    VDSEVENS$3        -0.787      0.014    -56.885      0.000
+    VDSEVENS$4        -0.265      0.013    -21.183      0.000
+    VDSEVENS$5         0.395      0.013     30.633      0.000
+    VDCOUNT$1         -1.767      0.023    -78.516      0.000
 
  Variances
     F                  1.000      0.000    999.000    999.000
 
  Residual Variances
-    VDORIZ             0.025      0.001     41.267      0.000
-    VDLFL1Z            0.004      0.000     39.849      0.000
-    VDLFL2Z            0.021      0.001     36.372      0.000
-    VDLFL3Z            0.055      0.001     78.994      0.000
-    VDWDDELZ           0.028      0.000     75.551      0.000
-    VDEXF7Z            0.016      0.000     46.316      0.000
-    VDSEVENSZ          0.066      0.001     71.410      0.000
+    VDLFL1Z            0.004      0.000     38.548      0.000
+    VDWDDELZ           0.028      0.000     75.359      0.000
+    VDEXF7Z            0.017      0.000     48.464      0.000
 
 
 QUALITY OF NUMERICAL RESULTS
 
-     Condition Number for the Information Matrix              0.984E-04
+     Condition Number for the Information Matrix              0.272E-04
        (ratio of smallest to largest eigenvalue)
 
 
@@ -338,9 +350,30 @@ RESULTS IN PROBABILITY SCALE
 
                     Estimate
 
- VDCOUNTZ
-    Category 1         0.067
-    Category 2         0.933
+ VDORI
+    Category 1         0.007
+    Category 2         0.012
+    Category 3         0.031
+    Category 4         0.180
+    Category 5         0.770
+ VDLFL2
+    Category 1         0.005
+    Category 2         0.078
+    Category 3         0.917
+ VDLFL3
+    Category 1         0.023
+    Category 2         0.341
+    Category 3         0.636
+ VDSEVENS
+    Category 1         0.090
+    Category 2         0.110
+    Category 3         0.088
+    Category 4         0.137
+    Category 5         0.185
+    Category 6         0.390
+ VDCOUNT
+    Category 1         0.068
+    Category 2         0.932
 
 
 STANDARDIZED MODEL RESULTS
@@ -352,38 +385,43 @@ STDYX Standardization
                     Estimate       S.E.  Est./S.E.    P-Value
 
  F        BY
-    VDORIZ             0.411      0.011     36.874      0.000
-    VDLFL1Z            0.572      0.008     71.572      0.000
-    VDLFL2Z            0.411      0.011     38.055      0.000
-    VDLFL3Z            0.502      0.009     57.395      0.000
-    VDWDDELZ           0.567      0.007     84.056      0.000
-    VDEXF7Z            0.736      0.006    116.828      0.000
-    VDSEVENSZ          0.665      0.006    116.023      0.000
-    VDCOUNTZ           0.512      0.012     42.731      0.000
+    VDORI              0.454      0.012     38.432      0.000
+    VDLFL1Z            0.584      0.008     69.058      0.000
+    VDLFL2             0.615      0.013     48.177      0.000
+    VDLFL3             0.580      0.009     61.635      0.000
+    VDWDDELZ           0.568      0.007     83.477      0.000
+    VDEXF7Z            0.719      0.006    120.508      0.000
+    VDSEVENS           0.706      0.006    116.369      0.000
+    VDCOUNT            0.536      0.013     41.161      0.000
 
  Intercepts
-    VDORIZ             5.373      0.083     64.620      0.000
-    VDLFL1Z            2.294      0.019    117.670      0.000
-    VDLFL2Z            6.006      0.100     60.351      0.000
-    VDLFL3Z            2.981      0.023    130.782      0.000
-    VDWDDELZ           2.086      0.013    158.708      0.000
-    VDEXF7Z            3.291      0.030    110.783      0.000
-    VDSEVENSZ          1.984      0.013    147.473      0.000
+    VDLFL1Z            2.294      0.019    117.893      0.000
+    VDWDDELZ           2.087      0.013    159.007      0.000
+    VDEXF7Z            3.337      0.030    112.820      0.000
 
  Thresholds
-    VDCOUNTZ$1        -1.496      0.014   -107.127      0.000
+    VDORI$1           -2.438      0.033    -73.909      0.000
+    VDORI$2           -2.075      0.024    -87.121      0.000
+    VDORI$3           -1.647      0.018    -92.250      0.000
+    VDORI$4           -0.740      0.012    -62.945      0.000
+    VDLFL2$1          -2.568      0.038    -68.407      0.000
+    VDLFL2$2          -1.383      0.015    -91.731      0.000
+    VDLFL3$1          -1.994      0.022    -89.573      0.000
+    VDLFL3$2          -0.347      0.011    -32.390      0.000
+    VDSEVENS$1        -1.340      0.013   -104.598      0.000
+    VDSEVENS$2        -0.841      0.010    -80.797      0.000
+    VDSEVENS$3        -0.557      0.010    -58.344      0.000
+    VDSEVENS$4        -0.188      0.009    -21.056      0.000
+    VDSEVENS$5         0.280      0.009     31.741      0.000
+    VDCOUNT$1         -1.491      0.014   -108.036      0.000
 
  Variances
     F                  1.000      0.000    999.000    999.000
 
  Residual Variances
-    VDORIZ             0.831      0.009     90.548      0.000
-    VDLFL1Z            0.673      0.009     73.711      0.000
-    VDLFL2Z            0.831      0.009     93.861      0.000
-    VDLFL3Z            0.748      0.009     85.294      0.000
-    VDWDDELZ           0.678      0.008     88.629      0.000
-    VDEXF7Z            0.459      0.009     49.562      0.000
-    VDSEVENSZ          0.558      0.008     73.158      0.000
+    VDLFL1Z            0.659      0.010     66.591      0.000
+    VDWDDELZ           0.678      0.008     87.832      0.000
+    VDEXF7Z            0.483      0.009     56.202      0.000
 
 
 STDY Standardization
@@ -392,38 +430,43 @@ STDY Standardization
                     Estimate       S.E.  Est./S.E.    P-Value
 
  F        BY
-    VDORIZ             0.411      0.011     36.874      0.000
-    VDLFL1Z            0.572      0.008     71.572      0.000
-    VDLFL2Z            0.411      0.011     38.055      0.000
-    VDLFL3Z            0.502      0.009     57.395      0.000
-    VDWDDELZ           0.567      0.007     84.056      0.000
-    VDEXF7Z            0.736      0.006    116.828      0.000
-    VDSEVENSZ          0.665      0.006    116.023      0.000
-    VDCOUNTZ           0.512      0.012     42.731      0.000
+    VDORI              0.454      0.012     38.432      0.000
+    VDLFL1Z            0.584      0.008     69.058      0.000
+    VDLFL2             0.615      0.013     48.177      0.000
+    VDLFL3             0.580      0.009     61.635      0.000
+    VDWDDELZ           0.568      0.007     83.477      0.000
+    VDEXF7Z            0.719      0.006    120.508      0.000
+    VDSEVENS           0.706      0.006    116.369      0.000
+    VDCOUNT            0.536      0.013     41.161      0.000
 
  Intercepts
-    VDORIZ             5.373      0.083     64.620      0.000
-    VDLFL1Z            2.294      0.019    117.670      0.000
-    VDLFL2Z            6.006      0.100     60.351      0.000
-    VDLFL3Z            2.981      0.023    130.782      0.000
-    VDWDDELZ           2.086      0.013    158.708      0.000
-    VDEXF7Z            3.291      0.030    110.783      0.000
-    VDSEVENSZ          1.984      0.013    147.473      0.000
+    VDLFL1Z            2.294      0.019    117.893      0.000
+    VDWDDELZ           2.087      0.013    159.007      0.000
+    VDEXF7Z            3.337      0.030    112.820      0.000
 
  Thresholds
-    VDCOUNTZ$1        -1.496      0.014   -107.127      0.000
+    VDORI$1           -2.438      0.033    -73.909      0.000
+    VDORI$2           -2.075      0.024    -87.121      0.000
+    VDORI$3           -1.647      0.018    -92.250      0.000
+    VDORI$4           -0.740      0.012    -62.945      0.000
+    VDLFL2$1          -2.568      0.038    -68.407      0.000
+    VDLFL2$2          -1.383      0.015    -91.731      0.000
+    VDLFL3$1          -1.994      0.022    -89.573      0.000
+    VDLFL3$2          -0.347      0.011    -32.390      0.000
+    VDSEVENS$1        -1.340      0.013   -104.598      0.000
+    VDSEVENS$2        -0.841      0.010    -80.797      0.000
+    VDSEVENS$3        -0.557      0.010    -58.344      0.000
+    VDSEVENS$4        -0.188      0.009    -21.056      0.000
+    VDSEVENS$5         0.280      0.009     31.741      0.000
+    VDCOUNT$1         -1.491      0.014   -108.036      0.000
 
  Variances
     F                  1.000      0.000    999.000    999.000
 
  Residual Variances
-    VDORIZ             0.831      0.009     90.548      0.000
-    VDLFL1Z            0.673      0.009     73.711      0.000
-    VDLFL2Z            0.831      0.009     93.861      0.000
-    VDLFL3Z            0.748      0.009     85.294      0.000
-    VDWDDELZ           0.678      0.008     88.629      0.000
-    VDEXF7Z            0.459      0.009     49.562      0.000
-    VDSEVENSZ          0.558      0.008     73.158      0.000
+    VDLFL1Z            0.659      0.010     66.591      0.000
+    VDWDDELZ           0.678      0.008     87.832      0.000
+    VDEXF7Z            0.483      0.009     56.202      0.000
 
 
 STD Standardization
@@ -432,38 +475,43 @@ STD Standardization
                     Estimate       S.E.  Est./S.E.    P-Value
 
  F        BY
-    VDORIZ             0.071      0.003     26.985      0.000
-    VDLFL1Z            0.046      0.001     69.450      0.000
-    VDLFL2Z            0.065      0.002     27.674      0.000
-    VDLFL3Z            0.136      0.003     49.293      0.000
-    VDWDDELZ           0.116      0.002     72.683      0.000
-    VDEXF7Z            0.139      0.002     77.625      0.000
-    VDSEVENSZ          0.228      0.002     97.763      0.000
-    VDCOUNTZ           0.596      0.019     31.523      0.000
+    VDORI              0.510      0.017     30.508      0.000
+    VDLFL1Z            0.047      0.001     66.706      0.000
+    VDLFL2             0.779      0.026     29.982      0.000
+    VDLFL3             0.712      0.017     40.908      0.000
+    VDWDDELZ           0.116      0.002     72.232      0.000
+    VDEXF7Z            0.135      0.002     81.743      0.000
+    VDSEVENS           0.998      0.017     58.315      0.000
+    VDCOUNT            0.636      0.022     29.314      0.000
 
  Intercepts
-    VDORIZ             0.924      0.001    682.491      0.000
-    VDLFL1Z            0.186      0.001    275.639      0.000
-    VDLFL2Z            0.955      0.001    767.043      0.000
-    VDLFL3Z            0.808      0.002    365.898      0.000
-    VDWDDELZ           0.425      0.001    294.104      0.000
-    VDEXF7Z            0.623      0.001    432.873      0.000
-    VDSEVENSZ          0.681      0.002    280.387      0.000
+    VDLFL1Z            0.186      0.001    275.672      0.000
+    VDWDDELZ           0.425      0.001    294.187      0.000
+    VDEXF7Z            0.624      0.001    437.499      0.000
 
  Thresholds
-    VDCOUNTZ$1        -1.742      0.021    -84.380      0.000
+    VDORI$1           -2.737      0.038    -72.718      0.000
+    VDORI$2           -2.329      0.026    -88.771      0.000
+    VDORI$3           -1.849      0.020    -92.124      0.000
+    VDORI$4           -0.830      0.014    -59.426      0.000
+    VDLFL2$1          -3.255      0.059    -55.429      0.000
+    VDLFL2$2          -1.753      0.028    -62.305      0.000
+    VDLFL3$1          -2.447      0.030    -80.789      0.000
+    VDLFL3$2          -0.425      0.013    -31.587      0.000
+    VDSEVENS$1        -1.893      0.021    -88.769      0.000
+    VDSEVENS$2        -1.188      0.016    -74.671      0.000
+    VDSEVENS$3        -0.787      0.014    -56.885      0.000
+    VDSEVENS$4        -0.265      0.013    -21.183      0.000
+    VDSEVENS$5         0.395      0.013     30.633      0.000
+    VDCOUNT$1         -1.767      0.023    -78.516      0.000
 
  Variances
     F                  1.000      0.000    999.000    999.000
 
  Residual Variances
-    VDORIZ             0.025      0.001     41.267      0.000
-    VDLFL1Z            0.004      0.000     39.849      0.000
-    VDLFL2Z            0.021      0.001     36.372      0.000
-    VDLFL3Z            0.055      0.001     78.994      0.000
-    VDWDDELZ           0.028      0.000     75.551      0.000
-    VDEXF7Z            0.016      0.000     46.316      0.000
-    VDSEVENSZ          0.066      0.001     71.410      0.000
+    VDLFL1Z            0.004      0.000     38.548      0.000
+    VDWDDELZ           0.028      0.000     75.359      0.000
+    VDEXF7Z            0.017      0.000     48.464      0.000
 
 
 R-SQUARE
@@ -471,14 +519,14 @@ R-SQUARE
     Observed                                        Two-Tailed
     Variable        Estimate       S.E.  Est./S.E.    P-Value
 
-    VDCOUNTZ           0.262      0.012     21.366      0.000
-    VDORIZ             0.169      0.009     18.437      0.000
-    VDLFL1Z            0.327      0.009     35.786      0.000
-    VDLFL2Z            0.169      0.009     19.028      0.000
-    VDLFL3Z            0.252      0.009     28.698      0.000
-    VDWDDELZ           0.322      0.008     42.028      0.000
-    VDEXF7Z            0.541      0.009     58.414      0.000
-    VDSEVENS           0.442      0.008     58.012      0.000
+    VDORI              0.206      0.011     19.216      0.000
+    VDLFL2             0.378      0.016     24.088      0.000
+    VDLFL3             0.336      0.011     30.818      0.000
+    VDSEVENS           0.499      0.009     58.185      0.000
+    VDCOUNT            0.288      0.014     20.580      0.000
+    VDLFL1Z            0.341      0.010     34.529      0.000
+    VDWDDELZ           0.322      0.008     41.738      0.000
+    VDEXF7Z            0.517      0.009     60.254      0.000
 
 
 SAVEDATA INFORMATION
@@ -498,9 +546,9 @@ SAVEDATA INFORMATION
     Standardized Model Results
     R-Square
 
-     Beginning Time:  15:40:03
-        Ending Time:  15:40:09
-       Elapsed Time:  00:00:06
+     Beginning Time:  14:34:13
+        Ending Time:  14:34:23
+       Elapsed Time:  00:00:10
 
 
 

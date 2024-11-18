@@ -91,27 +91,6 @@ foo %>%
 
 The factor score was transformed using a Blom transformation.  The transformation was done in the norming sample.  Cubic regression splines of the factor score were created to predict the Blom score from the factor score.  These cubic regression splines were recreated in the HRS sample to get predicted Blom scores in the HRS sample.
 
-```{r}
-#| fig-cap: Distribution of untransformed factor scores by HCAP inclusion status
-
-
-F_mean <- hrs16_cog %>%
-  filter(!is.na(normexcld)) %>%
-  mutate(normexcld_f = factor(normexcld, labels = c("Included sample", "Excluded sample"))) %>%
-  group_by(normexcld_f) %>%
-  summarize(mean = mean(F, na.rm=TRUE))
-
-hrs16_cog %>%
-  filter(!is.na(normexcld)) %>%
-  mutate(normexcld_f = factor(normexcld, labels = c("Included sample", "Excluded sample"))) %>%
-  ggplot(aes(x = F)) +
-  geom_histogram() +
-  geom_vline(data = F_mean, aes(xintercept = mean), color = "red") +
-  facet_wrap(~normexcld_f, ncol=1) +
-  hrbrthemes::theme_ipsum()
-
-```
-
 
 The knots used to create the cubic splines for the Factor score are:
 
@@ -154,6 +133,9 @@ goo_lm %>%
 
 ```
 
+## Plots of observed vs model implied blom scores
+
+These are plots of the observed blom scores versus the model implied blom scores that adjusted for demographic characteristics.
 
 ```{r}
 #| fig-cap: Predicted blom vs normalized blom in norming sample

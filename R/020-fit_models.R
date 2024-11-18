@@ -12,7 +12,7 @@ fs::dir_create(here::here("mplus_output"))
 
 
 mplus_analysis = "estimator = wlsmv; COVERAGE=0; PARAMETERIZATION = THETA;"
-mplus_variable = "categorical = vdcountz; idvariable = id;"
+mplus_variable = "categorical = vdori  vdlfl2 vdlfl3 vdsevens vdcount; idvariable = id;"
 mplus_output = "standardized;"
 mplus_title = "vdori - Orientation to time \n
 vdlfl1 - Animal naming \n
@@ -31,14 +31,14 @@ setwd(here::here("mplus_output", "model1"))
 
 mod1 <- MplusAutomation::mplusObject(
   TITLE = mplus_title,
-  MODEL = "f by vdoriz* vdlfl1z vdlfl2z vdlfl3z vdwdimmz vdwddelz vdexf7z vdsevensz vdcountz;
+  MODEL = "f by vdori* vdlfl1z vdlfl2 vdlfl3 vdwdimmz vdwddelz vdexf7z vdsevens vdcount;
   f @1;",
   VARIABLE = mplus_variable,
   ANALYSIS = mplus_analysis,
   OUTPUT = mplus_output,
   SAVEDATA = "H5RESULTS = model1.h5;",
-  usevariables = c("vdoriz", "vdlfl1z", "vdlfl2z", "vdlfl3z", "vdwdimmz", "vdwddelz",
-                   "vdexf7z", "vdsevensz", "vdcountz", "id" ),
+  usevariables = c("vdori", "vdlfl1z", "vdlfl2", "vdlfl3", "vdwdimmz", "vdwddelz",
+                   "vdexf7z", "vdsevens", "vdcount", "id" ),
   rdata = hrs16_cog
 
 )
@@ -50,14 +50,14 @@ setwd(here::here("mplus_output", "model2"))
 
 mod2 <- MplusAutomation::mplusObject(
   TITLE = mplus_title,
-  MODEL = "f by vdoriz* vdlfl1z vdlfl2z vdlfl3z vdwddelz vdexf7z vdsevensz vdcountz;
+  MODEL = "f by vdori* vdlfl1z vdlfl2 vdlfl3 vdwddelz vdexf7z vdsevens vdcount;
   f @1;",
   VARIABLE = mplus_variable,
   ANALYSIS = mplus_analysis,
   OUTPUT = mplus_output,
   SAVEDATA = "H5RESULTS = model2.h5;",
-  usevariables = c("vdoriz", "vdlfl1z", "vdlfl2z", "vdlfl3z", "vdwddelz",
-                   "vdexf7z", "vdsevensz", "vdcountz", "id" ),
+  usevariables = c("vdori", "vdlfl1z", "vdlfl2", "vdlfl3", "vdwddelz",
+                   "vdexf7z", "vdsevens", "vdcount", "id" ),
   rdata = hrs16_cog
 
 )
@@ -75,14 +75,14 @@ mplus_analysis = "estimator = mlr; COVERAGE=0; link=PROBIT;"
 
 mod2a <- MplusAutomation::mplusObject(
   TITLE = mplus_title,
-  MODEL = "f by vdoriz* vdlfl1z vdlfl2z vdlfl3z vdwddelz vdexf7z vdsevensz vdcountz;
+  MODEL = "f by vdori* vdlfl1z vdlfl2 vdlfl3 vdwddelz vdexf7z vdsevens vdcount;
   f @1;",
   VARIABLE = mplus_variable,
   ANALYSIS = mplus_analysis,
   OUTPUT = mplus_output,
   SAVEDATA = "H5RESULTS = model2a.h5;",
-  usevariables = c("vdoriz", "vdlfl1z", "vdlfl2z", "vdlfl3z", "vdwddelz",
-                   "vdexf7z", "vdsevensz", "vdcountz", "id" ),
+  usevariables = c("vdori", "vdlfl1z", "vdlfl2", "vdlfl3", "vdwddelz",
+                   "vdexf7z", "vdsevens", "vdcount", "id"),
   rdata = hrs16_cog
 
 )
@@ -116,8 +116,8 @@ mod_final <- MplusAutomation::mplusObject(
   ANALYSIS = mplus_analysis,
   OUTPUT = mplus_output,
   SAVEDATA = "H5RESULTS = model_final.h5; save = fscores; file = model_final.dat;",
-  usevariables = c("vdoriz", "vdlfl1z", "vdlfl2z", "vdlfl3z", "vdwddelz",
-                   "vdexf7z", "vdsevensz", "vdcountz", "id" ),
+  usevariables = c("vdori", "vdlfl1z", "vdlfl2", "vdlfl3", "vdwddelz",
+                   "vdexf7z", "vdsevens", "vdcount", "id" ),
   rdata = hrs16_cog
 
 )

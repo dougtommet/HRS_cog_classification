@@ -6,7 +6,7 @@ hrs16_cog <- readRDS(fs::path(r_objects_folder, "016_hrs16_cog.rds"))
 
 # Rescale cognitive items
 
-The cognitive items were rescaled using the min/max normalization.
+The continuous cognitive items were rescaled using the min/max normalization.
 
 ```{r}
 #| tbl-cap: Descriptive statistics of cognitive items after rescaling
