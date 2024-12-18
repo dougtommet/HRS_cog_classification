@@ -337,3 +337,5 @@ saveRDS(hrs16_cog_norm, fs::path(r_objects_folder, "025_hrs16_cog_norm.rds"))
 saveRDS(centering_info, fs::path(r_objects_folder, "025_centering_info.rds"))
 saveRDS(foo_lm, fs::path(r_objects_folder, "025_foo_lm.rds"))
 
+haven::write_dta(janitor::clean_names(hrs16_cog),fs::path(r_objects_folder, "025_hrs16_cog.dta"))
+
