@@ -1,0 +1,210 @@
+---
+title: "HRS/HCAP Algorithm in HRS Core"
+subtitle: ""
+author: "Rich Jones, Doug Tommet"
+date: "19 Dec 2024"
+format: 
+  revealjs:
+    embed-resources: true
+    auto-stretch: false
+    theme: white
+    slide-number: true
+    self-contained: true
+editor: source
+---
+
+## Contents
+
+1.  Goal of project
+
+2.  Analysis plan and progress
+
+3.  Some selected results
+
+4.  Next steps and timeline
+
+## Project Goal
+
+The goal is to determine to what degree the Core data can be used to approximate the HRS/HCAP classification.
+
+The procedure will be to classify 2016 HRS/HCAP participants into cognitive impairment categories (normal, mild cognitive impairment, dementia) using only data from the HRS 2016 Core interview (i.e., omitting all HRS/HCAP data).
+
+This is only one of several possible approaches to cognitive classification of Core participants.
+
+::: aside
+After forming this goal, we decided to use the same definition of normative reference group as in HRS/HCAP. This uses some non-CORE data, including the MMSE administered in HRS/HCAP, and claims data.
+:::
+
+----
+
+![](images/Algorithm flow diagram-2025-03-10.png)
+
+----
+
+## Links to supporting detailed documents and results
+
+|                                 |      |
+|---------------------------------|------|
+| Staistical analysis plan        | GDoc |
+| Detailed analysis results       | HTML |
+| Mplus output final factor model | TXT  |
+
+## Progress
+
+1.  Factor model for general cognition in HRS/Core (in R)
+
+2.  Adjustment, standardization and normalization (in R)
+
+3.  Equivalent cut point for identifying severe and moderate cognitive impairment to that used in HRS/HCAP algorithm
+
+4.  Operationalize functional impairment in HRS/Core
+
+5.  Run and compare algorithms
+
+6.  Reporting
+
+## Selected results
+
+::: aside
+Note: all results do **NOT** incorporate sampling weights
+:::
+
+## Single factor model for HRS/Core cognition
+
+::: columns
+::: {.column width="40%"}
+some tables
+:::
+
+::: {.column width="60%"}
+The single factor model fits well by conventional fit criteria.
+
+Like the HRS/HCAP factor models, we **do not include** immediate memory performance in the model.
+
+We **do include** naming and serial 7s, which are not in HRS/HCAP models
+
+::: aside
+During the meeting we discussed that the model may be too heavy in "other" (notably serial 7s, number series) and less "memory" and this may be problematic for AD. We will explore other solutions.
+:::
+:::
+:::
+
+------------------------------------------------------------------------
+
+::: columns
+::: {.column width="25%"}
+In the normative reference group
+
+NOT in the normative reference group
+:::
+
+::: {.column width="75%"}
+histogram
+:::
+:::
+
+------------------------------------------------------------------------
+
+::: columns
+::: {.column width="25%"}
+In the normative reference group
+
+NOT in the normative reference group
+
+NOT in HRS/HCAP
+:::
+
+::: {.column width="75%"}
+histogram
+:::
+:::
+
+------------------------------------------------------------------------
+
+![](images/fig1.png)
+
+------------------------------------------------------------------------
+
+![](images/fig2.png)
+
+Bland-Altman comparison of tf and Tgcp Limits of agreement (Reference Range for difference): -17.052 to 19.963 Mean difference: 1.456 (CI 1.722 to 1.189) Range : -15.198 to 81.953
+
+------------------------------------------------------------------------
+
+![](images/fig3.png)
+
+::: aside
+Number of domains impaired, based on full HRS/HCAP algorithm using 5 individual domains
+:::
+
+------------------------------------------------------------------------
+
+![](images/fig4.png)
+
+::: aside
+Number of domains impaired, based on full HRS/HCAP algorithm using 5 individual domains
+:::
+
+------------------------------------------------------------------------
+
+. tab CogImp if missing(tf)\~=1
+
+```         
+ CogImp |      Freq.     Percent        Cum.
+```
+
+------------+----------------------------------- No domains \| 2,119 64.62 64.62 1 domain \| 663 20.22 84.84 2+ domains \| 497 15.16 100.00 ------------+----------------------------------- Total \| 3,279 100.00
+
+. . centile tf if missing(CogImp)\~=1 & missing(tf)\~=1, centile(15 35)
+
+```         
+                                                      Binom. interp.   
+Variable |       Obs  Percentile    Centile        [95% conf. interval]
+```
+
+-------------+------------------------------------------------------------- tf \| 3,279 15 36.03611 35.25256 36.42486 \| 35 43.36455 42.96254 43.88443
+
+::: aside
+Centiles of adjusted, normalized, standardized factor score in HRS/Core
+:::
+
+::: aside
+Number of domains impaired, based on full HRS/HCAP algorithm using 5 individual domains
+:::
+
+::: aside
+The plan for finding cut points on the HRS/Core adjusted, standardized, normalized factor score (here, tf) is to find the proportion in the HRS/HCAP with impairment in 2+ or exactly 1 of 5 domains impaired, and identifying cuts at the matching percentiles on the HRS/Core factor score (tf).
+:::
+
+------------------------------------------------------------------------
+
+. tab CogImp tfCogImp
+
+```         
+       |             tfCogImp
+CogImp |         0          1          2 |     Total
+```
+
+-----------+---------------------------------+---------- No domains \| 1,668 345 106 \| 2,119 1 domain \| 344 190 129 \| 663 2+ domains \| 120 120 257 \| 497 -----------+---------------------------------+---------- Total \| 2,132 655 492 \| 3,279
+
+. kap CogImp tfCogImp
+
+```         
+         Expected
+```
+
+## Agreement agreement Kappa Std. err. Z Prob\>Z
+
+64.50% 48.33% 0.3130 0.0130 23.98 0.0000
+
+::: aside
+Kappa with quadratic weights = 0.49
+:::
+
+::: aside
+Number of domains impaired, based on full HRS/HCAP algorithm using 5 individual domains
+:::
+
+::: aside
+Based on matching centiles of adjusted, normalized, standardized factor score in HRS/Core
+:::
