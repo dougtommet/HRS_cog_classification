@@ -10,6 +10,7 @@ The continuous cognitive items were rescaled using the min/max normalization.
 
 ```{r}
 #| tbl-cap: Descriptive statistics of cognitive items after rescaling
+#| label: tbl-cog-items-rescale
 
 hrs16_cog %>%
   select(starts_with("vd") & ends_with("z")) %>%

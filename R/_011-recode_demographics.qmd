@@ -16,6 +16,7 @@ Female came from the variable `GENDER`.
 
 ```{r}
 #| tbl-cap: "Coding of female indicator"
+#| label: tbl-female
 
 hrs16_cog %>%
   mutate(GENDER = factor(GENDER, levels = c(1, 2),  labels = c("1.  Male", "2.  Female")) ) %>%
@@ -27,6 +28,7 @@ Black came from the variables `RACE` and `HISPANIC`.
 
 ```{r}
 #| tbl-cap: "Coding of Black or African-American indicator"
+#| label: tbl-black
 
 hrs16_cog %>%
   mutate(
@@ -44,6 +46,7 @@ Hispanic came from the variable `HISPANIC`.
 
 ```{r}
 #| tbl-cap: "Coding of Hispanic indicator"
+#| label: tbl-hisp
 
 hrs16_cog %>%
   mutate(

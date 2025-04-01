@@ -3,6 +3,7 @@
 tracker <- readRDS(fs::path(r_objects_folder, "005_tracker.rds"))
 h16a_r <- readRDS(fs::path(r_objects_folder, "005_h16a_r.rds"))
 h16d_r <- readRDS(fs::path(r_objects_folder, "005_h16d_r.rds"))
+h16g_r <- readRDS(fs::path(r_objects_folder, "005_h16g_r.rds"))
 normexcld <- readRDS(fs::path(r_objects_folder, "005_normexcld.rds"))
 
 hrs16_cog <- h16d_r %>%
@@ -29,6 +30,15 @@ hrs16_func <- h16d_r %>%
          PD531, PD532, PD533, PD534, PD535, PD536, PD537, PD538, PD539, PD540,
          PD541, PD542, PD543, PD544, PD545, PD546, PD547, PD548, PD549, PD550,
          PD551, PD552, PD553)
+
+
+
+hrs16_iadl <- h16g_r %>%
+  select(HHID, PN, PSUBHH,
+         PG014, PG021, PG023, PG030, PG040, PG041, PG044, PG047, PG050, PG051, PG059)
+
+
+
 
 
 tracker_demo <- tracker %>%
@@ -67,5 +77,6 @@ hrs16_cog <- hrs16_cog %>%
 #   OD279 OD280 OD281 OD282 OD283 OD284 OVESCORE OVESCORESE
 
 saveRDS(hrs16_cog, fs::path(r_objects_folder, "010_hrs16_cog.rds"))
+saveRDS(hrs16_iadl, fs::path(r_objects_folder, "010_hrs16_iadl.rds"))
 saveRDS(hrs16_func, fs::path(r_objects_folder, "010_hrs16_func.rds"))
 

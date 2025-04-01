@@ -21,7 +21,8 @@ The tables show the recoded variable on the left column, the original variable i
 The number correct of the four orientation to time questions - Month, Day, Year and Day of week.
 
 ```{r}
-#| tbl-cap: "vdori - Orientation to time - number correct"
+#| tbl-cap: "vdori - Orientation to time - number correct recoding"
+#| label: tbl-orientation-checkvar
 
 hrs16_cog %>%
   mutate(
@@ -44,6 +45,9 @@ hrs16_cog %>%
 ```
 
 ```{r}
+#| tbl-cap: "vdori - Orientation to time - number correct"
+#| label: tbl-orientation
+
 hrs16_cog %>%
   select(vdori) %>%
   labelled::to_factor() %>%
@@ -56,7 +60,8 @@ hrs16_cog %>%
 
 
 ```{r}
-#| tbl-cap: "vdcount: Count backwards"
+#| tbl-cap: "vdcount: Count backwards recoding"
+#| label: tbl-countbackwards-checkvar
 
 hrs16_cog %>%
   mutate(
@@ -71,6 +76,9 @@ hrs16_cog %>%
 ```
 
 ```{r}
+#| tbl-cap: "vdcount: Count backwards"
+#| label: tbl-countbackwards
+
 hrs16_cog %>%
   select(vdcount) %>%
   labelled::to_factor() %>%
@@ -84,7 +92,8 @@ hrs16_cog %>%
 The scissors and cactus naming items have been combined into one item.
 
 ```{r}
-#| tbl-cap: "vdlfl2: Scissors & Cactus - number correct"
+#| tbl-cap: "vdlfl2: Scissors & Cactus - number correct recoding"
+#| label: tbl-scissors-checkvar
 
 hrs16_cog %>%
   mutate(
@@ -100,6 +109,9 @@ hrs16_cog %>%
 ```
 
 ```{r}
+#| tbl-cap: "vdlfl2: Scissors & Cactus - number correct"
+#| label: tbl-scissors
+
 hrs16_cog %>%
   select(vdlfl2) %>%
   labelled::to_factor() %>%
@@ -113,7 +125,8 @@ hrs16_cog %>%
 The president and vice-president naming items have been combined into one item.
 
 ```{r}
-#| tbl-cap: "vdlfl3: President and vice-president - number correct"
+#| tbl-cap: "vdlfl3: President and vice-president - number correct recoding"
+#| label: tbl-president-checkvar
 
 hrs16_cog %>%
   mutate(
@@ -129,6 +142,9 @@ hrs16_cog %>%
 ```
 
 ```{r}
+#| tbl-cap: "vdlfl3: President and vice-president - number correct"
+#| label: tbl-president
+
 hrs16_cog %>%
   select(vdlfl3) %>%
   labelled::to_factor() %>%
@@ -142,7 +158,8 @@ hrs16_cog %>%
 The new variable counts the number of correct responses on the serial 7.  Each item was checked so that the difference between consecutive items is 7.  So if a mistake was made early on, there is an opportunity to get the remaining items correct.
 
 ```{r}
-#| tbl-cap: "PD142-PD146: Serial 7"
+#| tbl-cap: "PD142-PD146: Serial 7 recoding"
+#| label: tbl-serial7-checkvar
 
 hrs16_cog %>%
   mutate(
@@ -162,6 +179,9 @@ hrs16_cog %>%
 ```
 
 ```{r}
+#| tbl-cap: "PD142-PD146: Serial 7"
+#| label: tbl-serial7
+
 hrs16_cog %>%
   select(vdsevens) %>%
   labelled::to_factor() %>%
@@ -175,12 +195,17 @@ hrs16_cog %>%
 This variable is the number of correct responses minus the number of errors.  Missing values are set at the median value of errors.
 
 ```{r}
-#| tbl-cap: "PD196: Animal naming"
+#| tbl-cap: "PD196: Animal naming recoding"
+#| label: tbl-animal-checkvar
+
 QSPtools::checkvar(hrs16_cog, vdlfl1, PD196, PD198) %>%
   gt::gt()
 ```
 
 ```{r}
+#| tbl-cap: "PD196: Animal naming"
+#| label: tbl-animal
+
 hrs16_cog %>%
   select(vdlfl1) %>%
   labelled::to_factor() %>%
@@ -198,13 +223,17 @@ No recoding was done.
 Are we going to use both immediate and delayed recall? Or just delayed recall?
 
 ```{r}
-#| tbl-cap: "vdwdimm: Immediate word recall"
+#| tbl-cap: "vdwdimm: Immediate word recall recoding"
+#| label: tbl-imm-word-recall-checkvar
 
 QSPtools::checkvar(hrs16_cog, vdwdimm, PD174) %>%
   gt::gt()
 ```
 
 ```{r}
+#| tbl-cap: "vdwdimm: Immediate word recall"
+#| label: tbl-imm-word-recall
+
 hrs16_cog %>%
   select(vdwdimm) %>%
   labelled::to_factor() %>%
@@ -215,13 +244,17 @@ hrs16_cog %>%
 
 
 ```{r}
-#| tbl-cap: "vdwddel: Delayed word recall"
+#| tbl-cap: "vdwddel: Delayed word recall recoding"
+#| label: tbl-del-word-recall-checkvar
 
 QSPtools::checkvar(hrs16_cog, vdwddel, PD184) %>%
   gt::gt()
 ```
 
 ```{r}
+#| tbl-cap: "vdwddel: Delayed word recall"
+#| label: tbl-del-word-recall
+
 hrs16_cog %>%
   select(vdwddel) %>%
   labelled::to_factor() %>%
@@ -235,13 +268,17 @@ hrs16_cog %>%
 Recoded 996, 997, and 999 as missing.
 
 ```{r}
-#| tbl-cap: "vdexf7: Number series score"
+#| tbl-cap: "vdexf7: Number series score recoding"
+#| label: tbl-numeracy-checkvar
 
 QSPtools::checkvar(hrs16_cog, vdexf7, PNSSCORE) %>%
   gt::gt()
 ```
 
 ```{r}
+#| tbl-cap: "vdexf7: Number series score"
+#| label: tbl-numeracy
+
 hrs16_cog %>%
   select(vdexf7) %>%
   labelled::to_factor() %>%

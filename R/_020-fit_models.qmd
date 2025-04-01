@@ -34,6 +34,9 @@ The first model used all the items.
 The model fit for this model was "poor".
 
 ```{r}
+#| tbl-cap: "Model 1: Fit statistics"
+#| label: tbl-model1-fit
+
 mplush5::mplus.print.model.fit.information(model1_h5_path) %>%
   filter(grepl("RMSEA : E", description) |
          grepl("SRMR", description) |
@@ -52,6 +55,9 @@ mplush5::mplus.print.model.fit.information(model1_h5_path) %>%
 
 
 ```{r}
+#| tbl-cap: "Model 1: Factor loadings"
+#| label: tbl-model1-loadings
+
 mplush5::mplus.print.standardized.model.results(model1_h5_path, "stdyx") %>%
   filter(grepl("F BY", Statement))  %>%
   separate(Statement, into = c("f", "by", "item"), sep = " ") %>%
@@ -79,6 +85,9 @@ The second model removed the immediate word recall item.
 The model fit for this model was "good".
 
 ```{r}
+#| tbl-cap: "Model 2: Fit statistics"
+#| label: tbl-model2-fit
+
 mplush5::mplus.print.model.fit.information(model2_h5_path) %>%
   filter(grepl("RMSEA : E", description) |
          grepl("SRMR", description) |
@@ -97,6 +106,9 @@ mplush5::mplus.print.model.fit.information(model2_h5_path) %>%
 
 
 ```{r}
+#| tbl-cap: "Model 2: Factor loadings"
+#| label: tbl-model2-loadings
+
 mplush5::mplus.print.standardized.model.results(model2_h5_path, "stdyx") %>%
   filter(grepl("F BY", Statement))  %>%
   separate(Statement, into = c("f", "by", "item"), sep = " ") %>%
@@ -122,6 +134,7 @@ This is the distribution of the factor scores from the final model.
 
 ```{r}
 #| fig-cap: Distribution of factor scores by HCAP inclusion status
+#| label: fig-hist-factor-scores-hcap
 
 
 F_mean <- hrs16_cog %>%
@@ -143,6 +156,7 @@ hrs16_cog %>%
 
 ```{r}
 #| fig-cap: Distribution of factor scores by HCAP inclusion status, including HRS sample
+#| label: fig-hist-factor-scores-hrs
 
 F_mean <- hrs16_cog %>%
   mutate(

@@ -7,3 +7,5 @@ R_objects/
 mplus_output/**/*.dat
 mplus_output/**/*.h5
 mplus_output/**/*.inp
+stata/
+stata/*.dta

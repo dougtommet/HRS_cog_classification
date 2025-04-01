@@ -6,6 +6,7 @@ tracker <- haven::read_dta(fs::path(hrs_data_path, "tracker", "trk2022v1", "trk2
 h16a_r <- haven::read_dta(fs::path(hrs_data_path, "2016", "stata", "H16A_R.dta"))
 h16c_r <- haven::read_dta(fs::path(hrs_data_path, "2016", "stata", "H16C_R.dta"))
 h16d_r <- haven::read_dta(fs::path(hrs_data_path, "2016", "stata", "H16D_R.dta"))
+h16g_r <- haven::read_dta(fs::path(hrs_data_path, "2016", "stata", "H16G_R.dta"))
 
 normexcld <- haven::read_dta(fs::path(hrs_data_path, "normexcld.dta"))
 
@@ -15,6 +16,7 @@ saveRDS(tracker, fs::path(r_objects_folder, "005_tracker.rds"))
 saveRDS(h16a_r, fs::path(r_objects_folder, "005_h16a_r.rds"))
 saveRDS(h16c_r, fs::path(r_objects_folder, "005_h16c_r.rds"))
 saveRDS(h16d_r, fs::path(r_objects_folder, "005_h16d_r.rds"))
+saveRDS(h16g_r, fs::path(r_objects_folder, "005_h16g_r.rds"))
 saveRDS(normexcld, fs::path(r_objects_folder, "005_normexcld.rds"))
 
 

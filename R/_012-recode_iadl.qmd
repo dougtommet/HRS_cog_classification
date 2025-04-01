@@ -1,0 +1,121 @@
+```{r}
+hrs16_iadl <- readRDS(fs::path(r_objects_folder, "012_hrs16_iadl.rds"))
+
+```
+
+# Recode the functional impairment items
+
+This section shows the recoding of the IADL items.
+
+There are 11 IADL items that are considered to measure functional impairment.
+
+-   Item responses of 1 (Yes) and 6 (Can't do) are recoded as "impairment"
+
+-   Item responses of 5 (No), 7 (Don't do), 8 (Don't know) and 9 (Refused) are recoded as "no impairment"
+
+Two of the items - "Difficulty taking medication" and "Do you think you would have difficulty taking medication" are logically dependent and are merged into one item
+
+The sum of these 10 recoded IADL items is the functional impairment score
+
+```{r}
+#| tbl-cap: "ADL: Difficulty Dressing recoding"
+#| label: tbl-dressing
+
+hrs16_iadl %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(PG014, rPG014)
+```
+
+```{r}
+#| tbl-cap: "ADL: Difficulty Bathing recoding"
+#| label: tbl-bathing
+
+hrs16_iadl %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(PG021, rPG021)
+```
+
+```{r}
+#| tbl-cap: "ADL: Difficulty Eating recoding"
+#| label: tbl-eating
+
+hrs16_iadl %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(PG023, rPG023)
+```
+
+```{r}
+#| tbl-cap: "ADL: Difficulty Using Toilet recoding"
+#| label: tbl-toilet
+
+hrs16_iadl %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(PG030, rPG030)
+```
+
+```{r}
+#| tbl-cap: "ADL: Difficulty Using Maps recoding"
+#| label: tbl-maps
+
+hrs16_iadl %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(PG040, rPG040)
+```
+
+```{r}
+#| tbl-cap: "IADL: Difficulty Meal Prep recoding"
+#| label: tbl-meals
+
+hrs16_iadl %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(PG041, rPG041)
+```
+
+```{r}
+#| tbl-cap: "IADL: Difficulty Grocery Shopping recoding"
+#| label: tbl-grocery
+
+hrs16_iadl %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(PG044, rPG044)
+```
+
+```{r}
+#| tbl-cap: "IADL: Difficulty Making Phone Calls recoding"
+#| label: tbl-phone
+
+hrs16_iadl %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(PG047, rPG047)
+```
+
+```{r}
+#| tbl-cap: "IADL: Difficulty Taking Meds recoding"
+#| label: tbl-meds
+
+QSPtools::checkvar(hrs16_iadl, rPG050, PG050, PG051) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "IADL: Difficulty Managing Money Calls recoding"
+#| label: tbl-money
+
+hrs16_iadl %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(PG059, rPG059)
+```
+
+```{r}
+#| tbl-cap: "Descriptive statistics of recoded functional impairment items"
+#| label: tbl-desc-iadls
+
+hrs16_iadl %>%
+  select(starts_with("r"), iadl_imp) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary(
+    type = c(iadl_imp) ~ "categorical"
+  )
+
+
+```

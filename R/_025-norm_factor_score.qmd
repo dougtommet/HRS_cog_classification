@@ -17,7 +17,8 @@ The demographic variables were centered to the mean values in the norming sample
 These are the centering values used:
 
 ```{r}
-
+#| tbl-cap: "Demographic variable means"
+#| label: tbl-centering-values
 centering_info %>%
   gt::gt() %>%
   gt::fmt_number(decimals = 3)
@@ -26,7 +27,8 @@ centering_info %>%
 Summary of the centered demographic variables in the norming sample:
 
 ```{r}
-
+#| tbl-cap: "Descriptive statistics of centered demographic variables - HCAP"
+#| label: tbl-centered-hcap
 hrs16_cog_norm %>%
   select(cfemale, cblack, chisp, cschlyrs) %>%
   labelled::to_factor() %>%
@@ -40,6 +42,8 @@ hrs16_cog_norm %>%
 Summary of the centered demographic variables in the full HRS sample:
 
 ```{r}
+#| tbl-cap: "Descriptive statistics of centered demographic variables - HRS"
+#| label: tbl-centered-hrs
 hrs16_cog %>%
   select(cfemale, cblack, chisp, cschlyrs) %>%
   labelled::to_factor() %>%
@@ -63,6 +67,8 @@ To double check the math, these splines were compared to those from the `rms::rc
 These are the first 10 rows from the manually created splines.
 
 ```{r}
+#| tbl-cap: "Manually created regression splines"
+#| label: tbl-splines-manual
 hrs16_cog_norm %>% 
   slice_head(n=10) %>%
   select(spage1, spage2, spage3) %>%
@@ -74,6 +80,10 @@ hrs16_cog_norm %>%
 These are the first 10 rows from the `rms::rcs()` function.
 
 ```{r}
+#| tbl-cap: "rcs() created regression splines"
+#| label: tbl-splines-rcs
+
+
 # rms::rcs(hrs16_cog_norm$rage, 4)[1:10,]
 
 foo <- rms::rcs(hrs16_cog_norm$rage, 4)
@@ -103,6 +113,7 @@ The regression model is able to predict the blom score well using the factor sco
 
 ```{r}
 #| fig-cap: Original Blom score vs Predicted Blom score in norming sample
+#| label: fig-original-predicted-blom
 
 hrs16_cog_norm %>%
   ggplot(aes(x = f_blom, y = Pblom)) +
@@ -125,6 +136,7 @@ The factor scores were normalized by regressing the predicted blom score on the 
 
 ```{r}
 #| tbl-cap: Parameter estimates of the normalization regression in the norming sample
+#| label: tbl-normalization-factor-scores
 
 goo_lm %>%
   gt::gt() %>%
@@ -139,6 +151,7 @@ These are plots of the observed blom scores versus the model implied blom scores
 
 ```{r}
 #| fig-cap: Predicted blom vs normalized blom in norming sample
+#| label: fig-pred-normalized-blom-hcap
 
 hrs16_cog_norm %>%
   ggplot(aes(x = Pblom, y = Eblom)) +
@@ -155,6 +168,7 @@ The regression model was used to estimate the normalized blom scores in the full
 
 ```{r}
 #| fig-cap: Predicted blom vs normalized blom in full HRS sample
+#| label: fig-pred-normalized-blom-hrs
 
 hrs16_cog %>%
   ggplot(aes(x = Pblom, y = Eblom)) +
@@ -179,6 +193,7 @@ The adjusted model r2 is `r broom::glance(foo_lm) %>% pull(adj.r.squared) %>% ro
 
 ```{r}
 #| tbl-cap: Summary statistics of the factor score variables in the norming sample
+#| label: tbl-tscores-hcap
 
 hrs16_cog_norm %>%
   select(Pblom, Eblom, TF) %>%
@@ -192,6 +207,7 @@ hrs16_cog_norm %>%
 
 ```{r}
 #| fig-cap: Predicted blom score vs T-score in norming sample
+#| label: fig-pred-tscore-hcap
 
 hrs16_cog_norm %>%
   ggplot(aes(x = Pblom, y = TF)) +
@@ -203,6 +219,7 @@ hrs16_cog_norm %>%
 
 ```{r}
 #| tbl-cap: Summary statistics of the factor score variables in the full HRS sample
+#| label: tbl-tscores-hrs
 
 hrs16_cog %>%
   select(Pblom, Eblom, TF) %>%
@@ -216,6 +233,7 @@ hrs16_cog %>%
 
 ```{r}
 #| fig-cap: Predicted blom score vs T-score in the full HRS sample
+#| label: fig-pred-tscore-hrs
 
 hrs16_cog %>%
   ggplot(aes(x = Pblom, y = TF)) +
