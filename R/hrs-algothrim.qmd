@@ -112,7 +112,8 @@ hcap <- hcap %>%
                         is.na(cog_imp) & jorm_threshold==1 ~ 1,
                         is.na(cog_imp) & jorm_threshold==0 ~ 0
   ))
-QSPtools::checkvar(hcap, dx, cog_threshold, iadl_threshold, self_concerns, jorm_threshold)
+QSPtools::checkvar(hcap, dx, cog_threshold, iadl_threshold, self_concerns, jorm_threshold) %>%
+  gt::gt()
 
 hcap <- hcap %>%
   labelled::set_variable_labels(dx = "Algorithm Dx") %>%
