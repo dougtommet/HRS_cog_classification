@@ -95,7 +95,10 @@ hcap <- hcap %>%
          iadl_threshold = case_when(cog_threshold==2 & iadl_imp>0 ~ 1,
                                     cog_threshold==2 & iadl_imp==0 ~ 0,
                                     cog_threshold==1 & iadl_imp>0 ~ 1,
-                                    cog_threshold==1 & iadl_imp==0 ~ 0))
+                                    cog_threshold==1 & iadl_imp==0 ~ 0),
+         jorm_threshold = case_when(vs3jormsc>= 3.4 ~ 2,
+                                    vs3jormsc > 3.0 &  vs3jormsc < 3.4 ~ 1,
+                                    vs3jormsc <= 3.0  ~ 0))
 
 hcap <- hcap %>%
   mutate(dx = case_when(cog_threshold==2 & iadl_threshold==1 ~ 2,
@@ -105,11 +108,11 @@ hcap <- hcap %>%
                         cog_threshold==1 & iadl_threshold==0  & self_concerns==1~ 1,
                         cog_threshold==1 & iadl_threshold==0  & self_concerns==0~ 0,
                         cog_threshold==0 ~ 0,
-                        vs3jormsc_iflag==0 & vs3jormsc >= 3.4 ~ 2,
-                        vs3jormsc_iflag==0 & vs3jormsc > 3.0 &  vs3jormsc < 3.4 ~ 1,
-                        vs3jormsc_iflag==0 & vs3jormsc <= 3.0  ~ 0
+                        is.na(cog_imp) & jorm_threshold==2 ~ 2,
+                        is.na(cog_imp) & jorm_threshold==1 ~ 1,
+                        is.na(cog_imp) & jorm_threshold==0 ~ 0
   ))
-QSPtools::checkvar(hcap, dx, cog_threshold, iadl_threshold, self_concerns)
+QSPtools::checkvar(hcap, dx, cog_threshold, iadl_threshold, self_concerns, jorm_threshold)
 
 hcap <- hcap %>%
   labelled::set_variable_labels(dx = "Algorithm Dx") %>%
@@ -119,6 +122,14 @@ hcap %>%
   select(dx) %>%
   labelled::to_factor() %>%
   gtsummary::tbl_summary()
+
+hcap %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(vs1hcapdxeap, dx)
+# weighted kappa
+
+k <- table(hcap$vs1hcapdxeap, hcap$dx)
+psych::wkappa(k)
 
 a1 <- hcap %>% filter(is.na(cog_imp)) %>% nrow(); a1
 a2 <- hcap %>% filter(cog_imp %in% c(0, 1)) %>% nrow(); a2
