@@ -1,0 +1,196 @@
+
+# Apply algorithm in the HCAP sample
+
+In the previous section we found the cutpoints to use to determine cognitive impairment and functional impairment levels.  In this section we use those cutpoints to implement the algorithm.
+
+
+
+```{r}
+hcap <- readRDS(fs::path(r_objects_folder, "030_hcap.rds"))
+algorithm_thresholds <- readRDS(fs::path(r_objects_folder, "030_algorithm_thresholds.rds"))
+v1_algorithm <- readRDS(fs::path(r_objects_folder, "030_v1_algorithm.rds"))
+v1_flow_diagram <- readRDS(fs::path(r_objects_folder, "030_v1_flow_diagram.rds"))
+v2_algorithm <- readRDS(fs::path(r_objects_folder, "030_v2_algorithm.rds"))
+v2_flow_diagram <- readRDS(fs::path(r_objects_folder, "030_v2_flow_diagram.rds"))
+
+```
+
+
+
+The cutpoints we used for cognitive impairment were less than 36.0 and less than 43.3.  The ADL/IADL cutpoints were 1 or more impairments for both of the cognitive levels.  The Jorm thresholds were less than 3.0 and less than 3.4.
+
+The following code shows a function that uses these thresholds to create the data file.
+
+```{r}
+#| echo: true
+algorithm_thresholds
+```
+
+## Version 1 of algorithm
+
+@fig-hrs-algorithm-v1 shows the first version of the algorithm. 
+
+```{r}
+#| fig-cap: "HRS algorithm (v1)"
+#| label: fig-hrs-algorithm-v1
+
+knitr::include_graphics(here::here("Figures", "HRS-algorithm_2025-03-11_with_addresses.png"))
+```
+
+This is the code that creates a function that implements the algortihm shown in @fig-hrs-algorithm-v1.
+
+Note: The algorithm uses the Jorm score from HCAP, not the HRS version.
+
+```{r}
+#| echo: true
+v1_algorithm
+```
+
+
+```{r}
+#| tbl-cap: "Relationship between version 1 diagnosis and its constituent components"
+#| label: tbl-checkvar-dxv1
+QSPtools::checkvar(hcap, dx_v1, cog_threshold, iadl_threshold, self_concerns, jorm_threshold) %>%
+  gt::gt() %>%
+  my_gt()
+```
+
+The following table shows the sample sizes at the places labeled in @fig-hrs-algorithm-v1.
+
+```{r}
+#| tbl-cap: "Sample sizes at various places in the flow diagram"
+#| label: tbl-v1-flowdiagram-n
+v1_flow_diagram(hcap) %>% 
+  as_tibble() %>% 
+  pivot_longer(cols = everything(), names_to= "address", values_to = "n") %>%
+  gt::gt() %>%
+  my_gt()
+```
+
+```{r}
+#| tbl-cap: "Distribution of dementia diagnoses in HCAP"
+#| label: tbl-dxv1-distribution
+hcap %>%
+  select(dx_v1, vs1hcapdxeap) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary() %>%
+  my_gtsummary()
+
+```
+
+
+```{r}
+#| tbl-cap: "Crosstab of version 1 diagnosis and HCAP diagnosis"
+#| label: tbl-cross-dxv1-hcap
+hcap %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(vs1hcapdxeap, dx_v1) %>%
+  my_gtsummary()
+```
+
+```{r}
+k <- table(hcap$vs1hcapdxeap, hcap$dx_v1)
+psych::wkappa(k)
+```
+
+## Version 2
+
+In version 2 of the algorithm we removed the self-rated concerns from the severe cognitive impairment portion of the algorithm.  Now, if a participant has severe cognitive impairment but no functional impairment, they will be classified as MCI.
+
+```{r}
+#| fig-cap: "HRS algorithm (v2)"
+#| label: fig-hrs-algorithm-v2
+
+knitr::include_graphics(here::here("Figures", "HRS-algorithm_v2_2025-04-03.png"))
+```
+
+This is the code that creates a function that implements the algortihm shown in @fig-hrs-algorithm-v2.
+
+```{r}
+#| echo: true
+v2_algorithm
+```
+
+```{r}
+#| tbl-cap: "Relationship between version 2 diagnosis and its constituent components"
+#| label: tbl-checkvar-dxv2
+QSPtools::checkvar(hcap, dx_v2, cog_threshold, iadl_threshold, self_concerns, jorm_threshold) %>%
+  gt::gt() %>%
+  gt::tab_style(
+    style = list(
+      gt::cell_fill(color = "yellow")
+    ),
+    locations = gt::cells_body(
+      columns = c(dx_v2, cog_threshold, iadl_threshold, self_concerns, jorm_threshold, n),
+      rows = (cog_threshold==2 & iadl_threshold==0 & self_concerns==1)
+    )
+  ) %>%
+  my_gt()
+```
+
+The following table shows the sample sizes at the places labeled in @fig-hrs-algorithm-v2.
+
+```{r}
+#| tbl-cap: "Sample sizes at various places in the v2 flow diagram"
+#| label: tbl-v2-flowdiagram-n
+v2_flow_diagram(hcap) %>% 
+  as_tibble() %>% 
+  pivot_longer(cols = everything(), names_to= "address", values_to = "n") %>%
+  gt::gt() %>%
+  my_gt()
+```
+
+
+```{r}
+#| tbl-cap: "Distribution of the diagnoses for the subset that was affected by the change in algorithm"
+#| label: tbl-distribution-algorithm-change
+hcap %>%
+  filter(cog_threshold==2 & iadl_threshold==0 & self_concerns==1) %>%
+  select(dx_v1, dx_v2, vs1hcapdxeap) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary() %>%
+  my_gtsummary()
+```
+
+```{r}
+#| tbl-cap: "Distribution of dementia diagnoses in HCAP"
+#| label: tbl-dxv2-distribution
+hcap %>%
+  select(dx_v2, vs1hcapdxeap) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary() %>%
+  my_gtsummary()
+
+```
+
+```{r}
+#| tbl-cap: "Crosstab of version 1 diagnosis and HCAP diagnosis"
+#| label: tbl-cross-dxv1-hcap2
+hcap %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(vs1hcapdxeap, dx_v1) %>%
+  my_gtsummary()
+```
+
+```{r}
+#| tbl-cap: "Crosstab of version 2 diagnosis and HCAP diagnosis"
+#| label: tbl-cross-dxv2-hcap
+hcap %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(vs1hcapdxeap, dx_v2) %>%
+  my_gtsummary()
+```
+
+```{r}
+k <- table(hcap$vs1hcapdxeap, hcap$dx_v2)
+psych::wkappa(k)
+```
+
+```{r}
+#| tbl-cap: "Crosstab of version 2 diagnosis and version 1 diagnosis"
+#| label: tbl-cross-dxv2-dxv1
+hcap %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(dx_v1, dx_v2) %>%
+  my_gtsummary()
+```

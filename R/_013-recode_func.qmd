@@ -1,0 +1,254 @@
+
+
+```{r}
+hrs16_func <- readRDS(fs::path(r_objects_folder, "013_hrs16_func.rds"))
+hrshcap <- readRDS(fs::path(r_objects_folder, "005_hrshcap.rds"))
+
+
+```
+
+# Recode the informant based items
+
+This section shows the recoding of the Jorm items and the subjective cognitive impairment item.
+
+There are 16 Jorm items.
+
+-   For each Jorm item, three HRS items need to be combined to recreate the Jorm item
+
+The average of these 16 Jorms items is the score
+
+The subjective cognitive impairment item was recoded so that "no change" and "improvement" was combined into one category.
+
+
+
+```{r}
+#| tbl-cap: "Jorm: Remembering things about family"
+#| label: tbl-jorm1
+
+hrs16_func %>%
+  QSPtools::checkvar(jorm1, PD506, PD507, PD508) %>%
+  gt::gt() %>%
+  my_gt()
+```
+
+```{r}
+#| tbl-cap: "Jorm: Remembering things that happened recently"
+#| label: tbl-jorm2
+
+hrs16_func %>%
+  QSPtools::checkvar(jorm2, PD509, PD510, PD511) %>%
+  gt::gt() %>%
+  my_gt()
+```
+
+```{r}
+#| tbl-cap: "Jorm: Recalling conversations a few day later"
+#| label: tbl-jorm3
+
+hrs16_func %>%
+  QSPtools::checkvar(jorm3, PD512, PD513, PD514) %>%
+  gt::gt() %>%
+  my_gt()
+```
+
+```{r}
+#| tbl-cap: "Jorm: Remembering telephone number"
+#| label: tbl-jorm4
+
+hrs16_func %>%
+  QSPtools::checkvar(jorm4, PD515, PD516, PD517) %>%
+  gt::gt() %>%
+  my_gt()
+```
+
+```{r}
+#| tbl-cap: "Jorm: Remembering day and month"
+#| label: tbl-jorm5
+
+hrs16_func %>%
+  QSPtools::checkvar(jorm5, PD518, PD519, PD520) %>%
+  gt::gt() %>%
+  my_gt()
+```
+
+```{r}
+#| tbl-cap: "Jorm: Remembering where things are kept"
+#| label: tbl-jorm6
+
+hrs16_func %>%
+  QSPtools::checkvar(jorm6, PD521, PD522, PD523) %>%
+  gt::gt() %>%
+  my_gt()
+```
+
+```{r}
+#| tbl-cap: "Jorm: Remembering where to find things"
+#| label: tbl-jorm7
+
+hrs16_func %>%
+  QSPtools::checkvar(jorm7, PD524, PD525, PD526) %>%
+  gt::gt() %>%
+  my_gt()
+```
+
+```{r}
+#| tbl-cap: "Jorm: Knowing how to work familar machines around the house"
+#| label: tbl-jorm8
+
+hrs16_func %>%
+  QSPtools::checkvar(jorm8, PD527, PD528, PD529) %>%
+  gt::gt() %>%
+  my_gt()
+```
+
+```{r}
+#| tbl-cap: "Jorm: Learning to use a new gadget"
+#| label: tbl-jorm9
+
+hrs16_func %>%
+  QSPtools::checkvar(jorm9, PD530, PD531, PD532) %>%
+  gt::gt() %>%
+  my_gt()
+```
+
+```{r}
+#| tbl-cap: "Jorm: Learning new things in general"
+#| label: tbl-jorm10
+
+hrs16_func %>%
+  QSPtools::checkvar(jorm10, PD533, PD534, PD535) %>%
+  gt::gt() %>%
+  my_gt()
+```
+
+```{r}
+#| tbl-cap: "Jorm: Following a story in a book or on TV"
+#| label: tbl-jorm11
+
+hrs16_func %>%
+  QSPtools::checkvar(jorm11, PD536, PD537, PD538) %>%
+  gt::gt() %>%
+  my_gt()
+```
+
+```{r}
+#| tbl-cap: "Jorm: Making decisions on everyday matters"
+#| label: tbl-jorm12
+
+hrs16_func %>%
+  QSPtools::checkvar(jorm12, PD539, PD540, PD541) %>%
+  gt::gt() %>%
+  my_gt()
+```
+
+```{r}
+#| tbl-cap: "Jorm: Handling money for shopping"
+#| label: tbl-jorm13
+
+hrs16_func %>%
+  QSPtools::checkvar(jorm13, PD542, PD543, PD544) %>%
+  gt::gt() %>%
+  my_gt()
+```
+
+```{r}
+#| tbl-cap: "Jorm: Handling financial matters"
+#| label: tbl-jorm14
+
+hrs16_func %>%
+  QSPtools::checkvar(jorm14, PD545, PD546, PD547) %>%
+  gt::gt() %>%
+  my_gt() 
+  
+```
+
+```{r}
+#| tbl-cap: "Jorm: Handling everyday arthimetic problems"
+#| label: tbl-jorm15
+
+hrs16_func %>%
+  QSPtools::checkvar(jorm15, PD548, PD549, PD550) %>%
+  gt::gt() %>%
+  my_gt()
+    
+```
+
+```{r}
+#| tbl-cap: "Jorm: Using intelligence to understand what's going on"
+#| label: tbl-jorm16
+
+hrs16_func %>%
+  QSPtools::checkvar(jorm16, PD551, PD552, PD553) %>%
+  gt::gt() %>%
+  my_gt()
+  
+```
+
+```{r}
+#| tbl-cap: "Jorm Score"
+#| label: tbl-jorm-score
+
+foo <- hrs16_func %>%
+  left_join(hrshcap, by = c("HHID"="hhid", "PN" = "pn"))
+
+foo %>%
+  select(jorm, vs3jormsc) %>%
+  gtsummary::tbl_summary(
+    type = gtsummary::all_continuous() ~ "continuous2",
+    statistic = list(
+      gtsummary::all_continuous() ~ c("{mean} ({sd})",
+                                      "{median} ({p25}, {p75})",
+                                      "{N_nonmiss}"),
+      gtsummary::all_categorical() ~ "{n} / {N} ({p}%)"
+    ),
+  ) %>%
+  my_gtsummary()
+  
+```
+
+```{r}
+#| fig-cap: "Distribution of Jorm scores in HRS & HCAP"
+#| label: fig-jorm-hist
+
+foo %>%
+  select(HHID, PN, jorm, vs3jormsc) %>%
+  rename(hrs = jorm) %>%
+  rename(hcap = vs3jormsc) %>%
+  pivot_longer(cols = c(hrs, hcap), names_to = "source", values_to = "score") %>%
+  ggplot(aes(x = score, group = source)) +
+    geom_histogram() +
+    facet_wrap(~source, ncol=1) +
+    hrbrthemes::theme_ipsum()
+```
+
+```{r}
+#| fig-cap: "Scatterplot of Jorm scores by HRS & HCAP"
+#| label: fig-jorm-hrs-hcap
+
+foo %>%
+  ggplot(aes(x = jorm, y = vs3jormsc)) +
+  geom_point() +
+  hrbrthemes::theme_ipsum()
+```
+
+
+
+```{r}
+#| tbl-cap: "Self-concerns"
+#| label: tbl-scd
+
+hrs16_func %>%
+  select(self_concerns) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary(
+    statistic = list(
+      gtsummary::all_continuous() ~ "{mean} ({sd})",
+      gtsummary::all_categorical() ~ "{n} / {N} ({p}%)"
+    ),
+  )
+
+
+```
+
+
+

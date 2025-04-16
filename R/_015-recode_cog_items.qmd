@@ -40,7 +40,8 @@ hrs16_cog %>%
                                  "9.  RF (Refused)"))
     ) %>%
   QSPtools::checkvar(vdori, PD151, PD152, PD153, PD154) %>%
-  gt::gt()
+  gt::gt() %>%
+  my_gt()
 
 ```
 
@@ -53,7 +54,8 @@ hrs16_cog %>%
   labelled::to_factor() %>%
   gtsummary::tbl_summary(
     type = c(starts_with("vd")) ~ "categorical"
-  )
+  ) %>%
+  my_gtsummary() 
 ```
 
 ## Count backwards
@@ -72,7 +74,8 @@ hrs16_cog %>%
                       labels = c("1.  CORRECT", "5.  INCORRECT", "9.  RF (Refused)"))
     ) %>%
   QSPtools::checkvar(vdcount, PD124, PD129) %>%
-  gt::gt()
+  gt::gt() %>%
+  my_gt()
 ```
 
 ```{r}
@@ -84,7 +87,8 @@ hrs16_cog %>%
   labelled::to_factor() %>%
   gtsummary::tbl_summary(
     type = c(starts_with("vd")) ~ "categorical"
-  )
+  ) %>%
+  my_gtsummary()
 ```
 
 ## Object naming
@@ -105,7 +109,8 @@ hrs16_cog %>%
                                  "9.  RF (Refused)"))
     ) %>%
   QSPtools::checkvar(vdlfl2, PD155, PD156) %>%
-  gt::gt()
+  gt::gt() %>%
+  my_gt()
 ```
 
 ```{r}
@@ -117,7 +122,8 @@ hrs16_cog %>%
   labelled::to_factor() %>%
   gtsummary::tbl_summary(
     type = c(starts_with("vd")) ~ "categorical"
-  )
+  ) %>%
+  my_gtsummary()
 ```
 
 ## President/Vice-president
@@ -138,7 +144,8 @@ hrs16_cog %>%
                                  "9.  RF (Refused)"))
     ) %>%
   QSPtools::checkvar(vdlfl3, PD157, PD158) %>%
-  gt::gt()
+  gt::gt() %>%
+  my_gt()
 ```
 
 ```{r}
@@ -150,7 +157,8 @@ hrs16_cog %>%
   labelled::to_factor() %>%
   gtsummary::tbl_summary(
     type = c(starts_with("vd")) ~ "categorical"
-  )
+  ) %>%
+  my_gtsummary()
 ```
 
 ## Serial 7
@@ -175,7 +183,8 @@ hrs16_cog %>%
                       labels = c("0. Incorrect", "1. Correct"))
     ) %>%
   QSPtools::checkvar(vdsevens, rPD142, rPD143, rPD144, rPD145, rPD146) %>%
-  gt::gt()
+  gt::gt() %>%
+  my_gt()
 ```
 
 ```{r}
@@ -187,7 +196,8 @@ hrs16_cog %>%
   labelled::to_factor() %>%
   gtsummary::tbl_summary(
     type = c(starts_with("vd")) ~ "categorical"
-  )
+  ) %>%
+  my_gtsummary()
 ```
 
 ## Animal naming
@@ -199,7 +209,8 @@ This variable is the number of correct responses minus the number of errors.  Mi
 #| label: tbl-animal-checkvar
 
 QSPtools::checkvar(hrs16_cog, vdlfl1, PD196, PD198) %>%
-  gt::gt()
+  gt::gt() %>%
+  my_gt()
 ```
 
 ```{r}
@@ -211,7 +222,8 @@ hrs16_cog %>%
   labelled::to_factor() %>%
   gtsummary::tbl_summary(
     type = c(starts_with("vd")) ~ "categorical"
-  )
+  ) %>%
+  my_gtsummary()
 ```
 
 ## Word recall
@@ -227,7 +239,8 @@ Are we going to use both immediate and delayed recall? Or just delayed recall?
 #| label: tbl-imm-word-recall-checkvar
 
 QSPtools::checkvar(hrs16_cog, vdwdimm, PD174) %>%
-  gt::gt()
+  gt::gt() %>%
+  my_gt()
 ```
 
 ```{r}
@@ -239,7 +252,8 @@ hrs16_cog %>%
   labelled::to_factor() %>%
   gtsummary::tbl_summary(
     type = c(starts_with("vd")) ~ "categorical"
-  )
+  ) %>%
+  my_gtsummary()
 ```
 
 
@@ -248,7 +262,8 @@ hrs16_cog %>%
 #| label: tbl-del-word-recall-checkvar
 
 QSPtools::checkvar(hrs16_cog, vdwddel, PD184) %>%
-  gt::gt()
+  gt::gt() %>%
+  my_gt()
 ```
 
 ```{r}
@@ -260,7 +275,8 @@ hrs16_cog %>%
   labelled::to_factor() %>%
   gtsummary::tbl_summary(
     type = c(starts_with("vd")) ~ "categorical"
-  )
+  ) %>%
+  my_gtsummary()
 ```
 
 ## Numeracy
@@ -272,7 +288,8 @@ Recoded 996, 997, and 999 as missing.
 #| label: tbl-numeracy-checkvar
 
 QSPtools::checkvar(hrs16_cog, vdexf7, PNSSCORE) %>%
-  gt::gt()
+  gt::gt() %>%
+  my_gt()
 ```
 
 ```{r}
@@ -284,6 +301,7 @@ hrs16_cog %>%
   labelled::to_factor() %>%
   gtsummary::tbl_summary(
     type = c(starts_with("vd")) ~ "categorical"
-  )
+  ) %>%
+  my_gtsummary()
 ```
 

@@ -20,20 +20,39 @@ source(here::here("R", "002-folder_paths.R"))
 ```
 
 ```{r}
+my_gtsummary <- function(tbl) {
+  tbl %>%
+    gtsummary::as_gt() %>%
+    gt::opt_stylize(6)
+}
+my_gt <- function(tbl) {
+  tbl %>%
+    gt::opt_stylize(6)
+}
+```
+
+```{r}
 #| eval: false
 
 source(here::here("R", "005-read_data.R"))
 source(here::here("R", "010-select_data.R"))
 source(here::here("R", "011-recode_demographics.R"))
+source(here::here("R", "012-recode_iadl.R"))
+source(here::here("R", "013-recode_func.R"))
 source(here::here("R", "015-recode_cog_items.R"))
 source(here::here("R", "016-rescale_cog_items.R"))
 source(here::here("R", "020-fit_models.R"))
 source(here::here("R", "025-norm_factor_score.R"))
+source(here::here("R", "030-implementing_algorithm_in_HCAP.R"))
 ```
 
 {{< include _005-read_data.qmd >}}
 
 {{< include _011-recode_demographics.qmd >}}
+
+{{< include _012-recode_iadl.qmd >}}
+
+{{< include _013-recode_func.qmd >}}
 
 {{< include _015-recode_cog_items.qmd >}}
 
@@ -43,3 +62,6 @@ source(here::here("R", "025-norm_factor_score.R"))
 
 {{< include _025-norm_factor_score.qmd >}}
 
+{{< include _029-finding_algorithm_cutpoints.qmd >}}
+
+{{< include _030-implementing_algorithm_in_HCAP.qmd >}}

@@ -21,7 +21,8 @@ These are the centering values used:
 #| label: tbl-centering-values
 centering_info %>%
   gt::gt() %>%
-  gt::fmt_number(decimals = 3)
+  gt::fmt_number(decimals = 3) %>%
+  my_gt()
 ```
 
 Summary of the centered demographic variables in the norming sample:
@@ -35,7 +36,9 @@ hrs16_cog_norm %>%
   gtsummary::tbl_summary(statistic = list(
     gtsummary::all_continuous() ~ "{mean} ({sd})",
     gtsummary::all_categorical() ~ "{n} / {N} ({p}%)"
-  ))
+    )
+  ) %>%
+  my_gtsummary()
 
 ```
 
@@ -50,7 +53,9 @@ hrs16_cog %>%
   gtsummary::tbl_summary(statistic = list(
     gtsummary::all_continuous() ~ "{mean} ({sd})",
     gtsummary::all_categorical() ~ "{n} / {N} ({p}%)"
-  ))
+    )
+  ) %>%
+  my_gtsummary()
 
 ```
 
@@ -74,7 +79,8 @@ hrs16_cog_norm %>%
   select(spage1, spage2, spage3) %>%
   gt::gt() %>%
   gt::fmt_number(columns = c(spage2, spage3),
-                 decimals = 3)
+                 decimals = 3) %>%
+  my_gt()
 ```
 
 These are the first 10 rows from the `rms::rcs()` function.
@@ -94,7 +100,8 @@ foo %>%
   slice_head(n=10) %>%
   gt::gt() %>%
   gt::fmt_number(columns = c(`hrs16_cog_norm'`, `hrs16_cog_norm''`),
-                 decimals = 3)
+                 decimals = 3) %>%
+  my_gt()
 ```
 
 # Factor Score Transformation
@@ -141,7 +148,8 @@ The factor scores were normalized by regressing the predicted blom score on the 
 goo_lm %>%
   gt::gt() %>%
   gt::fmt_number(columns = c(estimate, std.error, statistic, p.value),
-                 decimals = 3)
+                 decimals = 3) %>%
+  my_gt()
 
 ```
 
@@ -201,8 +209,9 @@ hrs16_cog_norm %>%
     statistic = list(
     gtsummary::all_continuous() ~ "{mean} ({sd})",
     gtsummary::all_categorical() ~ "{n} / {N} ({p}%)"
-  )
-  )
+    )
+  ) %>%
+  my_gtsummary()
 ```
 
 ```{r}
@@ -227,8 +236,9 @@ hrs16_cog %>%
     statistic = list(
     gtsummary::all_continuous() ~ "{mean} ({sd})",
     gtsummary::all_categorical() ~ "{n} / {N} ({p}%)"
-  )
-  )
+    )
+  ) %>%
+  my_gtsummary()
 ```
 
 ```{r}

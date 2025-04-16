@@ -49,7 +49,8 @@ mplush5::mplus.print.model.fit.information(model1_h5_path) %>%
   gt::cols_label(
     description = "Fit statistic",
     value = "Value"
-  )
+  ) %>%
+  my_gt()
 
 ```
 
@@ -73,7 +74,8 @@ mplush5::mplus.print.standardized.model.results(model1_h5_path, "stdyx") %>%
     item = "Item",
     label = "Label",
     Estimate = "Std Factor Loading"
-  )
+  ) %>%
+  my_gt()
 
 ```
 
@@ -100,7 +102,8 @@ mplush5::mplus.print.model.fit.information(model2_h5_path) %>%
   gt::cols_label(
     description = "Fit statistic",
     value = "Value"
-  )
+  ) %>%
+  my_gt()
 
 ```
 
@@ -124,7 +127,8 @@ mplush5::mplus.print.standardized.model.results(model2_h5_path, "stdyx") %>%
     item = "Item",
     label = "Label",
     Estimate = "Std Factor Loading"
-  )
+  ) %>%
+  my_gt()
 
 ```
 

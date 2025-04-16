@@ -21,7 +21,8 @@ Female came from the variable `GENDER`.
 hrs16_cog %>%
   mutate(GENDER = factor(GENDER, levels = c(1, 2),  labels = c("1.  Male", "2.  Female")) ) %>%
   QSPtools::checkvar(female, GENDER) %>%
-  gt::gt()
+  gt::gt() %>%
+  my_gt()
 ```
 
 Black came from the variables `RACE` and `HISPANIC`.
@@ -39,7 +40,8 @@ hrs16_cog %>%
                       labels = c("0.  Not obtained", "1.  Hispanic, Mexican", "2.  Hispanic, Other",
                                  "3.  Hispanic, type unknown", "5.  Non-Hispanic"))) %>%
   QSPtools::checkvar(black, RACE, HISPANIC) %>%
-  gt::gt()
+  gt::gt() %>%
+  my_gt()
 ```
 
 Hispanic came from the variable `HISPANIC`.
@@ -54,5 +56,6 @@ hrs16_cog %>%
                       labels = c("0.  Not obtained", "1.  Hispanic, Mexican", "2.  Hispanic, Other", 
                                  "3.  Hispanic, type unknown", "5.  Non-Hispanic"))) %>%
   QSPtools::checkvar(hisp, HISPANIC) %>%
-  gt::gt()
+  gt::gt() %>%
+  my_gt()
 ```

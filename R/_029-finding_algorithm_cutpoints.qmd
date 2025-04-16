@@ -1,0 +1,234 @@
+# Designing the algorithm
+
+This section details how we design the algorithm to mimic the Manly-Jones (2022) algorithm that we implemented in HCAP. In the previous sections we created the components that go into the algorithm - the cognitive factor score, the functional impairment measure, the subjective cognitive complaints indicator. However, these components are different than the ones used in HCAP. So, we need to find cutpoints for these components that give similar prevalences as HCAP.
+
+These are the diagrams of the HCAP algorithm and the proposed HRS algorithm. In both algorithms the fist step is to decide if a participant has normal cognition, mild impairment, or severe impairment. After finding the cutoffs to use to determine cognitive impairment level, the next step is to find cutoffs to determine functional impairment. The functional impairment cutoffs will be determined separately for each level of cognitive impairment.
+
+```{r}
+#| label: fig-hcap-algorithm
+#| out-width: "500px"
+#| fig-cap: "HCAP algorithm"
+#| fig-alt: "HCAP algorithm"
+knitr::include_graphics(here::here("Figures", "HCAP-algorithm.png"))
+```
+
+```{r}
+#| label: fig-hrs-algorithm
+#| out-width: "500px"
+#| fig-cap: "HRS algorithm"
+#| fig-alt: "HRS algorithm"
+knitr::include_graphics(here::here("Figures", "HRS-algorithm_2025-03-11.png"))
+```
+
+
+
+
+```{r}
+hrs16_cog <- readRDS(fs::path(r_objects_folder, "025_hrs16_cog.rds"))
+hrs16_iadl <- readRDS(fs::path(r_objects_folder, "012_hrs16_iadl.rds"))
+hrs16_func <- readRDS(fs::path(r_objects_folder, "013_hrs16_func.rds"))
+hrshcap <- readRDS(fs::path(r_objects_folder, "014_hrshcap.rds"))
+
+w051 <- haven::read_dta(here::here("Stata", "w051-preimputation.dta"))
+w051 <- w051 %>%
+  select(hhid, pn, Tgcp)
+w073 <- haven::read_dta(here::here("Stata", "w073_hcapdx.dta"))
+w073 <- w073 %>% 
+  select(hhid, pn, n21, n22)
+
+```
+
+```{r}
+hrs <- hrs16_cog %>%
+  left_join(hrs16_iadl, by = c("HHID" = "HHID", "PN" = "PN")) %>%
+  left_join(hrs16_func, by = c("HHID" = "HHID", "PN" = "PN")) %>%
+  left_join(hrshcap, by = c("HHID" = "hhid", "PN" = "pn")) %>%
+  left_join(w051, by = c("HHID" = "hhid", "PN" = "pn")) %>%
+  left_join(w073, by = c("HHID" = "hhid", "PN" = "pn"))
+
+
+```
+
+```{r}
+# Using the n=3496 sample
+hcap <- hrs %>% 
+  filter(!is.na(normexcld))
+
+hcap <- hcap %>%
+  mutate(CogImp = case_when(n21==0 & n22==0 ~ 0,
+                            n21==0 & n22==1 ~ 1,
+                            n21==1 ~ 2))
+
+# QSPtools::checkvar(hcap, CogImp, n21, n22)
+hcap <- hcap %>%
+  labelled::set_variable_labels(CogImp = "Number of domains impaired") %>%
+  labelled::set_value_labels(CogImp = c("No domains" = 0, "1 domain" = 1, "2+ domains" = 2))
+
+# Filtering to the nonimputed sample (n=2993)
+hcap <- hcap %>%
+  filter(imputed_flag==1)
+
+```
+
+## Finding cognitive impairment thresholds
+
+@fig-scatter-fscore shows the cognitive factor scores are highly correlated between the HCAP cognitive battery and the HRS cognitive battery. The correlation between them is `r cor(hcap$Tgcp, hcap$TF, "pairwise") %>% round(3)`.
+
+```{r}
+#| fig-cap: "Cognitive factor score in HCAP vs HRS"
+#| label: fig-scatter-fscore
+hcap %>%
+  ggplot(aes(x = Tgcp, y = TF)) +
+    geom_point() +
+    scale_x_continuous("HRS/HCAP GCP", limits = c(-30, 130)) +
+    scale_y_continuous("HRS/Core GCP", limits = c(-30, 130)) +
+    hrbrthemes::theme_ipsum()
+
+
+```
+
+@fig-boxplot-hcap-fscore shows the distribution of the HCAP cognitive factor score by the number of cognitive domains impaired.  The plot shows there is good separation in the distribution of the HCAP factor scores by the number of domains impaired.
+
+```{r}
+#| fig-cap: "Distribution of HCAP cognitive factor score by number of domains impaired"
+#| label: fig-boxplot-hcap-fscore
+
+hcap %>%
+  ggplot(aes(y = Tgcp, x = factor(CogImp))) +
+    geom_boxplot() +
+    scale_x_discrete("Number of domains impaired") +
+    hrbrthemes::theme_ipsum()
+```
+
+@fig-boxplot-hrs-fscore is a similar figure that shows the distribution of the HRS cognitive factor score by the number of HCAP cognitive domains impaired.  This figure shows there is more overlap of the distributions of the factor scores when separating them by the same variable as in @fig-boxplot-hcap-fscore.
+
+```{r}
+#| fig-cap: "Distribution of HRS cognitive factor score by number of domains impaired"
+#| label: fig-boxplot-hrs-fscore
+
+hcap %>%
+  ggplot(aes(y = TF, x = factor(CogImp))) +
+    geom_boxplot() +
+    scale_x_discrete("Number of domains impaired") +
+    hrbrthemes::theme_ipsum()
+```
+
+@tbl-number-impaired-domains shows that `r hcap %>% group_by(CogImp) %>% summarize(p = n()/nrow(hcap)) %>% filter(CogImp==1) %>% pull(p) %>% round(3) * 100`% had one domain impaired, and `r hcap %>% group_by(CogImp) %>% summarize(p = n()/nrow(hcap)) %>% filter(CogImp==2) %>% pull(p) %>% round(3) * 100`% had two or more domains impaired.  So we'll find cutpoints in the HRS factor score to match these percentages.
+
+```{r}
+#| tbl-cap: "Distribution of the number of impaired domains in HCAP"
+#| label: tbl-number-impaired-domains
+
+hcap %>%
+  select(CogImp) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary() %>%
+  my_gtsummary()
+```
+
+The values of the HRS factor score that match those percentages are:
+
+```{r}
+quantile(hcap$TF, probs = c(.15, .35), na.rm=TRUE)
+
+```
+
+```{r}
+hcap <- hcap %>%
+  mutate(cog_imp_hrs = case_when(TF <36.0 ~ 2,
+                                 TF < 43.3 ~ 1,
+                                 !is.na(TF) ~ 0))
+hcap <- hcap %>%
+  labelled::set_variable_labels(cog_imp_hrs = "Level of cognitive impairment (HRS)") %>%
+  labelled::set_value_labels(cog_imp_hrs = c("None" = 0, "Mild" = 1, "Severe" = 2))
+
+```
+
+```{r}
+#| tbl-cap: "Level of cognitive impairment in HRS matched to the number of domains impaired"
+#| label: tbl-desc-cog-impairment-hrs
+
+hcap %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary(include = c(cog_imp_hrs),
+                         type = c(cog_imp_hrs) ~ "categorical") %>%
+  my_gtsummary()
+
+```
+
+```{r}
+k <- table(hcap$CogImp, hcap$cog_imp_hrs)
+
+```
+
+@tbl-cross-cog-impairment shows that the agreement of level of cognitive impairment is high between the two measures.  But despite choosing thresholds of the factor score to match the percentages of the number of impaired domains, the agreement is high but not perfect.  The weighted kappa is `r psych::wkappa(k)$weighted.kappa %>% round(2)`.
+
+```{r}
+#| tbl-cap: "Crosstab of number of domains impaired (HCAP) vs matched factor scores (HRS)"
+#| label: tbl-cross-cog-impairment
+hcap %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(CogImp, cog_imp_hrs) %>%
+  my_gtsummary()
+```
+
+## Finding functional impairment thresholds
+
+The next step of the algorithm after finding cognitive impairment thresholds is to find thresholds to for functional impairment.  This will be done separately by cognitive impairment level.
+
+```{r}
+# HCAP sample with severe cog impairment
+hcap_2 <- hcap %>%
+  filter(cog_imp_hrs==2)
+```
+
+In the HCAP algorithm, in the 2 or more impaired domains category, 391 / (391 + 211) = 65% had functional impairments. If we use a threshold of 1 or more ADL/IADL impairments then `r hcap_2 %>% mutate(x = iadl_imp>=1) %>% group_by(x) %>% summarize(p = n()/nrow(hcap_2)) %>% filter(x==TRUE) %>% pull(p) %>% round(3)*100` % will be categorized as having funcitonal impairment.
+
+```{r}
+#| tbl-cap: "Distribution of functional impairment among those with severve cognitive impairment"
+#| label: tbl-func-impairment-severve-cog
+
+gtsummary::tbl_summary(hcap_2, include = c(iadl_imp),
+                       type = c(iadl_imp) ~ "categorical") %>%
+  my_gtsummary()
+# HCAP sample functional impairment: 375/591 = 63%
+# The HRS IADL cutpoints that get the closet: 1+ 217/405 = 53%
+```
+
+```{r}
+# HCAP sample with mild cog impairment
+hcap_1 <- hcap %>%
+  filter(cog_imp_hrs==1)
+```
+
+In the HCAP algorithm, in the 1 impaired domain category, 536 / (536 + 231) = 70% had functional impairments. If we use a threshold of 1 or more ADL/IADL impairments then `r hcap_1 %>% mutate(x = iadl_imp>=1) %>% group_by(x) %>% summarize(p = n()/nrow(hcap_1)) %>% filter(x==TRUE) %>% pull(p) %>% round(3)*100` % will be categorized as having funcitonal impairment.
+
+```{r}
+#| tbl-cap: "Distribution of functional impairment among those with mild cognitive impairment"
+#| label: tbl-func-impairment-mild-cog
+
+gtsummary::tbl_summary(hcap_1, include = c(iadl_imp),
+                       type = c(iadl_imp) ~ "categorical") %>%
+  my_gtsummary()
+# HCAP sample functional impairment: 556/726 = 75%
+# The HRS IADL cutpoints that get the closet: 1+ 205/572 = 36%
+```
+
+## Informant based cognitive impairment
+
+```{r}
+#| tbl-cap: "Crosstab of missing cognitive score and missing informant score"
+#| label: tbl-cross-missing-jorm-fscore
+
+foo <- hcap %>%
+  mutate(jorm_missing = case_when(is.na(jorm) ~ 1,
+                                  !is.na(jorm) ~ 0),
+         TF_missing = case_when(is.na(TF) ~ 1,
+                                  !is.na(TF) ~ 0)) %>%
+  select(jorm_missing, TF_missing)
+
+foo %>%
+  gtsummary::tbl_cross(jorm_missing, TF_missing) %>%
+  my_gtsummary()
+
+```

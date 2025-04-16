@@ -22,7 +22,8 @@ hrs16_cog %>%
       "{median} ({p25}, {p75})",
       "{min}, {max}"
     )
-  )
+  ) %>%
+  my_gtsummary()
 
 ```
 
