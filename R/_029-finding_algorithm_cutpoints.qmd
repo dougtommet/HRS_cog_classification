@@ -1,6 +1,6 @@
 # Designing the algorithm
 
-This section details how we design the algorithm to mimic the Manly-Jones (2022) algorithm that we implemented in HCAP. In the previous sections we created the components that go into the algorithm - the cognitive factor score, the functional impairment measure, the subjective cognitive complaints indicator. However, these components are different than the ones used in HCAP. So, we need to find cutpoints for these components that give similar prevalences as HCAP.
+This section details how we design the algorithm to mimic the Manly-Jones (2022) algorithm that we implemented in HCAP. In the previous sections we created the components that go into the algorithm - the cognitive factor score, the functional impairment measure, the subjective cognitive complaints indicator. However, these components are different than the ones used in HCAP. So, we need to find cutpoints for these components that give similar prevalence as HCAP.
 
 These are the diagrams of the HCAP algorithm and the proposed HRS algorithm. In both algorithms the fist step is to decide if a participant has normal cognition, mild impairment, or severe impairment. After finding the cutoffs to use to determine cognitive impairment level, the next step is to find cutoffs to determine functional impairment. The functional impairment cutoffs will be determined separately for each level of cognitive impairment.
 
@@ -17,7 +17,8 @@ knitr::include_graphics(here::here("Figures", "HCAP-algorithm.png"))
 #| out-width: "500px"
 #| fig-cap: "HRS algorithm"
 #| fig-alt: "HRS algorithm"
-knitr::include_graphics(here::here("Figures", "HRS-algorithm_2025-03-11.png"))
+# Edited by RNJ 2025-07-17
+knitr::include_graphics(here::here("Figures", "HRS-Core-Diagnostic-Algorithm-With-Ns-HRS-Sample-2025-05-01.png"))
 ```
 
 
