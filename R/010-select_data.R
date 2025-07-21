@@ -20,10 +20,10 @@ hrs16_cog <- h16d_r %>%
          PD196, PD198, PNSSCORE)
 
 
-
+# RNJ Added PD101 2025-07-21
 hrs16_func <- h16d_r %>%
   select(HHID, PN, PSUBHH,
-         PD102,
+         PD102, PD101,
          PD502, PD505, PD506, PD507, PD508, PD509, PD510,
          PD511, PD512, PD513, PD514, PD515, PD516, PD517, PD518, PD519, PD520,
          PD521, PD522, PD523, PD524, PD525, PD526, PD527, PD528, PD529, PD530,

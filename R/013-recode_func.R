@@ -91,9 +91,25 @@ hrs16_func <- hrs16_func %>%
   mutate(jorm = mean(c(jorm1, jorm2, jorm3, jorm4, jorm5, jorm6, jorm7, jorm8, jorm9, jorm10, jorm11, jorm12, jorm13, jorm14, jorm15, jorm16), na.rm=TRUE)) %>%
   ungroup()
 
-hrs16_func <- hrs16_func  %>%
-  mutate(self_concerns = case_when(PD102==3 ~ 1,
-                                   PD102 %in% c(1, 2) ~ 0))
+# Rich Modified 2025-07-21
+# hrs16_func <- hrs16_func  %>%
+#  mutate(self_concerns = case_when(PD102==3 ~ 1,
+#                                   PD102 %in% c(1, 2) ~ 0))
+hrs16_func <- hrs16_func %>%
+  mutate(self_concerns = case_when(
+    PD101 %in% c(4, 5, 8, 9) ~ 1, # fair or poor memory
+    PD102 %in% c(3, 8, 9) ~ 1,    # worse than 2 years ago
+    PD101 %in% c(1, 2, 3) ~ 0,
+    TRUE ~ NA_real_
+  ))
+
+# checkvar
+hrs16_func %>%
+  count(self_concerns, PD101, PD102, drop = FALSE) %>%
+  complete(self_concerns, PD101, PD102, fill = list(n = 0)) %>%
+  filter(n > 0) %>%
+  print(n = Inf)
+
 
 hrs16_func <- hrs16_func %>%
   labelled::set_variable_labels(jorm1 = "Remembering things about family") %>%

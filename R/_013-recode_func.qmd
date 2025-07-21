@@ -233,6 +233,8 @@ foo %>%
 
 
 
+**Important note.** The table below shows the labels self-concerns variable based on PD102 (worse than 2 years ago). However the variable as of 2025-06-01 has been defined using both PD101 (fair or po0r memory) AND PD102 (worse than 2 years ago). The labels need to be updated, but the frequencies are still correct (updated). -RNJ
+
 ```{r}
 #| tbl-cap: "Self-concerns"
 #| label: tbl-scd
