@@ -145,8 +145,8 @@ hrs16_func <- hrs16_func %>%
   labelled::set_variable_labels(jorm16 = "Using intelligence to understand what's going on") %>%
   labelled::set_value_labels(jorm16 = c("Much improved" = 1, "A bit improved" = 2, "Not much change" = 3, "A bit worse" = 4, "Much worse" = 5)) %>%
   labelled::set_variable_labels(jorm = "Jorm score (HRS)")  %>%
-  labelled::set_variable_labels(self_concerns = "Compared to two years ago, would you say your memory is better now, about the same, or worse now than it was then?") %>%
-  labelled::set_value_labels(self_concerns = c("Worse" = 1, "Same/Better" = 0))
+  labelled::set_variable_labels(self_concerns = "Composite of (Compared to two years ago, would you say your memory is ...?) OR (How would you rate your memory at the present time?)") %>%
+  labelled::set_value_labels(self_concerns = c("Worse or (Fair or Poor)" = 1, "(Same or Better) AND (Excellent, Very Good, Good)" = 0))
 
 
 saveRDS(hrs16_func, fs::path(r_objects_folder, "013_hrs16_func.rds"))
