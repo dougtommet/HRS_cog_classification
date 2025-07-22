@@ -1,0 +1,94 @@
+
+
+```{r}
+hcap <- readRDS( fs::path(r_objects_folder, "030_hcap.rds"))
+hcap_validation <- readRDS(fs::path(r_objects_folder, "005_hcap_validation.rds"))
+langa_weir <- readRDS(fs::path(r_objects_folder, "005_langa_weir.rds"))
+
+
+```
+
+
+```{r}
+hcap_merged <- hcap %>%
+  full_join(hcap_validation, by = c("HHID" = "hhid", "PN" = "pn")) %>%
+  left_join(langa_weir, by = c("HHID" = "hhid", "PN" = "pn"))
+
+hcap_merged <- hcap_merged %>%
+  mutate(sampling_wt = 1/samplingP)
+
+```
+
+# Comparison of the HRS algorithm to other models
+
+## Comparison of the HRS alorgithm to the HCAP validation sample.  
+
+9 of the 50 validation cases weren't in the HCAP sample
+
+### Unweighted data
+
+```{r}
+hcap_merged %>%
+  # filter(!is.na(consensuspaneldx)) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(dx_v2, consensuspaneldx) %>%
+  my_gtsummary()
+
+```
+
+
+### Weighted data
+
+The sampling weights were calculated by taking the inverse of the sampling probability (`samplingP`).
+
+```{r}
+weighted_tab <- xtabs(sampling_wt ~ dx_v2 + consensuspaneldx, data = hcap_merged) %>%
+  round(1) 
+
+kap1 <- psych::cohen.kappa(weighted_tab)
+
+weighted_tab %>%
+  as.data.frame.matrix() %>%
+  rownames_to_column("dx_v2") %>%
+  gt::gt() %>%
+  gt::tab_spanner("consensuspaneldx", 2:4) %>%
+  my_gt()
+```
+
+The weighted kappa is  `r kap1[["confid"]][2,2] %>% round(2)` (`r kap1[["confid"]][2,1] %>% round(2)`. `r kap1[["confid"]][2,3] %>% round(2)`).
+
+
+## Comparison of HRS algorithm to HCAP algorithm
+
+```{r}
+hcap_merged %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(dx_v2, vs1hcapdxeap) %>%
+  my_gtsummary()
+
+```
+
+```{r}
+kap2 <- table(hcap_merged$dx_v2, hcap_merged$vs1hcapdxeap) %>%
+  psych::cohen.kappa()
+```
+
+The weighted kappa is  `r kap2[["confid"]][2,2] %>% round(2)` (`r kap2[["confid"]][2,1] %>% round(2)`. `r kap2[["confid"]][2,3] %>% round(2)`).
+
+## Comparison of HRS algorithm to Langa-Weir
+
+```{r}
+hcap_merged  %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(dx_v2, cogfunction2016) %>%
+  my_gtsummary()
+
+```
+
+```{r}
+kap3 <- table(hcap_merged$dx_v2, hcap_merged$cogfunction2016) %>%
+  psych::cohen.kappa()
+```
+
+The weighted kappa is  `r kap3[["confid"]][2,2] %>% round(2)` (`r kap3[["confid"]][2,1] %>% round(2)`. `r kap3[["confid"]][2,3] %>% round(2)`).
+

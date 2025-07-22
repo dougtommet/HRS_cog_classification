@@ -7,7 +7,7 @@ hcap23_data_path <- fs::path(dropbox_path, "work", "HCAP23", "POSTED", "DATA", "
 # This dropbox folder is copied from the network folder of the same name
 # It also has the tracker & 2016 core data downloaded from the HRS site
 # It also has the normexcld data sent by RNJ
-hrs_data_path_source <- fs::path(dropbox_path, "work", "HRS_data", "POSTED", "DATA", "SOURCE", "HRS")
+hrs_data_path_source <- fs::path(dropbox_path, "work", "HRS_data", "POSTED", "DATA", "SOURCE")
 hrs_data_path_derived <- fs::path(dropbox_path, "work", "HRS_data", "POSTED", "DATA", "DERIVED")
 
 
