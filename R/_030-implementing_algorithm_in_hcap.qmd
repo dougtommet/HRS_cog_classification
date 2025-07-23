@@ -182,6 +182,7 @@ hcap %>%
 ```
 
 ```{r}
+#| eval: false
 k <- table(hcap$vs1hcapdxeap, hcap$dx_v2)
 psych::wkappa(k)
 ```
@@ -193,4 +194,36 @@ hcap %>%
   labelled::to_factor() %>%
   gtsummary::tbl_cross(dx_v1, dx_v2) %>%
   my_gtsummary()
+```
+
+## Weighted prevalence
+
+The weighted prevalence was calculated using the variable `HCAP16WGTR`.
+
+```{r}
+#| tbl-cap: "Version 2 diagnosis (weighted)"
+#| label: tbl-prev-dxv2-wt
+hc16hp_r <- readRDS(fs::path(r_objects_folder, "005_hc16hp_r.rds"))
+
+foo <- hc16hp_r %>%
+  select(hhid, pn, HCAP16WGTR) %>%
+  left_join(hcap, by = c("hhid" = "HHID", "pn" = "PN"))
+
+foo_svy <- foo %>%
+  srvyr::as_survey_design(
+    weights = HCAP16WGTR
+  )
+
+foo_svy %>%
+  group_by(dx_v2) %>%
+  summarize(
+    n = srvyr::unweighted(n()),                    # Unweighted count
+    total = srvyr::survey_total(na.rm = TRUE),     # Weighted total
+    proportion = srvyr::survey_prop(na.rm = TRUE)  # Weighted proportion
+  ) %>%
+  gt::gt() %>%
+  gt::fmt_number(columns = c(proportion, proportion_se), decimals = 3) %>%
+  gt::fmt_number(columns = c(total, total_se), use_seps = TRUE, decimals = 0) %>%
+  my_gt()
+
 ```

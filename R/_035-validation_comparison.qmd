@@ -92,3 +92,26 @@ kap3 <- table(hcap_merged$dx_v2, hcap_merged$cogfunction2016) %>%
 
 The weighted kappa is  `r kap3[["confid"]][2,2] %>% round(2)` (`r kap3[["confid"]][2,1] %>% round(2)`. `r kap3[["confid"]][2,3] %>% round(2)`).
 
+## Comparison of HCAP validation to Langa-Weir
+
+```{r}
+weighted_tab2 <- xtabs(sampling_wt ~ cogfunction2016 + consensuspaneldx, data = hcap_merged) %>%
+  round(1) 
+
+kap4 <- psych::cohen.kappa(weighted_tab2)
+
+weighted_tab2 %>%
+  as.data.frame.matrix() %>%
+  rownames_to_column("hcap_validation") %>%
+  gt::gt() %>%
+  gt::tab_spanner("consensuspaneldx", 2:4) %>%
+  my_gt()
+
+```
+
+
+The weighted kappa is  `r kap4[["confid"]][2,2] %>% round(2)` (`r kap4[["confid"]][2,1] %>% round(2)`. `r kap4[["confid"]][2,3] %>% round(2)`).
+
+
+
+
