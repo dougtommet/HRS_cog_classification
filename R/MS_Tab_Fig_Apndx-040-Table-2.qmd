@@ -1,0 +1,25 @@
+<!-- MS_Tab_Fig_Apndx-040-Table-2.qmd -->
+<!-- Rich Jones --> 
+<!-- 2025-07-22 -->
+
+
+<!-- This will insert a page break -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+```{r}
+# Load the object
+hrs16_cog_025 <- readRDS(here::here("R_objects", "025_hrs16_cog.rds"))
+n2993 <- readr::read_csv(here::here("R_objects","n2993.csv"))
+hrs16_cog_025_n2993 <- hrs16_cog_025 |> dplyr::inner_join(n2993, by = c("HHID", "PN"))
+```
+
+```{r}
+# cognitive, functional, and self-report variables
+``` 
+
+
+### Table 2. Summary of cognitive, functional, and self-report variables in the HRS 2016 subsample sample (n = 2993) 
+

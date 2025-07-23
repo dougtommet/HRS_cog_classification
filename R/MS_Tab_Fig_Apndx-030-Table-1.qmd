@@ -1,0 +1,229 @@
+<!-- MS_Tab_Fig_Apndx-030-Table-1.qmd -->
+<!-- Rich Jones --> 
+<!-- 2025-07-22 -->
+
+```{r}
+# Load the object
+hrs16_cog_025 <- readRDS(here::here("R_objects", "025_hrs16_cog.rds"))
+
+# recode HISPANIC
+hrs16_cog_025 <- hrs16_cog_025 %>% 
+  dplyr::mutate(rHISP = dplyr::recode(HISPANIC,
+                                      `0` = 0,
+                                      `1` = 1,
+                                      `2` = 1,
+                                      `3` = 1,
+                                      `5` = 5,
+                                      .default = NA_real_))
+
+# GENDER
+# HISPANIC
+# RACE 
+# SCHLYRS 
+# PA019 (age)
+# hcap_030 <- readRDS(here::here("R_objects", "030_hcap.rds"))
+# Select only HHID and PN, and write to CSV
+# hcap_030 |>
+#  dplyr::select(HHID, PN) |>
+#  write.csv(here::here("R_objects", "n2993.csv"), row.names = FALSE)
+n2993 <- readr::read_csv(here::here("R_objects","n2993.csv"))
+hrs16_cog_025_n2993 <- hrs16_cog_025 |> dplyr::inner_join(n2993, by = c("HHID", "PN"))
+# nrow(hrs16_cog_025_n2993)  # Should be 2993
+```
+
+
+<!-- R code to find the RDS with 2993 rows 
+# List all .rds files in the R_objects folder
+rds_files <- list.files(here::here("R_objects"), pattern = "\\.rds$", full.names = TRUE)
+# Function to check row count
+check_rows <- function(file) {
+  obj <- readRDS(file)
+  if (is.data.frame(obj) && nrow(obj) == 2993) {
+    return(basename(file))
+  } else {
+    return(NULL)
+  }
+}
+# Apply function to all files
+matching_files <- Filter(Negate(is.null), lapply(rds_files, check_rows))
+matching_files
+--> 
+
+<!-- Generate table inputs -->
+```{r}
+library(forcats)
+library(rlang)
+library(dplyr)
+library(tibble)
+summarize_variable <- function(data, var) {
+  if (is.numeric(data[[var]])) {
+    mean_val <- mean(data[[var]], na.rm = TRUE)
+    sd_val <- sd(data[[var]], na.rm = TRUE)
+    tibble::tibble(
+      variable = var,
+      value = "Mean (SD)",
+      n_pct_or_mean_sd = sprintf("%.1f (%.1f)", mean_val, sd_val)
+    )
+  } else {
+    data |>
+      mutate(tmp = forcats::fct_infreq(as.factor(.data[[var]]))) %>%  # preserve labels
+      count(tmp) |>
+      mutate(
+        variable = var,
+        value = as.character(tmp),
+        percent = round(100 * n / sum(n), 1),
+        n_pct_or_mean_sd = paste0(format(n, big.mark = ","), " (", formatC(percent, format = "f", digits = 1), "%)")
+      ) |>
+      select(variable, value, n_pct_or_mean_sd)
+  }
+}
+
+label_categorical_vars <- function(df) {
+  df |>
+    dplyr::mutate(
+      female = factor(female, 
+                      levels = c(0, 1), 
+                      labels = c("Male", "Female")),
+      rHISP = factor(rHISP,
+                     levels = c(0,1,5),
+                     labels = c("Not obtained",
+                                "Hispanic",
+                                "Not Hispanic")),
+      HISPANIC = factor(HISPANIC, 
+                        levels = c(0, 1, 2, 3, 5),  
+                        labels = c("Not obtained", 
+                                   "Hispanic, Mexican", 
+                                   "Hispanic, Other",
+                                   "Hispanic, type unknown", 
+                                   "Not Hispanic")),
+      RACE = factor(RACE, 
+                    levels = c(0, 1, 2, 7),
+                    labels = c("Not collected", "White", "Black", "All other groups"))
+    )
+}
+
+# Apply to both
+library(purrr)
+
+
+
+
+list2(
+  hrs16_cog_025     = hrs16_cog_025,
+  hrs16_cog_025_n2993 = hrs16_cog_025_n2993
+) %>%
+  map(label_categorical_vars) -> labeled_list
+
+hrs16_cog_025 <- labeled_list$hrs16_cog_025
+hrs16_cog_025_n2993 <- labeled_list$hrs16_cog_025_n2993
+
+
+vars <- c("female", "rage", "RACE", "rHISP", "SCHLYRS")
+
+# For full sample
+summary_all <- dplyr::bind_rows(lapply(vars, \(v) summarize_variable(hrs16_cog_025, v)))
+# Replace NA in value column with "Blank, partial interview"
+summary_all <- summary_all %>%
+  mutate(value = ifelse(is.na(value), "Blank, partial interview", value))
+
+
+# For n2993 subset
+summary_n2993 <- dplyr::bind_rows(lapply(vars, \(v) summarize_variable(hrs16_cog_025_n2993, v)))
+summary_n2993 <- summary_n2993 %>%
+  mutate(value = ifelse(is.na(value), "Blank, partial interview", value))
+
+
+
+
+# Rename columns before joining
+summary_all <- summary_all %>%
+  rename(all_records = n_pct_or_mean_sd)
+
+summary_n2993 <- summary_n2993 %>%
+  rename(n2993_sample = n_pct_or_mean_sd)
+
+## Full join to align rows by variable/value
+summary_final <- full_join(summary_all, summary_n2993,
+                           by = c("variable", "value")) %>%
+  arrange(factor(variable, levels = vars), value)
+
+
+# Create a lookup table for variable labels and types
+var_labels <- tibble::tibble(
+  variable = c("female", "rage", "RACE", "rHISP", "SCHLYRS"),
+  label = c(
+    "Sex (N (%))",
+    "Age in years (Mean (SD))",
+    "Race (N (%))",
+    "Hispanic origin (N (%))",
+    "Years of education (Mean (SD))"
+  ),
+  type = c("categorical", "continuous", "categorical", "categorical", "continuous")
+)
+```
+
+```{r}
+# Join labels to summary_final
+summary_final <- summary_final %>%
+  left_join(var_labels, by = "variable")
+
+# perhaps sort or arrange here by decreasing sample size withing categorical variables
+
+# Create a new label_combined column
+summary_final <- summary_final %>%
+  mutate(label_combined = dplyr::case_when(
+    type == "continuous" & value == "Mean (SD)" ~ label,
+    type == "categorical" ~ paste0("   ", value),
+    TRUE ~ NA_character_
+  ))
+
+# Insert a header row before each categorical variable
+insert_headers <- summary_final %>%
+  filter(type == "categorical") %>%
+  distinct(variable, label) %>%
+  mutate(label_combined = label, all_records = NA, n2993_sample = NA)
+
+summary_final <- bind_rows(summary_final, insert_headers) 
+
+summary_final <- summary_final %>%
+  mutate(
+    sortorder = sub(" .*", "", sub("^\\s+", "", all_records)),
+    sortorder = as.numeric(gsub(",", "", sortorder)),
+    sortorder = ifelse(is.na(sortorder), 999999, sortorder)
+  )
+
+summary_final <- summary_final %>%
+  mutate(variable = factor(variable, levels = vars)) %>%
+  arrange(variable, desc(sortorder)) %>% 
+  select(label_combined, all_records, n2993_sample) 
+
+
+```
+
+
+```{r}
+#| echo: false 
+#| message: false
+#| warning: false 
+# assumes summary_final already exists
+library(flextable)
+
+flextable(summary_final) |>
+  set_header_labels(
+    label_combined = "Characteristic",
+    all_records = "HRS 2016 wave\n(N = 20,912)",
+    n2993_sample = "HCAP subsample\n(N = 2,993)"
+  ) |>
+  add_header_lines("Table 1. Participant Characteristics") |>
+  autofit()  |>
+  fontsize(size = 10, part = "all") |>  # match body font size
+  font(fontname = "Cambria", part = "all")  
+``` 
+
+
+::: {custom-style="Footnote text"}
+Notes: The HCAP subsample includes 2,993 participants from the HRS 2016 wave. The full HRS/HCAP sample included 3,496 participants. The subsample of 2,993 we use includes those HCAP participants who participated in the neuropsychological assessment portion sufficiently such that none of their 5 derived cognitive domain scores used in the dementia and MCI classification algorithm had to be imputed. We restrict our HCAP comparator sample to those without imputed data to ensure that imputation error does not compound classification error. Race and ethnicity data were gathered via self-report at the time of first interview and are considered to be markers of exposure to evolving systems of racism, not as a proxy for genetic variation or any other biological variable. Race was self-selected by participants at the time of the first interview from a list of options defined by the 2000 US Census criteria. Other race includes a pooled group of participants who identified as American Indian or Alaska Native, Asian, Native Hawaiian or Pacific Islander, or another self-described race, consolidated due to small sample sizes and risk of identification.
+:::
+
+
+

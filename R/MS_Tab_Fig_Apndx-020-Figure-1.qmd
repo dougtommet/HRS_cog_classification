@@ -1,0 +1,27 @@
+<!-- MS_Tab_Fig_Apndx-020-Figure-1.qmd -->
+<!-- Rich Jones -->
+<!-- 2025-07-22 -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+
+```{r}
+#| fig-cap: "Algorithm for classifying dementia and mild cognitive impairment in the Health and Retirement Study"
+#| label: fig-figure1
+knitr::include_graphics(here::here("Figures", "MS_Tab_Fig_Apndx-020-Figure-1.png"))
+```
+
+
+::: {custom-style="Footnote text"}
+@fig-figure1 caption. The algorithm for classifying dementia and mild cognitive impairment in the core Health and Retirement Study (HRS). Cell entries for sample size refer to a subsample of HRS/HCAP participants who completed all of the HCAP cognitive tests. Severe and Moderate cognitive impairment are defined using an estimated performance score derived from a single factor model fit to Core cognitive tests, using impairment thresholds to match prevalence estimates from the Harmonized Cognitive Assessment Protocol (HCAP) substudy (Manly et al., 2022). ADL/IADL limitations are assessed using core measures, and any impairment in any assessment item defines impairment. Self-reported concerns about memory or thinking are assessed with two core items asking about change from 2 years ago and current functioning. For HRS participants who do not complete the cognitive assessment, a study partner (usually a spouse) is asked about changes in cognitive performance using Jorm's Informant Questionnaire (IQCODE). Thresholds for impairment on the IQCODE are those used in Manly et al. (2022). 
+:::
+
+::: {custom-style="Commentary"}
+If this paper is about the HRS/Core cognitive classification, then the cell sample sizes based on N = 2993 are fine. However, if this paper is about the prevalence of dementia and MCI in the HRS, then the sample sizes should be based on the full HRS sample. This version of the flow diagram could then be included in appendix material that provides more detail on the derivation of the Core classification and relates it to the HCAP classification. 
+
+The text in red highlights differences from previous presentation, and will be removed in the final version.
+::: 
+
+<!-- have a nice day -->

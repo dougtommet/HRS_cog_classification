@@ -1,0 +1,66 @@
+---
+title: "Prevalence of Dementia and Mild Cognitive Impairment in the Health and Retirement Study: Figures, Tables, and Appendices"
+author: 
+  - name: "Richard N. Jones"
+    affiliation: "Brown University, Department of Psychiatry and Human Behavior, Department of Neurology"
+    orcid: "0000-0002-1049-218X"
+    email: "richard_jones@brown.edu"
+    address: "345 Blackstone Blvd, Providence, RI 02906"
+  - name: "Jennifer J. Manly"
+    affiliation: "Columbia University, Department of Neurology, Taub Institute for Research on Alzheimer’s Disease and the Aging Brain"
+  - name: "Douglas Tommet"
+    affiliation: "Brown University, Department of Psychiatry and Human Behavior"
+  - name: "Lindsay Kobayashi"
+    affiliation: "University of Michigan, Institute for Social Research, Department of Epidemiology"
+  - name: "Lindsay H. Ryan"
+    affiliation: "University of Michigan, Institute for Social Research, Department of Psychology"
+  - name: "Deborah A. Levine"
+    affiliation: "University of Michigan, Institute for Social Research"
+  - name: "Ryan J. McCammon"
+    affiliation: "University of Michigan, Institute for Social Research"
+  - name: "Steven G. Heeringa"
+    affiliation: "University of Michigan, Institute for Social Research"
+  - name: "David Weir"
+    affiliation: "University of Michigan, Institute for Social Research"    
+  - name: "Kenneth M. Langa"
+    affiliation: "University of Michigan, Institute for Social Research, Department of Internal Medicine"
+date: 2025-07-22
+format: 
+  docx:
+    reference-doc: "reference.docx"
+editor: source
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+<!-- I could not figure out a good way to get table of contents to work with figure and table captions --> 
+
+
+```{r}
+source(here::here("R", "001-libraries.R"))
+source(here::here("R", "002-folder_paths.R"))
+
+```
+
+{{< include MS_Tab_Fig_Apndx-010-Cover_Page.qmd >}}
+{{< include MS_Tab_Fig_Apndx-020-Figure-1.qmd >}}
+{{< include MS_Tab_Fig_Apndx-030-Table-1.qmd >}}
+{{< include MS_Tab_Fig_Apndx-040-Table-2.qmd >}}
+{{< include MS_Tab_Fig_Apndx-050-Table-3.qmd >}}
+{{< include MS_Tab_Fig_Apndx-055-Table-3.2.qmd >}}
+{{< include MS_Tab_Fig_Apndx-060-Table-3.3.qmd >}}
+{{< include MS_Tab_Fig_Apndx-070-Table-4.qmd >}}
+{{< include MS_Tab_Fig_Apndx-100-Appendix-1.qmd >}}
+
+
+<!-- This will insert a page break -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+Thanks for reading.
+
+

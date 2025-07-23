@@ -1,0 +1,31 @@
+<!-- MS_Tab_Fig_Apndx-100-Appendix-1.qmd -->
+<!-- Rich Jones --> 
+<!-- 2025-07-22 -->
+
+<!-- This will insert a page break -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+## Appendix: Derivation and operationalization of the HRS/Core Actuarial Cognitive Classification 
+
+### Overview 
+
+- Adapted version Jak/Bondi approach to MCI and dementia classification, using cognitive data, informant reports, functional data, and self-reports. Similar to how implemented in HRS/HCAP (Manly et al 2022). Key features include:
+   - Cognitive performance normalized with respect to internal reference group and standardized with respect to demographic factors (age, sex, race, ethnicity, education, and their two-way interactions).
+   - Dementia classification requires cognitive impairment and functional impairment
+   - MCI classification requires cognitive impairment that is either severe but without marked functional impairment, or moderate with functional impairment or self-concerns. Moderate impairment without functional impairment and without self-concerns is considered normal cognition.
+- Our procedure had the following **_similarities_** with respect to  Manly et al (2022)
+   - We use a subsample of the HRS/HCAP sample to derive the classification (N=2993), defined as persons who had none of their HRS/HCAP cognitive domains imputed.
+   - We use the same normative reference group as Manly et al (2022) to standardize cognitive performance.
+   - We compare to the same reference standard (consensus diagnoses in N=50 subsample, over sampled of persons with high diagnostic uncertainty).
+- Our operationalization had the following **_differences_** with respect to 
+   - Instead of 5 cognitive domains, we measure a single cognitive domain (global cognition) using the cognitive measures available in the Core in the 2016 wave. However, the cognitive impairment thresholds (after normalization and standardization) are selected to match the marginal distributions of impairment categories observed in the HRS/HCAP sample: these end-up being at T-score values of 36.4 and 43.8 , about the 9th and 27th percentiles of the HRS/HCAP sample.
+   - Whereas Manly et al (2022) used the Jorm and Blessed to identify functional impairment, we only had access to the Core HRS ADL/IADL items. We attempted to match marginal distributions of functional impairment, but had little flexibility in choosing thresholds. Our thresholds for impairment are between no ADL/IADL difficulties and any ADL/IADL difficulties, and we still under-identify functional impairment relative to what we were able to identify using the HRS/HCAP measures.
+   - HRS Core does have access to information from the Jorm, but this is only available for those participants that did not participate in the cognitive assessment. We use the Jorm to classify persons who did not participate in the cognitive assessment, but we do not use it to classify persons who did participate in the cognitive assessment (as we do in HRS/HCAP).
+   - We use two self-report items to identify cognitive concerns, PD101 and PD102. In HCAP, we only used PD102. HRS/HCAP only considers self-concerns of worsening (PD102), the Core algorithm also includes self-report of poor functioning.
+
+The appendix **_will_** include details on the specific cognitive variables used, the results of factor analysis, standardization and normalization, threshold identification. This information is currently available [at this link](https://quantsci.s3.amazonaws.com/Work/HCAP/HRS_cognition_2025-07-22.html). 
+
+

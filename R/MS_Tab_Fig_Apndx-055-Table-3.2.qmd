@@ -1,0 +1,110 @@
+<!-- MS_Tab_Fig_Apndx-050-Table-3.qmd -->
+<!-- Rich Jones --> 
+<!-- 2025-07-22 -->
+
+<!-- This will insert a page break -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+### Table 3.2 Diagnostic Comparison: HRS/Core Actuarial Classification versus HRS/HCAP Actuarial Classification (N=2,992)
+Cell entries are observed percentages of the total HRS/HCAP subsample.
+
+```{r}
+cell11 <- 127 # Dementia, Dementia
+cell12 <-  88 # Dementia, MCI
+cell13 <-  53 # Dementia, Normal
+cell21 <-  98 # MCI, Dementia
+cell22 <- 190 # MCI, MCI 
+cell23 <- 216 # MCI, Normal
+cell31 <-  57 # Normal, Dementia
+cell32 <-  374 # Normal, MCI 
+cell33 <- 1789 # Normal, Normal 
+cell14 <- (cell11+cell12+cell13) # Dementia, Total
+cell24 <- (cell21+cell22+cell23) # MCI, Total
+cell34 <- (cell31+cell32+cell33) # Normal, Total
+cell41 <- (cell11+cell21+cell31) # Total, Dementia
+cell42 <- (cell12+cell22+cell32) # Total, MCI
+cell43 <- (cell13+cell23+cell33) # Total, Normal
+cell44 <- (cell14+cell24+cell34) # Total, Total
+sum <- cell11 + cell12 + cell13 + cell21 + cell22 + cell23 + cell31 + cell32 + cell33
+# Normalize each cell
+for (i in 1:4) {
+  for (j in 1:4) {
+    cell_name <- paste0("cell", i, j)
+    assign(cell_name, round(100* get(cell_name) / sum,1))
+  }
+}
+```
+
+
+|          | **HRS/HCAP** |              |              |              |  
+|:---------|:------------:|:------------:|:------------:|:------------:|
+|**HRS Actuarial**  |**Dementia**  |  **MCI**     | **Normal**   | **Total**    |
+|Dementia  | `r cell11`   | `r cell12`   | `r cell13`   | `r cell14`   |
+|MCI       | `r cell21`   | `r cell22`   | `r cell23`   | `r cell24`   |
+|Normal    | `r cell31`   | `r cell32`   | `r cell33`   | `r cell34`   |
+|**Total** | `r cell41`   | `r cell42`   | `r cell43`   | `r cell44`   |
+
+::: {custom-style="Footnote text"}
+Note: cell entries are do not take into account sampling weights.
+:::
+
+
+```{r}
+# Create the observed matrix
+obs <- matrix(c(cell11, cell12, cell13,
+                cell21, cell22, cell23,
+                cell31, cell32, cell33),
+              nrow = 3, byrow = TRUE) 
+# Row and column sums
+row_marginals <- rowSums(obs)
+col_marginals <- colSums(obs)
+total <- sum(obs)
+
+# Expected frequencies under independence
+expected <- outer(row_marginals, col_marginals) / total
+# Quadratic weights for 3×3
+weights <- matrix(0, 3, 3)
+for (i in 1:3) {
+  for (j in 1:3) {
+    weights[i, j] <- 1 - ((i - j)^2 / (3 - 1)^2)
+  }
+}
+# Observed weighted agreement
+Po <- sum(weights * obs) / total
+
+# Expected weighted agreement
+Pe <- sum(weights * expected) / total
+
+# Weighted kappa
+kappa_w <- (Po - Pe) / (1 - Pe)
+``` 
+
+The weighted kappa statistic is `r round(kappa_w, 2)`, indicating a "fair" level of agreement between the HRS/Core Actuarial classification and the HCAP actuarial classification.
+
+
+<!-- Dementia vs MCI vs Normal -->
+```{r}
+# Define 2x2 table: Dementia vs MCI/Normal
+a <- cell11                        # A: Dementia, B: Dementia
+b <- cell12 + cell13              # A: Dementia, B: MCI or Normal
+c <- cell21 + cell31              # A: MCI or Normal, B: Dementia
+d <- cell22 + cell23 + cell32 + cell33  # A: MCI or Normal, B: MCI or Normal
+
+# Create 2x2 matrix
+dichotomized_matrix <- matrix(c(a, b, c, d), nrow = 2, byrow = TRUE,
+                              dimnames = list("A" = c("Dementia", "MCI/Normal"),
+                                              "B" = c("Dementia", "MCI/Normal")))
+# Install if needed: install.packages("psych")
+library(psych)
+foo <- round(psych::cohen.kappa(dichotomized_matrix)$kappa,2)
+``` 
+
+The agreement (unweighted Cohen's kappa) for dementia vs MCI or Normal is `r foo` indicating a "fair" level of agreement between the HRS/Core Actuarial classification and the HRS/HCAP actuarial classification.
+
+
+
+
+

@@ -1,0 +1,11 @@
+
+
+<!-- This will insert a page break -->
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+
+**Table 4. Group Differences in Prevalence of Dementia and Mild Cognitive Impairment (MCI) Among Health and Retirement Study (HRS, 2016, N = 20,912)** 
+
+
