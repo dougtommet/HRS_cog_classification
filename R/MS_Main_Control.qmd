@@ -123,9 +123,9 @@ For this paper, the **HRS Core** actuarial classification, the 3-way, with weigh
 ||||||
 |Graves et al (2020)|NACC (N=1524)                 |Normal, MCI, Dementia (actuarial)|NACC Consensus diagnoses|$\kappa_w$ =0.54|
 ||||||
-|This paper (2026)  |HRS Core (HCAP validation, N=50)|Normal, MCI, Dementia (actuarial)|HRS/HCAP Consensus Panel|$\kappa_w$ =0.33|
+|This paper (2026)  |HRS Core (HCAP validation, N=50)|Normal, MCI, Dementia (Langa-Weir)|HRS/HCAP Consensus Panel|$\kappa_w$ =0.38|
 ||||||
-|This paper (2026)  |HRS Core (HCAP validation, N=50)|Normal, MCI, Dementia (Langa-Weir)|HRS/HCAP Consensus Panel|$\kappa_w$ =?|
+|This paper (2026)  |HRS Core (HCAP validation, N=50)|Normal, MCI, Dementia (actuarial)|HRS/HCAP Consensus Panel|$\kappa_w$ =0.33|
 ||||||
 |**2-way (dementia)**|||||
 |This paper (2026)  |HRS Core (HCAP validation, N=50)|Dementia (actuarial)|HRS/HCAP Consensus |$\kappa$ =0.77|
@@ -140,11 +140,13 @@ For this paper, the **HRS Core** actuarial classification, the 3-way, with weigh
 |||||PPV=0.57|
 |||||SN=0.96|
 ||||||
+|This paper (2026)  |HRS Core (HCAP validation, N=50)|Dementia (Langa-Weir)|HRS/HCAP Consensus |$\kappa$ =0.66|
+|||||PPV=0.71|
+|||||SN=0.65|
+||||||
 |Kasper et al (2013)|ADAMS subsample (N=121)         |Probable dementia (NHATS algorithm)|ADAMS Consensus |$\kappa$ =0.53|
 |||||PPV=0.69|
 |||||SN=0.66|
-||||||
-|This paper (2026)  |HRS Core (HCAP validation, N=50)|Dementia (Langa-Weir)|HRS/HCAP Consensus |?|
 ||||||
 |This paper (2026)  |HRS Core (HCAP validation, N=50)|Dementia (Hurd)|HRS/HCAP Consensus |?|
 ||||||

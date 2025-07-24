@@ -1,0 +1,90 @@
+
+## Plan for cross-validation
+
+The goal of the internal cross-validation is to evaluate the internal validity of a supervised classifier (e.g., a profile mixture model) by assessing how well it predicts class membership when applied to held-out data, with 3 outcome classes. These analyses will be conducted as part of the derivation of the **_calibration model_**, and conducted in the n = 3496 sample.
+
+The basic approach is:
+
+1. Split the labeled data (n = 3,496) into $K = 10$ roughly equal parts (folds), stratifying on labeled class membership (Normal, MCI, Dementia) to maintain the observed class proportions in each fold.
+2. Iteratively train on $K - 1$ folds, and test on the remaining fold.
+3. Repeat until every fold has served once as the test set.
+4. Aggregate results to assess classification performance.
+
+### Details
+
+1. Define folds where K=10, stratify by class to ensure folds contain similar proportions of Normal, MCI, Dementia.
+
+2. For each fold (i = 1 to K):
+	-	Training set = K–1 folds
+	-	Use known class labels to train your model (e.g., estimate mixture model parameters).
+	-	Test set = the i-th fold. **Use fixed parameters from training set and leave out known class membership**
+
+3. Evaluation. For each person in the test fold, save from Mplus:
+	-	Class probabilities: P(Normal), P(MCI), P(Dementia)
+	-	Most likely class: Class with highest probability
+	-	Record predicted and actual (true) class.
+
+### Evaluation Metrics
+
+Since we have 3 classes, we use multiclass evaluation metrics:
+
+**1. Confusion Matrix**
+
+Shows counts of predictions vs. true labels:
+
+               Predicted
+            | N   MCI  Dem
+    --------+-------------
+    True N  | a   b    c
+    True MCI| d   e    f
+    True Dem| g   h    i
+
+
+### Metrics:
+
+**Overall accuracy**: $\frac{a + e + i}{\text{total}}$
+
+**Per-class sensitivity (recall):**
+
+Sens(Normal): $\frac{a}{a + b + c}$
+
+Sens(MCI): $\frac{e}{d + e + f}$
+
+Sens(Dementia): $\frac{i}{g + h + i}$
+
+**Per-class precision (PPV) and F1 scores:**
+
+PPV(Normal): $\frac{a}{a + d + g}$
+
+PPV(MCI): $\frac{e}{b + e + h}$
+
+PPV(Dementia): $\frac{i}{c + f + i}$
+
+**Weighted Kappa** (using quadratic weights)
+
+### Calibration:
+
+For each class, plot predicted vs. observed probabilities in bins (e.g., deciles of P(Dementia)), and use a Brier score to assess calibration quality.
+
+The Brier score is used to assess the accuracy of probabilistic predictions. For a single observation, the Brier score is:
+
+$$\text{Brier} = \sum_{g=1}^G \left( \hat{p}_g - y_g \right)^2$$
+
+Where:
+
+$G$ = number of classes (e.g., 3: Normal, MCI, Dementia)
+
+$\hat{p}_g$ = predicted probability that the observation belongs to class $g$
+
+$y_g$ = indicator (1 if true class is $g$, else 0)
+
+Then average over all N observations:
+
+$$\text{Brier Score (Multiclass)} = \frac{1}{N} \sum_{i=1}^N \sum_{g=1}^G \left( \hat{p}_{ig} - y_{ig} \right)^2$$
+
+Where the range is 0 (perfect) to 2 (for 3-class), and lower is better. Some authors will report the Bier score normalized (0–1).
+
+$$\text{Brier}_{\text{normalized}} = \frac{\text{Brier}_{\text{raw}}}{2/3}$$
+
+where $2/3$ is $(G-1)/G$. 
+

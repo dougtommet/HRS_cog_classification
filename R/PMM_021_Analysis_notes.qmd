@@ -1,0 +1,11 @@
+
+
+
+## Analysis notes 
+
+**Covariate centering.** Sociodemographics are centered at age 70, education grade 12, and the complex survey-weighted means in the HRS 2016 age 65+ subsample (n = 9,972) for Black or African-American vs all other race and ethnicity groups, Hispanic vs not-Hispanic, and female sex. Population-weighted values will use appropriate SUBPOPULATION routines, or will modify weights to accommodate subsample estimation (c.f., Carle YYYY).
+
+**Sample restriction.** Analyses, tables, and figures will be explicitly limited to the appropriate target sample (e.g., n = 9972, n = 3496, n = 50). 
+
+
+

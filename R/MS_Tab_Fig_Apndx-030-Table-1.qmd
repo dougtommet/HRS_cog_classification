@@ -6,6 +6,20 @@
 # Load the object
 hrs16_cog_025 <- readRDS(here::here("R_objects", "025_hrs16_cog.rds"))
 
+hrs16_cog_025 %>%
+  mutate(PA019_group = case_when(
+    is.na(PA019) ~ "Missing",
+    PA019 < 65 ~ "<65",
+    PA019 >= 65 ~ ">=65"
+  )) %>%
+  count(PA019_group)
+
+hrs16_cog_025 |>
+  filter(!is.na(PA019) & PA019 >= 65) |>
+  select(HHID, PN) |>
+  write.csv(here::here("R_objects", "n9972.csv"), row.names = FALSE)
+
+
 # recode HISPANIC
 hrs16_cog_025 <- hrs16_cog_025 %>% 
   dplyr::mutate(rHISP = dplyr::recode(HISPANIC,

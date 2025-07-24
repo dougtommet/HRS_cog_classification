@@ -1,0 +1,11 @@
+<!-- This will insert a page break  -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+### Appendix 2: HRS 2016 subsamples
+
+::: {#fig-fig1 layout-align="center"}
+![](excalidraw/figa1.excalidraw.svg){width="75%"} 
+:::

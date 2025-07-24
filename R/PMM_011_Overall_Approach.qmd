@@ -1,0 +1,78 @@
+
+# Use of terms 
+
+|**Terms**|**Meaning**|
+|:---------------|:-----------------------------------------------------------------------------------------|
+|**Manly-Jones algorithm**|Describes the approach to cognitive classification described in Manly et al (2023). This approach is a so-called **_actuarial_** classification, with that term attributed to Jak and Bondi and their colleagues. It refers to a procedure for classification using an algorithmic approach, a robust norms (normative reference) group, socio-economic adjustment of cognitive indicators, and the notable exclusion of clinical input. Also referred to as the **_HRS/HCAP algorithm_**.|
+|**_Mixture model_**|A categorical latent variable modeling approach that includes continuous variables as class indicators. Contrast with a **_latent class model_**, which is a categorical latent variable modeling approach that includes exclusively categorical variables as class indicators.|
+|**_Knownclass_**| A knownclass model is a categorical latent variable modeling approach where class membership is known. A knownclass model is analogous to a _supervised_ learning model, a latent class or mixture model without known classes is analogous to an _unsupervised_ learning model.|
+
+
+# Overall approach 
+
+We will use a **_supervised latent profile model_** trained with known class labels in HRS/HCAP (results of the Manly-Jones algorithm in the N=3,496 sample) to predict cognitive status in the broader HRS cohort (age 65+, n = 9,972). The model preserves the actuarial approach to classification while introducing a parametric latent structure, item-level covariate adjustment, and probabilistic scoring. A cartoon of the approach is show in Figure 1. 
+
+
+::: {#fig-fig1 layout-align="center" fig-cap="Calibration model - a supervised latent profile model"}
+![](excalidraw/PMM-011-Calibration_Model.excalidraw.svg){width="90%"}
+:::
+
+where:
+
+|||
+|:----|:-----|
+|Latent Class (“c”)|Class membership fixed to HRS/HCAP classification during model calibration |
+|Latent cognition  | General cognitive performance (GCP), factor-analytic structure, we allow for class membership to be indicated by the mean and variance of the GCP, after control for the effect of sociodemographics and membership in the normative reference (robust norms) group|
+|Dependent variables |Observed cognitive test scores (e.g., vdlflf1z, vdwdimmz), ADLs, self-report, informant
+|Sociodemographic Covariates|Centered and interacted, included only to adjust indicator means|
+|“Not in normative group”|Treated as a covariate affecting item means, not class|
+|Missing data strategy|Jorm indicator may require separate modeling due to non-overlap with other indicators|
+
+We are building a supervised latent profile model for cognitive classification using:
+
+- **Latent Class Regression** with known class labels (from the HRS/HCAP actuarial classification).
+- **Multivariate cognitive and functional data** (profile indicators) to define latent class structure (Normal, MCI, Dementia).
+- **Sociodemographic covariates** used not to predict class directly, but to adjust item means and thresholds.
+
+The model is:
+
+- Estimated in HRS/HCAP (with known class labels, n=3,496),
+- Applied to Core HRS (with unknown class labels) for classification (n = 9,972),
+- Designed to retain the structure and assumptions of actuarial diagnosis, but expressed in a fully parametric latent variable modeling framework.
+  
+In psychometric terms, our approach can be described as a **_supervised profile mixture model with structured measurement invariance_**. We estimate latent classes using multivariate cognitive and functional profiles (profile mixture model), use known classifications to supervise training (supervised), allow item means and thresholds to vary by sociodemographic covariates (structured measurement invariance), and treat “not in the normative group” as a covariate influencing observed scores but not latent class directly.
+
+## Notable features of model 
+
+**Purposeful misspecification.** We do not include, in our initial model, model parameters that allow for estimation of class membership on the basis of sociodemographics. This is a deliberate choice: we want class membership "predicted" only by cognitive, functional, self-report, and informant data. It is true we correct for measurement differences (in the means/thresholds) of individual cognitive indicators according to sociodemographics, but the effect of these covariates in the class variable is blocked at the cognitive performance variable level. This is a misspecification because we know from Manly et al (2023) Table 2 that sociodemographics are associated with membership in MCI and Dementia groups. This misspecification may make our model fit sub-optimal. But, our main goal is to develop a classification model that maintains fidelity to the spirit of the actuarial classification approach, rather that to achieve an optimally fitting model. 
+
+Another point of purposeful misspecification is we do not condition ADL/IADL limitations, self-concerns, or Jorm scores obtained from proxy informants on the "(not in) normative reference group" indicator. This is also most likely a misspecification, but the omission replicates our decisions used in the derivation of the Manly-Jones (HRS/HCAP) classification algorithm.
+
+Moreover, membership in the normative reference group is (hopefully) a very strong indicator of class assignment. Yet, we do not allow for class membership to be "predicted" by membership in the normative reference group. This is because, when we apply the prediction model, we will not know who is and who is not in the normative reference group. **_It might me reasonable to omit this variable from the calibration model_**, since the information that it provides is already encoded in the knownclass variable. This is a decision we'll have to make empirically.
+
+## Important differences from the Manly-Jones algorithm
+
+**No explicit decision tree.** The proposed model makes classifications analytically, and does not place a decision-tree like logic on the indicators to arrive at a classification. Parameters of the model are estimated (calibrated) to maximize agreement between the analytically-derived class assignments and the observed (knownclass) assignments derived from the Manly-Jones algorithm (aka the HRS/HCAP actuarial algorithm).
+
+**Missing data.** There is no imputation of missing data. Since the entirety of the classification is performed analytically, we rely upon the maximum likelihood and Bayesian parameter estimation procedures that provide unbiased estimates under the assumption that the missing data mechanism conforms to the conditionally missing at random assumption. This approach is superior to a single value imputation strategy, even if the imputations are drawn stochastically. 
+
+**No direct standardization and normalization of cognitive variables**. In Manly-Jones (and other actuarial approaches, c.f. Graves et al 2020) cognitive test scores are standardized, in a normative reference group (robust norms group) as a data processing step prior to analysis or inclusion in a actuarial algorithm. In the proposed 
+
+**Socio-demographic adjustment occurs at the indicator level** rather than the construct level. The Manly-Jones algorithm applies sociodemographic corrections at the domain level, implicitly assuming these corrections are appropriate for every sub test. Our approach implements these corrections (or their analytic analog) at the individual test level.
+
+## Classification model 
+
+Below is a cartoon of the classification model:
+
+::: {#fig-fig2 layout-align="center" fig-cap="Classification model"}
+![](excalidraw/PMM-012-Classification_Model.excalidraw.svg){width="90%"}
+:::
+
+When we use this model, either in cross-validation in the derivation sample (n = 3496) or in application to the full HRS 2016 age 65+ sample (n = 9972):
+
+**All parameters are fixed to presumed population values.** These are those estimated in a particular K=1-fold estimation, or the full sample estimation for the final analysis. 
+
+**Known class assignment and normative reference group variables are not included.** The model will be applied to data sets where these variables are not observed. 
+
+**Prepare a scoring grid.** We will generate a grid of all possible values for the variables included in the model, and run that grid through the classification model. The resulting data set of variable values and class probabilities will be a handy look-up table for exporting the algorithm to other data sets (i.e., HRS data from 2000 to 2022 for a prevalence and incidence paper). This grid will be immense but data storage is cheap. An important consideration for this is numeric data (e.g., z-scores for standardized cognitive indicators) need to be truncated to a reasonable degree of precision in the *Data management step*.
+

@@ -1,0 +1,11 @@
+
+
+
+# HRS 2016 and participant subgroups 
+
+The following diagram summarizes the relationships among some important subgroups of participants for this analysis.
+
+::: {#fig-fig3 layout-align="center" fig-cap="Flow diagram for participants in planned analyses"}
+![](excalidraw/PMM-031-STROBE_Diagram.excalidraw.svg){width="90%"}
+:::
+
