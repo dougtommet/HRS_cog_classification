@@ -1,0 +1,57 @@
+
+### Notes on weights: filters, subpopulation, weighted subpopulation
+
+In complex survey data like HRS, filtering the dataset to a subpopulation (e.g., age 65+) and running an analysis as if this subset were a simple random sample leads to incorrect standard errors and potentially biased estimates. The correct approach is to use a *subpopulation analysis*, where the full design (weights, strata, clusters) is preserved, but the analysis is restricted to the subpopulation.
+
+#### Key Points:
+
+- In R (`survey` package): create a full `svydesign()` object using the full dataset, then apply `subset()` to restrict the analysis to the subpopulation.
+- In Mplus: use the `SUBPOPULATION =` command, which allows you to include everyone in the data but restrict the estimation to a group (e.g., age ≥ 65) without dropping observations.
+- Subpopulation routines ensure correct standard errors by preserving information about the full sample design.
+
+#### Subpopulation Analysis in R Using the `survey` Package
+
+The `survey` package in R provides full support for subpopulation analysis in complex survey data. The recommended approach is:
+
+```
+library(survey)
+
+# Define the full survey design
+hrs_design <- svydesign(
+  ids = ~psuvar,
+  strata = ~stratavar,
+  weights = ~weightvar,
+  data = hrs_full,
+  nest = TRUE
+)
+
+# Restrict analysis to a subpopulation (e.g., age 65+)
+h65_design <- subset(hrs_design, age >= 65)
+
+# Example analysis
+svymean(~cog_score, design = h65_design)
+```
+
+This approach preserves the full information about the sample design, even though the estimation is limited to the subset. It avoids the bias introduced by dropping non-subpopulation cases from the dataset.
+
+#### Why Not Just Filter the Data?
+
+If you were to do:
+
+```
+subset_data <- hrs_full %>% filter(age >= 65)
+subset_design <- svydesign(ids = ~psuvar, strata = ~stratavar, weights = ~weightvar, data = subset_data)
+```
+
+You would be telling R that the `subset_data` sample is a full probability sample, when in fact it is a subpopulation from a larger design. This would underestimate standard errors and potentially bias point estimates.
+
+#### Notes on Variance Estimation
+
+- Functions like `svymean()` and `svyglm()` will automatically compute standard errors correctly for subpopulations if `subset()` is used.
+- Use `svyby()` for multiple subgroups.
+
+This logic is conceptually the same as the `SUBPOPULATION =` feature in Mplus.
+
+```
+svyby(~cog_score, ~sex, h65_design, svymean)
+```

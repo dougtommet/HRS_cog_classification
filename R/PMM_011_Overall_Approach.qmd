@@ -3,9 +3,12 @@
 
 |**Terms**|**Meaning**|
 |:---------------|:-----------------------------------------------------------------------------------------|
-|**Manly-Jones algorithm**|Describes the approach to cognitive classification described in Manly et al (2023). This approach is a so-called **_actuarial_** classification, with that term attributed to Jak and Bondi and their colleagues. It refers to a procedure for classification using an algorithmic approach, a robust norms (normative reference) group, socio-economic adjustment of cognitive indicators, and the notable exclusion of clinical input. Also referred to as the **_HRS/HCAP algorithm_**.|
+|**_Knownclass_**| A knownclass model is a categorical latent variable modeling approach (e.g., latent class model, mixture model) where class membership is known. A knownclass model is analogous to a _supervised_ learning model, a categorical latent variable model without known classes is analogous to an _unsupervised_ learning model.|
+|**Manly-Jones algorithm**|Describes the approach to cognitive classification described in Manly et al (2023). This approach is a so-called **_actuarial_** classification, with that term attributed to Jak and Bondi and their colleagues. It refers to a procedure for classification using an algorithmic approach, a robust norms group, socio-economic adjustment of cognitive indicators, and the notable exclusion of clinical input. Also referred to as the **_HRS/HCAP algorithm_**.|
 |**_Mixture model_**|A categorical latent variable modeling approach that includes continuous variables as class indicators. Contrast with a **_latent class model_**, which is a categorical latent variable modeling approach that includes exclusively categorical variables as class indicators.|
-|**_Knownclass_**| A knownclass model is a categorical latent variable modeling approach where class membership is known. A knownclass model is analogous to a _supervised_ learning model, a latent class or mixture model without known classes is analogous to an _unsupervised_ learning model.|
+|**Robust norms group** and **normative reference group**|These terms are used interchangeably. The terms refer to a set of people who are believed to be free from the cognitive effects of brain injury and disease. These people -- as a group -- define the range of cognitive performance expected in good health. The "good health" or "free from injury or disease" part of the definition is expressed with either **_robust_** or **_normative_**. The "range of cognitive performance expected" part of the definition is expressed with the words **_norms_** or **_reference_**. This implies we could also refer to the healthy group we obtain an estimate of the range of function expected in good health from as the _normative norms_ group. Kidding aside, **_robust norms_** would be the preferred term because injury or disease is a common thing for a person to experience in life and we would not want to label that experience as _abnormal_, which is implied by the label _normative_. In the actuarial approach as implemented in Manly et al (2023), the robust norms group is defined as a subset of the target sample (n = 1787 of the 3496 HRS/HCAP participants were identified as the robust norms group). This subgroup approach has advantages including any period or cohort or selection effects that are active in the target sample also are active for the robust norms subgroup.|
+
+
 
 
 # Overall approach 
@@ -22,11 +25,10 @@ where:
 |||
 |:----|:-----|
 |Latent Class (“c”)|Class membership fixed to HRS/HCAP classification during model calibration |
-|Latent cognition  | General cognitive performance (GCP), factor-analytic structure, we allow for class membership to be indicated by the mean and variance of the GCP, after control for the effect of sociodemographics and membership in the normative reference (robust norms) group|
+|Latent cognition  | General cognitive performance (GCP), factor-analytic structure, we allow for class membership to be indicated by the mean and variance of the GCP, after limited control for the effect of sociodemographics.|
 |Dependent variables |Observed cognitive test scores (e.g., vdlflf1z, vdwdimmz), ADLs, self-report, informant
-|Sociodemographic Covariates|Centered and interacted, included only to adjust indicator means|
-|“Not in normative group”|Treated as a covariate affecting item means, not class|
-|Missing data strategy|Jorm indicator may require separate modeling due to non-overlap with other indicators|
+|Sociodemographic Covariates|Centered and interacted, included only to adjust indicator means and not to directly inform class membership|
+|Missing data strategy|In general, missing data is handled analytically. The Jorm being observed only in those without cognitive performance data (and vice versa) indicator may require separate modeling of the Informant data.|
 
 We are building a supervised latent profile model for cognitive classification using:
 
@@ -38,25 +40,67 @@ The model is:
 
 - Estimated in HRS/HCAP (with known class labels, n=3,496),
 - Applied to Core HRS (with unknown class labels) for classification (n = 9,972),
-- Designed to retain the structure and assumptions of actuarial diagnosis, but expressed in a fully parametric latent variable modeling framework.
+- Designed to retain the structure and assumptions of actuarial classification, but expressed in a fully parametric latent variable modeling framework.
   
-In psychometric terms, our approach can be described as a **_supervised profile mixture model with structured measurement invariance_**. We estimate latent classes using multivariate cognitive and functional profiles (profile mixture model), use known classifications to supervise training (supervised), allow item means and thresholds to vary by sociodemographic covariates (structured measurement invariance), and treat “not in the normative group” as a covariate influencing observed scores but not latent class directly.
+In psychometric terms, our approach can be described as a **_supervised profile mixture model with structured measurement invariance_**. We estimate latent classes using multivariate cognitive and functional profiles (profile mixture model), use known classifications to supervise training (supervised), allow item means and thresholds to vary by sociodemographic covariates (structured measurement invariance).
 
 ## Notable features of model 
 
-**Purposeful misspecification.** We do not include, in our initial model, model parameters that allow for estimation of class membership on the basis of sociodemographics. This is a deliberate choice: we want class membership "predicted" only by cognitive, functional, self-report, and informant data. It is true we correct for measurement differences (in the means/thresholds) of individual cognitive indicators according to sociodemographics, but the effect of these covariates in the class variable is blocked at the cognitive performance variable level. This is a misspecification because we know from Manly et al (2023) Table 2 that sociodemographics are associated with membership in MCI and Dementia groups. This misspecification may make our model fit sub-optimal. But, our main goal is to develop a classification model that maintains fidelity to the spirit of the actuarial classification approach, rather that to achieve an optimally fitting model. 
+### Purposeful misspecification.
 
-Another point of purposeful misspecification is we do not condition ADL/IADL limitations, self-concerns, or Jorm scores obtained from proxy informants on the "(not in) normative reference group" indicator. This is also most likely a misspecification, but the omission replicates our decisions used in the derivation of the Manly-Jones (HRS/HCAP) classification algorithm.
+We do not include, in our initial model, model parameters that allow for estimation of class membership on the basis of sociodemographics. This is a deliberate choice: we want class membership "predicted" only by cognitive, functional, self-report, and informant data. It is true we correct for measurement differences (in the means/thresholds) of individual cognitive indicators according to sociodemographics, but the effect of these covariates in the class variable is blocked at the cognitive performance variable level. This is a misspecification because we know from Manly et al (2023) Table 2 that sociodemographics are associated with membership in MCI and Dementia groups. This misspecification may make our model fit sub-optimal. But, our main goal is to develop a classification model that maintains fidelity to the spirit of the actuarial classification approach, rather that to achieve an optimally fitting model. 
 
-Moreover, membership in the normative reference group is (hopefully) a very strong indicator of class assignment. Yet, we do not allow for class membership to be "predicted" by membership in the normative reference group. This is because, when we apply the prediction model, we will not know who is and who is not in the normative reference group. **_It might me reasonable to omit this variable from the calibration model_**, since the information that it provides is already encoded in the knownclass variable. This is a decision we'll have to make empirically.
+### Covariate effects are fixed parameters estimated in a preliminary model.
+
+A key component of the Jak/Bondi actuarial approach (and as used in Manly et al 2023) is the standardization of cognitive test scores across a set of covariates. In Manly et at (2023) cognitive ability estimates are regressed on age, sex, race, ethnicity, and educational attainment (and their two-way interactions) in a robust norms group. Cognitive impairment is defined using the residual from these regression equations. This is an attempt to operationalize the notion that _cognitive impairment should be lower than expected for the individual_ when classifying persons according to criteria for mild cognitive impairment and dementia. Simply identifying persons with low cognition is not what we are interested in, because (a) cognitive abilities are widely distributed in healthy populations and (b) a definition of impairment that was based on low performance would mix up factors associated with low peak lifetime cognitive performance and those associated with risk, resistance, resilience, or compensation for brain disease and the cognitive consequences or brain disease. For example, the 2018 NIA/AA Research Criteria for MCI state that cognitive performance should be "below expected range for that individual based on all available information. This may be based on clinical judgment and/or on cognitive test performance (which may or may not be based on comparison to normative data with or without adjustments for age, education, occupation, sex, etc.)" and that cognitive performance in MCI is "usually in the impaired/abnormal range based on population norms, but this is not required as long as the performance is below the range expected for that individual."(Jack et al, 2018, Table 3).[^1] Jack and his colleagues, in their announcement of the 2018 research framework, do not provide guidance on how to define "below the range expected for the individual". 
+
+[^1]: Jack Jr, C. R., Bennett, D. A., Blennow, K., Carrillo, M. C., Dunn, B., Haeberlein, S. B., Holtzman, D. M., Jagust, W., Jessen, F.,and Karlawish, J. (2018). NIA-AA research framework: toward a biological definition of Alzheimer’s disease. Alzheimer’s and Dementia, 14(4), 535-562
+
+The Jak/Bondi actuarial approach -- as used in Manly et al (2023) and elsewhere -- identifies "below the expected range for the individual" using regression adjustment and residuals obtained from a **_robust norms group_**. The definition of cognitive impairment using covariates is handled in data processing step: (a) robust norms group membership is defined, (b) regression models of performance on sociodemographic factors are estimated in the robust norms group, (c) the models and their parameters are used to generate estimates of expected performance given sociodemographic factors for each individual in the target sample, (d) impairment is defined by comparing observed and expected performance in the form of a scaled residual.
+
+::: {#fig-fig2 layout-align="center" fig-cap="Preliminary model for covariate effects estimated in robust norms sample"}
+![](excalidraw/PMM-012-Preliminary_Model.excalidraw.svg){width="90%"}
+:::
+
+In the proposed model, we do not use a data processing step to adjust cognitive performance indicators, the analytic model uses cognitive performance data as collected and minimally processed (response categories may be collapsed, performance may be normalized or standardized, but covariates are not used in these steps). To account for the dependence of the cognitive performance scores on sociodemographics in the robust norms group, we estimate a preliminary model restricted to the robust norms group and regress the cognitive performance variables on the sociodemographics. From this model we extract the regression coefficients and use them -- as fixed values -- in subsequent models. **_This is functionally equivalent to computing a residual using predicted values derived from parameter estimates from the robust norms group._** The three approaches illustrated below are approximately equivalent. Manly et al (2023) use the third panel approach (with additional scaling corrections, residuals are scaled by a factor of $\left(\sigma\sqrt{1-R^2}\right)^{-1}$, where $\sigma$ is the standard deviation of the cognitive performance variable in the robust norms group, and $R^2$ is the coefficient of determination from the regression model in the robust norms group: the correction factor accounts for "shrinkage" of the predicted value). 
+
+::: {#fig-fig3 layout-align="center" fig-cap="Approaches to constrained regression"}
+![](excalidraw/PMM-013-Approaches_to_constrained_regression.excalidraw.svg){width="90%"}
+:::
+
+In conclusion, our approach that involves a two-step calibration where covariate effects in the cognitive variables are estimated in the robust norms group, and used as fixed values in a subsequent classification model, is equivalent to using residuals given expected values derived from robust norms group equations as in Manly et al (2023). The omission of the scaling factor is not relevant, because we do not make inferences or classification decisions based on the scale of the cognitive performance indicators.
+
+:::{.callout-note}
+Stata users can prove it to themselves:
+
+```
+clear
+sysuse auto                           // use cars data set
+gen robustsample = (rep78>2)          // robust norms sample good repair rating
+standardize mpg if robustsample==1    // standardize to mean and sd in robust group
+standardize weight if robustsample==1 // get standardize.ado at https://github.com/rnj0nes/Jones-ADO
+standardize price                     // standardize in total sample
+glm zmpg zweight if robustsample==1   // regression in robust norms group
+scalar B0 = _b[_cons]                 // save constant or intercept term
+scalar B1 = _b[zweight]               // save slope term
+constraint 2 _cons = B0               // define constraints
+constraint 3 zweight =  B1
+gen pzmpg = B0 + B1*zweight           // linear predictor
+gen resid = zmpg-pzmpg                // residual
+glm zmpg zweight zprice , constraints(2 3) // constrained regression
+glm zmpg zprice , offset(pzmpg)      // linear predictor as offset
+glm resid zprice                     // regression of residual
+```
+
+R users are in a bind because there is no easy way to constrain parameters in R. The easiest approximate solution is to specify starting values and limit the iterations to 0.
+:::
+
 
 ## Important differences from the Manly-Jones algorithm
 
 **No explicit decision tree.** The proposed model makes classifications analytically, and does not place a decision-tree like logic on the indicators to arrive at a classification. Parameters of the model are estimated (calibrated) to maximize agreement between the analytically-derived class assignments and the observed (knownclass) assignments derived from the Manly-Jones algorithm (aka the HRS/HCAP actuarial algorithm).
 
 **Missing data.** There is no imputation of missing data. Since the entirety of the classification is performed analytically, we rely upon the maximum likelihood and Bayesian parameter estimation procedures that provide unbiased estimates under the assumption that the missing data mechanism conforms to the conditionally missing at random assumption. This approach is superior to a single value imputation strategy, even if the imputations are drawn stochastically. 
-
-**No direct standardization and normalization of cognitive variables**. In Manly-Jones (and other actuarial approaches, c.f. Graves et al 2020) cognitive test scores are standardized, in a normative reference group (robust norms group) as a data processing step prior to analysis or inclusion in a actuarial algorithm. In the proposed 
 
 **Socio-demographic adjustment occurs at the indicator level** rather than the construct level. The Manly-Jones algorithm applies sociodemographic corrections at the domain level, implicitly assuming these corrections are appropriate for every sub test. Our approach implements these corrections (or their analytic analog) at the individual test level.
 
@@ -70,9 +114,9 @@ Below is a cartoon of the classification model:
 
 When we use this model, either in cross-validation in the derivation sample (n = 3496) or in application to the full HRS 2016 age 65+ sample (n = 9972):
 
-**All parameters are fixed to presumed population values.** These are those estimated in a particular K=1-fold estimation, or the full sample estimation for the final analysis. 
+**All parameters are fixed to presumed population values.** These are those estimated in a particular cross-fold estimation for the assessment of classification model reliability, or the full sample estimation for the final analysis. 
 
-**Known class assignment and normative reference group variables are not included.** The model will be applied to data sets where these variables are not observed. 
+**Known class assignment is not included.** The model will be applied to data sets where these assignments are not observed. 
 
 **Prepare a scoring grid.** We will generate a grid of all possible values for the variables included in the model, and run that grid through the classification model. The resulting data set of variable values and class probabilities will be a handy look-up table for exporting the algorithm to other data sets (i.e., HRS data from 2000 to 2022 for a prevalence and incidence paper). This grid will be immense but data storage is cheap. An important consideration for this is numeric data (e.g., z-scores for standardized cognitive indicators) need to be truncated to a reasonable degree of precision in the *Data management step*.
 
