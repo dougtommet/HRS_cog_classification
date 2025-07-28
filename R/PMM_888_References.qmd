@@ -1,0 +1,38 @@
+# References
+
+Anthony, W. Z., Heaton, R. K., & Lehman, R. A. (1980). An attempt to cross-validate two actuarial systems for neuropsychological test interpretation. Journal of Consulting and Clinical Psychology, 48(3), 317. 
+
+Bondi, M. W., Jak, A. J., Delano-Wood, L., Jacobson, M. W., Delis, D. C., & Salmon, D. P. (2008). Neuropsychological contributions to the early identification of Alzheimer’s disease. Neuropsychology Review, 18, 73-90. 
+
+Bondi, M. W., Edmonds, E. C., Jak, A. J., Clark, L. R., Delano-Wood, L., McDonald, C. R., Nation, D. A., Libon, D. J., Au, R., & Galasko, D. (2014). Neuropsychological criteria for mild cognitive impairment improves diagnostic precision, biomarker associations, and progression rates. Journal of Alzheimer's Disease, 42(1), 275-289. 
+
+Farron, M., Ryan, L. H., Manly, J. J., Levine, D. A., Plassman, B. L., Giordani, B. J., Jones, R. N., & Langa, K. M. (2025). Assessing Cognitive Impairment in the Health and Retirement Study Harmonized Cognitive Assessment Protocol Project: Comparing a Diagnostic Algorithm With a Diagnostic Consensus Panel. Journal of Aging and Health, 8982643251335370. https://doi.org/10.1177/08982643251335370 
+
+Fonda, S., & Herzog, A. R. (2004). Documentation of physical functioning measured in the Health and Retirement Study and the Asset and Health Dynamics among the Oldest Old Study. https://hrs.isr.umich.edu/sites/default/files/biblio/dr-008_0.pdf
+
+Graves, L. V., Edmonds, E. C., Thomas, K. R., Weigand, A. J., Cooper, S., & Bondi, M. W. (2020). Evidence for the utility of actuarial neuropsychological criteria across the continuum of normal aging, mild cognitive impairment, and dementia. Journal of Alzheimer's Disease, 78(1), 371-386. 
+
+Hudomiet, P., Hurd, M. D., & Rohwedder, S. (2022). Trends in inequalities in the prevalence of dementia in the United States. Proceedings of the National Academy of Sciences of the United States of America, 119(46), e2212205119. https://doi.org/10.1073/pnas.2212205119 
+
+Hurd, M. D., Martorell, P., Delavande, A., Mullen, K. J., & Langa, K. M. (2013). Monetary Costs of Dementia in the United States. The New England journal of medicine, 368(14), 1326-1334. https://doi.org/10.1056/NEJMsa1204629 
+
+Jack Jr, C. R., Bennett, D. A., Blennow, K., Carrillo, M. C., Dunn, B., Haeberlein, S. B., Holtzman, D. M., Jagust, W., Jessen, F., & Karlawish, J. (2018). NIA-AA research framework: toward a biological definition of Alzheimer's disease. Alzheimer's & Dementia, 14(4), 535-562. 
+
+Jak, A. J., Bondi, M. W., Delano-Wood, L., Wierenga, C., Corey-Bloom, J., Salmon, D. P., & Delis, D. C. (2009). Quantification of five neuropsychological approaches to defining mild cognitive impairment. The American Journal of Geriatric Psychiatry, 17(5), 368-375. 
+
+Jones, R. N., Manly, J. J., Langa, K. M., Ryan, L. H., Levine, D. A., McCammon, R., & Weir, D. (2024). Factor structure of the Harmonized Cognitive Assessment Protocol neuropsychological battery in the Health and Retirement Study. Journal of the International Neuropsychological Society, 30(1), 47-55. https://doi.org/10.1017/S135561772300019X 
+
+Langa, K. M., Ryan, L. H., McCammon, R. J., Jones, R. N., Manly, J. J., Levine, D. A., Sonnega, A., Farron, M., & Weir, D. R. (2020). The Health and Retirement Study Harmonized Cognitive Assessment Protocol Project: Study Design and Methods. Neuroepidemiology, 54(1), 64-74. https://doi.org/10.1159/000503004 
+
+Langa, K. M., Weir, D. R., Kabeto, M., & Sonnega, A. (2023). Langa-Weir Classification of Cognitive Function (1995-2000). https://hrsdata.isr.umich.edu/sites/default/files/documentation/data-descriptions/1695907706/Data_Description_Langa_Weir_Classifications2020_V2.pdf
+
+Manly, J. J., Jones, R. N., Langa, K. M., Ryan, L. H., Levine, D. A., McCammon, R., Heeringa, S. G., & Weir, D. (2022). Estimating the Prevalence of Dementia and Mild Cognitive Impairment in the US: The 2016 Health and Retirement Study Harmonized Cognitive Assessment Protocol Project. JAMA Neurol, 79(12), 1242-1249. https://doi.org/10.1001/jamaneurol.2022.3543 
+
+Meehl, P. E. (1954). Clinical versus statistical prediction: A theoretical analysis and a review of the evidence. University of Minnesota Press. https://doi.org/https://doi.org/10.1037/11281-000 
+
+Wu, Q., Tchetgen, E. J. T., Osypuk, T. L., White, K., Mujahid, M., & Glymour, M. M. (2013). Combining direct and proxy assessments to reduce attrition bias in a longitudinal study. Alzheimer Disease and Associated Disorders, 27(3), 207-212. 
+
+
+
+
+

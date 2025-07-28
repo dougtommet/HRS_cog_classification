@@ -16,6 +16,11 @@ The `survey` package in R provides full support for subpopulation analysis in co
 ```
 library(survey)
 
+
+attr(PMM_41$inConsensus, "label") <- "Indicator for HRS/HCAP consensuspaneldx subpopulation"
+attr(PMM_41$inConsensus, "label") <- "Normalized sampling weight for consensuspaneldx"
+
+
 # Define the full survey design
 hrs_design <- svydesign(
   ids = ~psuvar,
@@ -33,6 +38,31 @@ svymean(~cog_score, design = h65_design)
 ```
 
 This approach preserves the full information about the sample design, even though the estimation is limited to the subset. It avoids the bias introduced by dropping non-subpopulation cases from the dataset.
+
+### What to do when using the HCAP Consensus sample 
+
+We have constructed a weight to use when doing analysis concerning the HRS/HCAP consensus sample. This weight variable is `HCAP16WGTR_consensus`. It is computed as the HRS/HCAP 2016 weight (`HCAP16WGTR_consensus`) times the inverse of the probability of selection into the consensus sample (`samplingP`). (see `PMM_042_Data_cleaning_consensusdx_sampling_weight.R`). There is also a dummy variable indicating membership in the consensus sample (`inConsensus`). The consensus sample is a subpopulation of the HCAP sample. So your weighted analysis should look like:
+
+```
+library(survey)
+
+# Define survey design using full data
+design <- svydesign(
+  ids = ~SECU,
+  strata = ~STRATUM,
+  weights = ~HCAP16WGTR_consensus,
+  data = PMM_45,
+  nest = TRUE
+)
+# Use subset() to restrict to subpopulation while retaining full design
+design_consensus <- subset(design_full, inConsensus == 1)
+# Now proceed with svymean(), svyglm(), etc. on subpop_design
+svymean(~age, design = design_consensus)
+svyglm(outcome ~ predictor, design = design_consensus)
+```
+
+
+
 
 #### Why Not Just Filter the Data?
 

@@ -1,0 +1,116 @@
+## Data cleaning 
+
+### Functional items 
+
+### ADL indicators
+
+The descriptives report above shows a lot of missing data in the ADLs. What's up with that? 
+
+This is from the codebook
+
+```
+==========================================================================================
+
+
+         IF ((((SecA.ContinuInterview.A218_AgeGreaterThan17 > 17) OR 
+         (SecA.ContinuInterview.A019_RAge > 17)) AND (RVARS.Z145_TypeExit_V <> 
+         NEWPOSTEXIT)) AND (RVARS.Z145_TypeExit_V <> FIRSTREPEATPOST)) AND 
+         (RVARS.Z145_TypeExit_V <> SECREPEATPOST) THEN 
+
+         IF NOT (piRvarsZ145_TypeExit_V IN [NEWPOSTEXIT, FIRSTREPEATPOST, 
+         SECREPEATPOST]) THEN 
+
+         IF (SecG.ADL.G013TNagiCkpt_A > 0) THEN 
+
+         IF (SecG.ADL.G129TDaysInBed_A < 86) OR SecG.ADL.G129TDaysInBed_A = EMPTY THEN 
+
+
+         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+PG014                         DIFFICULTY- DRESSING
+         Section: G     Level: Respondent      Type: Numeric    Width: 1   Decimals: 0
+         Ref: SecG.ADL.G014_DiffDress
+
+         Here are a few more everyday activities. Please tell me if you have any
+         difficulty with these because of a physical, mental, emotional or memory
+         problem. Again exclude any difficulties you expect to last less than three
+         months.
+         
+         Because of a health or memory problem do you have any difficulty with dressing,
+         including putting on shoes and socks?
+
+         .................................................................................
+          2352           1.  YES
+         10875           5.  NO
+            52           6.  [IF VOL] CAN'T DO
+            12           7.  [IF VOL] DON'T DO
+            10           8.  DK (Don't Know); NA (Not Ascertained)
+             2           9.  RF (Refused)
+          7609       Blank.  INAP (Inapplicable); Partial Interview
+
+
+==========================================================================================
+```
+
+
+According to the codebook, the blanks imply a partial interview, but hidden in the gobledygook above the variable report is this line `IF (SecG.ADL.G013TNagiCkpt_A > 0)`, which implies that the variable is not asked if `SecG.ADL.G013` is equal to 0. Variable `G013` is 
+
+==========================================================================================
+
+
+         ASSIGN: G013TNagiCkpt_A := 0:IF ((((SecA.ContinuInterview.A218_AgeGreaterThan17 
+         > 17) OR (SecA.ContinuInterview.A019_RAge > 17)) AND (RVARS.Z145_TypeExit_V <> 
+         NEWPOSTEXIT)) AND (RVARS.Z145_TypeExit_V <> FIRSTREPEATPOST)) AND 
+         (RVARS.Z145_TypeExit_V <> SECREPEATPOST) THEN 
+         IF NOT (piRvarsZ145_TypeExit_V IN [NEWPOSTEXIT, FIRSTREPEATPOST, 
+         SECREPEATPOST]) THEN 
+
+         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+PG013                         CHKPNT: COUNT OF G001 THROUGH G012
+         Section: G     Level: Respondent      Type: Numeric    Width: 2   Decimals: 0
+         Ref: SecG.ADL.G013TNagiCkpt_A
+
+         .................................................................................
+
+         -----------------------------------------------------------------
+              N      Min         Max          Mean            SD    Miss
+          20912        0          10          2.59          2.90       0
+         -----------------------------------------------------------------
+
+
+==========================================================================================
+
+...its the count of mobility limitations, in the 2016 wave these are `PG001-PG012`. The skip logic is supported in the [_Documentation of Physical Functioning_ (2004) report](https://hrs.isr.umich.edu/sites/default/files/biblio/dr-008_0.pdf):
+
+> In later waves of the HRS and AHEAD, people who had no problems with mobility, strength, and fine motor skills were not asked about ADLs. The HRS and AHEAD staff adopted these skip patterns based on their analyses showing that respondents tended to first lose the ability to perform tasks involving considerable mobility and strength, then the ability to perform tasks involving moderate mobility and strength, and lastly, the ability to do IADLs and ADLs. Analysts should consult the codebooks for each wave of the study to determine when skip patterns were used.
+
+
+File `PMM_041_Data_cleaning_functional_items.R` uses the skip logic to impute 0's according to the skip logic. Even if our earlier workflow handled the skip logic appropriately when making the `iadl_imp` variable, we might use the indivdiual adls/iadls in the classification model. 
+
+
+### IADL Indicators
+
+I also revised the mapping of non-response codes to the IADL indicators relative to previous data handling
+
+| IADL Core Response | Analytic Variable |
+|:-------------------|:------------------|
+|    1.  YES                                    | 1 (impairment) | 
+|    5.  NO                                     | 0 (no impairment) |
+|    6.  [IF VOL] CAN'T DO                      | 1 (impairment) |
+|    7.  [IF VOL] DON'T DO                      | NA (missing) |
+|    8.  DK (Don't Know); NA (Not Ascertained)  | NA (missing) |
+|    9.  RF (Refused)                           | 1 (impairment) |
+|Blank.  INAP (Inapplicable); Partial Interview | NA (missing) |
+
+
+**Updated descriptives with new ADL and IADL indicators**
+
+The `rPG###` variables are removed, the new `nPG###` variables are new recodes that assign 0s for skip missing. The descriptives below are for the `age65up==1` sample.
+
+```{r}
+readRDS(here::here("R_objects", "PMM_041.RDS")) |>  
+  dplyr::filter(age65up == 1) |>
+  skimr::skim()
+``` 
+
+
+<!-- have a nice day  -->

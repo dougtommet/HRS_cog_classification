@@ -1,0 +1,214 @@
+
+
+```{r} 
+PMM_45 <- readRDS(here::here("R_objects", "PMM_045.RDS"))
+#ßcat(paste(names(PMM_45), collapse = ", "))
+```
+
+## Summary of data preparation
+
+The object containing data for analysis and reporting is `PMM_045.RDS`. That data file has `nrow(PMM_45)` but the descriptives are limited to persons aged 65 and older in this report section.
+
+### Cognitive performance variables 
+
+```{r}
+# function for making table of variable subsets
+make_var_summary_table <- function(data, vars, caption = "Variable labels and summary") {
+  # Get variable labels
+  var_table <- tibble::tibble(
+    variable = names(data),
+    label = purrr::map_chr(data, ~ attr(.x, "label") %||% "")
+  )
+
+  # Filter to selected variables
+  var_table_selected <- var_table |>
+    dplyr::filter(variable %in% vars)
+
+  # Create HTML label table
+  label_table <- knitr::kable(var_table_selected, format = "html", caption = caption)
+
+  # Display label table (nicely rendered)
+  # print(label_table)
+  print(kableExtra::kable_styling(label_table))
+
+  
+  # Display summary statistics using skimr
+  data |>
+    dplyr::select(all_of(vars)) |>
+    skimr::skim()
+}
+``` 
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| results: asis
+
+make_var_summary_table(
+  data = PMM_45 |> dplyr::filter(age65up == 1),
+  vars = c("vdori", "vdlfl1z", "vdlfl2", "vdlfl3", 
+           "vdwdimmz", "vdwddelz", "vdexf7z", "vdsevens", "vdcount"),
+  caption = "Cognitive variables and labels in age 65+ sample"
+)
+```
+
+Missing data are tolerable in the dependent variables, for the kind of analysis we are planning. 
+
+### Functional variables, self-report, and informant variables
+
+I'm think that, in the spirit of completing a predictive modeling task, we can leave the functional variables as individual indicators, rather than making a sum score.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| results: asis
+
+make_var_summary_table(
+  data = PMM_45 |> dplyr::filter(age65up == 1),
+  vars = c("nPG014", "nPG021", "nPG023", "nPG030", "nPG040", "nPG041", "nPG044", "nPG047", "nPG050", "nPG059", "PD102", "jorm"),
+  caption = "Functional, self-report, and informant variables in age 65+ sample"
+)
+```
+
+These variables will also be treated as dependent variables, and the model can tolerate missingness. 
+
+### Analytic covariates
+
+These variables are used to standardize the cognitive performance variables. As covariates, we can't have any missing values and include the record in the analysis. So, these variables have been constructed to not have any missingness. This is accomplished with the use of absorbing null categories (not Black or African-American, not Hispanic), and single imputation using predictive mean matching (years of educational attainment). 
+
+These covariates are all centered. x1, which is spage1, is age at 2016 interview centered at 70. x2 and x3 are two additional splines for age that are 0 at age 70. x7 is years in school, with missing values imputed (see `010-select_data.R`), and centered at 12 years. In keeping with analytic decisions made in the HRS/HCAP analyses (Manly et al 2022) we do not use restricted cubic splines for education. x4, x5, and x6 code for female sex, Black or African-American (vs all other racial groups) and Hispanic (vs not Hispanic), and are mean centered using the HCAP sample and weighted. Interaction terms involving continuous predictors (x1-x3, x7) are not re-centered, and are computed before centring. Interaction terms involving discrete predictors (e.g., x4x5, the interaction of female sex and Black or African-American) are computed before centring, and are centered to the HCAP weighted mean.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| results: asis
+
+make_var_summary_table(
+  data = PMM_45 |> dplyr::filter(age65up == 1),
+  vars = c("x1", "x2", "x3", "x4", "x5", "x6", "x7", "x1x4", "x1x5", "x1x6", "x1x7", "x2x4", "x2x5", "x2x6", "x2x7", "x3x4", "x3x5", "x3x6", "x3x7", "x4x5", "x4x6", "x4x7", "x5x6", "x5x7", "x6x7"),
+  caption = "Analytic covariates in age 65+ sample"
+)
+```
+
+### Cognitive classification
+
+#### HCAP Cognitive Classification 
+
+There are two versions of the HCAP Cognitive Classification. Both follow the algorithm outlined in Manly et al (2022), but one relies upon Bayesian plausible values (BPV) as estimates of the underlying cognitive ability (`vs1hcapdx`), and with the other Expected A Posteriori (EAP) (`vs1hcapdxeap`). Here's what the HRS/HCAP Technical Documentation has to say about BPV vs EAP.
+
+> We have generated factor score estimates as expected a posteriori (EAP) estimates and single draws from a Bayesian posterior distribution (Bayesian plausible values, PV). Both of these estimates were derived using Mplus software (version 8.8, Muthén & Muthén, Los Angeles CA)(Asparouhov, 2010; https://www.statmodel.com/download/Plausible.pdf). Factor scores are estimates of a latent variable. And latent variables are, by definition, not directly observable. Therefore, any estimate of that latent variable has some level of imprecision. In the context of categorical data item factor analysis (or item response theory), the imprecision is determined by the number of items used in the factor model, the strength of the correlation between the items and the underlying factor, and the distribution of difficulty levels of the items. Factors with more items, items with strong relationships with the underlying factor, and many widely dispersed difficulty levels will have less imprecision than factors with only a few items with weak relationships with the underlying factor and coarse and skewed responses. If a factor is measured by all continuous indicators, imprecision is constant across the level of the latent trait. But if a factor is measured with at least one categorical indicator, imprecision will vary across the level of the latent trait, generally being higher at the extremes.
+
+> When we generate factor score estimates as plausible values, each person’s score is a draw from the posterior distribution of their factor score estimate, which is determined by the level of imprecision of the factor score. These are analogous to imputations in multiple imputation. In fact, it might be desirable to use multiple plausible values generated for each participant as if they were multiply imputed values in a data analysis. If we were to take many draws from the posterior for each participant, and then compute the mean of each persons’ plausible values - that mean would approach the EAP estimate we obtain for each person.
+
+> In addition to factor scores, we produce results of the classification algorithm using single draws from the Bayesian posterior distribution of factor scores (vs1hcapdx) and expected a posteriori (EAP) factor scores (vs1hcapdxeap) for data users to include in their analysis as they determine is appropriate. We recommend using plausible values (or multiple plausible values) in any circumstance where population-level parameter estimation and inference is desired. Use of EAP estimates in such circumstances is anti-conservative and may result in biased low standard errors in inflated type-I error levels. In some situations, such as descriptive analysis, or in a high-stakes decision making procedure (e.g., selecting participants for a module or sub-study) the EAP estimates would be preferable. For example, when we are interested in generating a prevalence estimate for older adults living in the US, we prefer the classification algorithm that uses the single draws from the plausible values, because that version incorporates uncertainty in the estimation of cognitive ability. On the other hand, when we are interested in comparing how the HCAP algorithm compares to a reference standard classification, we make use of the EAP factor score derived algorithmic results. The latter example involves a “high stakes” decision about agreement at the individual participant level, and we would not like that decision to be clouded by random fluctuations in assignment due to measurement imprecision in the cognitive assessment.
+
+Due to the uncertainty built in to BPV, **_we will use EAP for purposes of comparing HRS/Core derived classifications_** to HRS/HCAP classifications. 
+
+#### Criterion measures 
+
+A number of cognitive classification variables are in the data set. `consensuspaneldx` is used in Farron et al (2025), and is a Normal/MCI/Dementia classification adjudicated for 50 persons from HRS/HCAP sample (N=3496). These individuals were selected at random from the N=3496 with a probability derived from their MMSE score, with a higher probability assigned to persons with more diagnostic uncertainty given their MMSE score Normal/MCI/Dementia classifications based on HRS/ADAMS data. This selection probability is known and provided in `samplingP`, see Design variables section.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| results: asis
+
+make_var_summary_table(
+  data = PMM_45 |> dplyr::filter(age65up == 1),
+  vars = c("vs1hcapdx", "vs1hcapdxeap", "consensuspaneldx", "cogfunction2016",
+     "PrDem", "PrCIND", "PrNorm", "Cog", "CogSd", "Hudomiet_classification"),
+  caption = "Analytic covariates in age 65+ sample"
+)
+```
+
+
+**Langa-Weir classification** (`cogfunction2016`)
+
+Langa et al write:
+
+> The Langa-Weir Classifications map onto the 27-point scale (variable name `cogtot27_imp` [not in our data set]) thus: Normal (12 – 27); Cognitively Impaired but not Demented (CIND) (7 – 11); and Demented ( 0 – 6) (variable name `cogfunction`). Crimmins et al. (2011) documents the methods used to make these classifications based on diagnostic information from the ADAMS. 
+
+They go on to explain coding for Proxy respondents, and for dealing with web administration and cross-wave differences in assessment. The value levels correspond to `Cognition Category: 1=Normal, 2=CIND, 3=Demented`.
+
+**Hudomiet classification** (`Hudomiet_classification`, `PrDem`, `PrCIND`, `PrNorm`, `Cog`, `CogSd`)
+
+Hudomiet and colleagues (2022) write (emphasis added):
+
+> We use a longitudinal latent variable model and jointly model the clinical dementia diagnosis in the ADAMS subsample and the cognitive measures in the HRS. Changes in dementia over time are primarily identified from wave-to-wave differences in the averages of individuals’ performance on the HRS cognitive tests, while the clinical diagnosis of dementia in ADAMS plays a critical role in calibrating the HRS cognitive tests to measure dementia. Importantly, **_our model allows the relationship between the ADAMS and HRS measures to vary across population subgroups, essentially calibrating the measures for each subgroup._** (page 2/9)
+
+> ...the model is constructed to ensure the dementia classification is calibrated accurately within population subgroups, and therefore, it is equipped to produce accurate estimates of dementia prevalence by age, sex, education, race and ethnicity, and a measure of lifetime earnings. (page 2/9)
+
+Details beyond this are difficult to parse from Hudomiet et al (2022) and supplementary materials.
+
+The provided data are:
+
+`PrDem` Estimated probability of dementia<br>
+`PrCIND` Estimated probability of cognitive impairment not dementia (CIND)<br>
+`PrNorm` Estimated probability of normal cognitive status<br>
+`Cog` Expected value of latent cognitive ability<br>
+`CogSd` The standard deviation of latent cognitive ability<br>
+
+In addition, I have generated `Hudomiet_classification`, which is a normal/cind/dementia three-level variable where a respondent is classified according to their highest class probability. 
+
+**Hurd classification**
+
+If you are looking for the Hurd et al (2013) classification, it has not been prepared for the 2016 wave. 
+
+**Wu classification** 
+
+We did not code the Wu et al (2013) classification, as they do not provide sufficient information to replicate their prediction model.
+
+### Design Variables and convenience variables
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| results: asis
+
+make_var_summary_table(
+  data = PMM_45 |> dplyr::filter(age65up == 1),
+  vars = c("HHID", "PN", "SECU", "STRATUM", "PWGTR", "HCAP16WGTR", "samplingP", "HCAP16WGTR_consensus", "inConsensus", "nonzeroweight", "inHCAP", "age65up"),
+  caption = "Analytic covariates in age 65+ sample"
+)
+```
+
+For analyses involving the sampling weight, you must use `SECU`, `STRATUM`, and either of the available weights (`PWGTR` and `HCAP16WGTR`.) The number of records passed to analysis will be either N  = 19,699 or N = 3,496. Since the cognitive classifications based on HCAP are only relevant to those 65+, in the Core even 'tho the analysis involves 19,699 we must identify the `SUBPOPULATION` (analogous toa filter) to which the analysis is relevant, and that's where the `age65up` convenience variable comes in. `nonzeroweight` is a indicator for purposes of people in the N = 19,699 sample who were "officially" in the HRS 2016 sampling frame, as indicated by their having a non zero weight on `PWGTR`. There were 79 people in the HRS/HCAP sample with a non-zero `HCAP16WGTR` but a zero `PWGTR`. 
+
+`inConsensus` is a subpopulation indicator for the `consensuspaneldx` (HRS/HCAP validation subsample, n = 50). It should be used as a subpopulation of the `inHCAP` sample, and using weight `HCAP16WGTR_consensus`, which unlike the other weights is normalized, and will sum to 100 in the `inConsensus == 1` subpopulation. 
+
+
+### Table 1 and 2 variables 
+
+A number of variables have been created to be used in descriptive tables. 
+
+<!-- Function to cleanly list variables, labels value labels -->
+```{r}
+summarize_variable_metadata <- function(data, vars) {
+  stopifnot(all(vars %in% names(data)))
+
+  tibble::tibble(
+    variable = vars,
+    label = purrr::map_chr(vars, ~ attr(data[[.x]], "label") %||% ""),
+    value_labels = purrr::map_chr(vars, function(v) {
+      val_labs <- attr(data[[v]], "labels")
+      if (is.null(val_labs)) {
+        return("")
+      }
+      paste0(names(val_labs), " = ", val_labs, collapse = "; ")
+    })
+  )
+}
+```
+
+```{r}
+thud <- summarize_variable_metadata(
+  data = PMM_45,
+  vars = c("rage_cat", "rage", "Sex", "RaceAndEthnicity", "Educational_Attainment", "SCHLYRSimp")
+)
+knitr::kable(thud, format = "html", caption = "Descriptive variables for reporting")
+```

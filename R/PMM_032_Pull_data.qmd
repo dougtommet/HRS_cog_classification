@@ -1,0 +1,30 @@
+
+
+# Compiling data 
+
+Most of the data processing was handled in a previous workflow, and not documented here.
+
+Please refer to `PMM_031_Pull_data.R`
+
+Here are the contents of the working data file
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| results: asis
+
+# Read the RDS file
+PMM_31 <- readRDS(here::here("R_objects", "PMM_031.RDS"))
+
+# Create table of variable names and labels
+var_table <- tibble::tibble(
+  variable = names(PMM_31),
+  label = purrr::map_chr(PMM_31, ~ attr(.x, "label") %||% "")
+)
+
+# Show as HTML table
+knitr::kable(var_table, format = "html", caption = "Variables and Labels in PMM_31")
+```
+
+

@@ -32,18 +32,48 @@ hrs16_func <- h16d_r %>%
          PD551, PD552, PD553)
 
 
-
+# RNJ added PG013 2025-07-26
 hrs16_iadl <- h16g_r %>%
   select(HHID, PN, PSUBHH,
+         PG013,
          PG014, PG021, PG023, PG030, PG040, PG041, PG044, PG047, PG050, PG051, PG059)
-
-
-
-
 
 tracker_demo <- tracker %>%
   select(HHID, PN, PSUBHH,
-         GENDER, HISPANIC, RACE, SCHLYRS)
+         GENDER, HISPANIC, RACE, SCHLYRS, DEGREE)
+
+# 2025-07-26
+# Rich Jones Added this.I will replace missing (NA, 99) on SCHLYRS with
+# a value drawn using predictive mean matching using DEGREE, GENDER, HISPANIC,
+# and RACE and BIRTHYR as predictors. There are many people who have 99 for SCHLYRS but
+# have information on educational attainment in the variable DEGREE.
+# The new variable is called SCHLYRSimp
+library(dplyr)
+library(mice)
+# Prepare data: replace 99 with NA in SCHLYRS
+tracker_demo <- tracker %>%
+  select(HHID, PN, PSUBHH,
+         GENDER, HISPANIC, RACE, SCHLYRS, DEGREE, BIRTHYR) %>%
+  mutate(SCHLYRS = na_if(SCHLYRS, 99))  # treat 99 as NA
+# Set up predictors
+impute_vars <- c("SCHLYRS", "DEGREE", "GENDER", "HISPANIC", "RACE", "BIRTHYR")
+# Subset for imputation
+imp_data <- tracker_demo %>% select(all_of(impute_vars))
+# Run mice with 1 imputation using PMM
+imp_result <- mice(imp_data, m = 1, method = "pmm", seed = 2 , printFlag = FALSE)
+# Extract completed data
+completed <- complete(imp_result, 1)
+# Replace imputed SCHLYRS into tracker_demo
+tracker_demo$SCHLYRSimp <- completed$SCHLYRS
+attr(tracker_demo$SCHLYRSimp, "label") <- "Number of years in school (imputed)"
+# table(tracker_demo$SCHLYRS, useNA = "ifany")
+# table(tracker_demo$SCHLYRSimp, useNA = "ifany")
+
+
+
+
+
+
 
 h16a_r_demo <- h16a_r %>%
   select(HHID, PN, PSUBHH,
