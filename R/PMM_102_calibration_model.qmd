@@ -1,0 +1,142 @@
+# Profile mixture model results
+
+There were several variations of the profile mixture model I tried. The models all had three classes. The models used the neuropsych battery (robust norms adjusted), individual functional impairment indicators, subjective memory complaints, and informant scores.
+
+The modeling approach consisted of two steps.
+
+1.  The first step was a model that used a known class. The known class is the algorithmic diagnosis.
+
+2.  The second step fit a model with all the model parameters fixed to those from step 1 and class probabilities were estimated.
+
+In general, the models gave low probabilities for participants to be in class 2 (MCI). Very few participants had class 2 as their most likely class. I set up my own classification rule, where if a participant had a 1% chance or greater of being in class 2, that participant was placed in class 2, otherwise it was whether class 1 or class 3 had greater probability.
+
+## Model 1
+
+This was the first model I tried. It combined the neuropsych items into a GCP. It allowed the GCP, individual functional impairment indicators, subjective memory complaints, and informant scores to vary by class.
+
+```{r}
+pmm_102b <- MplusAutomation::readModels(here::here("mplus_output", "pmm_102", "pmm_hcap_102b.out"))
+
+PMM_100 <- readRDS(here::here("R_objects", "PMM_100.RDS"))
+inhcap <- PMM_100 %>%
+  filter(inHCAP==1)
+
+```
+
+### Parameter estimates
+
+These are the parameter estimates to show which were constrained to be equal or allowed to vary by class.
+
+```{r}
+#| tbl-cap: "Unstandardized factor loadings by class"
+pmm_102b[["parameters"]][["unstandardized"]] %>%
+  filter(!grepl("ON", paramHeader)) %>%
+  filter(grepl("BY", paramHeader)) %>%
+  select(param, est, LatentClass) %>%
+  pivot_wider(names_from = LatentClass, values_from = est, names_prefix = "class_") %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "Standardized (XY) factor loadings by class"
+pmm_102b[["parameters"]][["stdyx.standardized"]] %>%
+  filter(!grepl("ON", paramHeader)) %>%
+  filter(grepl("BY", paramHeader)) %>%
+  select(param, est, LatentClass) %>%
+  pivot_wider(names_from = LatentClass, values_from = est, names_prefix = "class_") %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "Untandardized covariances by class"
+pmm_102b[["parameters"]][["unstandardized"]] %>%
+  filter(!grepl("ON", paramHeader)) %>%
+  filter(grepl("WITH", paramHeader)) %>%
+  mutate(param = str_c(paramHeader, " ", param),
+         param = str_replace(param, "\\.", " ")) %>%
+  select(param, est, LatentClass) %>%
+  pivot_wider(names_from = LatentClass, values_from = est, names_prefix = "class_") %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "Unstandardized means/intercepts/thresholds by class"
+pmm_102b[["parameters"]][["unstandardized"]] %>%
+  filter(!grepl("ON", paramHeader)) %>%
+  filter(grepl("Thresholds", paramHeader)|
+           grepl("Means", paramHeader)|
+           grepl("Intercepts", paramHeader)) %>%
+  filter(!grepl("Categorical.Latent.Variables", LatentClass)) %>%
+  select(param, est, LatentClass) %>%
+  pivot_wider(names_from = LatentClass, values_from = est, names_prefix = "class_") %>%
+  gt::gt()
+```
+
+### Class probabilities
+
+There were no participants that had a greater than 50% probability of being in class 2. So I created a new classification rule where if a participant had a greater than 1% probability of being in class 2 then they were classified as being in class 2, otherwise they were their most likely class.
+
+```{r}
+
+cprob_102b <- pmm_102b[["savedata"]] %>%
+  as_tibble() %>%
+  janitor::clean_names()
+
+cprob_102b <- cprob_102b %>%
+  rowwise() %>%
+  mutate(c_dt = case_when(cprob2 > 0.01 ~ 2,
+                          cprob1 > cprob3 ~ 1,
+                          cprob1 < cprob3 ~ 3
+                          )
+         ) %>%
+  ungroup()
+
+labelled::var_label(cprob_102b$c_dt) <- "Model classification (modified)"
+
+foo <- inhcap %>%
+  select(vs1hcapdxeap) %>%
+  bind_cols(cprob_102b)
+```
+
+```{r}
+#| fig-cap: "Distribution of the class probibilities by the most likely class"
+cprob_102b %>%
+  select(id, cprob1, cprob2, cprob3) %>%
+  pivot_longer(names_to = "c", values_to = "prob", cols = c(cprob1, cprob2, cprob3)) %>%
+  ggplot(aes(x = prob)) +
+  geom_histogram() +
+  facet_grid(c ~ .) +
+  hrbrthemes::theme_ipsum()
+```
+
+```{r}
+#| tbl-cap: "Model classification vs algorithmic diagnosis"
+gtsummary::tbl_cross(foo, vs1hcapdxeap, c_dt)
+```
+
+Kappa
+
+```{r}
+psych::cohen.kappa(table(foo$vs1hcapdxeap, foo$c_dt))
+```
+
+```{r}
+#| fig-cap: "Distribution of class probabilities by Algorithmic Dx"
+inhcap %>%
+  select(vs1hcapdxeap) %>%
+  bind_cols(cprob_102b) %>%
+  select(id, cprob1, cprob2, cprob3, c, vs1hcapdxeap) %>%
+  pivot_longer(names_to = "cprob", values_to = "prob", 
+               cols = c(cprob1, cprob2, cprob3)) %>%
+  mutate(vs1hcapdxeap_f = factor(vs1hcapdxeap, levels = 1:3, labels = c("Normal", "MCI", "Demented")),
+         cprob = str_replace(cprob, "cprob", "class_")) %>%
+  ggplot(aes(x = prob, vs1hcapdxeap_f)) +
+  geom_boxplot() +
+  facet_grid(cprob ~ .) +
+  scale_y_discrete("Algorithmic Dx") +
+  scale_x_continuous("Class probibility") +
+  hrbrthemes::theme_ipsum()
+  
+
+
+```

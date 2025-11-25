@@ -33,7 +33,7 @@ trkdata <- readRDS(here::here("R_objects","005_tracker.rds")) |>
                 SECU, STRATUM, PWGTR,
                 PAGE, PINSAMP, PIWWAVE, PIWYEAR, PMARST, PNURSHM, PPROXY)
 
-# HCAP Weigt
+# HCAP Weight
 hcapwgtdata <- readRDS(here::here("R_objects","005_hc16hp_r.rds")) |>
   dplyr::select(hhid, pn, HCAP16WGTR)
 
@@ -96,13 +96,13 @@ attr(Hudomiet$Hudomiet_classification, "label") <- "Hudomiet classification by h
 #Hudomiet |> dplyr::select(HHID, PN) |> head()
 # Merge using cogdata as base
 PMM_31 <- cogdata |>
-  dplyr::left_join(scjormdata, by = c("HHID", "PN")) |>
-  dplyr::left_join(fxndata,    by = c("HHID", "PN")) |>
-  dplyr::left_join(hcapdata,   by = c("HHID", "PN")) |>
-  dplyr::left_join(hcapwgtdata,   by = c("HHID", "PN")) |>
-  dplyr::left_join(hcapN50data,   by = c("HHID", "PN")) |>
-  dplyr::left_join(trkdata,   by = c("HHID", "PN")) |>
-  dplyr::left_join(lw2016,    by = c("HHID", "PN")) |>
+  dplyr::left_join(scjormdata,  by = c("HHID", "PN")) |>
+  dplyr::left_join(fxndata,     by = c("HHID", "PN")) |>
+  dplyr::left_join(hcapdata,    by = c("HHID", "PN")) |>
+  dplyr::left_join(hcapwgtdata, by = c("HHID", "PN")) |>
+  dplyr::left_join(hcapN50data, by = c("HHID", "PN")) |>
+  dplyr::left_join(trkdata,     by = c("HHID", "PN")) |>
+  dplyr::left_join(lw2016,      by = c("HHID", "PN")) |>
   dplyr::left_join(Hudomiet,    by = c("HHID", "PN"))
 
 # cat(paste(names(PMM_31), collapse = ", "))

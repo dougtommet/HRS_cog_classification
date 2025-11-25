@@ -13,11 +13,14 @@ author:
 date: '`r Sys.Date()`'
 abstract: | 
   **Objective:** This analysis report describes the classification of cognitive impairment (Normal, Mild Cognitive Impairment, Dementia) using profile mixture modeling. The goal is to classify individuals in the Core Health and Retirement Study using data available in the (2016) Core interview, but to do in a way that (1) uses information learned in the HRS/HCAP study (Manly et al., 2022; Farron et al, 2025) and (2) produces a probabilistic classification for cognitive level. The approach we describe accomplishes these goals, remains consistent with the _actuarial_ approach to cognitive classification described by Jaq, Bondi and colleagues and used in Manly et al (2022), but discards the classification tree approach for an analytically derived classification model. 
+  
+  
+  **Approach:** 
+  
+  **_Step 1 - Data management:_** We manage data (define subsamples -- HRS age 65+ [n = 9,972], HRS/HCAP [n = 3,496], HRS/HCAP robust norms group [n = 1,787], HRS/HCAP validation sample [n = 50]), code analytic variables (cognitive indicators, functional impairment and self-report indicators, informant report indicators, HRS/HCAP classification results). No imputation for missing data, we're using maximum likelihood.
 
-  **Approach:** **_Step 1 - Data management:_** We manage data (define subsamples -- HRS age 65+ [n = 9,972], HRS/HCAP [n = 3,496], HRS/HCAP robust norms group [n = 1,787], HRS/HCAP validation sample [n = 50]), code analytic variables (cognitive indicators, functional impairment and self-report indicators, informant report indicators, HRS/HCAP classification results). No imputation for missing data, we're using maximum likelihood.
-  
   **_Step 2 - Model calibration:_**  We fit a profile mixture model to the HRS/HCAP sample and evaluate it using internal cross-validation. This model is estimated in the HRS/HCAP subsample (n = 3496), and using a knownclass mixture modeling approach with the HRS/HCAP classification results as the known class membership. The model is calibrated using a the Core of cognitive indicators and functional impairment indicators (e.g., IADL, ADL, self-report, informant report). Cognitive performance variables are regressed on the covariates (age, sex, race, ethnicity, education) with fixed parameter estimates derived from a preliminary model fit to only those individuals in the robust norms group. This model is evaluated using internal cross-validation. This evaluation uses as the criterion the knownclass variable, the result of the HRS/HCAP actuarial (manly-jones) classification, and offers a preview of the classification model developed in Step 3.
-  
+
   **_Step 3 - Classification:_** In the third step we use parameters of the _calibration model_  -- treating the parameters as fixed population values, apply it to the full HRS age 65+ sample using only data available to the Core sample. We refer to this as the _classification model_. The model uses only cognitive data, socio-demographics, and functional impairment, self-report, and informant data (i.e., no robust norms group information, no known class membership information). We  and (3) evaluate the agreement with (a) the HRS/HCAP consensus panel sample (n = 50) and (b) other dementia classifications available in the HRS (Langa-Weir, Hudomiet). These comparisons are completed in the HRS 65+ sample. To contextualize the results of the classification model, we also evaluate the validity of new classification model and the Langa-Weir, and Hudomiet with the HRS/HCAP consensus panel reference standard (n = 50).
 
   **End results**. A classification model that produces a classification _and a_ probabilistic estimate of membership in HRS/HCAP "Normal", "MCI", and "Dementia" categories (n = 9,972), and information about the reliability (internal cross-validation) and validity (correspondence to reference standard diagnosis [n = 50] other algorithms [n = 9,972]). 
@@ -29,17 +32,26 @@ execute:
   echo: false
   warning: false
   message: false
+editor_options: 
+  chunk_output_type: console
 ---
 
 
 ```{r}
 source(here::here("R", "001-libraries.R"))
 source(here::here("R", "002-folder_paths.R"))
+source(here::here("R", "PMM_027_custom_functions.R"))
 source(here::here("R", "PMM_031_Pull_data.R"))
 source(here::here("R", "PMM_033_Sample_identification.R"))
 source(here::here("R", "PMM_041_Data_cleaning_functional_items.R"))
 source(here::here("R", "PMM_042_Data_cleaning_consensusdx_sampling_weight.R"))
 source(here::here("R", "PMM_045_Data_generation_tables_analyses.R"))
+
+source(here::here("R", "PMM_100_norming_npb.R"))
+source(here::here("R", "PMM_101_mplus_function.R"))
+source(here::here("R", "PMM_102_calibration_model.R"))
+source(here::here("R", "PMM_103_calibration_model.R"))
+
 ```
 
 ```{r}
@@ -60,10 +72,14 @@ my_gt <- function(tbl) {
 {{< include PMM_021_Analysis_notes.qmd >}}
 {{< include PMM_022_Analysis_notes_on_weights.qmd >}}
 {{< include PMM_025_Plan_for_cross_validation.qmd >}}
-{{< include PMM_032_Pull_data.qmd >}}
+{{< include PMM_031_Pull_data.qmd >}}
 {{< include PMM_037_Descriptives_in_analysis_Sample.qmd >}}
 {{< include PMM_040_Data_cleaning_functional_items.qmd >}}
 {{< include PMM_047_Summary_data_prep.qmd >}}
+
+{{< include PMM_102_calibration_model.qmd >}}
+{{< include PMM_103_calibration_model.qmd >}}
+
 {{< include PMM_888_References.qmd >}}
 
 <!-- have a nice day -->

@@ -19,6 +19,13 @@ hrs16_cog_025 |>
   select(HHID, PN) |>
   write.csv(here::here("R_objects", "n9972.csv"), row.names = FALSE)
 
+hcap_030 <- readRDS(here::here("R_objects", "030_hcap.rds"))
+# Select only HHID and PN, and write to CSV
+hcap_030 |>
+ dplyr::select(HHID, PN) |>
+ write.csv(here::here("R_objects", "n2993.csv"), row.names = FALSE)
+n2993 <- readr::read_csv(here::here("R_objects","n2993.csv"))
+
 
 # recode HISPANIC
 hrs16_cog_025 <- hrs16_cog_025 %>% 
@@ -35,13 +42,9 @@ hrs16_cog_025 <- hrs16_cog_025 %>%
 # RACE 
 # SCHLYRS 
 # PA019 (age)
-# hcap_030 <- readRDS(here::here("R_objects", "030_hcap.rds"))
-# Select only HHID and PN, and write to CSV
-# hcap_030 |>
-#  dplyr::select(HHID, PN) |>
-#  write.csv(here::here("R_objects", "n2993.csv"), row.names = FALSE)
-n2993 <- readr::read_csv(here::here("R_objects","n2993.csv"))
-hrs16_cog_025_n2993 <- hrs16_cog_025 |> dplyr::inner_join(n2993, by = c("HHID", "PN"))
+
+hrs16_cog_025_n2993 <- hrs16_cog_025 |> 
+  dplyr::inner_join(n2993, by = c("HHID", "PN"))
 # nrow(hrs16_cog_025_n2993)  # Should be 2993
 ```
 
@@ -65,10 +68,10 @@ matching_files
 
 <!-- Generate table inputs -->
 ```{r}
-library(forcats)
-library(rlang)
-library(dplyr)
-library(tibble)
+# library(forcats)
+# library(rlang)
+# library(dplyr)
+# library(tibble)
 summarize_variable <- function(data, var) {
   if (is.numeric(data[[var]])) {
     mean_val <- mean(data[[var]], na.rm = TRUE)
@@ -80,7 +83,7 @@ summarize_variable <- function(data, var) {
     )
   } else {
     data |>
-      mutate(tmp = forcats::fct_infreq(as.factor(.data[[var]]))) %>%  # preserve labels
+      mutate(tmp = forcats::fct_infreq(as.factor(.data[[var]]))) |>  # preserve labels
       count(tmp) |>
       mutate(
         variable = var,
@@ -117,16 +120,43 @@ label_categorical_vars <- function(df) {
 }
 
 # Apply to both
-library(purrr)
+# library(purrr)
 
-
-
-
-list2(
-  hrs16_cog_025     = hrs16_cog_025,
+labeled_list <- list(
+  hrs16_cog_025       = hrs16_cog_025,
   hrs16_cog_025_n2993 = hrs16_cog_025_n2993
 ) %>%
-  map(label_categorical_vars) -> labeled_list
+  map(label_categorical_vars)
+
+foo <- n2993 %>%
+  mutate(n2993=1)
+
+goo <- hrs16_cog_025 %>%
+  left_join(foo, by = c("HHID", "PN")) %>%
+  mutate(n2993 = case_when(is.na(n2993) ~ 0,
+                           !is.na(n2993) ~ n2993))
+
+goo %>%
+  select(n2993, female, rage, RACE, rHISP, SCHLYRS) %>%
+  mutate(female = forcats::fct_relevel(female, "Female", "Male"),
+         RACE = forcats::fct_relevel(RACE, "White", "Black", "All other groups", "Not collected"),
+         rHISP = forcats::fct_relevel(rHISP, "Not Hispanic", "Hispanic", "Not obtained")
+         ) %>%
+  gtsummary::tbl_summary(by = n2993,
+                         statistic = gtsummary::all_continuous() ~ c("{mean} ({sd})"),
+                         missing_text = "Blank, partial interview",
+                         digits = gtsummary::all_continuous() ~ 1,
+                         label = list(female = "Sex",
+                                      rage = "Age (in years)",
+                                      RACE = "Race",
+                                      rHISP = "Hispanic origin",
+                                      SCHLYRS = "Years of education")
+                         ) %>%
+  gtsummary::add_overall() %>%
+  gtsummary::modify_column_hide("stat_1") %>%
+  gtsummary::modify_header(stat_0 = "**HRS 2016 Wave** \n N = {gtsummary::style_number(n)}",
+                           stat_2 = "**HCAP subsample** \nN = {gtsummary::style_number(n)}") 
+
 
 hrs16_cog_025 <- labeled_list$hrs16_cog_025
 hrs16_cog_025_n2993 <- labeled_list$hrs16_cog_025_n2993
@@ -134,17 +164,26 @@ hrs16_cog_025_n2993 <- labeled_list$hrs16_cog_025_n2993
 
 vars <- c("female", "rage", "RACE", "rHISP", "SCHLYRS")
 
+
 # For full sample
-summary_all <- dplyr::bind_rows(lapply(vars, \(v) summarize_variable(hrs16_cog_025, v)))
+# summary_all <- dplyr::bind_rows(lapply(vars, \(v) summarize_variable(hrs16_cog_025, v)))
+summary_all <- purrr::map_df(vars, summarize_variable, data = hrs16_cog_025)
 # Replace NA in value column with "Blank, partial interview"
+# summary_all <- summary_all %>%
+#   mutate(value = ifelse(is.na(value), "Blank, partial interview", value))
 summary_all <- summary_all %>%
-  mutate(value = ifelse(is.na(value), "Blank, partial interview", value))
+  mutate(value = case_when(is.na(value) ~ "Blank, partial interview", 
+                           !is.na(value) ~ value))
 
 
 # For n2993 subset
-summary_n2993 <- dplyr::bind_rows(lapply(vars, \(v) summarize_variable(hrs16_cog_025_n2993, v)))
+# summary_n2993 <- dplyr::bind_rows(lapply(vars, \(v) summarize_variable(hrs16_cog_025_n2993, v)))
+summary_n2993 <- purrr::map_df(vars, summarize_variable, data = hrs16_cog_025_n2993)
+# summary_n2993 <- summary_n2993 %>%
+#   mutate(value = ifelse(is.na(value), "Blank, partial interview", value))
 summary_n2993 <- summary_n2993 %>%
-  mutate(value = ifelse(is.na(value), "Blank, partial interview", value))
+  mutate(value = case_when(is.na(value) ~ "Blank, partial interview", 
+                           !is.na(value) ~ value))
 
 
 
@@ -220,18 +259,18 @@ summary_final <- summary_final %>%
 #| message: false
 #| warning: false 
 # assumes summary_final already exists
-library(flextable)
+# library(flextable)
 
-flextable(summary_final) |>
-  set_header_labels(
+flextable::flextable(summary_final) |>
+  flextable::set_header_labels(
     label_combined = "Characteristic",
     all_records = "HRS 2016 wave\n(N = 20,912)",
     n2993_sample = "HCAP subsample\n(N = 2,993)"
   ) |>
-  add_header_lines("Table 1. Participant Characteristics") |>
-  autofit()  |>
-  fontsize(size = 10, part = "all") |>  # match body font size
-  font(fontname = "Cambria", part = "all")  
+  flextable::add_header_lines("Table 1. Participant Characteristics") |>
+  flextable::autofit()  |>
+  flextable::fontsize(size = 10, part = "all") |>  # match body font size
+  flextable::font(fontname = "Cambria", part = "all")  
 ``` 
 
 

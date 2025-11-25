@@ -1,9 +1,15 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 ## Descriptives in analysis sample
 
 This report is limited to those age 65 and older, and either in HCAP or have a non-zero 2016 Core interview sampling weight (`inHcap==1 | (age65up==1 & nonzeroweight==1))`)
 
 ```{r}
-n9763 <- readRDS(here::here("R_objects", "PMM_033.RDS")) |>  dplyr::filter(age65up == 1) 
+n9763 <- readRDS(here::here("R_objects", "PMM_033.RDS")) |>  
+  dplyr::filter(age65up == 1) 
   
 n9763 |>
   haven::zap_label() |> 

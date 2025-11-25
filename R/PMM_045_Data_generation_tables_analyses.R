@@ -2,7 +2,6 @@
 
 source(here::here("R","PMM_027_custom_functions.R"))
 PMM_45 <- readRDS(here::here("R_objects", "PMM_041.RDS"))
-library(haven)
 
 
 # Age splines
@@ -330,10 +329,7 @@ attr(PMM_45$Educational_Attainment, "label") <- "Educational attainment"
 ## PMM_45 |> dplyr::filter(inHCAP==1) |> dplyr::select(spage1, spage2, spage3, female, black, hisp, SCHLYRSimp, STRATUM, SECU) |> skimr::skim()
 
 
-library(dplyr)
-library(survey)
-library(purrr)
-library(rlang)
+
 
 # Create analytic covariates x1–x7
 PMM_45 <- PMM_45 %>%
@@ -347,7 +343,7 @@ PMM_45 <- PMM_45 %>%
     x7 = SCHLYRSimp-12
   )
 # Apply variable labels (assuming haven::labelled)
-library(haven)
+
 for (i in 1:7) {
   attr(PMM_45[[paste0("x", i)]], "label") <- paste("Source:", c("spage1", "spage2", "spage3", "female", "black", "hisp", "SCHLYRSimp")[i])
 }
@@ -367,9 +363,9 @@ for (i in seq_along(covars)) {
 
 
 # Center covariates that need centering
-# x1, x2, and x3 and x7 do not need centring
-# anything interacting with x1, x2, x3, and x7 do not need centring
-# x4, x5, x6, x4x5, x4x6, x5x6 all need centring
+# x1, x2, and x3 and x7 do not need centering
+# anything interacting with x1, x2, x3, and x7 do not need centering
+# x4, x5, x6, x4x5, x4x6, x5x6 all need centering
 
 # Define your inHCAP sample
 df <- PMM_45 %>% filter(inHCAP == 1)

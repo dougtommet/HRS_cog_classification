@@ -1,8 +1,7 @@
-source(here::here("R","PMM_027_custom_functions.R"))
+
 
 PMM_41 <- readRDS(here::here("R_objects", "PMM_033.RDS"))
 
-library(haven)  # for variable labels
 
 # Begin new code for ADL impairment indicators
 # Variables to process
