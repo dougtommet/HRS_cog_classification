@@ -1,0 +1,19 @@
+
+# Profile mixture model results
+
+Several variations of the profile mixture model were tried. The models all had three classes. The models used the neuropsych battery (robust norms adjusted), individual functional impairment indicators, subjective memory complaints, and informant scores.
+
+The modeling approach consisted of two steps.
+
+1.  The first step was a model that used a known class. The known class is the algorithmic diagnosis.
+
+2.  The second step fit a model with all the model parameters fixed to those from step 1 and class probabilities were estimated.
+
+In general, the models gave low probabilities for participants to be in class 2 (MCI). Very few participants had class 2 as their most likely class. 
+ 
+### Class assignments
+
+The model gives estimated probabilities that a participant is in each of the three classes.  We created 100 replications of the data.  Then we set the class assignment in these replications to the probability of being in a class.  For example, if a participant had 90% probability of being in class 1, 1% in class 2, and 9% in class 3, then for 90 of the replications the participant was assigned to class 1, 1 time to class 2, and 9 times to class 3.
+
+
+

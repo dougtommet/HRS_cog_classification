@@ -1,18 +1,9 @@
-# Profile mixture model results
 
-There were several variations of the profile mixture model I tried. The models all had three classes. The models used the neuropsych battery (robust norms adjusted), individual functional impairment indicators, subjective memory complaints, and informant scores.
 
-The modeling approach consisted of two steps.
 
-1.  The first step was a model that used a known class. The known class is the algorithmic diagnosis.
+## Model - GCP factor
 
-2.  The second step fit a model with all the model parameters fixed to those from step 1 and class probabilities were estimated.
-
-In general, the models gave low probabilities for participants to be in class 2 (MCI). Very few participants had class 2 as their most likely class. I set up my own classification rule, where if a participant had a 1% chance or greater of being in class 2, that participant was placed in class 2, otherwise it was whether class 1 or class 3 had greater probability.
-
-## Model 1
-
-This was the first model I tried. It combined the neuropsych items into a GCP. It allowed the GCP, individual functional impairment indicators, subjective memory complaints, and informant scores to vary by class.
+This model combined the neuropsych items into a GCP. It allowed the GCP, individual functional impairment indicators, subjective memory complaints, and informant scores to vary by class.
 
 ```{r}
 pmm_102b <- MplusAutomation::readModels(here::here("mplus_output", "pmm_102", "pmm_hcap_102b.out"))
@@ -26,6 +17,8 @@ inhcap <- PMM_100 %>%
 ### Parameter estimates
 
 These are the parameter estimates to show which were constrained to be equal or allowed to vary by class.
+
+In this model all the factor loading were constrained to be the same across class.
 
 ```{r}
 #| tbl-cap: "Unstandardized factor loadings by class"
@@ -47,6 +40,8 @@ pmm_102b[["parameters"]][["stdyx.standardized"]] %>%
   gt::gt()
 ```
 
+The covariance between immediate and delayed word recall was allowed to vary by class.
+
 ```{r}
 #| tbl-cap: "Untandardized covariances by class"
 pmm_102b[["parameters"]][["unstandardized"]] %>%
@@ -58,6 +53,20 @@ pmm_102b[["parameters"]][["unstandardized"]] %>%
   pivot_wider(names_from = LatentClass, values_from = est, names_prefix = "class_") %>%
   gt::gt()
 ```
+
+The variance of the GCP was allowed to vary by class.
+
+```{r}
+#| tbl-cap: "Unstandardized variances by class"
+pmm_102b[["parameters"]][["unstandardized"]] %>%
+  filter(!grepl("ON", paramHeader)) %>%
+  filter(grepl("Variances", paramHeader)) %>%
+  select(param, est, LatentClass) %>%
+  pivot_wider(names_from = LatentClass, values_from = est, names_prefix = "class_") %>%
+  gt::gt()
+```
+
+The mean of the GCP, ADL/IADL, and subjective complaints were allowed to vary by class.
 
 ```{r}
 #| tbl-cap: "Unstandardized means/intercepts/thresholds by class"
@@ -72,9 +81,9 @@ pmm_102b[["parameters"]][["unstandardized"]] %>%
   gt::gt()
 ```
 
-### Class probabilities
 
-There were no participants that had a greater than 50% probability of being in class 2. So I created a new classification rule where if a participant had a greater than 1% probability of being in class 2 then they were classified as being in class 2, otherwise they were their most likely class.
+
+
 
 ```{r}
 
@@ -82,21 +91,49 @@ cprob_102b <- pmm_102b[["savedata"]] %>%
   as_tibble() %>%
   janitor::clean_names()
 
-cprob_102b <- cprob_102b %>%
-  rowwise() %>%
-  mutate(c_dt = case_when(cprob2 > 0.01 ~ 2,
-                          cprob1 > cprob3 ~ 1,
-                          cprob1 < cprob3 ~ 3
-                          )
-         ) %>%
-  ungroup()
-
-labelled::var_label(cprob_102b$c_dt) <- "Model classification (modified)"
-
 foo <- inhcap %>%
-  select(vs1hcapdxeap) %>%
-  bind_cols(cprob_102b)
+  select(vs1hcapdxeap, cogfunction2016, consensuspaneldx) %>%
+  mutate(cogfunction2016_2 = car::recode(cogfunction2016, "1:2 = 1; 3 = 2"),
+         consensuspaneldx_2 = car::recode(consensuspaneldx, "1:2 = 1; 3 = 2"),
+         vs1hcapdxeap2 = car::recode(vs1hcapdxeap, "1:2 = 1; 3 = 2"),
+         vs1hcapdxeap2_f = factor(vs1hcapdxeap2, levels = c(1, 2), 
+                                  labels = c("Non-demented", "Demented"))) %>%
+  bind_cols(cprob_102b) %>%
+  mutate(c2 = car::recode(c, "1:2 = 1; 3 = 2"),
+         c2_f = factor(c2, levels = c(1, 2), 
+                                  labels = c("Non-demented", "Demented")))
+
+labelled::var_label(foo$cogfunction2016_2) <- "2016 Cognition Category (recoded): 1 = Normal/CIND, 2 = Demented"
+labelled::var_label(foo$consensuspaneldx_2) <- "Consensus panel dx (recoded): 1 = Normal/CIND, 2 = Demented"
+labelled::var_label(foo$vs1hcapdxeap2_f) <- "HRS HCAP Dementia and MCI Classification (EAP version, HRS HCAP variable set 1)"
+labelled::var_label(foo$c) <- "Most likely class membership"
+labelled::var_label(foo$c2) <- "Most likely class membership (recoded)"
+labelled::var_label(foo$c2_f) <- "Most likely class membership (recoded)"
+  
+goo <- foo %>% 
+  slice(rep(1:n(), each = 100))
+
+goo <- goo %>%
+  group_by(id) %>%
+  mutate(i = row_number())
+
+goo <- goo %>%
+  mutate(c1 = cprob1*100,
+         c2 = cprob2*100 + c1,
+         c_dt = case_when(i<=c1 ~ 1,
+                          i<=c2 ~ 2,
+                          TRUE ~ 3),
+         c_dt2 = car::recode(c_dt, "1:2 = 1; 3 = 2"),
+         c_dt2_f = factor(c_dt2, levels = c(1, 2), 
+                                  labels = c("Non-demented", "Demented")),
+         hcap16wg100 = hcap16wg/100)
+
+labelled::var_label(goo$c_dt2) <- "Most likely class membership (recoded)"
+labelled::var_label(goo$c_dt2_f) <- "Most likely class membership (recoded)"
 ```
+
+
+### Class assignment distribution
 
 ```{r}
 #| fig-cap: "Distribution of the class probibilities by the most likely class"
@@ -107,17 +144,6 @@ cprob_102b %>%
   geom_histogram() +
   facet_grid(c ~ .) +
   hrbrthemes::theme_ipsum()
-```
-
-```{r}
-#| tbl-cap: "Model classification vs algorithmic diagnosis"
-gtsummary::tbl_cross(foo, vs1hcapdxeap, c_dt)
-```
-
-Kappa
-
-```{r}
-psych::cohen.kappa(table(foo$vs1hcapdxeap, foo$c_dt))
 ```
 
 ```{r}
@@ -140,3 +166,151 @@ inhcap %>%
 
 
 ```
+
+### Class assignment comparison
+
+#### Comparison to Algorithmic Diagnosis
+
+```{r}
+#| tbl-cap: "Model classification vs algorithmic diagnosis, no sample weights"
+gtsummary::tbl_cross(foo, vs1hcapdxeap, c)
+```
+
+```{r}
+#| tbl-cap: "Kappa: Model classification vs algorithmic diagnosis, no sample weights"
+psych::cohen.kappa(table(foo$vs1hcapdxeap, foo$c)) %>%
+  kappa_gt()
+
+```
+
+
+```{r}
+#| tbl-cap: "Model classification vs algorithmic diagnosis, no sample weights"
+gtsummary::tbl_cross(foo, vs1hcapdxeap2_f, c2_f)
+```
+
+
+```{r}
+#| tbl-cap: "Kappa: Model classification vs algorithmic diagnosis, no sample weights"
+psych::cohen.kappa(table(foo$vs1hcapdxeap2, foo$c2)) %>%
+  kappa_gt()
+```
+
+```{r}
+#| tbl-cap: "Model classification vs algorithmic diagnosis, 100 replications, no sample weights"
+gtsummary::tbl_cross(goo, vs1hcapdxeap2_f, c_dt2_f)
+```
+
+
+```{r}
+#| tbl-cap: "Kappa: Model classification vs algorithmic diagnosis, 100 replications, no sample weights"
+psych::cohen.kappa(table(goo$vs1hcapdxeap2_f, goo$c_dt2_f)) %>%
+  kappa_gt()
+```
+
+
+```{r}
+#| tbl-cap: "Model classification vs algorithmic diagnosis, 100 replications, with sample weights"
+weighted_tab <- xtabs(hcap16wg100 ~ vs1hcapdxeap2_f + c_dt2_f, data = goo) %>%
+  round(1) 
+
+weighted_tab %>%
+  as.data.frame.matrix() %>%
+  rownames_to_column("vs1hcapdxeap2_f") %>%
+  gt::gt(rowname_col = "vs1hcapdxeap2_f") %>%
+  gt::tab_spanner("Most likely class membership (recoded)", 2:3) %>%
+  gt::tab_stubhead("HRS HCAP Dementia and MCI Classification (EAP version, HRS HCAP variable set 1)") %>%
+  gt::summary_columns(
+    columns = c(`Non-demented`, `Demented`),
+    fns = ~ sum(.),
+    new_col_names = "Total"
+  ) %>%
+  gt::grand_summary_rows(
+    fns = list(label = "Total", id = "total", fn = "sum"),
+  )
+```
+
+
+```{r}
+#| tbl-cap: "Kappa: Model classification vs algorithmic diagnosis, 100 replications, with sample weights"
+psych::cohen.kappa(weighted_tab) %>%
+  kappa_gt()
+```
+
+#### Comparison to Langa-Weir
+
+```{r}
+#| tbl-cap: "Model classification vs Langa-Weir diagnosis, 100 replications, with sample weights"
+weighted_tab <- xtabs(hcap16wg100 ~ cogfunction2016_2 + c_dt2_f, data = goo) %>%
+  round(1) 
+
+weighted_tab %>%
+  as.data.frame.matrix() %>%
+  rownames_to_column("cogfunction2016_2") %>%
+  gt::gt(rowname_col = "cogfunction2016_2") %>%
+  gt::tab_spanner("Most likely class membership (recoded)", 2:3) %>%
+  gt::tab_stubhead("Langa-Weir classification") %>%
+  gt::summary_columns(
+    columns = c(`Non-demented`, `Demented`),
+    fns = ~ sum(.),
+    new_col_names = "Total"
+  ) %>%
+  gt::grand_summary_rows(
+    fns = list(label = "Total", id = "total", fn = "sum"),
+  )
+```
+
+
+```{r}
+#| tbl-cap: "Kappa: Model classification vs Langa-Weir diagnosis, 100 replications, with sample weights"
+psych::cohen.kappa(weighted_tab) %>%
+  kappa_gt()
+```
+
+#### Comparison to Consensus panel
+
+```{r}
+#| tbl-cap: "Model classification vs Consensus panel diagnosis, 100 replications, with sample weights"
+weighted_tab <- xtabs(hcap16wg100 ~ consensuspaneldx_2 + c_dt2_f, data = goo) %>%
+  round(1) 
+
+weighted_tab %>%
+  as.data.frame.matrix() %>%
+  rownames_to_column("consensuspaneldx_2") %>%
+  gt::gt(rowname_col = "consensuspaneldx_2") %>%
+  gt::tab_spanner("Most likely class membership (recoded)", 2:3) %>%
+  gt::tab_stubhead("Consensus panel classification") %>%
+  gt::summary_columns(
+    columns = c(`Non-demented`, `Demented`),
+    fns = ~ sum(.),
+    new_col_names = "Total"
+  ) %>%
+  gt::grand_summary_rows(
+    fns = list(label = "Total", id = "total", fn = "sum"),
+  )
+```
+
+
+```{r}
+#| tbl-cap: "Kappa: Model classification vs Consensus diagnosis, 100 replications, with sample weights"
+psych::cohen.kappa(weighted_tab) %>%
+  kappa_gt()
+```
+
+
+```{r}
+# 
+# goo_svy <- goo %>%
+#   ungroup() %>%
+#   srvyr::as_survey_design(
+#     weights = hcap16wg100
+#   )
+# 
+# hoo <- survey::svytable(~vs1hcapdxeap2+ c_dt2, goo_svy, round = TRUE)
+# 
+# psych::cohen.kappa(hoo)
+```
+
+
+
+

@@ -40,6 +40,10 @@ editor_options:
 ```{r}
 source(here::here("R", "001-libraries.R"))
 source(here::here("R", "002-folder_paths.R"))
+```
+
+```{r}
+#| eval: false
 source(here::here("R", "PMM_027_custom_functions.R"))
 source(here::here("R", "PMM_031_Pull_data.R"))
 source(here::here("R", "PMM_033_Sample_identification.R"))
@@ -64,6 +68,15 @@ my_gt <- function(tbl) {
   tbl %>%
     gt::opt_stylize(6)
 }
+
+kappa_gt <- function(k) {
+  k$confid %>% 
+  as_tibble() %>%
+  slice(2) %>%
+  gt::gt() %>%
+  gt::tab_header("Cohen's weighted Kappa") %>%
+  gt::fmt_number(decimals = 2)
+}
 ```
 
 
@@ -77,8 +90,10 @@ my_gt <- function(tbl) {
 {{< include PMM_040_Data_cleaning_functional_items.qmd >}}
 {{< include PMM_047_Summary_data_prep.qmd >}}
 
-{{< include PMM_102_calibration_model.qmd >}}
+{{< include PMM_100_pmm_text.qmd >}}
+
 {{< include PMM_103_calibration_model.qmd >}}
+{{< include PMM_102_calibration_model.qmd >}}
 
 {{< include PMM_888_References.qmd >}}
 
