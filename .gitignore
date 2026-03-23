@@ -4,6 +4,7 @@
 .Ruserdata
 
 R_objects/
+References/
 mplus_output/**/*.dat
 mplus_output/**/*.h5
 mplus_output/**/*.inp
