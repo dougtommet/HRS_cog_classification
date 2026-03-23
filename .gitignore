@@ -9,3 +9,4 @@ mplus_output/**/*.h5
 mplus_output/**/*.inp
 stata/
 stata/*.dta
+R/PMM_000_Analysis_Report_Control.html
