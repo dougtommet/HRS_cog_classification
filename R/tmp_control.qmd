@@ -1,0 +1,16 @@
+---
+title: "Temporary Consensus Sample Comparison"
+date: '`r Sys.Date()`'
+format:
+  html:
+    toc: true
+    self-contained: true
+execute:
+  echo: false
+  warning: false
+  message: false
+editor_options:
+  chunk_output_type: console
+---
+
+{{< include PMM_110_Comparison_of_Consensus_Langa_Weir.qmd >}}
