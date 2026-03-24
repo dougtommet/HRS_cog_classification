@@ -37,7 +37,7 @@ algorithm_thresholds
 knitr::include_graphics(here::here("Figures", "HRS-algorithm_2025-03-11_with_addresses.png"))
 ```
 
-This is the code that creates a function that implements the algortihm shown in @fig-hrs-algorithm-v1.
+This is the code that creates a function that implements the algorithm shown in @fig-hrs-algorithm-v1.
 
 Note: The algorithm uses the Jorm score from HCAP, not the HRS version.
 
@@ -104,7 +104,7 @@ In version 2 of the algorithm we removed the self-rated concerns from the severe
 knitr::include_graphics(here::here("Figures", "HRS-algorithm_v2_2025-04-03.png"))
 ```
 
-This is the code that creates a function that implements the algortihm shown in @fig-hrs-algorithm-v2.
+This is the code that creates a function that implements the algorithm shown in @fig-hrs-algorithm-v2.
 
 ```{r}
 #| echo: true

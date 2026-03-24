@@ -1,15 +1,20 @@
 
 # Profile mixture model results
 
-Several variations of the profile mixture model were tried. The models all had three classes. The models used the neuropsych battery (robust norms adjusted), individual functional impairment indicators, subjective memory complaints, and informant scores.
+Several variations of the profile mixture model were tried. These variations were having the neuropsych items being combined into a GCP factor or being left as indidivual item.  The models all had three classes. 
+
+The models used the neuropsych battery (robust norms adjusted), individual functional impairment indicators, subjective memory complaints, and informant scores (Jorm).  Because the Jorm was only given to those that skipped the cognitive battery, two different prediction models were created.  The first model used the neuropsych battery, functional impairment indicators and subjective memory complaints.  The second model used the function impairment indicators and the informant scores.  The results of the two models were combined to give a final prediction for each participant.  If a participant was given the Jorm, their final prediction would be from the Jorm model, otherwise it would be from the cognition model.
 
 The modeling approach consisted of two steps.
 
-1.  The first step was a model that used a known class. The known class is the algorithmic diagnosis.
+1.  The first step was a model that used a known class. This was fit in the HCAP sample. The known class is the algorithmic diagnosis.
 
-2.  The second step fit a model with all the model parameters fixed to those from step 1 and class probabilities were estimated.
+2.  The second step fit a model in the HRS sample with all the model parameters fixed to those from step 1 and class probabilities were estimated.
 
 In general, the models gave low probabilities for participants to be in class 2 (MCI). Very few participants had class 2 as their most likely class. 
+ 
+Note: In Mplus, the subpopulation option isn't available with the knownclass option.
+
  
 ### Class assignments
 
