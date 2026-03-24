@@ -1,0 +1,102 @@
+## Results
+
+```{r}
+#| fig-width: 9
+#| fig-height: 6
+#| dpi: 320
+
+pmm_results_plot_data <- MplusAutomation::readModels(
+  here::here("mplus_output", "pmm_103", "pmm_hcap_103b.out")
+)[["savedata"]] %>%
+  tibble::as_tibble() %>%
+  janitor::clean_names() %>%
+  dplyr::select(id, cprob1, cprob2, cprob3) %>%
+  dplyr::arrange(dplyr::desc(cprob1), dplyr::desc(cprob2), dplyr::desc(cprob3)) %>%
+  dplyr::mutate(participant_number = dplyr::row_number()) %>%
+  tidyr::pivot_longer(
+    cols = c(cprob1, cprob2, cprob3),
+    names_to = "class",
+    values_to = "probability"
+  ) %>%
+  dplyr::mutate(
+    class = factor(
+      class,
+      levels = c("cprob1", "cprob2", "cprob3"),
+      labels = c("Normal", "MCI", "Dementia")
+    )
+  )
+
+participant_count <- dplyr::n_distinct(pmm_results_plot_data$participant_number)
+x_axis_title <- stringr::str_glue("Participant number (N = {scales::comma(participant_count)})")
+
+pmm_results_plot_base <- ggplot(
+  pmm_results_plot_data,
+  aes(x = participant_number, y = probability, fill = class)
+) +
+  geom_col(width = 1) +
+  scale_fill_manual(
+    values = c("Normal" = "#efedf5", "MCI" = "#bcbddc", "Dementia" = "#756bb1")
+  ) +
+  scale_x_continuous(x_axis_title, breaks = NULL, expand = c(0, 0)) +
+  scale_y_continuous(
+    "Probability of class membership",
+    labels = scales::label_number(accuracy = 0.1),
+    expand = c(0, 0)
+  ) +
+  guides(fill = guide_legend(title = NULL, nrow = 1))
+
+pmm_results_plot_slide <- pmm_results_plot_base +
+  theme_minimal(base_size = 20) +
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_blank(),
+    legend.position = "bottom",
+    legend.direction = "horizontal",
+    legend.box.margin = margin(t = 8),
+    plot.margin = margin(10, 20, 10, 10)
+  )
+
+pmm_results_plot_export <- pmm_results_plot_base +
+  theme_minimal(base_size = 5.5) +
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y = element_text(size = 4.8),
+    axis.title.x = element_text(size = 7.2, margin = margin(t = 4)),
+    axis.title.y = element_text(size = 7.2, margin = margin(r = 4)),
+    legend.position = "bottom",
+    legend.direction = "horizontal",
+    legend.text = element_text(size = 5.6),
+    legend.key.size = grid::unit(0.12, "in"),
+    legend.box.margin = margin(t = 2),
+    legend.margin = margin(0, 0, 0, 0),
+    plot.margin = margin(4, 6, 4, 4)
+  )
+
+pdf_output_path <- here::here("Figures", "Slides2603_results_class_probabilities.pdf")
+png_output_path <- here::here("Figures", "Slides2603_results_class_probabilities.png")
+
+ggplot2::ggsave(
+  filename = pdf_output_path,
+  plot = pmm_results_plot_export,
+  width = 4,
+  height = 3,
+  units = "in",
+  device = grDevices::cairo_pdf
+)
+
+system2(
+  command = "sips",
+  args = c(
+    "-s", "format", "png",
+    "--resampleWidth", "2400",
+    "--resampleHeight", "1800",
+    pdf_output_path,
+    "--out", png_output_path
+  ),
+  stdout = FALSE,
+  stderr = FALSE
+)
+
+pmm_results_plot_slide
+```

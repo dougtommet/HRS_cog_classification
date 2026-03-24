@@ -1,0 +1,11 @@
+## Conclusion
+
+<div style="font-size: 0.66em; line-height: 1.3;">
+
+For 3-way classification, with the HRS/HCAP algorithm as the reference standard, the previously described **HCAP Algorithm in Core** procedure is optimal, with a quadratic weighted kappa of **`r scales::number(kappa_core_algo_algorithmic$quadratic_weighted_kappa, accuracy = 0.01)`**. With consensus diagnosis as the reference standard, the new predictive mean matching (PMM) procedure is optimal, with a quadratic weighted kappa of **`r scales::number(kappa_consensus_pmm$quadratic_weighted_kappa, accuracy = 0.01)`**.
+
+For classification of dementia versus no dementia, with the HRS/HCAP algorithm as the reference standard, the new predictive mean matching (PMM) procedure has the worst performance, with kappa **`r scales::number(kappa_algorithmic_pmm_binary$kappa, accuracy = 0.01)`**. The **HCAP Algorithm in Core** and **Langa-Weir** procedures are comparable, with kappas of **`r scales::number(kappa_core_algo_algorithmic_binary$kappa, accuracy = 0.01)`** and **`r scales::number(kappa_algorithmic_lw_binary$kappa, accuracy = 0.01)`**, respectively. With consensus diagnosis as the reference standard, **Langa-Weir** and **HCAP Algorithm in Core** are also comparable, with kappas of **`r scales::number(kappa_lw_consensus_binary$kappa, accuracy = 0.01)`** and **`r scales::number(kappa_core_algo_consensus_binary$kappa, accuracy = 0.01)`**, respectively. Both the HCAP algorithmic diagnosis (full HCAP) and PMM approaches were substantially worse (kappas < .55).
+
+**Therefore** the previously described **HCAP Algorithm in Core** procedure optimizes -- among the options considered -- accurate  3-way (Normal, MCI, Dementia) and 2-way classification (dementia vs no dementia).
+
+</div>

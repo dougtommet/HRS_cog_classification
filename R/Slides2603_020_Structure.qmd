@@ -31,27 +31,33 @@ Cognitive indicators include `vdori`, Orientation to time; `vdlfl1z`, Animal nam
 :::
 
 ::: {.column width="42%"}
-<div style="font-size: 0.6em; line-height: 1.0;">
+<div style="font-size: 0.3em; line-height: 0.9;">
 
-We started with a model that include a latent general cognitive performance factor (GCP), but that model resulted in poor classification, and after consideration, the use we had in mind did not require the parsimony of a general factor as long as it was only applied to core data (with the same cognitive indicators). 
+We started with a model that include a latent general cognitive performance factor (GCP), but that model resulted in poor classification (_entropy_ = 0.71, vs 0.83 for the model with cognitive indicators included separately), and after consideration, the use we had in mind did not require the parsimony of a general factor as long as it was only applied to core data (with the same cognitive indicators). 
 
 We also thought we could include the Jorm in this model, but the missing data pattern made that overly complicated. We address informant data (available only for those with no cognitive data) separately. We build a separate PMM for the informant data (a PMM model so we can have a probabilistic classification result), and then combine the results of the two PMMs using whichever is appropriate for the respondent.
 
+**_Entropy_** is a measure of classification model confidence, based on posterior probabilities. A model with higher entropy has better separation between classes, while a model with lower entropy has worse separation (lower entropy). Entropy provides a summary measure of classification uncertainty based on posterior class probabilities, with higher values indicating sharper separation between classes. Because entropy is a deterministic function of model-based probabilities and lacks a sampling distribution, it should not be used as a formal criterion for model selection but rather as a descriptive indicator of classification quality. Values greater than 0.70 are considered usable, and with values greater than 0.80 is considered strong classification and reliable class assignment.
 </div>
+
 :::
 ::::
 
-### How our approach differs from LDA and QDA
+## How our approach differs from LDA and QDA
 
-<div style="font-size: 0.4em; line-height: 1.0;">
+<div style="font-size: 0.6em; line-height: 1.0;">
 LDA and QDA (Linear and quadratic discriminant analysis, respectively) classify people from the joint distribution of multiple indicators, but they are usually framed for continuous Gaussian variables. In LDA, classes differ in their means, but they are assumed to share the same covariance matrix. In QDA, both the class means and the class-specific covariance matrices are allowed to differ. Our PMM is closer to a generative LDA/QDA family model than to a simple discriminative classifier, because it models the distribution of the indicators within class and then computes posterior class probabilities.
 
 For the cognitive indicators, PMM handles the indicator means through fixed sociodemographic adjustment terms estimated in the robust norms group, plus class-specific location shifts in the classification model. That means expected performance is anchored to the normative reference group rather than re-estimated in the target sample. For the indicator variances and covariances, the current PMM is LDA-like: residual variability is constrained to be equal across classes. A QDA-like extension would allow those residual variance-covariance parameters to differ by class. PMM is also more flexible than classical LDA or QDA because several indicators are ordinal or discrete, so class separation is represented through latent-response means, thresholds, and shared residual structure rather than only through multivariate Gaussian means and variances on the observed score scale.
 </div>
 
-### How our approach differs from predictive modeling
+## How our approach differs from predictive modeling
 
-<div style="font-size: 0.4em; line-height: 1.0;">
+<div style="font-size: 0.6em; line-height: 1.0;">
 Many predictive models are optimized to maximize classification accuracy in the sample at hand, even if that means learning direct associations of sociodemographics with class membership or relying on patterns that are difficult to transport or interpret. Our PMM is built for a different goal: it separates measurement from classification, anchors expected cognitive performance in a normative reference group, and then classifies people according to how their observed indicator pattern departs from that demographically adjusted expectation. In that sense, PMM is not just trying to predict who is in each class; it is trying to represent a transportable classification rule with a measurement interpretation that remains close to the logic of the actuarial approach.
 </div>
 
+## How our is similar to LDA, ML
+
+- Unlike Manly et al (2022), there is no decision tree. 
+- The PMM takes as input cognitive indicators, functional and self-report (and informant) data, and outputs probabilities of class membership. LDA, machine learning classifiers would do the same.

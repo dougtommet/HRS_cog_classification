@@ -40,12 +40,22 @@ include-in-header:
 
 ```{r setup}
 #| include: false
+#| message: false
+#| warning: false
 
-source(here::here("R", "001-libraries.R"))
-source(here::here("R", "002-folder_paths.R"))
+invisible(
+  suppressMessages(
+    suppressPackageStartupMessages({
+      source(here::here("R", "001-libraries.R"))
+      source(here::here("R", "002-folder_paths.R"))
+    })
+  )
+)
 ```
-
-<!-- One included QMD file per slide. -->
 
 {{< include Slides2603_010_Introduction.qmd >}}
 {{< include Slides2603_020_Structure.qmd >}}
+{{< include Slides2603_030_Covariate-adjustment.qmd >}}
+{{< include Slides2603_040_Results.qmd >}}
+{{< include Slides2603_060_Comparison_Tables.qmd >}}
+{{< include Slides2603_070_Conclusion.qmd >}}
