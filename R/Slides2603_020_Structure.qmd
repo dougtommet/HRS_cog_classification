@@ -1,0 +1,6 @@
+## Slide Structure
+
+- This project uses one included QMD file per slide.
+- Keep each slide self-contained, especially when the content is complex.
+- Put shared setup code only in `Slides2603_Control.qmd`.
+- Reference figures with repository-relative paths.

@@ -11,3 +11,5 @@ mplus_output/**/*.inp
 stata/
 stata/*.dta
 R/PMM_000_Analysis_Report_Control.html
+README.html
+README_files/

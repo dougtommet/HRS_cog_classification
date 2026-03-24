@@ -1,0 +1,6 @@
+## Slides2603
+
+- Starter revealjs slide deck for the Slides2603 analysis project
+- Modeled on the external FPE Memory presentation workflow
+- Adapted to use repository-relative paths
+- Build with `Rscript Slides2603_Driver.R`

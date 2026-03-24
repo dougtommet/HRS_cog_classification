@@ -1,0 +1,48 @@
+---
+title: "Slides2603"
+author: "Rich Jones"
+date: '`r Sys.Date()`'
+format:
+  revealjs:
+    theme: white
+    slide-number: true
+    self-contained: true
+    code-copy: true
+    code-line-numbers: true
+    fig-align: center
+    controls: true
+    controls-layout: bottom-right
+editor: source
+include-in-header:
+  - text: |
+      <style>
+      .reveal .slide-number {
+        top: 1em !important;
+        right: 1em !important;
+        bottom: auto !important;
+        left: auto !important;
+      }
+      .reveal pre {
+        max-height: 850px !important;
+        width: 100% !important;
+        overflow-y: auto !important;
+      }
+      .reveal pre code {
+        max-height: 850px !important;
+        overflow-y: auto !important;
+      }
+      </style>
+---
+
+```{r setup}
+#| include: false
+
+source(here::here("R", "001-libraries.R"))
+source(here::here("R", "002-folder_paths.R"))
+```
+
+<!-- One included QMD file per slide. -->
+
+{{< include Slides2603_010_Introduction.qmd >}}
+{{< include Slides2603_020_Structure.qmd >}}
+{{< include Slides2603_030_Next_Steps.qmd >}}
