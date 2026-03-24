@@ -1,5 +1,0 @@
-## Next Steps
-
-- Add project-specific slides as new `Slides2603_*.qmd` files in `R/`.
-- Append each new slide file to `Slides2603_Control.qmd` with an include statement.
-- Keep dense or code-heavy slides isolated so they are easier to edit and review.

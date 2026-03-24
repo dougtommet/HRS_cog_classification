@@ -1,6 +1,10 @@
 ---
-title: "Slides2603"
-author: "Rich Jones"
+title: "Cognitive classification in HRS Core: Learning from HCAP"
+title-slide-attributes:
+  data-background-image: ../Figures/Gemini-Brown-Amphibian.png
+  data-background-size: contain
+  data-background-opacity: "1"
+author: "Rich Jones and Doug Tommet for HRS/HCAP Working Group"
 date: '`r Sys.Date()`'
 format:
   revealjs:
@@ -45,4 +49,3 @@ source(here::here("R", "002-folder_paths.R"))
 
 {{< include Slides2603_010_Introduction.qmd >}}
 {{< include Slides2603_020_Structure.qmd >}}
-{{< include Slides2603_030_Next_Steps.qmd >}}

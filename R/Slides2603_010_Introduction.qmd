@@ -1,6 +1,25 @@
-## Slides2603
+## Contents
 
-- Starter revealjs slide deck for the Slides2603 analysis project
-- Modeled on the external FPE Memory presentation workflow
-- Adapted to use repository-relative paths
-- Build with `Rscript Slides2603_Driver.R`
+- Review problem
+
+- Review previous work
+
+- Outline new work
+
+- Results 
+
+## Problem/question/goal
+
+- Improve Core cognitive classification (e.g., Langa-Weir) using information extracted from HRS/HCAP (possibly measurement and/or prediction models)
+
+- End goal: Cognitive classification, and classification probabilities
+
+## Previous work
+
+<div style="font-size: 0.7em; line-height: 1.2;">
+Previously we exported the "Manly-Jones" algorithm to the Core using a single domain of general cognitive performance to define cognitive impairment, ADLs and IADLS to define functional impairment. We applied cutpoints to cognition and functional measures to match the prevalence of cognitive impairment and functional impairment in the 2016 HCAP sample. 
+
+This approach achieved a **weighted kappa of 0.52** with respect to the HCAP algorithmic classification, and a weighted kappa of 0.33 with respect to the HCAP consensus classification (weighted here means some contribution to agreement is provided by off diagonal agreement, e.g., MCI vs. dementia; but these estimates also account for sampling weights; source: Reports/HRS_cognition_2025-07-22.html, comparison to HCAP algorithm and HCAP consensus sections). This was in a sub-sample of 2016 HCAP participants who had at least one non-missing cognitive measure (N = 2993).
+
+We wanted to do better, and we wanted a probabilistic information at the individual level about the classification.
+</div>
