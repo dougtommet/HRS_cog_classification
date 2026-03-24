@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 ## Comparison Within The Consensus Sample
 
 These comparisons use the HRS/HCAP validation sample and apply a consensus-panel sampling weight computed as `HCAP16WGTR * samplingP^(-1)`, normalized to sum to 100 in the validation sample.
@@ -82,7 +87,9 @@ format_binary_weighted_tab <- function(tab, row_name, stubhead, spanner) {
     gt::tab_spanner(spanner, 2:3) |>
     gt::tab_stubhead(stubhead)
 }
+```
 
+```{r}
 consensus_sample <- PMM_100 |>
   dplyr::filter(
     inHCAP == 1,
@@ -128,7 +135,9 @@ consensus_sample_binary <- consensus_sample |>
       ordered = TRUE
     )
   )
+```
 
+```{r}
 pmm_103_cprob <- MplusAutomation::readModels(
   here::here("mplus_output", "pmm_103", "pmm_hcap_103b.out")
 )[["savedata"]] |>
@@ -185,19 +194,27 @@ consensus_sample_pmm_binary <- consensus_sample_pmm_rep |>
       ordered = TRUE
     )
   )
+```
 
-tab_lw_consensus <- xtabs(consensus_wt ~ langa_weir + consensus, data = consensus_sample) |>
+```{r}
+tab_lw_consensus <- xtabs(consensus_wt ~ langa_weir + consensus, 
+                          data = consensus_sample) |>
   round(1)
-tab_algorithmic_consensus <- xtabs(consensus_wt ~ algorithmic + consensus, data = consensus_sample) |>
+tab_algorithmic_consensus <- xtabs(consensus_wt ~ algorithmic + consensus, 
+                                   data = consensus_sample) |>
   round(1)
-tab_algorithmic_lw <- xtabs(consensus_wt ~ algorithmic + langa_weir, data = consensus_sample) |>
+tab_algorithmic_lw <- xtabs(consensus_wt ~ algorithmic + langa_weir, 
+                            data = consensus_sample) |>
   round(1)
 
-tab_consensus_pmm <- xtabs(consensus_wt100 ~ consensus + pmm, data = consensus_sample_pmm_rep) |>
+tab_consensus_pmm <- xtabs(consensus_wt100 ~ consensus + pmm, 
+                           data = consensus_sample_pmm_rep) |>
   round(1)
-tab_algorithmic_pmm <- xtabs(consensus_wt100 ~ algorithmic + pmm, data = consensus_sample_pmm_rep) |>
+tab_algorithmic_pmm <- xtabs(consensus_wt100 ~ algorithmic + pmm, 
+                             data = consensus_sample_pmm_rep) |>
   round(1)
-tab_lw_pmm <- xtabs(consensus_wt100 ~ langa_weir + pmm, data = consensus_sample_pmm_rep) |>
+tab_lw_pmm <- xtabs(consensus_wt100 ~ langa_weir + pmm, 
+                    data = consensus_sample_pmm_rep) |>
   round(1)
 
 kappa_lw_consensus <- weighted_kappa_from_tab(tab_lw_consensus)
@@ -206,7 +223,9 @@ kappa_algorithmic_lw <- weighted_kappa_from_tab(tab_algorithmic_lw)
 kappa_consensus_pmm <- weighted_kappa_from_tab(tab_consensus_pmm)
 kappa_algorithmic_pmm <- weighted_kappa_from_tab(tab_algorithmic_pmm)
 kappa_lw_pmm <- weighted_kappa_from_tab(tab_lw_pmm)
+```
 
+```{r}
 agreement_methods <- c(
   "Consensus diagnosis",
   "Algorithmic diagnosis",
@@ -234,19 +253,27 @@ agreement_matrix["Algorithmic diagnosis", "PMM"] <- kappa_algorithmic_pmm$quadra
 agreement_matrix["PMM", "Algorithmic diagnosis"] <- kappa_algorithmic_pmm$quadratic_weighted_kappa
 agreement_matrix["Langa-Weir", "PMM"] <- kappa_lw_pmm$quadratic_weighted_kappa
 agreement_matrix["PMM", "Langa-Weir"] <- kappa_lw_pmm$quadratic_weighted_kappa
+```
 
-tab_lw_consensus_binary <- xtabs(consensus_wt ~ langa_weir_binary + consensus_binary, data = consensus_sample_binary) |>
+```{r}
+tab_lw_consensus_binary <- xtabs(consensus_wt ~ langa_weir_binary + consensus_binary, 
+                                 data = consensus_sample_binary) |>
   round(1)
-tab_algorithmic_consensus_binary <- xtabs(consensus_wt ~ algorithmic_binary + consensus_binary, data = consensus_sample_binary) |>
+tab_algorithmic_consensus_binary <- xtabs(consensus_wt ~ algorithmic_binary + consensus_binary, 
+                                          data = consensus_sample_binary) |>
   round(1)
-tab_algorithmic_lw_binary <- xtabs(consensus_wt ~ algorithmic_binary + langa_weir_binary, data = consensus_sample_binary) |>
+tab_algorithmic_lw_binary <- xtabs(consensus_wt ~ algorithmic_binary + langa_weir_binary, 
+                                   data = consensus_sample_binary) |>
   round(1)
 
-tab_consensus_pmm_binary <- xtabs(consensus_wt100 ~ consensus_binary + pmm_binary, data = consensus_sample_pmm_binary) |>
+tab_consensus_pmm_binary <- xtabs(consensus_wt100 ~ consensus_binary + pmm_binary, 
+                                  data = consensus_sample_pmm_binary) |>
   round(1)
-tab_algorithmic_pmm_binary <- xtabs(consensus_wt100 ~ algorithmic_binary + pmm_binary, data = consensus_sample_pmm_binary) |>
+tab_algorithmic_pmm_binary <- xtabs(consensus_wt100 ~ algorithmic_binary + pmm_binary, 
+                                    data = consensus_sample_pmm_binary) |>
   round(1)
-tab_lw_pmm_binary <- xtabs(consensus_wt100 ~ langa_weir_binary + pmm_binary, data = consensus_sample_pmm_binary) |>
+tab_lw_pmm_binary <- xtabs(consensus_wt100 ~ langa_weir_binary + pmm_binary, 
+                           data = consensus_sample_pmm_binary) |>
   round(1)
 
 kappa_lw_consensus_binary <- binary_kappa_from_tab(tab_lw_consensus_binary)
@@ -255,7 +282,9 @@ kappa_algorithmic_lw_binary <- binary_kappa_from_tab(tab_algorithmic_lw_binary)
 kappa_consensus_pmm_binary <- binary_kappa_from_tab(tab_consensus_pmm_binary)
 kappa_algorithmic_pmm_binary <- binary_kappa_from_tab(tab_algorithmic_pmm_binary)
 kappa_lw_pmm_binary <- binary_kappa_from_tab(tab_lw_pmm_binary)
+```
 
+```{r}
 agreement_matrix_binary <- matrix(
   NA_real_,
   nrow = length(agreement_methods),
