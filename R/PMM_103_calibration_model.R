@@ -5,6 +5,22 @@
 PMM_100 <- readRDS(here::here("R_objects", "PMM_100.RDS"))
 mplus_mod_norms <- readRDS(here::here("R_objects", "PMM_100_mplus_mod_norms.RDS"))
 
+normalize_mplus_savedata <- function(savedata) {
+  savedata |>
+    tibble::as_tibble() |>
+    janitor::clean_names() |>
+    dplyr::rename(c = tidyselect::any_of("mlcc"))
+}
+
+read_mplus_model_quietly <- function(model_path) {
+  suppressWarnings(MplusAutomation::readModels(model_path))
+}
+
+read_mplus_savedata_quietly <- function(model_path) {
+  read_mplus_model_quietly(model_path)[["savedata"]] |>
+    normalize_mplus_savedata()
+}
+
 
 inhcap <- PMM_100 %>%
   filter(inHCAP==1)
@@ -89,7 +105,7 @@ MplusAutomation::mplusModeler(mod1, modelout = "pmm_hcap_103.inp", run = 1, writ
 # mplush5::mplus.view.results(here::here("mplus_output", "pmm_103", "model_103.h5"))
 # mplush5::mplus.print.results.in.probability.scale(here::here("mplus_output", "pmm_103", "model_103.h5"))
 
-pmm_103 <- MplusAutomation::readModels(here::here("mplus_output", "pmm_103", "pmm_hcap_103.out"))
+pmm_103 <- read_mplus_model_quietly(here::here("mplus_output", "pmm_103", "pmm_hcap_103.out"))
 
 mplus_mod_fixed <- write_lca_model(pmm_103, mplus_mod_norms)
 mplus_variable_fixed = "categorical = vdori vdlfl2 vdlfl3 vdsevens vdcount nPG014 nPG021
@@ -134,7 +150,7 @@ mod_fixed <- MplusAutomation::mplusObject(
 )
 MplusAutomation::mplusModeler(mod_fixed, modelout = "pmm_hcap_103b.inp", run = 1, writeData = "always")
 
-pmm_103b <- MplusAutomation::readModels(here::here("mplus_output", "pmm_103", "pmm_hcap_103b.out"))
+pmm_103b <- read_mplus_model_quietly(here::here("mplus_output", "pmm_103", "pmm_hcap_103b.out"))
 
 #####################################
 
@@ -205,7 +221,7 @@ MplusAutomation::mplusModeler(mod1, modelout = "pmm_hcap_103_jorm.inp", run = 1,
 # mplush5::mplus.view.results(here::here("mplus_output", "pmm_103", "model_103.h5"))
 # mplush5::mplus.print.results.in.probability.scale(here::here("mplus_output", "pmm_103", "model_103.h5"))
 
-pmm_103_jorm <- MplusAutomation::readModels(here::here("mplus_output", "pmm_103_jorm", "pmm_hcap_103_jorm.out"))
+pmm_103_jorm <- read_mplus_model_quietly(here::here("mplus_output", "pmm_103_jorm", "pmm_hcap_103_jorm.out"))
 
 mplus_mod_fixed_jorm <- write_lca_model(pmm_103_jorm, "")
 mplus_variable_fixed_jorm = "categorical = nPG014 nPG021
@@ -243,7 +259,7 @@ mod_fixed <- MplusAutomation::mplusObject(
 )
 MplusAutomation::mplusModeler(mod_fixed, modelout = "pmm_hcap_103b_jorm.inp", run = 1, writeData = "always")
 
-pmm_103b_jorm <- MplusAutomation::readModels(here::here("mplus_output", "pmm_103_jorm", "pmm_hcap_103b_jorm.out"))
+pmm_103b_jorm <- read_mplus_model_quietly(here::here("mplus_output", "pmm_103_jorm", "pmm_hcap_103b_jorm.out"))
 
 
 

@@ -1,310 +1,17 @@
 ---
 output: html_document
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
-## Comparison Within The Consensus Sample
 
-These comparisons use the HRS/HCAP validation sample and apply a consensus-panel sampling weight computed as `HCAP16WGTR * samplingP^(-1)`, normalized to sum to 100 in the validation sample.
+## Weighted Comparison Tables
 
-```{r}
-PMM_100 <- readRDS(here::here("R_objects", "PMM_100.RDS"))
+Comparisons that involve the consensus diagnosis use the HRS/HCAP validation-subsample weights computed as `HCAP16WGTR * samplingP^(-1)`.
 
-class_labels <- c("Normal", "MCI", "Dementia")
-
-weighted_kappa_from_tab <- function(tab) {
-  obs <- unclass(tab)
-  expected <- outer(rowSums(obs), colSums(obs)) / sum(obs)
-
-  agreement_weights <- outer(
-    1:nrow(obs),
-    1:ncol(obs),
-    function(i, j) 1 - ((i - j)^2 / (nrow(obs) - 1)^2)
-  )
-
-  po <- sum(agreement_weights * obs) / sum(obs)
-  pe <- sum(agreement_weights * expected) / sum(obs)
-  kappa_w <- (po - pe) / (1 - pe)
-
-  tibble::tibble(
-    observed_weighted_agreement = po,
-    expected_weighted_agreement = pe,
-    quadratic_weighted_kappa = kappa_w
-  )
-}
-
-format_weighted_tab <- function(tab, row_name, stubhead, spanner) {
-  tab_df <- tab |>
-    as.data.frame.matrix() |>
-    tibble::rownames_to_column(row_name) |>
-    dplyr::mutate(Total = Normal + MCI + Dementia)
-
-  total_row <- tab_df |>
-    dplyr::summarise(
-      dplyr::across(c(Normal, MCI, Dementia, Total), sum),
-      .groups = "drop"
-    ) |>
-    dplyr::mutate(!!row_name := "Total") |>
-    dplyr::select(dplyr::all_of(c(row_name, "Normal", "MCI", "Dementia", "Total")))
-
-  dplyr::bind_rows(tab_df, total_row) |>
-    gt::gt(rowname_col = row_name) |>
-    gt::tab_spanner(spanner, 2:4) |>
-    gt::tab_stubhead(stubhead)
-}
-
-binary_kappa_from_tab <- function(tab) {
-  obs <- unclass(tab)
-  expected <- outer(rowSums(obs), colSums(obs)) / sum(obs)
-
-  po <- sum(diag(obs)) / sum(obs)
-  pe <- sum(diag(expected)) / sum(obs)
-  kappa <- (po - pe) / (1 - pe)
-
-  tibble::tibble(
-    observed_agreement = po,
-    expected_agreement = pe,
-    kappa = kappa
-  )
-}
-
-format_binary_weighted_tab <- function(tab, row_name, stubhead, spanner) {
-  tab_df <- tab |>
-    as.data.frame.matrix() |>
-    tibble::rownames_to_column(row_name) |>
-    dplyr::mutate(Total = `Non-demented` + Demented)
-
-  total_row <- tab_df |>
-    dplyr::summarise(
-      dplyr::across(c(`Non-demented`, Demented, Total), sum),
-      .groups = "drop"
-    ) |>
-    dplyr::mutate(!!row_name := "Total") |>
-    dplyr::select(dplyr::all_of(c(row_name, "Non-demented", "Demented", "Total")))
-
-  dplyr::bind_rows(tab_df, total_row) |>
-    gt::gt(rowname_col = row_name) |>
-    gt::tab_spanner(spanner, 2:3) |>
-    gt::tab_stubhead(stubhead)
-}
-```
+Comparisons that do not involve the consensus diagnosis use the HCAP population weights `HCAP16WGTR`.
 
 ```{r}
-consensus_sample <- PMM_100 |>
-  dplyr::filter(
-    inHCAP == 1,
-    !is.na(consensuspaneldx),
-    !is.na(cogfunction2016),
-    !is.na(vs1hcapdxeap),
-    !is.na(samplingP)
-  ) |>
-  dplyr::transmute(
-    id = as.integer(id),
-    consensus = haven::zap_labels(consensuspaneldx),
-    algorithmic = haven::zap_labels(vs1hcapdxeap),
-    langa_weir = haven::zap_labels(cogfunction2016),
-    consensus_wt_raw = HCAP16WGTR * samplingP^(-1)
-  ) |>
-  dplyr::mutate(
-    consensus_wt = 100 * consensus_wt_raw / sum(consensus_wt_raw, na.rm = TRUE),
-    consensus = factor(consensus, levels = 1:3, labels = class_labels, ordered = TRUE),
-    algorithmic = factor(algorithmic, levels = 1:3, labels = class_labels, ordered = TRUE),
-    langa_weir = factor(langa_weir, levels = 1:3, labels = class_labels, ordered = TRUE)
-  )
-
-binary_labels <- c("Non-demented", "Demented")
-
-consensus_sample_binary <- consensus_sample |>
-  dplyr::mutate(
-    consensus_binary = factor(
-      dplyr::if_else(as.integer(consensus) == 3L, 2L, 1L),
-      levels = 1:2,
-      labels = binary_labels,
-      ordered = TRUE
-    ),
-    algorithmic_binary = factor(
-      dplyr::if_else(as.integer(algorithmic) == 3L, 2L, 1L),
-      levels = 1:2,
-      labels = binary_labels,
-      ordered = TRUE
-    ),
-    langa_weir_binary = factor(
-      dplyr::if_else(as.integer(langa_weir) == 3L, 2L, 1L),
-      levels = 1:2,
-      labels = binary_labels,
-      ordered = TRUE
-    )
-  )
-```
-
-```{r}
-pmm_103_cprob <- MplusAutomation::readModels(
-  here::here("mplus_output", "pmm_103", "pmm_hcap_103b.out")
-)[["savedata"]] |>
-  tibble::as_tibble() |>
-  janitor::clean_names() |>
-  dplyr::select(id, cprob1, cprob2, cprob3)
-
-consensus_sample_pmm <- consensus_sample |>
-  dplyr::inner_join(pmm_103_cprob, by = "id")
-
-consensus_sample_pmm_rep <- consensus_sample_pmm |>
-  dplyr::slice(rep(1:dplyr::n(), each = 100)) |>
-  dplyr::group_by(id) |>
-  dplyr::mutate(
-    i = dplyr::row_number(),
-    p1 = cprob1 * 100,
-    p2 = cprob2 * 100 + p1,
-    pmm = dplyr::case_when(
-      i <= p1 ~ 1L,
-      i <= p2 ~ 2L,
-      TRUE ~ 3L
-    ),
-    consensus_wt100 = consensus_wt / 100
-  ) |>
-  dplyr::ungroup() |>
-  dplyr::mutate(
-    pmm = factor(pmm, levels = 1:3, labels = class_labels, ordered = TRUE)
-  )
-
-consensus_sample_pmm_binary <- consensus_sample_pmm_rep |>
-  dplyr::mutate(
-    consensus_binary = factor(
-      dplyr::if_else(as.integer(consensus) == 3L, 2L, 1L),
-      levels = 1:2,
-      labels = binary_labels,
-      ordered = TRUE
-    ),
-    algorithmic_binary = factor(
-      dplyr::if_else(as.integer(algorithmic) == 3L, 2L, 1L),
-      levels = 1:2,
-      labels = binary_labels,
-      ordered = TRUE
-    ),
-    langa_weir_binary = factor(
-      dplyr::if_else(as.integer(langa_weir) == 3L, 2L, 1L),
-      levels = 1:2,
-      labels = binary_labels,
-      ordered = TRUE
-    ),
-    pmm_binary = factor(
-      dplyr::if_else(as.integer(pmm) == 3L, 2L, 1L),
-      levels = 1:2,
-      labels = binary_labels,
-      ordered = TRUE
-    )
-  )
-```
-
-```{r}
-tab_lw_consensus <- xtabs(consensus_wt ~ langa_weir + consensus, 
-                          data = consensus_sample) |>
-  round(1)
-tab_algorithmic_consensus <- xtabs(consensus_wt ~ algorithmic + consensus, 
-                                   data = consensus_sample) |>
-  round(1)
-tab_algorithmic_lw <- xtabs(consensus_wt ~ algorithmic + langa_weir, 
-                            data = consensus_sample) |>
-  round(1)
-
-tab_consensus_pmm <- xtabs(consensus_wt100 ~ consensus + pmm, 
-                           data = consensus_sample_pmm_rep) |>
-  round(1)
-tab_algorithmic_pmm <- xtabs(consensus_wt100 ~ algorithmic + pmm, 
-                             data = consensus_sample_pmm_rep) |>
-  round(1)
-tab_lw_pmm <- xtabs(consensus_wt100 ~ langa_weir + pmm, 
-                    data = consensus_sample_pmm_rep) |>
-  round(1)
-
-kappa_lw_consensus <- weighted_kappa_from_tab(tab_lw_consensus)
-kappa_algorithmic_consensus <- weighted_kappa_from_tab(tab_algorithmic_consensus)
-kappa_algorithmic_lw <- weighted_kappa_from_tab(tab_algorithmic_lw)
-kappa_consensus_pmm <- weighted_kappa_from_tab(tab_consensus_pmm)
-kappa_algorithmic_pmm <- weighted_kappa_from_tab(tab_algorithmic_pmm)
-kappa_lw_pmm <- weighted_kappa_from_tab(tab_lw_pmm)
-```
-
-```{r}
-agreement_methods <- c(
-  "Consensus diagnosis",
-  "Algorithmic diagnosis",
-  "Langa-Weir",
-  "PMM"
-)
-
-agreement_matrix <- matrix(
-  NA_real_,
-  nrow = length(agreement_methods),
-  ncol = length(agreement_methods),
-  dimnames = list(agreement_methods, agreement_methods)
-)
-
-diag(agreement_matrix) <- 1
-agreement_matrix["Consensus diagnosis", "Algorithmic diagnosis"] <- kappa_algorithmic_consensus$quadratic_weighted_kappa
-agreement_matrix["Algorithmic diagnosis", "Consensus diagnosis"] <- kappa_algorithmic_consensus$quadratic_weighted_kappa
-agreement_matrix["Consensus diagnosis", "Langa-Weir"] <- kappa_lw_consensus$quadratic_weighted_kappa
-agreement_matrix["Langa-Weir", "Consensus diagnosis"] <- kappa_lw_consensus$quadratic_weighted_kappa
-agreement_matrix["Consensus diagnosis", "PMM"] <- kappa_consensus_pmm$quadratic_weighted_kappa
-agreement_matrix["PMM", "Consensus diagnosis"] <- kappa_consensus_pmm$quadratic_weighted_kappa
-agreement_matrix["Algorithmic diagnosis", "Langa-Weir"] <- kappa_algorithmic_lw$quadratic_weighted_kappa
-agreement_matrix["Langa-Weir", "Algorithmic diagnosis"] <- kappa_algorithmic_lw$quadratic_weighted_kappa
-agreement_matrix["Algorithmic diagnosis", "PMM"] <- kappa_algorithmic_pmm$quadratic_weighted_kappa
-agreement_matrix["PMM", "Algorithmic diagnosis"] <- kappa_algorithmic_pmm$quadratic_weighted_kappa
-agreement_matrix["Langa-Weir", "PMM"] <- kappa_lw_pmm$quadratic_weighted_kappa
-agreement_matrix["PMM", "Langa-Weir"] <- kappa_lw_pmm$quadratic_weighted_kappa
-```
-
-```{r}
-tab_lw_consensus_binary <- xtabs(consensus_wt ~ langa_weir_binary + consensus_binary, 
-                                 data = consensus_sample_binary) |>
-  round(1)
-tab_algorithmic_consensus_binary <- xtabs(consensus_wt ~ algorithmic_binary + consensus_binary, 
-                                          data = consensus_sample_binary) |>
-  round(1)
-tab_algorithmic_lw_binary <- xtabs(consensus_wt ~ algorithmic_binary + langa_weir_binary, 
-                                   data = consensus_sample_binary) |>
-  round(1)
-
-tab_consensus_pmm_binary <- xtabs(consensus_wt100 ~ consensus_binary + pmm_binary, 
-                                  data = consensus_sample_pmm_binary) |>
-  round(1)
-tab_algorithmic_pmm_binary <- xtabs(consensus_wt100 ~ algorithmic_binary + pmm_binary, 
-                                    data = consensus_sample_pmm_binary) |>
-  round(1)
-tab_lw_pmm_binary <- xtabs(consensus_wt100 ~ langa_weir_binary + pmm_binary, 
-                           data = consensus_sample_pmm_binary) |>
-  round(1)
-
-kappa_lw_consensus_binary <- binary_kappa_from_tab(tab_lw_consensus_binary)
-kappa_algorithmic_consensus_binary <- binary_kappa_from_tab(tab_algorithmic_consensus_binary)
-kappa_algorithmic_lw_binary <- binary_kappa_from_tab(tab_algorithmic_lw_binary)
-kappa_consensus_pmm_binary <- binary_kappa_from_tab(tab_consensus_pmm_binary)
-kappa_algorithmic_pmm_binary <- binary_kappa_from_tab(tab_algorithmic_pmm_binary)
-kappa_lw_pmm_binary <- binary_kappa_from_tab(tab_lw_pmm_binary)
-```
-
-```{r}
-agreement_matrix_binary <- matrix(
-  NA_real_,
-  nrow = length(agreement_methods),
-  ncol = length(agreement_methods),
-  dimnames = list(agreement_methods, agreement_methods)
-)
-
-diag(agreement_matrix_binary) <- 1
-agreement_matrix_binary["Consensus diagnosis", "Algorithmic diagnosis"] <- kappa_algorithmic_consensus_binary$kappa
-agreement_matrix_binary["Algorithmic diagnosis", "Consensus diagnosis"] <- kappa_algorithmic_consensus_binary$kappa
-agreement_matrix_binary["Consensus diagnosis", "Langa-Weir"] <- kappa_lw_consensus_binary$kappa
-agreement_matrix_binary["Langa-Weir", "Consensus diagnosis"] <- kappa_lw_consensus_binary$kappa
-agreement_matrix_binary["Consensus diagnosis", "PMM"] <- kappa_consensus_pmm_binary$kappa
-agreement_matrix_binary["PMM", "Consensus diagnosis"] <- kappa_consensus_pmm_binary$kappa
-agreement_matrix_binary["Algorithmic diagnosis", "Langa-Weir"] <- kappa_algorithmic_lw_binary$kappa
-agreement_matrix_binary["Langa-Weir", "Algorithmic diagnosis"] <- kappa_algorithmic_lw_binary$kappa
-agreement_matrix_binary["Algorithmic diagnosis", "PMM"] <- kappa_algorithmic_pmm_binary$kappa
-agreement_matrix_binary["PMM", "Algorithmic diagnosis"] <- kappa_algorithmic_pmm_binary$kappa
-agreement_matrix_binary["Langa-Weir", "PMM"] <- kappa_lw_pmm_binary$kappa
-agreement_matrix_binary["PMM", "Langa-Weir"] <- kappa_lw_pmm_binary$kappa
+source(here::here("R", "PMM_110_Comparison_of_Consensus_Langa_Weir.R"))
 ```
 
 ### Langa-Weir versus Consensus panel
@@ -312,199 +19,184 @@ agreement_matrix_binary["PMM", "Langa-Weir"] <- kappa_lw_pmm_binary$kappa
 ```{r}
 #| tbl-cap: "Langa-Weir diagnosis vs Consensus panel diagnosis, with consensus-panel sample weights"
 format_weighted_tab(
-  tab_lw_consensus,
+  PMM_110$tabs$three_class$lw_consensus,
   row_name = "langa_weir",
   stubhead = "Langa-Weir classification",
   spanner = "Consensus panel diagnosis"
 )
 ```
 
-The quadratic weighted kappa is `r round(kappa_lw_consensus$quadratic_weighted_kappa, 3)`.
+::: {custom-style="Footnote text"}
+`r PMM_110$notes$consensus_standard`
+:::
+
+The quadratic weighted kappa is `r round(PMM_110$summary$lw_consensus_kappa, 3)`.
 
 ### Algorithmic diagnosis versus Consensus panel
 
 ```{r}
 #| tbl-cap: "Algorithmic diagnosis vs Consensus panel diagnosis, with consensus-panel sample weights"
-format_weighted_tab(
-  tab_algorithmic_consensus,
-  row_name = "algorithmic",
-  stubhead = "Algorithmic diagnosis",
-  spanner = "Consensus panel diagnosis"
-)
+PMM_110$tables$algorithmic_consensus
 ```
 
-The quadratic weighted kappa is `r round(kappa_algorithmic_consensus$quadratic_weighted_kappa, 3)`.
+::: {custom-style="Footnote text"}
+`r PMM_110$notes$consensus_standard`
+:::
+
+The quadratic weighted kappa is `r round(PMM_110$summary$algorithmic_consensus_kappa, 3)`.
 
 ### Langa-Weir versus Algorithmic diagnosis
 
 ```{r}
-#| tbl-cap: "Langa-Weir diagnosis vs Algorithmic diagnosis, with consensus-panel sample weights"
-format_weighted_tab(
-  tab_algorithmic_lw,
-  row_name = "algorithmic",
-  stubhead = "Algorithmic diagnosis",
-  spanner = "Langa-Weir diagnosis"
-)
+#| tbl-cap: "Langa-Weir diagnosis vs Algorithmic diagnosis, with HCAP weights"
+PMM_110$tables$algorithmic_lw
 ```
 
-The quadratic weighted kappa is `r round(kappa_algorithmic_lw$quadratic_weighted_kappa, 3)`.
+::: {custom-style="Footnote text"}
+`r PMM_110$notes$hcap_standard`
+:::
 
-### Consensus panel versus Profile-mixture classification
+The quadratic weighted kappa is `r round(PMM_110$summary$algorithmic_lw_kappa, 3)`.
+
+### Consensus panel versus Combined model classification
 
 ```{r}
-#| tbl-cap: "Consensus panel diagnosis vs Profile-mixture classification, with consensus-panel sample weights"
-format_weighted_tab(
-  tab_consensus_pmm,
-  row_name = "consensus",
-  stubhead = "Consensus panel diagnosis",
-  spanner = "Profile-mixture classification"
-)
+#| tbl-cap: "Consensus panel diagnosis vs Combined model classification, with consensus-panel sample weights"
+PMM_110$tables$consensus_combined
 ```
 
-The quadratic weighted kappa is `r round(kappa_consensus_pmm$quadratic_weighted_kappa, 3)`.
+::: {custom-style="Footnote text"}
+`r PMM_110$notes$consensus_combined`
+:::
 
-### Algorithmic diagnosis versus Profile-mixture classification
+The quadratic weighted kappa is `r round(PMM_110$summary$consensus_combined_kappa, 3)`.
+
+### Algorithmic diagnosis versus Combined model classification
 
 ```{r}
-#| tbl-cap: "Algorithmic diagnosis vs Profile-mixture classification, with consensus-panel sample weights"
-format_weighted_tab(
-  tab_algorithmic_pmm,
-  row_name = "algorithmic",
-  stubhead = "Algorithmic diagnosis",
-  spanner = "Profile-mixture classification"
-)
+#| tbl-cap: "Algorithmic diagnosis vs Combined model classification, with HCAP weights"
+PMM_110$tables$algorithmic_combined
 ```
 
-The quadratic weighted kappa is `r round(kappa_algorithmic_pmm$quadratic_weighted_kappa, 3)`.
+::: {custom-style="Footnote text"}
+`r PMM_110$notes$hcap_combined`
+:::
 
-### Langa-Weir versus Profile-mixture classification
+The quadratic weighted kappa is `r round(PMM_110$summary$algorithmic_combined_kappa, 3)`.
+
+### Langa-Weir versus Combined model classification
 
 ```{r}
-#| tbl-cap: "Langa-Weir diagnosis vs Profile-mixture classification, with consensus-panel sample weights"
-format_weighted_tab(
-  tab_lw_pmm,
-  row_name = "langa_weir",
-  stubhead = "Langa-Weir classification",
-  spanner = "Profile-mixture classification"
-)
+#| tbl-cap: "Langa-Weir diagnosis vs Combined model classification, with HCAP weights"
+PMM_110$tables$lw_combined
 ```
 
-The quadratic weighted kappa is `r round(kappa_lw_pmm$quadratic_weighted_kappa, 3)`.
+::: {custom-style="Footnote text"}
+`r PMM_110$notes$hcap_combined`
+:::
+
+The quadratic weighted kappa is `r round(PMM_110$summary$lw_combined_kappa, 3)`.
 
 ### Agreement Matrix
 
 ```{r}
-#| tbl-cap: "Pairwise quadratic weighted kappa matrix in the consensus sample"
-agreement_matrix |>
-  as.data.frame() |>
-  tibble::rownames_to_column("method") |>
-  gt::gt(rowname_col = "method") |>
-  gt::fmt_number(
-    columns = agreement_methods,
-    decimals = 3
-  ) |>
-  gt::tab_stubhead("Consensus sample")
+#| tbl-cap: "Pairwise quadratic weighted kappa matrix using consensus-panel weights for consensus comparisons and HCAP weights otherwise"
+PMM_110$tables$agreement_matrix
 ```
+
+::: {custom-style="Footnote text"}
+`r PMM_110$notes$matrix_three`
+:::
 
 ## Dementia Versus Non-dementia
 
-This section collapses Normal and MCI into a single non-demented category and recomputes the consensus-sample agreement statistics using the same sampling weights.
+This section collapses Normal and MCI into a single non-demented category. Comparisons that involve the consensus diagnosis use consensus-panel weights, and comparisons that do not involve the consensus diagnosis use HCAP weights.
 
 ### Langa-Weir versus Consensus panel
 
 ```{r}
 #| tbl-cap: "Langa-Weir dementia classification vs Consensus panel diagnosis, with consensus-panel sample weights"
-format_binary_weighted_tab(
-  tab_lw_consensus_binary,
-  row_name = "langa_weir_binary",
-  stubhead = "Langa-Weir classification",
-  spanner = "Consensus panel diagnosis"
-)
+PMM_110$tables$lw_consensus_binary
 ```
 
-The kappa is `r round(kappa_lw_consensus_binary$kappa, 3)`.
+::: {custom-style="Footnote text"}
+`r PMM_110$notes$consensus_standard`
+:::
+
+The kappa is `r round(PMM_110$summary$lw_consensus_binary_kappa, 3)`.
 
 ### Algorithmic diagnosis versus Consensus panel
 
 ```{r}
 #| tbl-cap: "Algorithmic dementia classification vs Consensus panel diagnosis, with consensus-panel sample weights"
-format_binary_weighted_tab(
-  tab_algorithmic_consensus_binary,
-  row_name = "algorithmic_binary",
-  stubhead = "Algorithmic diagnosis",
-  spanner = "Consensus panel diagnosis"
-)
+PMM_110$tables$algorithmic_consensus_binary
 ```
 
-The kappa is `r round(kappa_algorithmic_consensus_binary$kappa, 3)`.
+::: {custom-style="Footnote text"}
+`r PMM_110$notes$consensus_standard`
+:::
+
+The kappa is `r round(PMM_110$summary$algorithmic_consensus_binary_kappa, 3)`.
 
 ### Langa-Weir versus Algorithmic diagnosis
 
 ```{r}
-#| tbl-cap: "Langa-Weir dementia classification vs Algorithmic diagnosis, with consensus-panel sample weights"
-format_binary_weighted_tab(
-  tab_algorithmic_lw_binary,
-  row_name = "algorithmic_binary",
-  stubhead = "Algorithmic diagnosis",
-  spanner = "Langa-Weir diagnosis"
-)
+#| tbl-cap: "Langa-Weir dementia classification vs Algorithmic diagnosis, with HCAP weights"
+PMM_110$tables$algorithmic_lw_binary
 ```
 
-The kappa is `r round(kappa_algorithmic_lw_binary$kappa, 3)`.
+::: {custom-style="Footnote text"}
+`r PMM_110$notes$hcap_standard`
+:::
 
-### Consensus panel versus Profile-mixture classification
+The kappa is `r round(PMM_110$summary$algorithmic_lw_binary_kappa, 3)`.
+
+### Consensus panel versus Combined model classification
 
 ```{r}
-#| tbl-cap: "Consensus panel dementia classification vs Profile-mixture classification, with consensus-panel sample weights"
-format_binary_weighted_tab(
-  tab_consensus_pmm_binary,
-  row_name = "consensus_binary",
-  stubhead = "Consensus panel diagnosis",
-  spanner = "Profile-mixture classification"
-)
+#| tbl-cap: "Consensus panel dementia classification vs Combined model classification, with consensus-panel sample weights"
+PMM_110$tables$consensus_combined_binary
 ```
 
-The kappa is `r round(kappa_consensus_pmm_binary$kappa, 3)`.
+::: {custom-style="Footnote text"}
+`r PMM_110$notes$consensus_combined`
+:::
 
-### Algorithmic diagnosis versus Profile-mixture classification
+The kappa is `r round(PMM_110$summary$consensus_combined_binary_kappa, 3)`.
+
+### Algorithmic diagnosis versus Combined model classification
 
 ```{r}
-#| tbl-cap: "Algorithmic dementia classification vs Profile-mixture classification, with consensus-panel sample weights"
-format_binary_weighted_tab(
-  tab_algorithmic_pmm_binary,
-  row_name = "algorithmic_binary",
-  stubhead = "Algorithmic diagnosis",
-  spanner = "Profile-mixture classification"
-)
+#| tbl-cap: "Algorithmic dementia classification vs Combined model classification, with HCAP weights"
+PMM_110$tables$algorithmic_combined_binary
 ```
 
-The kappa is `r round(kappa_algorithmic_pmm_binary$kappa, 3)`.
+::: {custom-style="Footnote text"}
+`r PMM_110$notes$hcap_combined`
+:::
 
-### Langa-Weir versus Profile-mixture classification
+The kappa is `r round(PMM_110$summary$algorithmic_combined_binary_kappa, 3)`.
+
+### Langa-Weir versus Combined model classification
 
 ```{r}
-#| tbl-cap: "Langa-Weir dementia classification vs Profile-mixture classification, with consensus-panel sample weights"
-format_binary_weighted_tab(
-  tab_lw_pmm_binary,
-  row_name = "langa_weir_binary",
-  stubhead = "Langa-Weir classification",
-  spanner = "Profile-mixture classification"
-)
+#| tbl-cap: "Langa-Weir dementia classification vs Combined model classification, with HCAP weights"
+PMM_110$tables$lw_combined_binary
 ```
 
-The kappa is `r round(kappa_lw_pmm_binary$kappa, 3)`.
+::: {custom-style="Footnote text"}
+`r PMM_110$notes$hcap_combined`
+:::
+
+The kappa is `r round(PMM_110$summary$lw_combined_binary_kappa, 3)`.
 
 ### Binary Agreement Matrix
 
 ```{r}
-#| tbl-cap: "Pairwise kappa matrix for dementia versus non-dementia in the consensus sample"
-agreement_matrix_binary |>
-  as.data.frame() |>
-  tibble::rownames_to_column("method") |>
-  gt::gt(rowname_col = "method") |>
-  gt::fmt_number(
-    columns = agreement_methods,
-    decimals = 3
-  ) |>
-  gt::tab_stubhead("Consensus sample")
+#| tbl-cap: "Pairwise kappa matrix for dementia versus non-dementia using consensus-panel weights for consensus comparisons and HCAP weights otherwise"
+PMM_110$tables$agreement_matrix_binary
 ```
+
+::: {custom-style="Footnote text"}
+`r PMM_110$notes$matrix_binary`
+:::

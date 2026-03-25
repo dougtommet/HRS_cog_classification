@@ -1,11 +1,36 @@
 ## Conclusion
 
-<div style="font-size: 0.66em; line-height: 1.3;">
-
-For 3-way classification, with the HRS/HCAP algorithm as the reference standard, the previously described **HCAP Algorithm in Core** procedure is optimal, with a quadratic weighted kappa of **`r scales::number(kappa_core_algo_algorithmic$quadratic_weighted_kappa, accuracy = 0.01)`**. With consensus diagnosis as the reference standard, the new predictive mean matching (PMM) procedure is optimal, with a quadratic weighted kappa of **`r scales::number(kappa_consensus_pmm$quadratic_weighted_kappa, accuracy = 0.01)`**.
-
-For classification of dementia versus no dementia, with the HRS/HCAP algorithm as the reference standard, the new predictive mean matching (PMM) procedure has the worst performance, with kappa **`r scales::number(kappa_algorithmic_pmm_binary$kappa, accuracy = 0.01)`**. The **HCAP Algorithm in Core** and **Langa-Weir** procedures are comparable, with kappas of **`r scales::number(kappa_core_algo_algorithmic_binary$kappa, accuracy = 0.01)`** and **`r scales::number(kappa_algorithmic_lw_binary$kappa, accuracy = 0.01)`**, respectively. With consensus diagnosis as the reference standard, **Langa-Weir** and **HCAP Algorithm in Core** are also comparable, with kappas of **`r scales::number(kappa_lw_consensus_binary$kappa, accuracy = 0.01)`** and **`r scales::number(kappa_core_algo_consensus_binary$kappa, accuracy = 0.01)`**, respectively. Both the HCAP algorithmic diagnosis (full HCAP) and PMM approaches were substantially worse (kappas < .55).
-
-**Therefore** the previously described **HCAP Algorithm in Core** procedure optimizes -- among the options considered -- accurate  3-way (Normal, MCI, Dementia) and 2-way classification (dementia vs no dementia).
-
+<div style="font-size: 0.66em; line-height: 0.9;">
+|**Reference standard / Classification**|**Algorithmic diagnosis**|**Consensus panel diagnosis**|
+|:---------------------|:-----------------------|:-------------------------|
+|**3-way (normal, mci, dementia)** | The combined PMM model compares comparably to Langa-Weir ($\kappa_w$ = 0.51)† for the 3-way classification (normal, mci, dementia) | The combined PMM model is far more accurate ($\kappa_w$ = 0.53) than Langa-Weir ($\kappa_w$ = 0.10)|
+|**2-way (dementia, no dementia)** | The combined PMM model compares comparably to Langa-Weir ($\kappa$ = 0.44 combined PMM, 0.41 Langa-Weir).‡ |The Langa-Weir is more accurate ($\kappa$ = 0.74) than the combined PMM ($\kappa$ = 0.38) and the algorithmic diagnosis ($\kappa$ = 0.54).|
 </div>
+
+
+<div style="font-size: 0.66em; line-height: 1.1;">
+Given the team's preference for the algorithmic diagnosis as the reference standard, the combined PMM model is a small improvement over Langa-Weir for 2-way classification of dementia and comparable to Langa-Weir for 3-way classification of normal, mci, and dementia. Kappa values in the 0.4 to 0.5 range constitute "moderate" agreement beyond change (per Landis JR & Koch GG. Biometrics. 1977:33(1);159-74). **_However_**, considering the margins, the PMM combination classification does not produce comparable marginal distributions to the algorithmic diagnosis, and is particularly poor at classifying MCI.
+</div>
+
+<div style="font-size: 0.5em; line-height: 0.9;">
+† We reported a $\kappa_w$ of 0.52 for the 3-way classification relative to algorithmic diagnosis for the HCAP-approach-in-Core data April 2025 (last report), and ‡ we reported $\kappa$ of 0.44 for HCAP algorithm in core for 2-way classification. These previous calculations did not involve sample sample weights, but preliminarily the suggestion is the PMM approach is _not a net improvement over the previous approach_ (refactoring the HCAP algorithm to fit HRS Core data collection).
+</div>
+
+## Next steps
+
+1. Return to HCAP-algorithm-in-Core analysis, update with sample weights, and compare to PMM approach.
+2. Evaluate machine learning / predictive modeling approaches to classification
+3. Manuscript: all three approaches, plus Langa-Weir, Hudomiet
+
+
+## Resources 
+
+[This slide show (html)](https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides2603_2026-03-25.html)
+
+[PMM analysis report (html)](https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/PMM_Analysis_Report_2026-03-25.html)
+
+[HCAP in core slide show (Gslides)](https://docs.google.com/presentation/d/10Jsx5bdNrKA0TYQP0w4hCPZfcdVBGvi0CpvsMn6430Q/edit?usp=sharing)
+
+[HCAP in Core analysis report (html)](https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/HRS_cognition_2025-07-22.html)
+
+[Github repository](https://github.com/dougtommet/HRS_cog_classification)

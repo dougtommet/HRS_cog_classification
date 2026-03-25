@@ -75,15 +75,18 @@ pmm_103b_jorm[["parameters"]][["unstandardized"]] %>%
 
 ```{r}
 
-cprob_103b <- pmm_103b[["savedata"]] %>%
-  as_tibble() %>%
-  janitor::clean_names() %>%
+normalize_mplus_savedata <- function(savedata) {
+  savedata %>%
+    as_tibble() %>%
+    janitor::clean_names() %>%
+    rename(c = tidyselect::any_of("mlcc"))
+}
+
+cprob_103b <- normalize_mplus_savedata(pmm_103b[["savedata"]]) %>%
   select(id, stratum, secu_mplus, hcap16wg,
          cprob1, cprob2, cprob3, c)
 
-cprob_103b_jorm <- pmm_103b_jorm[["savedata"]] %>%
-  as_tibble() %>%
-  janitor::clean_names() %>%
+cprob_103b_jorm <- normalize_mplus_savedata(pmm_103b_jorm[["savedata"]]) %>%
   rename(cprob1_jorm = cprob1) %>%
   rename(cprob2_jorm = cprob2) %>%
   rename(cprob3_jorm = cprob3) %>%

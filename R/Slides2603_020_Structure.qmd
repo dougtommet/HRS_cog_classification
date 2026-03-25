@@ -11,7 +11,8 @@
 :::
 
 ::: {.column width="42%"}
-<div style="font-size: 0.4em; line-height: 1.0;">
+<div style="font-size: 0.33em; line-height: 1.0;">
+Separate models are trained for the cognitive and functional indicators, and the informant reports (Jorm IQCODE). The results of these models are then combined to generate a final classification for each person (N=3496). Recall that the Jorm informant reports are available only for those without cognitive data.
 
 `cg` is a latent class variable (a known class in the HRS/HCAP calibration sample, and an unknown class in the HRS Core application sample) that is predicted by a set of cognitive indicators (the nine indicators listed below) that are adjusted for sociodemographics using fixed parameters from the robust norms group. The classes correspond to normal cognition, MCI/CIND, and dementia.
 
@@ -54,7 +55,7 @@ For the cognitive indicators, PMM handles the indicator means through fixed soci
 ## How our approach differs from predictive modeling
 
 <div style="font-size: 0.6em; line-height: 1.0;">
-Many predictive models are optimized to maximize classification accuracy in the sample at hand, even if that means learning direct associations of sociodemographics with class membership or relying on patterns that are difficult to transport or interpret. Our PMM is built for a different goal: it separates measurement from classification, anchors expected cognitive performance in a normative reference group, and then classifies people according to how their observed indicator pattern departs from that demographically adjusted expectation. In that sense, PMM is not just trying to predict who is in each class; it is trying to represent a transportable classification rule with a measurement interpretation that remains close to the logic of the actuarial approach.
+Many predictive models are optimized to maximize classification accuracy in the sample at hand, even if that means learning direct associations of sociodemographics with class membership or relying on patterns that are difficult to transport or interpret. Our PMM is built for a different goal: it separates measurement from classification, anchors expected cognitive performance in a normative reference group, and then classifies people according to how their observed indicator pattern departs from that demographically adjusted expectation. In this sense the PMM approach is a measurement model rather than a prediction model.
 </div>
 
 ## How our is similar to LDA, ML

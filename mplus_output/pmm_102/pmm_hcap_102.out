@@ -1,6 +1,6 @@
-Mplus VERSION 8.11 (Mac)
+Mplus VERSION 9 (Mac)
 MUTHEN & MUTHEN
-11/20/2025  12:41 PM
+03/24/2026   4:57 PM
 
 INPUT INSTRUCTIONS
 
@@ -12,7 +12,6 @@ INPUT INSTRUCTIONS
     x7: school years
   DATA:
   FILE = "pmm_hcap_102_836a6b4075b173679694e40918ff98ec.dat";
-
   VARIABLE:
   NAMES = id vs1hcapdxeap HCAP16WGTR STRATUM SECU_mplus vdori vdlfl1z vdlfl2 vdlfl3
        vdwdimmz vdwddelz vdexf7z vdsevens vdcount x1 x2 x3 x4 x5 x6 x7 x1x4 x1x5 x1x6
@@ -349,7 +348,7 @@ Optimization Specifications for the EM Algorithm
     Relative loglikelihood change                        0.100D-05
     Derivative                                           0.100D-02
 Optimization Specifications for the M step of the EM Algorithm for
-Categorical Latent variables
+Categorical Latent Variables
   Number of M step iterations                                    1
   M step convergence criterion                           0.100D-02
   Basis for M step termination                           ITERATION
@@ -973,6 +972,20 @@ UNIVARIATE SAMPLE STATISTICS
             3496.000       0.844      31.745       5.000    1.09%       0.000      0.000
      X6X7                 -0.225      -4.830     -12.000    0.57%       0.000      0.000      0.000
             3496.000       2.185      29.540       5.000    0.31%       0.000      0.000
+
+
+     VIF (VARIANCE INFLATION FACTOR) FOR EXPLORING MULTICOLLINEARITY OF INDEPENDENT VARIABLES
+
+     Variable        VIF       Variable        VIF       Variable        VIF
+
+     X1            19.664      X2           147.720      X3            94.692
+     X4             2.621      X5             3.772      X6             3.550
+     X7             4.995      X1X4          20.179      X1X5           8.242
+     X1X6           8.959      X1X7          13.203      X2X4         158.036
+     X2X5          49.085      X2X6          62.914      X2X7          85.087
+     X3X4          99.874      X3X5          28.496      X3X6          37.816
+     X3X7          47.006      X4X5           3.456      X4X6           3.285
+     X4X7           2.986      X5X7           1.393      X6X7           2.225
 
 RANDOM STARTS RESULTS RANKED FROM THE BEST TO THE WORST LOGLIKELIHOOD VALUES
 
@@ -1990,6 +2003,75 @@ QUALITY OF NUMERICAL RESULTS
        (ratio of smallest to largest eigenvalue)
 
 
+LATENT CLASS INDICATOR MEANS AND PROBABILITIES FOR EACH LATENT CLASS
+
+     MEAN/PROBABILITY PROFILES FOR CG
+                       Latent class
+                     1      2      3
+     VDORI
+       Category 1  0.005  0.019  0.075
+       Category 2  0.006  0.021  0.066
+       Category 3  0.020  0.055  0.132
+       Category 4  0.141  0.260  0.353
+       Category 5  0.828  0.646  0.374
+     VDLFL2
+       Category 1  0.002  0.025  0.070
+       Category 2  0.024  0.109  0.275
+       Category 3  0.974  0.866  0.655
+     VDLFL3
+       Category 1  0.014  0.048  0.135
+       Category 2  0.217  0.390  0.495
+       Category 3  0.769  0.561  0.370
+     VDSEVENS
+       Category 1  0.047  0.126  0.317
+       Category 2  0.077  0.142  0.203
+       Category 3  0.070  0.104  0.109
+       Category 4  0.113  0.137  0.115
+       Category 5  0.187  0.175  0.114
+       Category 6  0.505  0.316  0.142
+     VDCOUNT
+       Category 1  0.038  0.103  0.225
+       Category 2  0.962  0.897  0.775
+     NPG014
+       Category 1  0.918  0.828  0.651
+       Category 2  0.082  0.172  0.349
+     NPG021
+       Category 1  0.954  0.856  0.646
+       Category 2  0.046  0.144  0.354
+     NPG023
+       Category 1  0.983  0.920  0.792
+       Category 2  0.017  0.080  0.208
+     NPG030
+       Category 1  0.958  0.883  0.779
+       Category 2  0.042  0.117  0.221
+     NPG040
+       Category 1  0.917  0.752  0.568
+       Category 2  0.083  0.248  0.432
+     NPG041
+       Category 1  0.967  0.884  0.623
+       Category 2  0.033  0.116  0.377
+     NPG044
+       Category 1  0.949  0.826  0.644
+       Category 2  0.051  0.174  0.356
+     NPG047
+       Category 1  0.982  0.895  0.705
+       Category 2  0.018  0.105  0.295
+     NPG050
+       Category 1  0.981  0.908  0.722
+       Category 2  0.019  0.092  0.278
+     NPG059
+       Category 1  0.977  0.873  0.672
+       Category 2  0.023  0.127  0.328
+     PD102
+       Category 1  0.015  0.022  0.042
+       Category 2  0.750  0.663  0.610
+       Category 3  0.235  0.315  0.349
+     VDLFL1Z       0.193  0.150  0.101
+     VDWDIMMZ      0.555  0.451  0.327
+     VDWDDELZ      0.461  0.340  0.184
+     VDEXF7Z       0.659  0.557  0.425
+
+
 RESULTS IN PROBABILITY SCALE
 
                     Estimate
@@ -2178,6 +2260,102 @@ Latent Class 3 (3)
     Category 3         0.349
 
 
+EQUALITY TESTS OF INTERCEPTS/THRESHOLDS ACROSS THE LATENT CLASSES
+
+                    Chi-Square     P-Value   Degrees of Freedom
+
+
+NPG014
+  Overall test        186.886      0.000        2
+  Class 1 vs. 2        36.469      0.000        1
+  Class 1 vs. 3       166.760      0.000        1
+  Class 2 vs. 3        26.377      0.000        1
+
+NPG021
+  Overall test        169.435      0.000        2
+  Class 1 vs. 2        62.886      0.000        1
+  Class 1 vs. 3       167.124      0.000        1
+  Class 2 vs. 3        46.522      0.000        1
+
+NPG023
+  Overall test        126.804      0.000        2
+  Class 1 vs. 2        62.053      0.000        1
+  Class 1 vs. 3       116.220      0.000        1
+  Class 2 vs. 3        21.413      0.000        1
+
+NPG030
+  Overall test        116.227      0.000        2
+  Class 1 vs. 2        43.595      0.000        1
+  Class 1 vs. 3        92.712      0.000        1
+  Class 2 vs. 3        10.691      0.001        1
+
+NPG040
+  Overall test        188.767      0.000        2
+  Class 1 vs. 2       104.451      0.000        1
+  Class 1 vs. 3       146.604      0.000        1
+  Class 2 vs. 3        21.853      0.000        1
+
+NPG041
+  Overall test        140.675      0.000        2
+  Class 1 vs. 2        50.735      0.000        1
+  Class 1 vs. 3       140.172      0.000        1
+  Class 2 vs. 3        53.792      0.000        1
+
+NPG044
+  Overall test        184.353      0.000        2
+  Class 1 vs. 2       103.868      0.000        1
+  Class 1 vs. 3       157.454      0.000        1
+  Class 2 vs. 3        30.416      0.000        1
+
+NPG047
+  Overall test        295.532      0.000        2
+  Class 1 vs. 2       128.085      0.000        1
+  Class 1 vs. 3       283.774      0.000        1
+  Class 2 vs. 3        51.118      0.000        1
+
+NPG050
+  Overall test        180.968      0.000        2
+  Class 1 vs. 2        41.686      0.000        1
+  Class 1 vs. 3       171.334      0.000        1
+  Class 2 vs. 3        44.730      0.000        1
+
+NPG059
+  Overall test        225.114      0.000        2
+  Class 1 vs. 2       107.677      0.000        1
+  Class 1 vs. 3       216.307      0.000        1
+  Class 2 vs. 3        43.136      0.000        1
+
+PD102
+  Overall test         26.605      0.000        4
+  Class 1 vs. 2        16.288      0.000        2
+  Class 1 vs. 3        15.191      0.001        2
+  Class 2 vs. 3         2.857      0.240        2
+
+VDLFL1Z
+  Overall test          0.000      1.000        2
+  Class 1 vs. 2         0.000      1.000        1
+  Class 1 vs. 3         0.000      1.000        1
+  Class 2 vs. 3         0.000      1.000        1
+
+VDWDIMMZ
+  Overall test          0.000      1.000        2
+  Class 1 vs. 2         0.000      1.000        1
+  Class 1 vs. 3         0.000      1.000        1
+  Class 2 vs. 3         0.000      1.000        1
+
+VDWDDELZ
+  Overall test          0.000      1.000        2
+  Class 1 vs. 2         0.000      1.000        1
+  Class 1 vs. 3         0.000      1.000        1
+  Class 2 vs. 3         0.000      1.000        1
+
+VDEXF7Z
+  Overall test          0.000      1.000        2
+  Class 1 vs. 2         0.000      1.000        1
+  Class 1 vs. 3         0.000      1.000        1
+  Class 2 vs. 3         0.000      1.000        1
+
+
 LATENT CLASS INDICATOR ODDS RATIOS FOR THE LATENT CLASSES
 
                                                 95% C.I.
@@ -2319,7 +2497,7 @@ Latent Class 2 Compared to Latent Class 3
     Category > 2       0.857      0.156      0.599      1.225
 
 
-LOGISTIC REGRESSION ODDS RATIO RESULTS
+LOGISTIC REGRESSION ODDS RATIO RESULTS FOR OBSERVED VARIABLES
 
                                                 95% C.I.
                     Estimate       S.E.  Lower 2.5% Upper 2.5%
@@ -5594,6 +5772,10 @@ Latent Class 3 (3)
     VDWDDELZ           0.483      0.026     18.787      0.000
     VDEXF7Z            0.585      0.023     25.494      0.000
 
+Available post-processing tools
+
+  Conditional probabilities for the latent class indicators
+  Conditional probabilities for the latent class variable
 
 SAVEDATA INFORMATION
 
@@ -5614,9 +5796,9 @@ SAVEDATA INFORMATION
     Standardized Model Results
     R-Square
 
-     Beginning Time:  12:41:27
-        Ending Time:  12:44:35
-       Elapsed Time:  00:03:08
+     Beginning Time:  16:57:09
+        Ending Time:  17:01:23
+       Elapsed Time:  00:04:14
 
 
 
@@ -5629,4 +5811,4 @@ Fax: (310) 391-8971
 Web: www.StatModel.com
 Support: Support@StatModel.com
 
-Copyright (c) 1998-2024 Muthen & Muthen
+Copyright (c) 1998-2025 Muthen & Muthen

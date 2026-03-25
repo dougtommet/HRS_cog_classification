@@ -93,7 +93,9 @@ kappa_gt <- function(k) {
 {{< include PMM_100_pmm_text.qmd >}}
 
 {{< include PMM_103_calibration_model.qmd >}}
-{{< include PMM_102_calibration_model.qmd >}}
+<!--{{< include PMM_102_calibration_model.qmd >}}-->
+{{< include PMM_110_Comparison_of_Consensus_Langa_Weir.qmd >}}
+{{< include PMM_112_Margins.qmd >}}
 
 {{< include PMM_888_References.qmd >}}
 

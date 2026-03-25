@@ -24,7 +24,7 @@ if (identical(mode, "render-qmd")) {
   rendered_output <- here::here("R", "tmp_control.html")
   final_output <- here::here(
     "Reports",
-    stringr::str_c("tmp_consensus_sample_comparison_", Sys.Date(), ".html")
+    stringr::str_c("tmp_pmm_110_comparison_", Sys.Date(), ".html")
   )
 
   quarto::quarto_render(render_target, output_format = "html")

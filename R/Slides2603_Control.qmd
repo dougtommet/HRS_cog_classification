@@ -57,5 +57,6 @@ invisible(
 {{< include Slides2603_020_Structure.qmd >}}
 {{< include Slides2603_030_Covariate-adjustment.qmd >}}
 {{< include Slides2603_040_Results.qmd >}}
+{{< include Slides2603_042_margins.qmd >}}
 {{< include Slides2603_060_Comparison_Tables.qmd >}}
 {{< include Slides2603_070_Conclusion.qmd >}}

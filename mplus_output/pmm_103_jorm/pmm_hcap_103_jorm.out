@@ -1,6 +1,6 @@
-Mplus VERSION 8.11 (Mac)
+Mplus VERSION 9 (Mac)
 MUTHEN & MUTHEN
-03/23/2026  12:08 PM
+03/25/2026   4:06 AM
 
 INPUT INSTRUCTIONS
 
@@ -12,7 +12,6 @@ INPUT INSTRUCTIONS
     x7: school years
   DATA:
   FILE = "pmm_hcap_103_jorm_65d87be91693351096bf75742f5391f5.dat";
-
   VARIABLE:
   NAMES = id vs1hcapdxeap HCAP16WGTR STRATUM SECU_mplus nPG014 nPG021 nPG023 nPG030
        nPG040 nPG041 nPG044 nPG047 nPG050 nPG059 jorm;
@@ -108,7 +107,7 @@ Optimization Specifications for the EM Algorithm
     Relative loglikelihood change                        0.100D-05
     Derivative                                           0.100D-02
 Optimization Specifications for the M step of the EM Algorithm for
-Categorical Latent variables
+Categorical Latent Variables
   Number of M step iterations                                    1
   M step convergence criterion                           0.100D-02
   Basis for M step termination                           ITERATION
@@ -517,6 +516,44 @@ QUALITY OF NUMERICAL RESULTS
        (ratio of smallest to largest eigenvalue)
 
 
+LATENT CLASS INDICATOR MEANS AND PROBABILITIES FOR EACH LATENT CLASS
+
+     MEAN/PROBABILITY PROFILES FOR CG
+                       Latent class
+                     1      2      3
+     NPG014
+       Category 1  0.861  0.472  0.297
+       Category 2  0.139  0.528  0.703
+     NPG021
+       Category 1  0.910  0.435  0.243
+       Category 2  0.090  0.565  0.757
+     NPG023
+       Category 1  0.940  0.642  0.524
+       Category 2  0.060  0.358  0.476
+     NPG030
+       Category 1  0.908  0.551  0.513
+       Category 2  0.092  0.449  0.487
+     NPG040
+       Category 1  0.829  0.362  0.109
+       Category 2  0.171  0.638  0.891
+     NPG041
+       Category 1  0.929  0.425  0.141
+       Category 2  0.071  0.575  0.859
+     NPG044
+       Category 1  0.903  0.392  0.198
+       Category 2  0.097  0.608  0.802
+     NPG047
+       Category 1  0.920  0.542  0.211
+       Category 2  0.080  0.458  0.789
+     NPG050
+       Category 1  0.922  0.567  0.328
+       Category 2  0.078  0.433  0.672
+     NPG059
+       Category 1  0.976  0.491  0.161
+       Category 2  0.024  0.509  0.839
+     JORM          3.074  3.666  4.186
+
+
 RESULTS IN PROBABILITY SCALE
 
                                                     Two-Tailed
@@ -620,6 +657,78 @@ Latent Class 3 (3)
  NPG059
     Category 1         0.161      0.057      2.834      0.005
     Category 2         0.839      0.057     14.776      0.000
+
+
+EQUALITY TESTS OF MEANS/PROBABILITIES ACROSS THE LATENT CLASSES
+
+                    Chi-Square     P-Value   Degrees of Freedom
+
+
+NPG014
+  Overall test         25.686      0.000        2
+  Class 1 vs. 2        12.675      0.000        1
+  Class 1 vs. 3        25.609      0.000        1
+  Class 2 vs. 3         2.887      0.089        1
+
+NPG021
+  Overall test         34.340      0.000        2
+  Class 1 vs. 2        16.880      0.000        1
+  Class 1 vs. 3        34.308      0.000        1
+  Class 2 vs. 3         3.742      0.053        1
+
+NPG023
+  Overall test         11.497      0.003        2
+  Class 1 vs. 2         7.303      0.007        1
+  Class 1 vs. 3        11.309      0.001        1
+  Class 2 vs. 3         1.405      0.236        1
+
+NPG030
+  Overall test         15.358      0.000        2
+  Class 1 vs. 2        10.762      0.001        1
+  Class 1 vs. 3        15.348      0.000        1
+  Class 2 vs. 3         0.213      0.645        1
+
+NPG040
+  Overall test         29.306      0.000        2
+  Class 1 vs. 2        12.002      0.001        1
+  Class 1 vs. 3        28.268      0.000        1
+  Class 2 vs. 3         5.263      0.022        1
+
+NPG041
+  Overall test         25.314      0.000        2
+  Class 1 vs. 2         9.330      0.002        1
+  Class 1 vs. 3        23.429      0.000        1
+  Class 2 vs. 3         6.666      0.010        1
+
+NPG044
+  Overall test         22.389      0.000        2
+  Class 1 vs. 2        12.653      0.000        1
+  Class 1 vs. 3        22.389      0.000        1
+  Class 2 vs. 3         3.258      0.071        1
+
+NPG047
+  Overall test         30.889      0.000        2
+  Class 1 vs. 2         9.244      0.002        1
+  Class 1 vs. 3        27.131      0.000        1
+  Class 2 vs. 3        10.465      0.001        1
+
+NPG050
+  Overall test         25.425      0.000        2
+  Class 1 vs. 2         9.686      0.002        1
+  Class 1 vs. 3        23.183      0.000        1
+  Class 2 vs. 3         5.826      0.016        1
+
+NPG059
+  Overall test         46.085      0.000        2
+  Class 1 vs. 2        27.966      0.000        1
+  Class 1 vs. 3        45.877      0.000        1
+  Class 2 vs. 3         8.562      0.003        1
+
+JORM
+  Overall test        146.990      0.000        2
+  Class 1 vs. 2        21.531      0.000        1
+  Class 1 vs. 3       111.732      0.000        1
+  Class 2 vs. 3         8.832      0.003        1
 
 
 LATENT CLASS INDICATOR ODDS RATIOS FOR THE LATENT CLASSES
@@ -915,9 +1024,9 @@ SAVEDATA INFORMATION
     Latent Class Indicator Odds Ratios for the Latent Classes
     Standardized Model Results
 
-     Beginning Time:  12:08:14
-        Ending Time:  12:08:15
-       Elapsed Time:  00:00:01
+     Beginning Time:  04:06:04
+        Ending Time:  04:06:06
+       Elapsed Time:  00:00:02
 
 
 
@@ -930,4 +1039,4 @@ Fax: (310) 391-8971
 Web: www.StatModel.com
 Support: Support@StatModel.com
 
-Copyright (c) 1998-2024 Muthen & Muthen
+Copyright (c) 1998-2025 Muthen & Muthen

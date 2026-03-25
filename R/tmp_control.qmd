@@ -1,5 +1,5 @@
 ---
-title: "Temporary Consensus Sample Comparison"
+title: "Temporary PMM 110 Comparison"
 date: '`r Sys.Date()`'
 format:
   html:
@@ -12,5 +12,10 @@ execute:
 editor_options:
   chunk_output_type: console
 ---
+
+```{r}
+source(here::here("R", "001-libraries.R"))
+source(here::here("R", "002-folder_paths.R"))
+```
 
 {{< include PMM_110_Comparison_of_Consensus_Langa_Weir.qmd >}}

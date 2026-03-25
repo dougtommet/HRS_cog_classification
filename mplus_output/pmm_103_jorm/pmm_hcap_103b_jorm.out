@@ -1,6 +1,6 @@
-Mplus VERSION 8.11 (Mac)
+Mplus VERSION 9 (Mac)
 MUTHEN & MUTHEN
-03/23/2026  12:08 PM
+03/25/2026   4:06 AM
 
 INPUT INSTRUCTIONS
 
@@ -12,7 +12,6 @@ INPUT INSTRUCTIONS
     x7: school years
   DATA:
   FILE = "pmm_hcap_103b_jorm_04f6b98cc467dedf865ff161a76a50c1.dat";
-
   VARIABLE:
   NAMES = id HCAP16WGTR STRATUM SECU_mplus nPG014 nPG021 nPG023 nPG030 nPG040 nPG041
        nPG044 nPG047 nPG050 nPG059 jorm;
@@ -143,7 +142,7 @@ Optimization Specifications for the EM Algorithm
     Relative loglikelihood change                        0.100D-05
     Derivative                                           0.100D-02
 Optimization Specifications for the M step of the EM Algorithm for
-Categorical Latent variables
+Categorical Latent Variables
   Number of M step iterations                                    1
   M step convergence criterion                           0.100D-02
   Basis for M step termination                           ITERATION
@@ -611,6 +610,44 @@ QUALITY OF NUMERICAL RESULTS
        (ratio of smallest to largest eigenvalue)
 
 
+LATENT CLASS INDICATOR MEANS AND PROBABILITIES FOR EACH LATENT CLASS
+
+     MEAN/PROBABILITY PROFILES FOR C
+                       Latent class
+                     1      2      3
+     NPG014
+       Category 1  0.861  0.472  0.297
+       Category 2  0.139  0.528  0.703
+     NPG021
+       Category 1  0.910  0.435  0.243
+       Category 2  0.090  0.565  0.757
+     NPG023
+       Category 1  0.940  0.642  0.524
+       Category 2  0.060  0.358  0.476
+     NPG030
+       Category 1  0.908  0.551  0.512
+       Category 2  0.092  0.449  0.488
+     NPG040
+       Category 1  0.829  0.362  0.109
+       Category 2  0.171  0.638  0.891
+     NPG041
+       Category 1  0.929  0.425  0.141
+       Category 2  0.071  0.575  0.859
+     NPG044
+       Category 1  0.903  0.392  0.198
+       Category 2  0.097  0.608  0.802
+     NPG047
+       Category 1  0.920  0.542  0.211
+       Category 2  0.080  0.458  0.789
+     NPG050
+       Category 1  0.922  0.567  0.328
+       Category 2  0.078  0.433  0.672
+     NPG059
+       Category 1  0.976  0.491  0.161
+       Category 2  0.024  0.509  0.839
+     JORM          0.000  0.000  0.000
+
+
 RESULTS IN PROBABILITY SCALE
 
                                                     Two-Tailed
@@ -714,6 +751,18 @@ Latent Class 3
  NPG059
     Category 1         0.161      0.000      0.000      1.000
     Category 2         0.839      0.000      0.000      1.000
+
+
+EQUALITY TESTS OF MEANS/PROBABILITIES ACROSS THE LATENT CLASSES
+
+                    Chi-Square     P-Value   Degrees of Freedom
+
+
+JORM
+  Overall test   62086398.920      0.000        2
+  Class 1 vs. 2  ************      0.000        1
+  Class 1 vs. 3  ************      0.000        1
+  Class 2 vs. 3  ************      0.000        1
 
 
 LATENT CLASS INDICATOR ODDS RATIOS FOR THE LATENT CLASSES
@@ -1014,7 +1063,7 @@ SAVEDATA INFORMATION
     CPROB1         F10.3
     CPROB2         F10.3
     CPROB3         F10.3
-    C              F10.3
+    MLCC           F10.3
     HCAP16WG       F10.3
     ID             I10
     STRATUM        I4
@@ -1042,9 +1091,9 @@ SAVEDATA INFORMATION
     Latent Class Indicator Odds Ratios for the Latent Classes
     Standardized Model Results
 
-     Beginning Time:  12:08:17
-        Ending Time:  12:08:18
-       Elapsed Time:  00:00:01
+     Beginning Time:  04:06:06
+        Ending Time:  04:06:08
+       Elapsed Time:  00:00:02
 
 
 
@@ -1057,4 +1106,4 @@ Fax: (310) 391-8971
 Web: www.StatModel.com
 Support: Support@StatModel.com
 
-Copyright (c) 1998-2024 Muthen & Muthen
+Copyright (c) 1998-2025 Muthen & Muthen
