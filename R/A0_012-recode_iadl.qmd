@@ -1,0 +1,178 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+hrs16_iadl <- readRDS(here::here("R_objects", "A0_012_hrs16_iadl.rds"))
+
+```
+
+## ADLs/IADLs
+
+This script reads the ADL/IADL data in `A0_009_hrs16_iadl.rds` and recodes raw HRS response codes into binary impairment indicators (1 = impaired, 0 = not impaired). A sum score across all items is then computed.
+
+### General Response Code Mapping
+
+All items share the same base recoding scheme for their raw response codes:
+
+| Raw Code | Meaning                  | Recoded Value    |
+|----------|--------------------------|------------------|
+| 1        | Yes, has difficulty      | 1 (Impaired)     |
+| 5        | No difficulty            | 0 (Not impaired) |
+| 6        | Can't do / doesn't do    | 1 (Impaired)     |
+| 7        | Don't know               | `NA`             |
+| 8        | Refused / not applicable | `NA`             |
+| 9        | Not asked / volunteered  | 1 (Impaired)     |
+
+### Additional Routing Rules
+
+Several items have special routing logic tied to skip patterns in the HRS questionnaire.
+
+**`PG013` routing (items `rPG014`, `rPG021`, `rPG023`, `rPG030`):** Respondents with `PG013 == 0` (no difficulties reported on the screener) who are otherwise missing on a given item are recoded to **0** (not impaired), reflecting the intended skip logic.
+
+**`PG014 == 5` routing (items `rPG021`, `rPG023`, `rPG030`):** If dressing (`PG014`) was not impaired and subsequent items are missing or coded 7/8, those items are recoded to **0**, again reflecting skip routing.
+
+**`rPG050` — Difficulty Taking Medications:** This item has an additional follow-up question (`PG051`) that is used when `PG050 == 7` (don't know):
+
+| `PG050` | `PG051` | Recoded `rPG050` |
+|---------|---------|------------------|
+| 7       | 1       | 1 (Impaired)     |
+| 7       | 5       | 0 (Not impaired) |
+| 7       | 8       | `NA`             |
+
+------------------------------------------------------------------------
+
+## Derived Items
+
+### Binary Impairment Indicators
+
+| Variable | Label                               | Type |
+|----------|-------------------------------------|------|
+| `rPG014` | ADL: Difficulty Dressing            | ADL  |
+| `rPG021` | ADL: Difficulty Bathing             | ADL  |
+| `rPG023` | ADL: Difficulty Eating              | ADL  |
+| `rPG030` | ADL: Difficulty Using Toilet        | ADL  |
+| `rPG040` | IADL: Difficulty Using Maps         | IADL |
+| `rPG041` | IADL: Difficulty Meal Prep          | IADL |
+| `rPG044` | IADL: Difficulty Grocery Shopping   | IADL |
+| `rPG047` | IADL: Difficulty Making Phone Calls | IADL |
+| `rPG050` | IADL: Difficulty Taking Medications | IADL |
+| `rPG059` | IADL: Difficulty Managing Money     | IADL |
+
+All indicators are labelled: `1 = "Impaired"`, `0 = "Not impaired"`.
+
+
+```{r}
+#| tbl-cap: "ADL: Difficulty Dressing recoding"
+#| label: tbl-dressing
+
+hrs16_iadl %>%
+  QSPtools::checkvar(rPG014, PG014) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "ADL: Difficulty Bathing recoding"
+#| label: tbl-bathing
+
+hrs16_iadl %>%
+  QSPtools::checkvar(rPG021, PG021) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "ADL: Difficulty Eating recoding"
+#| label: tbl-eating
+
+hrs16_iadl %>%
+  QSPtools::checkvar(rPG023, PG023) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "ADL: Difficulty Using Toilet recoding"
+#| label: tbl-toilet
+
+hrs16_iadl %>%
+  QSPtools::checkvar(rPG030, PG030) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "ADL: Difficulty Using Maps recoding"
+#| label: tbl-maps
+
+hrs16_iadl %>%
+  QSPtools::checkvar(rPG040, PG040) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "IADL: Difficulty Meal Prep recoding"
+#| label: tbl-meals
+
+hrs16_iadl %>%
+  QSPtools::checkvar(rPG041, PG041) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "IADL: Difficulty Grocery Shopping recoding"
+#| label: tbl-grocery
+
+hrs16_iadl %>%
+  QSPtools::checkvar(rPG044, PG044) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "IADL: Difficulty Making Phone Calls recoding"
+#| label: tbl-phone
+
+hrs16_iadl %>%
+  QSPtools::checkvar(rPG047, PG047) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "IADL: Difficulty Taking Meds recoding"
+#| label: tbl-meds
+
+hrs16_iadl %>%
+  QSPtools::checkvar(rPG050, PG050, PG051) %>%
+  gt::gt() 
+```
+
+```{r}
+#| tbl-cap: "IADL: Difficulty Managing Money Calls recoding"
+#| label: tbl-money
+
+hrs16_iadl %>%
+  QSPtools::checkvar(rPG059, PG059) %>%
+  gt::gt()
+
+```
+
+```{r}
+#| tbl-cap: "Descriptive statistics of recoded functional impairment items"
+#| label: tbl-desc-iadls
+
+hrs16_iadl %>%
+  select(starts_with("r"), iadl_imp) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary(
+    type = c(iadl_imp) ~ "categorical"
+  ) 
+
+
+```
+
+
+### Sum Score (`iadl_imp`)
+
+A row-wise sum of all 10 binary indicators is computed, yielding a score from 0 to 10 representing the total number of ADL/IADL domains with impairment. Missing values on individual items are treated as 0 in the sum. 
+
+
+

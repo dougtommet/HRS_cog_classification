@@ -1,0 +1,51 @@
+
+
+
+
+## Consensus sample weights
+
+This script reads the tracker demographics from `A0_011` and constructs two variables needed for analyses that use the **HCAP consensus panel diagnosis** (`consensuspaneldx`) as an outcome:
+
+1. **`inConsensus`** — a binary subpopulation membership indicator
+2. **`HCAP16WGTR_consensus`** — a sampling weight adjusted for the probability of selection into the consensus panel subsample and normalized to sum to 100
+
+The output is saved as `A0_021_tracker_demo.rds`.
+
+
+### 1. Consensus Panel Sampling Weight (`HCAP16WGTR_consensus`)
+
+The base HCAP sampling weight (`HCAP16WGTR`) is adjusted for the **inverse probability of selection** into the consensus panel subsample:
+
+$$
+w_{\text{consensus}} = \text{HCAP16WGTR} \times \frac{1}{\text{samplingP}}
+$$
+
+where `samplingP` is the probability that a given HCAP respondent was selected for consensus panel review. This inverse-probability weighting ensures that the consensus subsample is representative of the full HCAP-eligible population.
+
+#### Normalization
+
+The weight is then **normalized to sum to 100** among respondents with `inConsensus == 1`:
+
+$$
+w_{\text{consensus, normalized}} = \frac{w_{\text{consensus}}}{\sum_{i \in \text{Consensus}} w_{\text{consensus},i}} \times 100
+$$
+
+#### Missing Weight Handling
+
+Respondents who are in HCAP (`inHCAP == 1`) but have a missing `HCAP16WGTR_consensus` — which occurs when `samplingP` is missing, as in informant-only cases — have their weight set to **0** rather than left as `NA`.
+
+
+### 2. Consensus Subpopulation Indicator (`inConsensus`)
+
+A three-valued indicator is derived to flag membership in the consensus panel subsample, defined only within the HCAP sample:
+
+| Condition | `inConsensus` |
+|---|---|
+| `inHCAP == 0` (not in HCAP) | `NA` |
+| `inHCAP == 1` AND `consensuspaneldx` is not missing | 1 |
+| `inHCAP == 1` AND `consensuspaneldx` is missing | 0 |
+
+Respondents outside HCAP receive `NA` rather than 0 to distinguish non-eligibility from non-selection.
+
+
+

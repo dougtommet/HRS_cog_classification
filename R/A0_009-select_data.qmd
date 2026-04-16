@@ -1,0 +1,120 @@
+
+# Data selection
+
+This section describes the data selection process. It starts with the seven data files described above, selects the analysis relevant variables from each data file, and then saves them as intermediate data files for later use.  
+
+
+## Input Data
+
+| Object | Source File | Description |
+|---|---|---|
+| `tracker` | `A0_005_tracker.rds` | HRS tracker file (sampling, demographics, weights) |
+| `h16a_r` | `A0_005_h16a_r.rds` | HRS 2016 Section A (household/respondent info) |
+| `h16d_r` | `A0_005_h16d_r.rds` | HRS 2016 Section D (cognition & function) |
+| `h16g_r` | `A0_005_h16g_r.rds` | HRS 2016 Section G (IADL) |
+| `normexcld` | `A0_005_normexcld.rds` | Normative exclusion flags |
+| `hrshcap` | `A0_005_hrshcap.rds` | HCAP clinical diagnosis & domain scores |
+| `hc16hp_r` | `A0_005_hc16hp_r.rds` | HCAP 2016 sampling weights |
+| `hcap_validation` | `A0_005_hcap_validation.rds` | HRS/HCAP validation subsample (N=50) |
+
+
+
+## Processing Steps
+
+### 1. Cognition (`hrs16_cog`)
+
+Variables are selected from `h16d_r` (HRS 2016 Section D) covering the major cognitive domains assessed in HRS:
+
+| Variable(s) | Domain |
+|---|---|
+| `PD174` | Immediate word recall (10-word list) |
+| `PD184` | Delayed word recall |
+| `PD151–PD154` | Serial 7s subtraction |
+| `PD124`, `PD129` | Date/president orientation |
+| `PD155–PD156` | Object naming |
+| `PD157–PD158` | Vocabulary |
+| `PD142–PD146` | Backwards counting |
+| `PD196`, `PD198` | Additional cognitive items |
+| `PNSSCORE` | Nurse/proxy cognitive summary score |
+
+After selection, normative exclusion flags from `normexcld` are joined by `HHID`/`PN` to identify respondents who should be excluded from normative cognitive scoring.
+
+
+### 2. HCAP Diagnosis & Domain Flags (`hrshcap`)
+
+Variables are selected from the HCAP dataset covering:
+
+- **Clinical diagnoses:** `vs1hcapdx` (primary), `vs1hcapdxeap` (expert adjudication panel)
+- **Domain-level impairment flags** (memory, executive function, language/fluency, visuospatial, orientation) across standard and EAP scoring
+- **Additional scales:** JORM informant report (`vs3jormsc_iflag`), Blessed scale (`vs3blessedsc_iflag`)
+
+
+
+### 3. HCAP Sampling Weight (`hc16hp_r`)
+
+`HCAP16WGTR` is retained alongside identifiers. 
+
+
+### 4. HCAP Validation Subsample (`hcap_validation`)
+
+Retains `samplingP` (sampling probability) and `consensuspaneldx` (consensus panel diagnosis) for the N=50 validation subsample. 
+
+
+### 5. Functional Impairment — ADL (`hrs16_func`)
+
+Variables are selected from `h16d_r` covering:
+
+- `PD101`, `PD102` — Functional difficulty summary items
+- `PD502`, `PD505-PD553` — Full battery of ADL/functional limitation items
+
+
+### 6. Functional Impairment — IADL (`hrs16_iadl`)
+
+Variables are selected from `h16g_r` covering:
+
+- `PG013` — Additional IADL item 
+- `PG014`, `PG021`, `PG023`, `PG030`, `PG040`, `PG041`. `PG044`. `PG047`. `PG050`, `PG051`, `PG059` (selected items) — Core IADL battery (meal prep, managing money, using telephone, etc.)
+
+
+### 7. Demographics & Sampling Weights (`tracker_demo`)
+
+Core demographic and design variables are drawn from two sources and then joined:
+
+**From `tracker`:**
+
+| Variable | Description |
+|---|---|
+| `SECU`, `STRATUM` | Complex survey design variables |
+| `PWGTR` | HRS person-level weight |
+| `HCAP16RESP` | HCAP 2016 response indicator |
+| `PIWTYPE` | Interview type |
+| `PAGE` | Age |
+| `PINSAMP`, `PIWWAVE`, `PIWYEAR` | Sample/wave/year indicators |
+| `PMARST` | Marital status |
+| `PNURSHM` | Nursing home residence |
+| `PPROXY` | Proxy interview flag |
+| `GENDER`, `HISPANIC`, `RACE` | Sex/race/ethnicity |
+| `SCHLYRS`, `DEGREE` | Education (years & degree) |
+| `BIRTHYR` | Birth year |
+
+**From `h16a_r`:** 
+
+`PA019` - Current age calculation
+
+The two files are merged together.
+
+
+## Output Data
+
+The following intermediate files are saved:
+
+| Object | Output File | Key Content |
+|---|---|---|
+| `hrs16_cog` | `A0_009_hrs16_cog.rds` | Cognitive test items + normative exclusion flags |
+| `hrs16_iadl` | `A0_009_hrs16_iadl.rds` | IADL items |
+| `hrs16_func` | `A0_009_hrs16_func.rds` | ADL/functional limitation items |
+| `tracker_demo` | `A0_009_tracker_demo.rds` | Demographics, weights, survey design variables |
+| `hrshcap` | `A0_009_hrshcap.rds` | HCAP diagnoses and domain impairment flags |
+| `hc16hp_r` | `A0_009_hc16hp_r.rds` | HCAP sampling weight |
+| `hcap_validation` | `A0_009_hcap_validation.rds` | HCAP validation subsample (N=50) |
+

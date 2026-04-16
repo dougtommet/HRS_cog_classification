@@ -1,0 +1,29 @@
+# Input data files
+
+The data files used in the analysis are:
+
+-   hc16hp_r.dta
+
+-   trk2022tr_r.dta
+
+-   H16A_R.dta
+
+-   H16C_R.dta
+
+-   H16D_R.dta
+
+-   H16G_R.dta Langa_Weir_Dementia_Classification/LangaWeir2020v2/cogfinalimp_9520wide.dta
+
+-   Dementia_Predicted_Probabilities_Files_Hurd/DementiaPredictedProbabilities/pdem_withvarnames.dta
+
+-   Predicted_Cognition_and_Dementia_Measure_Hudomiet/PredictedCognitionDementiaMeasures/Dementia_HRS_2000-2016_Basic_Release1_2m.dta
+
+-   normexcld.dta
+
+-   hrshcap.dta
+
+-   20240228-040.dta (HCAP validation)
+
+
+
+

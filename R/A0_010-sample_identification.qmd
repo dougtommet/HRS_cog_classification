@@ -1,0 +1,112 @@
+
+```{r}
+tracker_demo <- readRDS(here::here("R_objects", "A0_010_tracker_demo.rds"))
+
+```
+
+## Sample selection variables
+
+This script reads the tracker demographic file and two HCAP auxiliary files, joins them together, and derives a set of sample membership indicators, an age eligibility flag, a unique respondent ID, and a recoded survey cluster variable for use in Mplus. The output is saved as `A0_010_tracker_demo.rds`.
+
+
+#### `inHRS_16` — In HRS 2016 Core Interview
+
+A binary indicator for whether the respondent completed a core HRS 2016 interview, based on `PIWTYPE`:
+
+| `PIWTYPE` | `inHRS_16` |
+|---|---|
+| 1 (core interview) | 1 |
+| Any other value | 0 |
+
+```{r}
+#| tbl-cap: "In HRS 2016 indicator"
+QSPtools::checkvar(tracker_demo, inHRS_16, PIWTYPE) %>%
+  gt::gt()
+```
+
+### `nonzeroweight` — Positive Sampling Weight
+
+A binary indicator for whether the respondent has a positive HRS person-level weight (`PWGTR`):
+
+| Condition | `nonzeroweight` |
+|---|---|
+| `PWGTR` is missing | 0 |
+| `PWGTR > 0` | 1 |
+| `PWGTR == 0` | 0 |
+
+
+### `inHCAP` — In HCAP 2016
+
+A binary indicator for HCAP participation, based on `HCAP16RESP`:
+
+| `HCAP16RESP` | `inHCAP` | Notes |
+|---|---|---|
+| 1 | 1 | Informant only |
+| 2 | 1 | Respondent only |
+| 3 | 1 | Both respondent and informant |
+| 0 or other | 0 | No participation |
+
+```{r}
+#| tbl-cap: "In HCAP 2016 indicator"
+QSPtools::checkvar(tracker_demo, inHCAP, HCAP16RESP) %>%
+  gt::gt()
+```
+
+
+### `inSamplingFrame` — Weight and HCAP Membership Cross-Classification
+
+A four-category labelled variable summarizing the cross-classification of weight status and HCAP participation:
+
+| Value | Label | Condition |
+|---|---|---|
+| 1 | In HCAP, has weight | `nonzeroweight == 1` AND `inHCAP == 1` |
+| 2 | In HCAP, no weight | `nonzeroweight == 0` AND `inHCAP == 1` |
+| 3 | Has weight, not in HCAP | `nonzeroweight == 1` AND `inHCAP == 0` |
+| 4 | No weight, not in HCAP | `nonzeroweight == 0` AND `inHCAP == 0` |
+
+```{r}
+#| tbl-cap: "In the sampling frame indicator"
+QSPtools::checkvar(tracker_demo, inSamplingFrame, nonzeroweight, inHCAP) %>%
+  gt::gt()
+```
+
+### `age65up` — Age 65 or Older
+
+A binary eligibility indicator derived from self-reported age, with `PA019` (Section A age) taking priority over `PAGE` (tracker age):
+
+| Condition | `age65up` |
+|---|---|
+| `PA019 >= 65` | 1 |
+| `PA019 < 65` | 0 |
+| `PA019` missing AND `PAGE >= 65` | 1 |
+| `PA019` missing AND `PAGE < 65` | 0 |
+| `PA019` missing and `PAGE` missing | `NA` |
+
+```{r}
+#| tbl-cap: "Age 65+ indicator"
+QSPtools::checkvar(tracker_demo, age65up, PA019, PAGE) %>%
+  gt::gt()
+```
+
+### `id` — Unique Respondent Identifier
+
+A string identifier formed by concatenating `HHID` and `PN` with `str_c()`. Used as a row-level ID in Mplus analyses.
+
+
+### `SECU_mplus` — Survey Cluster Variable for Mplus
+
+A recoded cluster variable computed as:
+
+$$
+\text{SECU\_mplus} = 10 \times \text{STRATUM} + \text{SECU}
+$$
+
+This encoding creates a unique numeric identifier for each SECU-within-STRATUM combination in a format compatible with Mplus survey design specification.
+
+
+
+
+
+
+
+

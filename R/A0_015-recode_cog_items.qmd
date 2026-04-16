@@ -1,0 +1,174 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+hrs16_cog <- readRDS(here::here("R_objects", "A0_015_hrs16_cog.rds"))
+```
+
+## Cognitive Items
+
+This script reads the raw HRS 2016 cognitive items `A0_009A0_009_hrs16_cog.rds` and performs two operations:
+
+1. **Recodes individual cognitive test items** into binary correct/incorrect indicators or cleaned continuous scores
+2. **Constructs domain-level summary scores** by summing or combining item-level variables
+
+The output is saved as `A0_015_hrs16_cog.rds`.
+
+
+### 1. Item-Level Recoding
+
+#### Orientation to Time (`rPD151`–`rPD154`)
+
+Four date/time orientation items are each recoded to binary correct (1) / incorrect (0). Responses of don't know (8) and refuse (9) are scored as **incorrect (0)**.
+
+| Variable | Item | Source |
+|---|---|---|
+| `rPD151` | Month | PD151 |
+| `rPD152` | Day | PD152 |
+| `rPD153` | Year | PD153 |
+| `rPD154` | Day of week | PD154 |
+
+```{r}
+#| tbl-cap: "Month"
+hrs16_cog %>%
+  QSPtools::checkvar(rPD151, PD151) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "Day"
+hrs16_cog %>%
+  QSPtools::checkvar(rPD152, PD152) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "Year"
+hrs16_cog %>%
+  QSPtools::checkvar(rPD153, PD153) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "Day of week"
+hrs16_cog %>%
+  QSPtools::checkvar(rPD154, PD154) %>%
+  gt::gt()
+```
+
+#### Object & Person Naming (`rPD155`–`rPD158`)
+
+Four naming items recoded to binary correct (1) / incorrect (0). Don't know and refuse are scored as **incorrect (0)**.
+
+| Variable | Item | Source |
+|---|---|---|
+| `rPD155` | Scissors (object naming) | PD155 |
+| `rPD156` | Cactus (object naming) | PD156 |
+| `rPD157` | President (person naming) | PD157 |
+| `rPD158` | Vice-president (person naming) | PD158 |
+
+```{r}
+#| tbl-cap: "Object naming: Scissors"
+hrs16_cog %>%
+  QSPtools::checkvar(rPD155, PD155) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "Object naming: Cactus"
+hrs16_cog %>%
+  QSPtools::checkvar(rPD156, PD156) %>%
+  gt::gt()
+```
+
+#### Serial 7s Subtraction (`rPD142`–`rPD146`)
+
+Five sequential subtraction items. Each is scored correct (1) if the respondent's answer equals the correct value for that step; don't know (998), refuse (999), and any other non-missing, non-correct values are scored **incorrect (0)**.
+
+Correctness for steps 2–5 is evaluated **relative to the prior response** (i.e., the respondent's previous answer minus 7), not the expected absolute value — preserving credit for internally consistent sequences following an initial error.
+
+| Variable | Item | Correct Answer Rule |
+|---|---|---|
+| `rPD142` | Serial 7's — 1 | PD142 == 93 |
+| `rPD143` | Serial 7's — 2 | PD143 == PD142 − 7 |
+| `rPD144` | Serial 7's — 3 | PD144 == PD143 − 7 |
+| `rPD145` | Serial 7's — 4 | PD145 == PD144 − 7 |
+| `rPD146` | Serial 7's — 5 | PD146 == PD145 − 7 |
+
+
+```{r}
+#| tbl-cap: "Serial sevens"
+hrs16_cog %>%
+  QSPtools::checkvar(vdsevens, rPD142, rPD143, rPD144, rPD145, rPD146) %>%
+  gt::gt()
+```
+
+#### Animal Naming Errors (`rPD198`)
+
+`PD198` records the number of animal naming errors. Two special cases are handled before the score is used:
+
+- `PD198 == 98` (coded as missing in HRS) → recoded to **1** (the median error value)
+- `NA` → recoded to **1** (median imputation)
+
+All other values are retained as-is.
+
+
+#### Count Backwards from 20 (`vdcount`)
+
+A binary indicator for whether the respondent correctly counted backwards from 20, allowing for two tries:
+
+| Condition | `vdcount` |
+|---|---|
+| First try correct (`PD124 == 1`) OR second try correct (`PD129 == 1`) | 1 |
+| First try incorrect (`PD124 == 5`) or wants to restart (6) or refuses (9) | 0 |
+| Second try incorrect (`PD129 == 5`) or refuses (9) — after failing first try | 1 |
+
+> Note: A failed second try is scored as **1** (partial credit), consistent with the HRS scoring convention for this item.
+
+```{r}
+#| tbl-cap: "Count backwards from twenty"
+hrs16_cog %>%
+  QSPtools::checkvar(vdcount, PD124, PD129) %>%
+  gt::gt()
+```
+
+#### Word recall
+
+Word recall items are carried forward with minimal transformation:
+
+| Variable | Label | Source | Notes |
+|---|---|---|---|
+| `vdwdimm` | Word recall — Immediate | PD174 | Direct assignment |
+| `vdwddel` | Word recall — Delayed | PD184 | Direct assignment |
+
+
+#### Number series
+
+Number series item is carried forward with minimal transformation:
+
+| Variable | Label | Source | Notes |
+|---|---|---|---|
+| `vdexf7` | Number series | PNSSCORE | Codes 996, 997, 999 set to `NA` |
+
+
+
+
+### 2. Domain-Level Summary Scores
+
+All summaries are row-wise. If **all** component items are missing, the score is set to `NA` rather than 0.
+
+| Score | Label | Components | Range |
+|---|---|---|---|
+| `vdori` | Orientation to Time | `rPD151`–`rPD154` | 0–4 |
+| `vdlfl2` | Object naming | `rPD155`, `rPD156` | 0–2 |
+| `vdlfl3` | Person naming | `rPD157`, `rPD158` | 0–2 |
+| `vdsevens` | Serial 7's — number correct | `rPD142`–`rPD146` | 0–5 |
+| `vdlfl1` | Animal naming (correct − errors) | `PD196 − rPD198` | ≥ 0 (floored at 0) |
+
+`vdlfl1` is floored at 0: if the number of errors exceeds the number of correct animals, the score is set to 0 rather than going negative.
+
+
+

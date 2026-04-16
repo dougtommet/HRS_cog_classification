@@ -1,0 +1,39 @@
+
+
+
+## Rescaling
+
+This script reads the recoded cognitive data from `A0_015` and applies a **smoothed min-max normalization** to a subset of cognitive domain scores, producing scaled versions (suffix `z`) bounded approximately in [0, 1]. The output is saved as `A0_016_hrs16_cog.rds`.
+
+
+### Normalization Function (`minmax`)
+
+A custom smoothed min-max transformation is applied rather than a standard 0–1 rescaling. The formula is:
+
+$$
+\tilde{x} = \frac{x - \min(x) + c_n}{\max(x) - \min(x) + c_d}
+$$
+
+where the smoothing constants are derived from the sample standard deviation:
+
+$$
+c_n = \frac{5}{8000} \cdot \text{SD}(x), \qquad c_d = \frac{10}{8000} \cdot \text{SD}(x)
+$$
+
+The small additive constants $c_n$ (numerator) and $c_d$ (denominator) prevent the transformed values from collapsing exactly to 0 or 1 at the observed minimum and maximum, which is useful for downstream models (e.g., those involving log or logit links). Both constants scale with the standard deviation of the variable, keeping the adjustment proportionate across scores with different dispersions.
+
+
+## Variables Transformed
+
+Four cognitive scores receive the `minmax` transformation:
+
+| Input Variable | Output Variable | Label |
+|---|---|---|
+| `vdlfl1` | `vdlfl1z` | Animal naming (correct − errors) |
+| `vdwdimm` | `vdwdimmz` | Word recall — Immediate |
+| `vdwddel` | `vdwddelz` | Word recall — Delayed |
+| `vdexf7` | `vdexf7z` | Number series |
+
+
+
+

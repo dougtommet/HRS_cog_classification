@@ -1,0 +1,73 @@
+## Informant & self-report of impairment
+
+This script reads the functional data selected in `A0_009_hrs16_func.rds` and derives two informant/self-report measures of cognitive change:
+
+1.  **JORM score** (`jorm`) — a 16-item informant-rated scale of cognitive change, constructed from `PD506`–`PD553` and averaged across items
+2.  **Self-reported memory concern** (`self_concerns`) — a binary composite drawn from two self-report items capturing current memory rating and change from two years ago
+
+The output is saved as `A0_013_hrs16_func.rds`.
+
+## Processing Steps
+
+### 1. JORM Item Construction (`jorm1`–`jorm16`)
+
+Each JORM item is constructed from a **pair** of raw HRS variables using a branching logic that maps the routing structure of the HRS questionnaire onto the standard 5-point JORM response scale.
+
+#### Source Variable Pairs
+
+| JORM Item | Label | Raw Variables |
+|------------------------|------------------------|------------------------|
+| `jorm1` | Remembering things about family | PD506, PD507, PD508 |
+| `jorm2` | Remembering things that happened recently | PD509, PD510, PD511 |
+| `jorm3` | Recalling conversations a few days later | PD512, PD513, PD514 |
+| `jorm4` | Remembering telephone numbers | PD515, PD516, PD517 |
+| `jorm5` | Remembering day and month | PD518, PD519, PD520 |
+| `jorm6` | Remembering where things are kept | PD521, PD522, PD523 |
+| `jorm7` | Remembering where to find things | PD524, PD525, PD526 |
+| `jorm8` | Knowing how to work familiar machines | PD527, PD528, PD529 |
+| `jorm9` | Learning to use a new gadget | PD530, PD531, PD532 |
+| `jorm10` | Learning new things in general | PD533, PD534, PD535 |
+| `jorm11` | Following a story in a book or on TV | PD536, PD537, PD538 |
+| `jorm12` | Making decisions on everyday matters | PD539, PD540, PD541 |
+| `jorm13` | Handling money for shopping | PD542, PD543, PD544 |
+| `jorm14` | Handling financial matters | PD545, PD546, PD547 |
+| `jorm15` | Handling everyday arithmetic problems | PD548, PD549, PD550 |
+| `jorm16` | Using intelligence to understand what's going on | PD551, PD552, PD553 |
+
+#### Branching Recoding Logic
+
+Each item uses the same three-variable branching structure (illustrated below using generic variables A, B, C):
+
+| Condition         | Recoded Value | Label           |
+|-------------------|---------------|-----------------|
+| A == 1 AND B == 1 | 1             | Much improved   |
+| A == 1 AND B == 2 | 2             | A bit improved  |
+| A == 2            | 3             | Not much change |
+| A == 3 AND C == 4 | 4             | A bit worse     |
+| A == 3 AND C == 5 | 5             | Much worse      |
+
+Where A is the primary routing variable, B captures improvement direction, and C captures worsening direction. Any combination not listed above yields `NA`.
+
+### 2. JORM Summary Score (`jorm`)
+
+A row-wise mean of all 16 item scores is computed with `na.rm = TRUE`, yielding a continuous score ranging from 1 (much improved across all items) to 5 (much worse across all items). Items with missing values are excluded from the mean rather than set to zero.
+
+### 3. Self-Reported Memory Concern (`self_concerns`)
+
+A binary composite is derived from two HRS items:
+
+-   **`PD101`** — *"How would you rate your memory at the present time?"*
+-   **`PD102`** — *"Compared to two years ago, would you say your memory is better, the same, or worse?"*
+
+#### Recoding Rules (applied in priority order)
+
+| Condition | `self_concerns` | Label |
+|------------------------|------------------------|------------------------|
+| `PD101` in {4, 5, 8, 9} — fair/poor or ambiguous rating | 1 | Worse or (Fair or Poor) |
+| `PD102` in {3, 8, 9} — worse or ambiguous change | 1 | Worse or (Fair or Poor) |
+| `PD101` in {1, 2, 3} — excellent/very good/good rating | 0 | (Same or Better) AND (Excellent, Very Good, Good) |
+| All other cases | `NA` | — |
+
+
+
+

@@ -1,0 +1,76 @@
+---
+title: "HRS 2016 - Data Processing"
+author: 
+  - name: "Douglas Tommet"
+    affiliation: "Brown University, Department of Psychiatry and Human Behavior"
+  - name: "Richard N. Jones"
+    affiliation: "Brown University, Department of Psychiatry and Human Behavior, Department of Neurology"
+    orcid: "0000-0002-1049-218X"
+    email: "richard_jones@brown.edu"
+    address: "345 Blackstone Blvd, Providence, RI 02906"
+  - name: "HRS/HCAP Team"
+date: '`r Sys.Date()`'
+abstract: | 
+  
+  **Objective:** The objective of this analysis is to create a working data file of the HRS 2016 sample.  It starts with the raw data files, selects the relevant variables, recodes the variables, merge the data files together, and then filters the data to the 2016 particiants.
+format: 
+  html:
+    toc: true
+    self-contained: true
+    theme: cosmo
+execute:
+  echo: false
+  warning: false
+  message: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+source(here::here("R", "A0_001-libraries.R"))
+source(here::here("R", "A0_002-folder_paths.R"))
+```
+
+```{r}
+#| eval: true
+source(here::here("R", "A0_005-read_data.R"))
+source(here::here("R", "A0_009-select_data.R"))
+source(here::here("R", "A0_010-sample_identification.R"))
+source(here::here("R", "A0_011-recode_demographics.R"))
+source(here::here("R", "A0_012-recode_iadl.R"))
+source(here::here("R", "A0_013-recode_func.R"))
+source(here::here("R", "A0_014-recode_imputation_flag.R"))
+source(here::here("R", "A0_015-recode_cog_items.R"))
+source(here::here("R", "A0_016-rescale_cog_items.R"))
+source(here::here("R", "A0_017-recode_classification.R"))
+source(here::here("R", "A0_021-consensus_weights.R"))
+source(here::here("R", "A0_030-merge_data.R"))
+
+
+```
+
+{{< include A0_005-read_data.qmd >}}
+
+{{< include A0_009-select_data.qmd >}}
+
+# Data recoding
+
+{{< include A0_010-sample_identification.qmd >}}
+
+{{< include A0_011-recode_demographics.qmd >}}
+
+{{< include A0_012-recode_iadl.qmd >}}
+
+{{< include A0_013-recode_func.qmd >}}
+
+{{< include A0_015-recode_cog_items.qmd >}}
+
+{{< include A0_016-rescale_cog_items.qmd >}}
+
+{{< include A0_017-recode_classification.qmd >}}
+
+{{< include A0_021-consensus_weights.qmd >}}
+
+{{< include A0_030-merge_data.qmd >}}
+
+

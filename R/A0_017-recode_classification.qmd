@@ -1,0 +1,70 @@
+
+
+## Diagnostic classification
+
+This script prepares two external cognitive classification datasets — **Langa-Weir** and **Hudomiet** — for integration into the analytic pipeline. Both are trimmed to the relevant wave/variables, identifiers are standardized to `HHID`/`PN`, and a derived three-category Hudomiet classification variable is constructed. 
+
+A third classifier (Hurd dementia probabilities) was evaluated but excluded because it is only available through wave 2007, making it incompatible with the 2016 analytic wave.
+
+*Input Data*
+
+| Object | Source File | Description |
+|---|---|---|
+| `langa_weir` | `A0_005_langa_weir.rds` | Langa-Weir cognitive status classification |
+| `hudomiet` | `A0_005_hudomiet.rds` | Hudomiet probabilistic cognitive classification (waves 5–13) |
+| ~~`hurd`~~ | ~~`A0_005_hurd.rds`~~ | ~~Hurd dementia probabilities~~ (excluded; only available through 2007) |
+
+
+### 1. Langa-Weir (`langa_weir`)
+
+Only the cognitive status variable for 2016 is retained:
+
+| Variable | Description |
+|---|---|
+| `HHID` | Household identifier |
+| `PN` | Person number |
+| `cogfunction2016` | Langa-Weir cognitive function classification, 2016 wave |
+
+
+### 2. Hudomiet (`hudomiet`)
+
+#### Wave Filtering
+
+The Hudomiet dataset spans waves 5 (year 2000) through 13 (year 2016). Only **wave 13** (2016) is retained.
+
+#### Variable Selection
+
+Five variables are kept from the filtered dataset:
+
+| Variable | Description |
+|---|---|
+| `PrDem` | Posterior probability of dementia |
+| `PrCIND` | Posterior probability of cognitive impairment, no dementia (CIND) |
+| `PrNorm` | Posterior probability of normal cognition |
+| `Cog` | Posterior mean of the latent cognitive factor |
+| `CogSd` | Posterior standard deviation of the latent cognitive factor |
+
+#### Identifier Parsing
+
+The Hudomiet file uses a single concatenated identifier `hhidpn` rather than separate `HHID` and `PN` columns. This is parsed into components using the following steps:
+
+1. Zero-pad `hhidpn` to 9 digits using `sprintf("%009.0f", ...)`
+2. Reverse the string
+3. Extract the first 3 characters → reversed `PN` → reverse back to get `PN`
+4. Extract characters 4–9 → reversed `HHID` → reverse back to get `HHID`
+5. Drop all intermediate parsing columns
+
+#### Hudomiet Classification (`Hudomiet_classification`)
+
+A three-category classification is derived by assigning each respondent to the cognitive status with the **highest posterior probability**:
+
+| Value | Label | Rule |
+|---|---|---|
+| 1 | Normal | `PrNorm ≥ PrCIND` AND `PrNorm ≥ PrDem` |
+| 2 | CIND | `PrCIND ≥ PrDem` AND `PrCIND > PrNorm` |
+| 3 | Dementia | `PrDem > PrCIND` AND `PrDem > PrNorm` |
+| `NA` | — | No condition met (ties not resolved) |
+
+The variable is labelled: *"Hudomiet classification by highest class proportion"*.
+
+

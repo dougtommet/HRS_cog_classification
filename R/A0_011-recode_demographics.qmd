@@ -1,0 +1,156 @@
+
+
+```{r}
+tracker_demo <- readRDS(here::here("R_objects", "A0_011_tracker_demo.rds"))
+
+
+```
+
+
+## Demographic variables
+
+This script takes the tracker demographic file produced in the prior step (`A0_010_tracker_demo.rds`) and performs three major operations:
+
+1.  **Imputes missing years of schooling** (`SCHLYRSimp`) using predictive mean matching (PMM) via `mice`
+2.  **Derives descriptive demographic variables** — sex, age categories, race/ethnicity, and educational attainment
+3.  **Constructs analysis covariates** (x1–x7 and all eligible two-way interactions), then **centers** relevant covariates using HCAP-weighted means estimated in the HCAP subsample
+
+The output is saved as `A0_011_tracker_demo.rds`.
+
+### 1. Education Imputation (`SCHLYRSimp`)
+
+Years of schooling (`SCHLYRS`) contains missing values coded as `99` and structural zeros in `BIRTHYR`. These are first recoded to `NA`. Five respondents also have manually verified education values (originally recoded in `015-Call-data-CORE-respondent.do`).
+
+| HHID    | PN  | New SCHLYRS value |
+|---------|-----|-------------------|
+| 134189  | 020 | 14                |
+| 502334  | 010 | 12                |
+| 502607  | 010 | 10                |
+| 905576  | 010 | 16                |
+| 906962  | 010 | 12                |
+
+Imputation is then carried out using `mice` with a single imputation (`m = 1`), predictive mean matching (`method = "pmm"`), and seed `2`. Predictors are: `DEGREE`, `GENDER`, `HISPANIC`, `RACE`, and `BIRTHYR`. The imputed values are stored as `SCHLYRSimp`.
+
+
+### 2. Derived Demographic Variables
+
+#### Sex (`female`)
+
+A binary `female` indicator is derived from `GENDER` (1 = male, 0 = female).
+
+```{r}
+QSPtools::checkvar(tracker_demo, female, GENDER) %>%
+  gt::gt()
+```
+
+#### Race and Ethnicity (`black`, `hisp`, `RaceAndEthnicity`)
+
+Two binary indicators are derived:
+
+-   `black`: Black or African-American and **not** Hispanic
+-   `hisp`: Hispanic of any racial background (`HISPANIC` in 1, 2, 3)
+
+```{r}
+QSPtools::checkvar(tracker_demo, black, RACE, HISPANIC) %>%
+  gt::gt()
+```
+
+```{r}
+QSPtools::checkvar(tracker_demo, hisp, RACE, HISPANIC) %>%
+  gt::gt()
+```
+
+
+A four-category summary variable `RaceAndEthnicity` is also constructed with the following priority logic:
+
+| Priority          | Category                                 | Code |
+|-------------------|------------------------------------------|------|
+| 1                 | White                                    | 1    |
+| 2                 | Black or African-American (Not Hispanic) | 2    |
+| 3 (overrides 1–2) | Hispanic (any racial group)              | 3    |
+| 4                 | All other racial groups                  | 4    |
+
+
+```{r}
+QSPtools::checkvar(tracker_demo, RaceAndEthnicity, RACE, HISPANIC) %>%
+  gt::gt()
+```
+
+
+#### Age (`rage`, `rage_cat`, `rage_cat_f`)
+
+`rage` maps directly to `PA019` (self-reported age). Age is grouped into an ordered 6-category factor:
+
+| Category | Age Range   |
+|----------|-------------|
+| 1        | 65–69       |
+| 2        | 70–74       |
+| 3        | 75–79       |
+| 4        | 80–84       |
+| 5        | 85–89       |
+| 6        | 90 and over |
+
+Ages below 65 are set to `NA`.
+
+#### Educational Attainment (`Educational_Attainment`)
+
+A four-category labelled variable is derived from `SCHLYRSimp`:
+
+| Category                 | Years of schooling |
+|--------------------------|--------------------|
+| \< High school           | \< 12              |
+| High school              | = 12               |
+| Some college             | 13–13              |
+| Education beyond college | ≥ 14               |
+| Unknown                  | Missing            |
+
+
+
+```{r}
+QSPtools::checkvar(tracker_demo, Educational_Attainment, SCHLYRSimp) %>%
+  gt::gt()
+```
+
+### 3. Age Splines (`spage1`, `spage2`, `spage3`)
+
+Restricted cubic splines (RCS) for age are computed using fixed knots at **70, 78, 86, and 94**, matching the parameterization used in prior HRS/HCAP analyses. The function `ageRCS()` implements the truncated power basis:
+
+-   `spage1`: Linear age term, **centered at 70** (deviation from age 70)
+-   `spage2`, `spage3`: Nonlinear spline components (zero at age 70 by construction)
+
+> The knot placement reflects a hockey-stick-shaped age–cognition relationship in the HCAP normative sample: near-linear decline through most of the age range, with a reversal in the oldest-old due to selective survival. More parameters are therefore allocated to the upper age range.
+
+
+### 4. Analysis Covariates (x1–x7)
+
+Seven covariates are defined for use in adjustment and classification models:
+
+| Covariate | Source            | Centering                         |
+|-----------|-------------------|-----------------------------------|
+| `x1`      | `spage1`          | Centered at age 70 (see above)    |
+| `x2`      | `spage2`          | Zero at age 70 by construction    |
+| `x3`      | `spage3`          | Zero at age 70 by construction    |
+| `x4`      | `female`          | Centered at HCAP weighted mean    |
+| `x5`      | `black`           | Centered at HCAP weighted mean    |
+| `x6`      | `hisp`            | Centered at HCAP weighted mean    |
+| `x7`      | `SCHLYRSimp − 12` | Centered at 12 years of schooling |
+
+#### Two-Way Interactions
+
+All pairwise interactions among x1–x7 are generated **except**: - Interactions among x1, x2, and x3 (spline components with one another)
+
+This yields interaction terms named `x1x4`, `x1x5`, ..., `x5x6`, etc.
+
+-   The only two-way interaction deliberately excluded from the covariate set is `black × hisp`, as no respondents in the sample are both Black and Hispanic.
+
+#### Centering of Demographic Covariates
+
+`x4`, `x5`, `x6`, and their interactions (`x4x5`, `x4x6`, `x5x6`) are centered on **HCAP-weighted means** estimated from the `inHCAP == 1` subsample. The survey design uses `SECU` as the cluster ID, `STRATUM` as the strata, and `HCAP16WGTR` as the sampling weight (via `survey::svydesign`).
+
+The six computed means are stored in the named list `covariate_means` for reproducible application to future datasets.
+
+> Although centering means are estimated within the HCAP subsample, the centered covariates are applied to the full `tracker_demo` dataset.
+
+
+
+

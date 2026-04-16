@@ -1,0 +1,99 @@
+
+
+
+## Merging files together
+
+This script brings together all upstream analytic data objects into a single merged file, applies a structured variable selection, and constructs three analytic samples via sequential exclusion criteria. A CONSORT-style flow diagram is generated to document sample attrition at each step.
+
+
+*Input Data*
+
+| Object | Source File | Description |
+|---|---|---|
+| `tracker_demo` | `A0_021_tracker_demo.rds` | Demographics, weights, covariates, consensus weight |
+| `langa_weir` | `A0_017_langa_weir.rds` | Langa-Weir cognitive classification (`cogfunction2016`) |
+| `hudomiet` | `A0_017_hudomiet.rds` | Hudomiet probabilistic cognitive classification |
+| `hrs16_cog` | `A0_016_hrs16_cog.rds` | Normalized cognitive domain scores |
+| `hrshcap` | `A0_014_hrshcap.rds` | HCAP diagnoses and domain impairment flags |
+| `hrs16_func` | `A0_013_hrs16_func.rds` | JORM score and self-reported memory concern |
+| `hrs16_iadl` | `A0_012_hrs16_iadl.rds` | ADL/IADL binary indicators and sum score |
+
+
+
+### 1. Merging
+
+All seven input objects are joined to `tracker_demo` via sequential left joins on `HHID` and `PN`. The tracker file serves as the spine; all other datasets contribute additional columns.
+
+
+### 2. Variable Selection
+
+After merging, columns are reordered and a priority variable list is applied using `select()`. Variables are organized into the following groups:
+
+| Group | Variables |
+|---|---|
+| Identifiers | `HHID`, `PN` |
+| Survey design & weights | `SECU`, `STRATUM`, `PWGTR`, `HCAP16WGTR`, `samplingP` |
+| Sample tracking | `PINSAMP`, `PIWWAVE`, `PIWYEAR`, `PMARST`, `PNURSHM`, `PPROXY` |
+| Demographics | `rage`, `PA019`, `PAGE`, `female`, `black`, `hisp`, `SCHLYRS`, `HISPANIC`, `RACE` |
+| Cognitive scores (normalized) | `vdori`, `vdlfl1z`, `vdlfl2`, `vdlfl3`, `vdwdimmz`, `vdwddelz`, `vdexf7z`, `vdsevens`, `vdcount` |
+| ADL/IADL items & sum | `rPG014`–`rPG059`, `iadl_imp`, raw `PG013`–`PG059` |
+| Self-report & informant | `PD102`, `jorm` |
+| Diagnoses & classification | `normexcld`, `vs1hcapdx`, `vs1hcapdxeap`, `consensuspaneldx` |
+| Langa-Weir classification | `cogfunction2016` |
+| Hudomiet classification | `PrDem`, `PrCIND`, `PrNorm`, `Cog`, `CogSd`, `Hudomiet_classification` |
+| All remaining variables | `everything()` |
+
+
+### 3. Sample Exclusion & CONSORT Diagram
+
+Four sequential exclusion flags are constructed to define the analytic samples:
+
+| Flag | Exclusion Criterion |
+|---|---|
+| `not_in_hrs16` | `PIWTYPE != 1` — respondent did not complete a core HRS 2016 interview |
+| `not_in_sampling_frame` | `nonzeroweight == 0` AND `inHCAP == 0` — zero sampling weight and not in HCAP |
+| `age_young_or_not_in_hcap` | `age65up == 0` AND `inHCAP == 0` — under age 65 and not in HCAP |
+| `not_in_hcap` | `inHCAP == 0` — not in the HCAP subsample |
+
+These flags are used to generate a CONSORT flow diagram tracing the sample from the full tracker file through to the final HCAP subsample.
+
+#### CONSORT Flow
+
+```{r}
+
+hrs16_consort <- readRDS(here::here("R_objects", "A0_030_hrs16_consort.rds"))
+
+```
+
+
+```{r}
+#| fig-cap: "Consort diagram for HRS/HCAP 2016"
+hrs16_consort
+```
+
+n=2993 is the nonimputed data
+
+### 4. Analytic Sample Objects
+
+Three analytic datasets are derived from the merged file after applying exclusions:
+
+| Object | Filters Applied | Description |
+|---|---|---|
+| `tracker_merged` | None | Full merged file, all respondents |
+| `hrs16_merged` | Excludes `not_in_hrs16`, `not_in_sampling_frame`, `age_young_or_not_in_hcap` | HRS 2016 analytic sample, age 65+, non-zero weight |
+| `hcap16_merged` | All above + excludes `not_in_hcap` | HCAP 2016 subsample only |
+
+Exclusion flag columns are dropped from both `hrs16_merged` and `hcap16_merged` after filtering.
+
+## Output Data
+
+| Object | Output File | Description |
+|---|---|---|
+| `tracker_merged` | `A0_030_tracker_merged.rds` | Full integrated dataset, all respondents |
+| `hrs16_merged` | `A0_030_hrs16_merged.rds` | HRS 2016 analytic sample (age 65+, core interview, non-zero weight) |
+| `hcap16_merged` | `A0_030_hcap16_merged.rds` | HCAP 2016 subsample |
+| `hrs16_consort` | `A0_030_hrs16_consort.rds` | CONSORT flow diagram object |
+
+
+
+
