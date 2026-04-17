@@ -1,0 +1,70 @@
+---
+title: "HRS 2016 - Cognition classification"
+author: "Doug Tommet"
+date: '`r Sys.Date()`'
+format: 
+  html:
+    toc: true
+    self-contained: true
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+
+```{r}
+source(here::here("R", "A1_001-libraries.R"))
+source(here::here("R", "A1_002-folder_paths.R"))
+
+```
+
+```{r}
+my_gtsummary <- function(tbl) {
+  tbl %>%
+    gtsummary::as_gt() %>%
+    gt::opt_stylize(6)
+}
+my_gt <- function(tbl) {
+  tbl %>%
+    gt::opt_stylize(6)
+}
+```
+
+```{r}
+#| eval: false
+
+source(here::here("R", "A1_005-read_data.R"))
+source(here::here("R", "A1_010-select_data.R"))
+source(here::here("R", "A1_011-recode_demographics.R"))
+source(here::here("R", "A1_012-recode_iadl.R"))
+source(here::here("R", "A1_013-recode_func.R"))
+source(here::here("R", "A1_014-recode_imputation_flag.R")) # added RNJ 2025-06-17
+source(here::here("R", "A1_015-recode_cog_items.R"))
+source(here::here("R", "A1_016-rescale_cog_items.R"))
+source(here::here("R", "A1_020-fit_models.R"))
+source(here::here("R", "A1_025-norm_factor_score.R"))
+source(here::here("R", "A1_030-implementing_algorithm_in_HCAP.R"))
+```
+
+{{< include A1_005-read_data.qmd >}}
+
+{{< include A1_011-recode_demographics.qmd >}}
+
+{{< include A1_012-recode_iadl.qmd >}}
+
+{{< include A1_013-recode_func.qmd >}}
+
+{{< include A1_015-recode_cog_items.qmd >}}
+
+{{< include A1_016-rescale_cog_items.qmd >}}
+
+{{< include A1_020-fit_models.qmd >}}
+
+{{< include A1_025-norm_factor_score.qmd >}}
+
+{{< include A1_029-finding_algorithm_cutpoints.qmd >}}
+
+{{< include A1_030-implementing_algorithm_in_HCAP.qmd >}}
+
+{{< include A1_035-validation_comparison.qmd >}}
