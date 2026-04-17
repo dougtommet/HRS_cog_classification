@@ -1,0 +1,663 @@
+Mplus VERSION 8.11 (Mac)
+MUTHEN & MUTHEN
+04/09/2026   1:38 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:
+  vdori - Orientation to time
+
+  vdlfl1 - Animal naming
+
+  vdlfl2 - Scissors & cactus
+
+  vdlfl3 - President & vice-president
+
+  vdcount - Count backwards from 20
+
+  vdsevens - Serial sevens
+
+  vdwdimm - Immediate word recall
+
+  vdwddel - Delayed word recall
+
+  vdexf7 - Number series
+
+  DATA:
+  FILE = "model_final_b1fdb1fa1644fd6594615389756fee3f.dat";
+
+  VARIABLE:
+  NAMES = mplusid HCAP16WGTR STRATUM SECU_mplus vdori vdlfl1z vdlfl2 vdlfl3 vdwddelz
+       vdexf7z vdsevens vdcount;
+   MISSING=.;
+   categorical = vdori  vdlfl2 vdlfl3 vdsevens vdcount; idvariable = mplusid;
+  weight = HCAP16WGTR; stratification = STRATUM; cluster = SECU_mplus;
+  ANALYSIS:
+  estimator = mlr; COVERAGE=0; link=PROBIT;
+  TYPE = complex;
+  MODEL:
+  F BY VDORI @ 0.5533;
+   F BY VDLFL1Z @ 0.0487;
+   F BY VDLFL2 @ 0.9353;
+   F BY VDLFL3 @ 0.7566;
+   F BY VDWDDELZ @ 0.131;
+   F BY VDEXF7Z @ 0.1319;
+   F BY VDSEVENS @ 0.8674;
+   F BY VDCOUNT @ 0.6091;
+   [VDLFL1Z @ 0.1787];
+   [VDWDDELZ @ 0.4175];
+   [VDEXF7Z @ 0.629];
+   [VDORI$1 @ -2.7383];
+   [VDORI$2 @ -2.3542];
+   [VDORI$3 @ -1.8475];
+   [VDORI$4 @ -0.803];
+   [VDLFL2$1 @ -3.5647];
+   [VDLFL2$2 @ -2.0466];
+   [VDLFL3$1 @ -2.4616];
+   [VDLFL3$2 @ -0.6212];
+   [VDSEVENS$1 @ -1.8907];
+   [VDSEVENS$2 @ -1.2141];
+   [VDSEVENS$3 @ -0.845];
+   [VDSEVENS$4 @ -0.3945];
+   [VDSEVENS$5 @ 0.208];
+   [VDCOUNT$1 @ -1.7786];
+   [F@0];
+   F@1;
+  OUTPUT:
+  standardized;
+  SAVEDATA:
+  H5RESULTS = model_final.h5; save = fscores; file = model_final.dat;
+
+
+
+*** WARNING
+  Data set contains cases with missing on all variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on all variables:  213
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+vdori - Orientation to time
+
+vdlfl1 - Animal naming
+
+vdlfl2 - Scissors & cactus
+
+vdlfl3 - President & vice-president
+
+vdcount - Count backwards from 20
+
+vdsevens - Serial sevens
+
+vdwdimm - Immediate word recall
+
+vdwddel - Delayed word recall
+
+vdexf7 - Number series
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        3283
+
+Number of dependent variables                                    8
+Number of independent variables                                  0
+Number of continuous latent variables                            1
+
+Observed dependent variables
+
+  Continuous
+   VDLFL1Z     VDWDDELZ    VDEXF7Z
+
+  Binary and ordered categorical (ordinal)
+   VDORI       VDLFL2      VDLFL3      VDSEVENS    VDCOUNT
+
+Continuous latent variables
+   F
+
+Variables with special functions
+
+  Stratification        STRATUM
+  Cluster variable      SECU_MPL
+  Weight variable       HCAP16WG
+  ID variable           MPLUSID
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            10
+  Minimum value for logit thresholds                           -10
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            1
+  Adaptive quadrature                                           ON
+Link                                                        PROBIT
+Cholesky                                                        ON
+
+Input data file(s)
+  model_final_b1fdb1fa1644fd6594615389756fee3f.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns            14
+     Number of y missing data patterns           8
+     Number of u missing data patterns           3
+     Number of strata                           56
+     Number of clusters                        112
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.000
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              VDORI         VDLFL2        VDLFL3        VDSEVENS      VDCOUNT
+              ________      ________      ________      ________      ________
+ VDORI          0.992
+ VDLFL2         0.992         0.992
+ VDLFL3         0.992         0.992         0.992
+ VDSEVENS       0.992         0.992         0.992         1.000
+ VDCOUNT        0.990         0.990         0.990         0.998         0.998
+ VDLFL1Z        0.989         0.989         0.989         0.989         0.988
+ VDWDDELZ       0.989         0.989         0.989         0.997         0.995
+ VDEXF7Z        0.869         0.869         0.869         0.876         0.876
+
+
+           Covariance Coverage
+              VDLFL1Z       VDWDDELZ      VDEXF7Z
+              ________      ________      ________
+ VDLFL1Z        0.989
+ VDWDDELZ       0.987         0.997
+ VDEXF7Z        0.867         0.874         0.876
+
+
+     PROPORTION OF DATA PRESENT FOR U
+
+
+           Covariance Coverage
+              VDORI         VDLFL2        VDLFL3        VDSEVENS      VDCOUNT
+              ________      ________      ________      ________      ________
+ VDORI          0.992
+ VDLFL2         0.992         0.992
+ VDLFL3         0.992         0.992         0.992
+ VDSEVENS       0.992         0.992         0.992         1.000
+ VDCOUNT        0.990         0.990         0.990         0.998         0.998
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              VDLFL1Z       VDWDDELZ      VDEXF7Z
+              ________      ________      ________
+ VDLFL1Z        0.989
+ VDWDDELZ       0.987         0.997
+ VDEXF7Z        0.867         0.874         0.876
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    VDORI
+      Category 1    0.011           35.137
+      Category 2    0.012           37.821
+      Category 3    0.032          102.691
+      Category 4    0.183          594.362
+      Category 5    0.763         2476.722
+    VDLFL2
+      Category 1    0.006           19.279
+      Category 2    0.065          209.676
+      Category 3    0.929         3017.778
+    VDLFL3
+      Category 1    0.027           88.946
+      Category 2    0.279          907.250
+      Category 3    0.693         2250.537
+    VDSEVENS
+      Category 1    0.080          263.109
+      Category 2    0.098          320.159
+      Category 3    0.078          254.489
+      Category 4    0.118          387.307
+      Category 5    0.182          597.078
+      Category 6    0.445         1460.858
+    VDCOUNT
+      Category 1    0.065          212.181
+      Category 2    0.935         3065.786
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     VDLFL1Z               0.179       1.241       0.000    0.43%       0.102      0.148      0.159
+            3247.000       0.007       8.805       1.000    0.06%       0.182      0.227
+     VDWDDELZ              0.418      -0.187       0.000    9.14%       0.200      0.400      0.400
+            3273.000       0.043      -0.360       1.000    0.09%       0.500      0.600
+     VDEXF7Z               0.645      -1.039       0.000    1.25%       0.526      0.600      0.629
+            2877.000       0.032       2.099       1.000    1.49%       0.680      0.731
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                        3
+
+Loglikelihood
+
+          H0 Value                       -4581.504
+          H0 Scaling Correction Factor      8.0996
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    9169.007
+          Bayesian (BIC)                  9187.297
+          Sample-Size Adjusted BIC        9177.765
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit for the Binary and Ordered Categorical
+(Ordinal) Outcomes**
+
+          Pearson Chi-Square
+
+          Value                            783.364
+          Degrees of Freedom                   535
+          P-Value                           0.0000
+
+          Likelihood Ratio Chi-Square
+
+          Value                            475.973
+          Degrees of Freedom                   535
+          P-Value                           0.9682
+
+** Of the 822 cells in the frequency table, 4
+   were deleted in the calculation of chi-square due to extreme values.
+
+Chi-Square Test for MCAR under the Unrestricted Latent Class Indicator Model
+
+          Pearson Chi-Square
+
+          Value                             57.861
+          Degrees of Freedom                   280
+          P-Value                           1.0000
+
+          Likelihood Ratio Chi-Square
+
+          Value                             53.984
+          Degrees of Freedom                   280
+          P-Value                           1.0000
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ F        BY
+    VDORI              0.553      0.000    999.000    999.000
+    VDLFL1Z            0.049      0.000    999.000    999.000
+    VDLFL2             0.935      0.000    999.000    999.000
+    VDLFL3             0.757      0.000    999.000    999.000
+    VDWDDELZ           0.131      0.000    999.000    999.000
+    VDEXF7Z            0.132      0.000    999.000    999.000
+    VDSEVENS           0.867      0.000    999.000    999.000
+    VDCOUNT            0.609      0.000    999.000    999.000
+
+ Means
+    F                  0.000      0.000    999.000    999.000
+
+ Intercepts
+    VDLFL1Z            0.179      0.000    999.000    999.000
+    VDWDDELZ           0.417      0.000    999.000    999.000
+    VDEXF7Z            0.629      0.000    999.000    999.000
+
+ Thresholds
+    VDORI$1           -2.738      0.000    999.000    999.000
+    VDORI$2           -2.354      0.000    999.000    999.000
+    VDORI$3           -1.847      0.000    999.000    999.000
+    VDORI$4           -0.803      0.000    999.000    999.000
+    VDLFL2$1          -3.565      0.000    999.000    999.000
+    VDLFL2$2          -2.047      0.000    999.000    999.000
+    VDLFL3$1          -2.462      0.000    999.000    999.000
+    VDLFL3$2          -0.621      0.000    999.000    999.000
+    VDSEVENS$1        -1.891      0.000    999.000    999.000
+    VDSEVENS$2        -1.214      0.000    999.000    999.000
+    VDSEVENS$3        -0.845      0.000    999.000    999.000
+    VDSEVENS$4        -0.394      0.000    999.000    999.000
+    VDSEVENS$5         0.208      0.000    999.000    999.000
+    VDCOUNT$1         -1.779      0.000    999.000    999.000
+
+ Variances
+    F                  1.000      0.000    999.000    999.000
+
+ Residual Variances
+    VDLFL1Z            0.004      0.001      8.173      0.000
+    VDWDDELZ           0.026      0.001     27.768      0.000
+    VDEXF7Z            0.017      0.001     14.201      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.151E+00
+       (ratio of smallest to largest eigenvalue)
+
+
+RESULTS IN PROBABILITY SCALE
+
+                    Estimate
+
+ VDORI
+    Category 1         0.008
+    Category 2         0.011
+    Category 3         0.033
+    Category 4         0.188
+    Category 5         0.759
+ VDLFL2
+    Category 1         0.005
+    Category 2         0.063
+    Category 3         0.933
+ VDLFL3
+    Category 1         0.025
+    Category 2         0.285
+    Category 3         0.690
+ VDSEVENS
+    Category 1         0.077
+    Category 2         0.103
+    Category 3         0.082
+    Category 4         0.121
+    Category 5         0.180
+    Category 6         0.438
+ VDCOUNT
+    Category 1         0.064
+    Category 2         0.936
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ F        BY
+    VDORI              0.484      0.000    999.000    999.000
+    VDLFL1Z            0.601      0.023     25.584      0.000
+    VDLFL2             0.683      0.000    999.000    999.000
+    VDLFL3             0.603      0.000    999.000    999.000
+    VDWDDELZ           0.630      0.007     91.992      0.000
+    VDEXF7Z            0.711      0.012     57.393      0.000
+    VDSEVENS           0.655      0.000    999.000    999.000
+    VDCOUNT            0.520      0.000    999.000    999.000
+
+ Means
+    F                  0.000      0.000    999.000    999.000
+
+ Intercepts
+    VDLFL1Z            2.205      0.086     25.584      0.000
+    VDWDDELZ           2.006      0.022     91.992      0.000
+    VDEXF7Z            3.389      0.059     57.393      0.000
+
+ Thresholds
+    VDORI$1           -2.396      0.000    999.000    999.000
+    VDORI$2           -2.060      0.000    999.000    999.000
+    VDORI$3           -1.617      0.000    999.000    999.000
+    VDORI$4           -0.703      0.000    999.000    999.000
+    VDLFL2$1          -2.603      0.000    999.000    999.000
+    VDLFL2$2          -1.495      0.000    999.000    999.000
+    VDLFL3$1          -1.963      0.000    999.000    999.000
+    VDLFL3$2          -0.495      0.000    999.000    999.000
+    VDSEVENS$1        -1.428      0.000    999.000    999.000
+    VDSEVENS$2        -0.917      0.000    999.000    999.000
+    VDSEVENS$3        -0.638      0.000    999.000    999.000
+    VDSEVENS$4        -0.298      0.000    999.000    999.000
+    VDSEVENS$5         0.157      0.000    999.000    999.000
+    VDCOUNT$1         -1.519      0.000    999.000    999.000
+
+ Variances
+    F                  1.000      0.000    999.000    999.000
+
+ Residual Variances
+    VDLFL1Z            0.639      0.028     22.632      0.000
+    VDWDDELZ           0.604      0.009     70.066      0.000
+    VDEXF7Z            0.495      0.018     28.115      0.000
+
+
+STDY Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ F        BY
+    VDORI              0.484      0.000    999.000    999.000
+    VDLFL1Z            0.601      0.023     25.584      0.000
+    VDLFL2             0.683      0.000    999.000    999.000
+    VDLFL3             0.603      0.000    999.000    999.000
+    VDWDDELZ           0.630      0.007     91.992      0.000
+    VDEXF7Z            0.711      0.012     57.393      0.000
+    VDSEVENS           0.655      0.000    999.000    999.000
+    VDCOUNT            0.520      0.000    999.000    999.000
+
+ Means
+    F                  0.000      0.000    999.000    999.000
+
+ Intercepts
+    VDLFL1Z            2.205      0.086     25.584      0.000
+    VDWDDELZ           2.006      0.022     91.992      0.000
+    VDEXF7Z            3.389      0.059     57.393      0.000
+
+ Thresholds
+    VDORI$1           -2.396      0.000    999.000    999.000
+    VDORI$2           -2.060      0.000    999.000    999.000
+    VDORI$3           -1.617      0.000    999.000    999.000
+    VDORI$4           -0.703      0.000    999.000    999.000
+    VDLFL2$1          -2.603      0.000    999.000    999.000
+    VDLFL2$2          -1.495      0.000    999.000    999.000
+    VDLFL3$1          -1.963      0.000    999.000    999.000
+    VDLFL3$2          -0.495      0.000    999.000    999.000
+    VDSEVENS$1        -1.428      0.000    999.000    999.000
+    VDSEVENS$2        -0.917      0.000    999.000    999.000
+    VDSEVENS$3        -0.638      0.000    999.000    999.000
+    VDSEVENS$4        -0.298      0.000    999.000    999.000
+    VDSEVENS$5         0.157      0.000    999.000    999.000
+    VDCOUNT$1         -1.519      0.000    999.000    999.000
+
+ Variances
+    F                  1.000      0.000    999.000    999.000
+
+ Residual Variances
+    VDLFL1Z            0.639      0.028     22.632      0.000
+    VDWDDELZ           0.604      0.009     70.066      0.000
+    VDEXF7Z            0.495      0.018     28.115      0.000
+
+
+STD Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ F        BY
+    VDORI              0.553      0.000    999.000    999.000
+    VDLFL1Z            0.049      0.000    999.000    999.000
+    VDLFL2             0.935      0.000    999.000    999.000
+    VDLFL3             0.757      0.000    999.000    999.000
+    VDWDDELZ           0.131      0.000    999.000    999.000
+    VDEXF7Z            0.132      0.000    999.000    999.000
+    VDSEVENS           0.867      0.000    999.000    999.000
+    VDCOUNT            0.609      0.000    999.000    999.000
+
+ Means
+    F                  0.000      0.000    999.000    999.000
+
+ Intercepts
+    VDLFL1Z            0.179      0.000    999.000    999.000
+    VDWDDELZ           0.417      0.000    999.000    999.000
+    VDEXF7Z            0.629      0.000    999.000    999.000
+
+ Thresholds
+    VDORI$1           -2.738      0.000    999.000    999.000
+    VDORI$2           -2.354      0.000    999.000    999.000
+    VDORI$3           -1.847      0.000    999.000    999.000
+    VDORI$4           -0.803      0.000    999.000    999.000
+    VDLFL2$1          -3.565      0.000    999.000    999.000
+    VDLFL2$2          -2.047      0.000    999.000    999.000
+    VDLFL3$1          -2.462      0.000    999.000    999.000
+    VDLFL3$2          -0.621      0.000    999.000    999.000
+    VDSEVENS$1        -1.891      0.000    999.000    999.000
+    VDSEVENS$2        -1.214      0.000    999.000    999.000
+    VDSEVENS$3        -0.845      0.000    999.000    999.000
+    VDSEVENS$4        -0.394      0.000    999.000    999.000
+    VDSEVENS$5         0.208      0.000    999.000    999.000
+    VDCOUNT$1         -1.779      0.000    999.000    999.000
+
+ Variances
+    F                  1.000      0.000    999.000    999.000
+
+ Residual Variances
+    VDLFL1Z            0.004      0.001      8.173      0.000
+    VDWDDELZ           0.026      0.001     27.768      0.000
+    VDEXF7Z            0.017      0.001     14.201      0.000
+
+
+R-SQUARE
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    VDORI              0.234      0.000    999.000    999.000
+    VDLFL2             0.467      0.000    999.000    999.000
+    VDLFL3             0.364      0.000    999.000    999.000
+    VDSEVENS           0.429      0.000    999.000    999.000
+    VDCOUNT            0.271      0.000    999.000    999.000
+    VDLFL1Z            0.361      0.028     12.792      0.000
+    VDWDDELZ           0.396      0.009     45.996      0.000
+    VDEXF7Z            0.505      0.018     28.696      0.000
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              F             F_SE
+              ________      ________
+               -0.169         0.475
+
+
+           Covariances
+              F             F_SE
+              ________      ________
+ F              0.782
+ F_SE           0.014         0.001
+
+
+           Correlations
+              F             F_SE
+              ________      ________
+ F              1.000
+ F_SE           0.586         1.000
+
+
+SAVEDATA INFORMATION
+
+
+  Save file
+    model_final.dat
+
+  Order and format of variables
+
+    VDORI          F10.3
+    VDLFL2         F10.3
+    VDLFL3         F10.3
+    VDSEVENS       F10.3
+    VDCOUNT        F10.3
+    VDLFL1Z        F10.3
+    VDWDDELZ       F10.3
+    VDEXF7Z        F10.3
+    F              F10.3
+    F_SE           F10.3
+    HCAP16WG       F10.3
+    MPLUSID        I5
+    STRATUM        I4
+    SECU_MPLUS     I4
+
+  Save file format
+    11F10.3 I5 2I4
+
+  Save file record length    10000
+
+  Save missing symbol        *
+
+
+  Results in H5 Format
+
+  Save file
+    model_final.h5
+
+  List of results saved
+
+    Summary of Analysis
+    Model Fit Information
+    Model Results
+    Results in Probability Scale
+    Standardized Model Results
+    R-Square
+
+     Beginning Time:  13:38:36
+        Ending Time:  13:38:39
+       Elapsed Time:  00:00:03
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2024 Muthen & Muthen

@@ -1,0 +1,213 @@
+
+```{r}
+hrs16_hcap                 <- readRDS(here::here("R_objects", "A7_075_hrs16_hcap.rds"))
+algorithm_thresholds       <- readRDS(here::here("R_objects", "A7_075_algorithm_thresholds.rds"))
+v1_algorithm               <- readRDS(here::here("R_objects", "A7_075_v1_algorithm.rds"))
+hcap_flow_diagram_values   <- readRDS(here::here("R_objects", "A7_075_hcap_flow_diagram_values.rds"))
+```
+
+
+# Apply algorithm in the HCAP sample
+
+
+
+This section descrbes a rule-based classification algorithm applied to the HCAP subsample to assign each respondent to one of three cognitive status categories: **Normal**, **MCI**, or **Dementia**. The algorithm combines a T-scaled cognitive performance score (`TF`), a self-reported memory change item (`PD102`), and an informant-rated cognitive change score (`jorm`). A flow diagram counting function is also defined to document how many respondents pass through each decision node.
+Both `algorithm_thresholds` and `v1_algorithm` are saved as function objects, allowing identical classification logic to be applied to future datasets without modifying code.
+
+
+
+The HCAP subsample is extracted by filtering to `inHCAP == 1` (N = 3,496).
+
+## Processing Steps
+
+### 1. Threshold Classification (`algorithm_thresholds`)
+
+Two intermediate threshold variables are computed before the final diagnosis is assigned.
+
+#### `cog_threshold` — T-score Cognitive Performance Category
+
+| Condition | `cog_threshold` | Interpretation |
+|---|---|---|
+| `TF < 37` | 2 | Substantial impairment |
+| `TF < 48` (and ≥ 37) | 1 | Mild impairment |
+| `TF ≥ 48` | 0 | Normal range |
+
+
+#### `jorm_threshold` — Informant-Rated Cognitive Change Category
+
+| Condition | `jorm_threshold` | Interpretation |
+|---|---|---|
+| `jorm ≥ 3.4` | 2 | Substantial worsening |
+| `3.0 < jorm < 3.4` | 1 | Mild worsening |
+| `jorm ≤ 3.0` | 0 | Stable or improved |
+
+The JORM scale runs from 1 (much improved) to 5 (much worse); a score of 3.0 represents "not much change."
+
+#### Self-report memory change
+
+The `PD102` values 8 (refused) and 9 (don't know) are treated equivalently to 3 (worse) in the algorithm — ambiguous self-report responses are classified conservatively toward higher impairment.
+
+The following code shows a function that uses these thresholds to create the data file.
+
+```{r}
+#| echo: true
+algorithm_thresholds
+```
+
+### 2. V1 Classification Algorithm (`v1_algorithm`)
+
+The final three-category diagnosis (`dx_v1`) is assigned using the following decision rules, applied in priority order. A visual of the algorithm is shown in @fig-hrs-algorithm-v1. 
+
+```{r}
+#| fig-cap: "HRS algorithm (v1)"
+#| label: fig-hrs-algorithm-v1
+
+knitr::include_graphics(here::here("Figures", "HRS-Core-Diagnostic-Algorithm-With-Ns-HRS-Sample-2026-04-16.png"))
+```
+
+#### Primary Path — `TF` is Available
+
+| `cog_threshold` | `PD102` | `dx_v1` | Label |
+|---|---|---|---|
+| 2 (substantial) | 3, 8, or 9 (worse/ambiguous) | 3 | Dementia |
+| 2 (substantial) | 1 or 2 (same or better) | 2 | MCI |
+| 1 (mild) | 3, 8, or 9 (worse/ambiguous) | 2 | MCI |
+| 1 (mild) | 1 or 2 (same or better) | 1 | Normal |
+| 0 (normal range) | Any | 1 | Normal |
+
+The logic requires **both** a substantially low cognitive score **and** self-reported worsening to reach a dementia classification. A low score without self-reported worsening, or self-reported worsening with only mild cognitive impairment, results in MCI.
+
+#### Fallback Path — `TF` is Missing
+
+When `TF` is unavailable (e.g., proxy interviews or missing cognitive data), the JORM informant rating is used alone:
+
+| `jorm_threshold` | `dx_v1` | Label |
+|---|---|---|
+| 2 | 3 | Dementia |
+| 1 | 2 | MCI |
+| 0 | 1 | Normal |
+
+This is the code that creates a function that implements the algorithm shown in @fig-hrs-algorithm-v1.
+
+```{r}
+#| echo: true
+v1_algorithm
+```
+
+```{r}
+#| tbl-cap: "Relationship between algorithmic diagnosis and its constituent components"
+#| label: tbl-checkvar-dxv1
+QSPtools::checkvar(hrs16_hcap, dx_v1, cog_threshold, PD102, jorm_threshold) %>%
+  gt::gt()
+```
+
+
+### 3. Flow Diagram Counts (`v1_flow_diagram`)
+
+A function computes the number of respondents at each decision node in the algorithm, returning a named list with 17 counts:
+
+
+```{r}
+
+#| tbl-cap: "Sample sizes at various places in the flow diagram"
+#| label: tbl-v1-flowdiagram-n
+
+flow_table <- tibble(
+  address = c("a1", "b1", "b2", "b3", "b4", "b5",
+              "c1", "c2", "c3", "c4",
+              "d1", "d2", "d3", "d4",
+              "e1", "e2", "e3"),
+  Description = c(
+    "Total N",
+    "Missing TF (routed to JORM fallback)",
+    "cog_threshold == 2 (substantial impairment)",
+    "cog_threshold in {0, 1} (mild or normal)",
+    "cog_threshold == 1 (mild impairment)",
+    "cog_threshold == 0 (normal range)",
+    "Missing TF AND jorm_threshold == 2",
+    "Missing TF AND jorm_threshold in {0, 1}",
+    "Missing TF AND jorm_threshold == 1",
+    "Missing TF AND jorm_threshold == 0",
+    "cog_threshold == 2 AND PD102 worse/ambiguous -> Dementia",
+    "cog_threshold == 2 AND PD102 same/better -> MCI",
+    "cog_threshold == 1 AND PD102 worse/ambiguous -> MCI",
+    "cog_threshold == 1 AND PD102 same/better -> Normal",
+    "Final N: Normal (dx_v1 == 1)",
+    "Final N: MCI (dx_v1 == 2)",
+    "Final N: Dementia (dx_v1 == 3)"
+  )
+)
+
+flow_table_n <- hcap_flow_diagram_values %>% 
+  as_tibble() %>% 
+  pivot_longer(cols = everything(), names_to= "address", values_to = "n") 
+
+flow_table %>%
+  left_join(flow_table_n, by = "address") %>%
+  gt::gt() 
+```
+
+
+
+## Descriptive statistics of classifications
+
+```{r}
+#| tbl-cap: "Distribution of dementia diagnoses in HCAP"
+#| label: tbl-dxv1-distribution
+hrs16_hcap %>%
+  select(dx_v1, vs1hcapdxeap) %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_summary() 
+
+```
+
+
+```{r}
+#| tbl-cap: "Crosstab of version 1 diagnosis and HCAP diagnosis"
+#| label: tbl-cross-dxv1-hcap
+hrs16_hcap %>%
+  labelled::to_factor() %>%
+  gtsummary::tbl_cross(vs1hcapdxeap, dx_v1)
+```
+
+```{r}
+table(hrs16_hcap$vs1hcapdxeap, hrs16_hcap$dx_v1) %>%
+  psych::wkappa()
+```
+
+```{r}
+#| tbl-cap: "Distribution of dementia diagnoses in HCAP (Weighted)"
+#| label: tbl-dxv1-distribution-wt
+svy_design <- svydesign(
+  ids = ~SECU,
+  strata = ~STRATUM,
+  weights = ~HCAP16WGTR0,
+  data = hrs16_hcap,
+  nest = TRUE
+)
+
+gtsummary::tbl_svysummary(svy_design,
+                          include = c("dx_v1", "vs1hcapdxeap"))
+
+```
+
+```{r}
+#| tbl-cap: "Crosstab of version 1 diagnosis and HCAP diagnosis (Weighted)"
+#| label: tbl-cross-dxv1-hcap-wt
+
+weighted_tab <- xtabs(HCAP16WGTR0 ~ dx_v1 + vs1hcapdxeap, data = hrs16_hcap) 
+
+weighted_tab %>%
+  as.data.frame.matrix() %>%
+  rownames_to_column("dx_v1") %>%
+  gt::gt() %>%
+  gt::tab_spanner("HCAP Dementia and MCI Classification", 2:4) %>%
+  gt::fmt_number(decimals=0)
+
+
+```
+
+```{r}
+weighted_tab %>%
+  psych::wkappa()
+```

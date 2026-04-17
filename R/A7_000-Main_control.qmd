@@ -1,0 +1,53 @@
+---
+title: "HRS 2016 - Cognition classification"
+author: 
+  - name: "Douglas Tommet"
+    affiliation: "Brown University, Department of Psychiatry and Human Behavior"
+  - name: "Richard N. Jones"
+    affiliation: "Brown University, Department of Psychiatry and Human Behavior, Department of Neurology"
+    orcid: "0000-0002-1049-218X"
+    email: "richard_jones@brown.edu"
+    address: "345 Blackstone Blvd, Providence, RI 02906"
+  - name: "HRS/HCAP Team"
+date: '`r Sys.Date()`'
+abstract: | 
+  
+  **Objective:** 
+format: 
+  html:
+    toc: true
+    self-contained: true
+    theme: cosmo
+execute:
+  echo: false
+  warning: false
+  message: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+source(here::here("R", "A7_001-libraries.R"))
+
+```
+
+```{r}
+#| eval: true
+source(here::here("R", "A7_005-get_data.R"))
+source(here::here("R", "A7_050-mplus_model.R"))
+source(here::here("R", "A7_055-norm_factor_score.R"))
+source(here::here("R", "A7_075-implement_algorithm.R"))
+source(here::here("R", "A7_100-comparison_of_diagnoses.R"))
+
+
+```
+
+{{< include A7_050-mplus_models.qmd >}}
+
+{{< include A7_055-norm_factor_score.qmd >}}
+
+{{< include A7_075-implement_algorithm.qmd >}}
+
+{{< include A7_100-comparison_of_diagnoses.qmd >}}
+
+

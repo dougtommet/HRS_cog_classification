@@ -1,0 +1,152 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+item_df <- tribble(~item, ~label,
+"vdori",  "Orientation to time",
+"vdlfl1z",  "Animal naming",
+"vdlfl2",  "Scissors & cactus",
+"vdlfl3",  "President & vice-president",
+"vdcount", "Count backwards from 20",
+"vdsevens", "Serial sevens",
+"vdwdimmz", "Immediate word recall",
+"vdwddelz", "Delayed word recall",
+"vdexf7z", "Number series"
+)
+
+```
+
+# Mplus models
+
+## Model 1
+
+Sample HRS 2016, age 65+
+
+Weights: HCAP16WGTR, participants not in HCAP get a weight of 0
+
+Estimator: WLSMV N = 9218
+
+Missing cognitive testing N=571
+
+Fit statistics:
+
+```{r}
+#| tbl-cap: "Model 1: Fit statistics"
+#| label: tbl-model1-fit
+
+mplush5::mplus.print.model.fit.information(here::here("mplus_output", "A7", "model1", "model1.h5")) %>%
+  filter(grepl("RMSEA : E", description) |
+         grepl("SRMR", description) |
+         grepl("CFI", description) ) %>%
+  gt::gt() %>%
+  gt::fmt_number(
+    columns = value,
+    decimals = 3
+  ) %>%
+  gt::cols_label(
+    description = "Fit statistic",
+    value = "Value"
+  ) 
+
+```
+
+Factor loadings:
+
+```{r}
+#| tbl-cap: "Model 1: Factor loadings"
+#| label: tbl-model1-loadings
+
+mplush5::mplus.print.standardized.model.results(here::here("mplus_output", "A7", "model1", "model1.h5"), "stdyx") %>%
+  filter(grepl("F BY", Statement))  %>%
+  separate(Statement, into = c("f", "by", "item"), sep = " ") %>%
+  mutate(item = str_to_lower(item)) %>%
+  left_join(item_df, by = c("item" = "item")) %>%
+  select(item, label, Estimate) %>%
+  gt::gt() %>%
+  gt::fmt_number(
+    columns = Estimate,
+    decimals = 3
+  ) %>%
+  gt::cols_label(
+    item = "Item",
+    label = "Label",
+    Estimate = "Std Factor Loading"
+  ) 
+
+```
+
+## Model 1a
+
+Sample HRS 2016, age 65+
+
+Weights: HCAP16WGTR, participants not in HCAP get a weight of 0
+
+Estimator: MLR-Probit
+
+N = 9218
+
+Missing cognitive testing N=571
+
+Factor loadings:
+
+```{r}
+#| tbl-cap: "Model 1a: Factor loadings"
+#| label: tbl-model1a-loadings
+
+mplush5::mplus.print.standardized.model.results(here::here("mplus_output", "A7", "model1a", "model1a.h5"), "stdyx") %>%
+  filter(grepl("F BY", Statement))  %>%
+  separate(Statement, into = c("f", "by", "item"), sep = " ") %>%
+  mutate(item = str_to_lower(item)) %>%
+  left_join(item_df, by = c("item" = "item")) %>%
+  select(item, label, Estimate) %>%
+  gt::gt() %>%
+  gt::fmt_number(
+    columns = Estimate,
+    decimals = 3
+  ) %>%
+  gt::cols_label(
+    item = "Item",
+    label = "Label",
+    Estimate = "Std Factor Loading"
+  ) 
+
+```
+
+## Model 1a fixed
+
+Model with all parameters fixed to those from Model 1a, and mean=0 and variance=1.
+
+Estimator: MLR-Probit
+
+N = 9218,
+
+Missing cognitive testing N=571
+
+Note: Everyone gets a factor score, even if they weren't in HCAP
+
+```{r}
+hrs16_merged <- readRDS(here::here("R_objects", "A7_050_hrs16_merged.rds"))
+
+```
+
+```{r}
+#| fig-cap: "Distribution of factor scores by HCAP inclusion"
+#| label: fig-f-hcap-hist
+
+
+F_mean <- hrs16_merged %>%
+  mutate(inHCAP_f = factor(inHCAP, levels = 0:1, labels = c("Not in HCAP", "In HCAP"))) %>%
+  group_by(inHCAP_f) %>%
+  summarize(mean = mean(F, na.rm=TRUE))
+
+hrs16_merged %>%
+  mutate(inHCAP_f = factor(inHCAP, levels = 0:1, labels = c("Not in HCAP", "In HCAP"))) %>%
+  ggplot(aes(x = F)) +
+  geom_histogram() +
+  geom_vline(data = F_mean, aes(xintercept = mean), color = "red") +
+  facet_wrap(~inHCAP_f, ncol=1) +
+  hrbrthemes::theme_ipsum()
+```

@@ -1,0 +1,204 @@
+# Norming Factor Scores
+
+The factor score `F` is put through a three-stage normalization pipeline:
+
+1.  **Blom transformation** — maps `F` to a normal score (`f_blom`) within the normative sample, then fits a cubic spline model to predict Blom scores (`Pblom`) from `F` for application to the full sample
+2.  **Demographic adjustment** — regresses `Pblom` on age splines, sex, race/ethnicity, and education (and their two-way interactions) using a survey-weighted GLM estimated in the normative sample, producing expected Blom scores (`Eblom`)
+3.  **T-scaling** — converts the residual between observed and expected Blom scores into a T-score (`TF`) with mean 50 and SD 10
+
+All three stages are estimated in the **normative sample** (`normexcld == 0`) and applied to both the normative sample and the **full analytic sample**.
+
+## Processing Steps
+
+### 1. Normative Sample Definition
+
+The normative subsample is defined by filtering to respondents with `normexcld == 0`. Missing HCAP weights are set to 0 (`HCAP16WGTR0`) to allow these cases to be included in the survey design object without causing errors.
+
+### 2. Blom Transformation
+
+#### Direct Blom Transform
+
+Within `hrs16_cog_norm`, the factor score `F` is Blom-transformed, producing `f_blom`.
+
+#### Cubic Spline Model for `F → Pblom`
+
+Rather than applying the Blom transform directly to the full sample (which would require re-ranking all scores), a **cubic spline regression** is fitted to predict `f_blom` from `F` within the normative sample. Knots are placed at the **5th, 35th, 65th, and 95th percentiles** of `F` in the normative sample.
+
+Three spline basis terms are computed using the restricted cubic spline (RCS) truncated power basis:
+
+-   `spF1` — linear term (`F` itself)
+-   `spF2` — first nonlinear RCS component anchored at k1
+-   `spF3` — second nonlinear RCS component anchored at k2
+
+The model `glm(f_blom ~ spF1 + spF2 + spF3)` is estimated in the normative sample. Fitted values (`Pblom`) are then obtained for both the normative sample and the full sample, applying the **same knot locations** derived from the normative sample. This ensures the transformation is portable and does not depend on the distribution of `F` in the full sample.
+
+### 3. Demographic Adjustment (`Eblom`)
+
+A survey-weighted GLM is estimated in the normative sample to regress `Pblom` on demographic covariates:
+
+**Survey design:** cluster = `SECU`, strata = `STRATUM`, weights = `HCAP16WGTR0`, nested = `TRUE`
+
+**Model:**
+
+$$
+\text{Pblom} \sim x_1 + x_2 + x_3 + x_4 + x_5 + x_6 + x_7 + \text{(selected two-way interactions)}
+$$
+
+Where the covariates are:
+
+| Covariate        | Description                                        |
+|------------------|----------------------------------------------------|
+| `x1`, `x2`, `x3` | Age restricted cubic spline terms (centered at 70) |
+| `x4`             | Female (centered at HCAP weighted mean)            |
+| `x5`             | Black (centered at HCAP weighted mean)             |
+| `x6`             | Hispanic (centered at HCAP weighted mean)          |
+| `x7`             | Years of schooling − 12                            |
+
+Two-way interactions included: all combinations of x1–x3 with x4–x7, and among x4–x7 (except `x4x6` is included but `x5x6` is excluded as no respondents are both Black and Hispanic). The model R² is approximately **0.366**.
+
+Fitted values (`Eblom`) represent the **demographically expected** Blom score for each respondent given their age, sex, race/ethnicity, and education. `Eblom` is computed for both the normative and full samples using the model estimated in the normative sample.
+
+### 4. T-Scaled Residual (`TF`)
+
+The final score `TF` is the **standardized residual** of the observed Blom score from its demographic expectation, rescaled to a T-score distribution (mean = 50, SD = 10):
+
+$$
+TF = 50 + 10 \times \frac{\text{Pblom} - \text{Eblom}}{\text{SD}(\text{Pblom}) \times \sqrt{1 - R^2}}
+$$
+
+Where:
+
+-   $\text{SD}(\text{Pblom}) = 0.9987769$ (estimated in the normative sample)
+-   $R^2 = 0.366$ (from the demographic adjustment model)
+-   The denominator $= 0.9987769 \times \sqrt{1 - 0.366} \approx 0.7953$ is the standard error of the estimate (SEE)
+
+Both constants are fixed at their normative-sample values and applied identically to the full sample, ensuring `TF` is anchored to the normative distribution.
+
+`TF` is conceptually equivalent to a demographically-normed cognitive performance score: values above 50 indicate better-than-expected performance for a respondent's demographic profile; values below 50 indicate worse-than-expected performance.
+
+## Descriptive statistics of factor scores
+
+```{r}
+hrs16_merged <- readRDS(here::here("R_objects", "A7_055_hrs16_merged.rds"))
+```
+
+```{r}
+#| fig-cap: "Distribution of factor scores by HCAP normative sample status"
+#| label: fig-f-hcap-normative-hist
+
+
+F_mean <- hrs16_merged %>%
+  filter(!is.na(normexcld)) %>%
+  mutate(normexcld_f = factor(normexcld, labels = c("HCAP - Normative sample", "HCAP - Excluded sample"))) %>%
+  group_by(normexcld_f) %>%
+  summarize(mean = mean(F, na.rm=TRUE))
+
+hrs16_merged %>%
+  filter(!is.na(normexcld)) %>%
+  mutate(normexcld_f = factor(normexcld, labels = c("HCAP - Normative sample", "HCAP - Excluded sample"))) %>%
+  ggplot(aes(x = F)) +
+  geom_histogram() +
+  geom_vline(data = F_mean, aes(xintercept = mean), color = "red") +
+  facet_wrap(~normexcld_f, ncol=1) +
+  hrbrthemes::theme_ipsum()
+```
+
+```{r}
+#| tbl-cap: "Descriptive statistics of factor scores by HCAP normative sample status"
+#| label: tbl-f-hcap-normative
+
+hrs16_merged %>%
+  filter(!is.na(normexcld)) %>%
+  mutate(normexcld_f = factor(normexcld, labels = c("HCAP - Normative sample", "HCAP - Excluded sample"))) %>%
+  select(F, normexcld_f) %>%
+  gtsummary::tbl_summary(by = normexcld_f,
+                         type = all_continuous() ~ "continuous2",
+                         statistic = gtsummary::all_continuous2() ~ c(
+                           "{mean} ({sd})",
+                           "{median} ({p25}, {p75})",
+                           "{min}, {max}")
+                         ) %>%
+  gtsummary::add_overall()
+
+
+
+```
+
+```{r}
+#| tbl-cap: "Descriptive statistics of adjusted factor scores"
+#| label: tbl-blom-desc
+
+hrs16_merged %>%
+  mutate(
+    x = case_when(inHCAP==0 ~ 1,
+                  normexcld==1 ~ 2,
+                  normexcld==0 ~ 3),
+    x = factor(x, levels = 1:3, labels = c("Not in HCAP", "HCAP - Excluded sample", "HCAP - Normative sample") )
+    # normexcld_f = factor(normexcld, labels = c("HCAP - Normative sample", "HCAP - Excluded sample"))
+    ) %>%
+  select(x, Pblom, Eblom, TF) %>% 
+  gtsummary::tbl_summary(by = x,
+    type = list(c(Pblom, Eblom, TF ) ~ "continuous2"),
+    statistic = gtsummary::all_continuous2() ~ c(
+                           "{mean} ({sd})",
+                           "{median} ({p25}, {p75})",
+                           "{min}, {max}")
+  )
+```
+
+```{r}
+#| fig-cap: "Demographically adjusted factor scores vs original factor score"
+#| label: fig-scatter-eblom-plom
+
+# hrs16_cog_norm %>%
+#   ggplot(aes(x = Pblom, y = Eblom)) +
+#   geom_point() +
+#   geom_smooth(se=FALSE) +
+#   scale_y_continuous(labelled::get_label_attribute(hrs16_cog_norm$Eblom), limits = c(-4, 3)) +
+#   scale_x_continuous(labelled::get_label_attribute(hrs16_cog_norm$Pblom), limits = c(-4, 3)) +
+#   hrbrthemes::theme_ipsum() +
+#   theme(aspect.ratio=1)
+
+
+hrs16_merged %>%
+  filter(inHCAP==1) %>%
+  mutate(
+    normexcld_f = factor(normexcld, labels = c("HCAP - Normative sample", "HCAP - Excluded sample"))
+    ) %>%
+  ggplot(aes(x = Pblom, y = Eblom, color = normexcld_f)) +
+  geom_point(alpha=.2) +
+  geom_smooth(se=FALSE) +
+  scale_y_continuous(labelled::get_label_attribute(hrs16_cog_norm$Eblom), limits = c(-4, 3)) +
+  scale_x_continuous(labelled::get_label_attribute(hrs16_cog_norm$Pblom), limits = c(-4, 3)) +
+  scale_color_discrete("HCAP sample") +
+  hrbrthemes::theme_ipsum() +
+  theme(aspect.ratio=1)
+```
+
+```{r}
+#| fig-cap: "T-scaled factor residual vs original factor score"
+#| label: fig-scatter-tf-plom
+
+# hrs16_cog_norm %>%
+#   ggplot(aes(x = Pblom, y = TF)) +
+#   geom_point() +
+#   geom_smooth(se=FALSE) +
+#   scale_y_continuous(labelled::get_label_attribute(hrs16_cog_norm$TF)) +
+#   scale_x_continuous(labelled::get_label_attribute(hrs16_cog_norm$Pblom), limits = c(-4, 3)) +
+#   hrbrthemes::theme_ipsum()
+
+
+hrs16_merged %>%
+  filter(inHCAP==1) %>%
+  mutate(
+    normexcld_f = factor(normexcld, labels = c("HCAP - Normative sample", "HCAP - Excluded sample"))
+    ) %>%
+  ggplot(aes(x = Pblom, y = TF, color = normexcld_f)) +
+  geom_point(alpha = .2) +
+  geom_smooth(se=FALSE) +
+  scale_y_continuous(labelled::get_label_attribute(hrs16_cog_norm$TF)) +
+  scale_x_continuous(labelled::get_label_attribute(hrs16_cog_norm$Pblom), limits = c(-4, 3)) +
+  scale_color_discrete("HCAP sample") +
+  hrbrthemes::theme_ipsum()
+
+```

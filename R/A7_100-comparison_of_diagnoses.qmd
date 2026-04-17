@@ -1,0 +1,336 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+# Weighted Comparison Tables
+
+Comparisons that involve the consensus diagnosis use the HRS/HCAP validation-subsample weights computed as `HCAP16WGTR * samplingP^(-1)`.
+
+Comparisons that do not involve the consensus diagnosis use the HCAP population weights `HCAP16WGTR`.
+
+```{r}
+hcap_tables <- readRDS(here::here("R_objects", "A7_100_hcap_tables.rds"))
+```
+
+### Langa-Weir versus Consensus panel
+
+```{r}
+#| tbl-cap: "Langa-Weir diagnosis vs Consensus panel diagnosis, with consensus-panel sample weights"
+#| label: tbl-lw-consensus-3
+format_weighted_tab(
+  hcap_tables$tabs$three_class$lw_consensus,
+  row_name = "langa_weir",
+  stubhead = "Langa-Weir classification",
+  spanner = "Consensus panel diagnosis"
+)
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$consensus_standard`
+:::
+
+The quadratic weighted kappa is `r round(hcap_tables$summary$lw_consensus_kappa, 3)`.
+
+### Algorithmic diagnosis versus Consensus panel
+
+```{r}
+#| tbl-cap: "Algorithmic diagnosis vs Consensus panel diagnosis, with consensus-panel sample weights"
+#| label: tbl-algorithmic-consensus-3
+hcap_tables$tables$algorithmic_consensus
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$consensus_standard`
+:::
+
+The quadratic weighted kappa is `r round(hcap_tables$summary$algorithmic_consensus_kappa, 3)`.
+
+### HRS classification model versus Consensus panel
+
+```{r}
+#| tbl-cap: "Consensus panel diagnosis vs HRS classification model, with consensus-panel sample weights"
+#| label: tbl-consensus-hrs-3
+hcap_tables$tables$consensus_hrs
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$consensus_hrs`
+:::
+
+The quadratic weighted kappa is `r round(hcap_tables$summary$consensus_hrs_kappa, 3)`.
+
+### Hudomiet versus Consensus panel
+
+```{r}
+#| tbl-cap: "Consensus panel diagnosis vs Hudomiet, with consensus-panel sample weights"
+#| label: tbl-consensus-hudomiet-3
+hcap_tables$tables$consensus_hudomiet
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$consensus_hudomiet`
+:::
+
+The quadratic weighted kappa is `r round(hcap_tables$summary$consensus_hudomiet_kappa, 3)`.
+
+### Langa-Weir versus Algorithmic diagnosis
+
+```{r}
+#| tbl-cap: "Langa-Weir diagnosis vs Algorithmic diagnosis, with HCAP weights"
+#| label: tbl-algorithmic-lw-3
+hcap_tables$tables$algorithmic_lw
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$hcap_standard`
+:::
+
+The quadratic weighted kappa is `r round(hcap_tables$summary$algorithmic_lw_kappa, 3)`.
+
+
+### HRS classification model versus Algorithmic diagnosis
+
+```{r}
+#| tbl-cap: "Algorithmic diagnosis vs HRS classification model, with HCAP weights"
+#| label: tbl-algorithmic-hrs-3
+hcap_tables$tables$algorithmic_hrs
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$hcap_hrs`
+:::
+
+The quadratic weighted kappa is `r round(hcap_tables$summary$algorithmic_hrs_kappa, 3)`.
+
+### Hudomiet model versus Algorithmic diagnosis
+
+```{r}
+#| tbl-cap: "Algorithmic diagnosis vs Hudomiet, with HCAP weights"
+#| label: tbl-algorithmic-hudomiet-3
+hcap_tables$tables$algorithmic_hudomiet
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$hcap_hudomiet`
+:::
+
+The quadratic weighted kappa is `r round(hcap_tables$summary$algorithmic_hudomiet_kappa, 3)`.
+
+
+### Langa-Weir versus HRS classification model
+
+```{r}
+#| tbl-cap: "Langa-Weir diagnosis vs HRS classification model, with HCAP weights"
+#| label: tbl-lw-hrs-3
+hcap_tables$tables$lw_hrs
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$hcap_hrs`
+:::
+
+The quadratic weighted kappa is `r round(hcap_tables$summary$lw_hrs_kappa, 3)`.
+
+### Langa-Weir versus Hudomiet
+
+```{r}
+#| tbl-cap: "Langa-Weir diagnosis vs Hudomiet, with HCAP weights"
+#| label: tbl-lw-hudomiet-3
+hcap_tables$tables$lw_hudomiet
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$hcap_hudomiet`
+:::
+
+The quadratic weighted kappa is `r round(hcap_tables$summary$lw_hudomiet_kappa, 3)`.
+
+### HRS classification model versus Hudomiet
+
+```{r}
+#| tbl-cap: "HRS classification model vs Hudomiet, with HCAP weights"
+#| label: tbl-hrs-hudomiet-3
+hcap_tables$tables$hrs_hudomiet
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$hcap_hudomiet`
+:::
+
+The quadratic weighted kappa is `r round(hcap_tables$summary$hrs_hudomiet_kappa, 3)`.
+
+
+### Agreement Matrix
+
+```{r}
+#| tbl-cap: "Pairwise quadratic weighted kappa matrix using consensus-panel weights for consensus comparisons and HCAP weights otherwise"
+#| label: tbl-agreement-matrix-3
+hcap_tables$tables$agreement_matrix
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$matrix_three`
+:::
+
+## Dementia Versus Non-dementia
+
+This section collapses Normal and MCI into a single non-demented category. Comparisons that involve the consensus diagnosis use consensus-panel weights, and comparisons that do not involve the consensus diagnosis use HCAP weights.
+
+### Algorithmic diagnosis versus Consensus panel
+
+```{r}
+#| tbl-cap: "Algorithmic dementia classification vs Consensus panel diagnosis, with consensus-panel sample weights"
+#| label: tbl-algorithmic-consensus-2
+hcap_tables$tables$algorithmic_consensus_binary
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$consensus_standard`
+:::
+
+The kappa is `r round(hcap_tables$summary$algorithmic_consensus_binary_kappa, 3)`.
+
+### Langa-Weir versus Consensus panel
+
+```{r}
+#| tbl-cap: "Langa-Weir dementia classification vs Consensus panel diagnosis, with consensus-panel sample weights"
+#| label: tbl-lw-consensus-2
+hcap_tables$tables$lw_consensus_binary
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$consensus_standard`
+:::
+
+The kappa is `r round(hcap_tables$summary$lw_consensus_binary_kappa, 3)`.
+
+### HRS classification model versus Consensus panel
+
+```{r}
+#| tbl-cap: "Consensus panel dementia classification vs HRS classification model, with consensus-panel sample weights"
+#| label: tbl-consensus-hrs-2
+hcap_tables$tables$consensus_hrs_binary
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$consensus_hrs`
+:::
+
+The kappa is `r round(hcap_tables$summary$consensus_hrs_binary_kappa, 3)`.
+
+### Hudomiet versus Consensus panel
+
+```{r}
+#| tbl-cap: "Consensus panel dementia classification vs Hudomiet, with consensus-panel sample weights"
+#| label: tbl-consensus-hudomiet-2
+hcap_tables$tables$consensus_hudomiet_binary
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$consensus_hudomiet`
+:::
+
+The kappa is `r round(hcap_tables$summary$consensus_hudomiet_binary_kappa, 3)`.
+
+### Langa-Weir versus Algorithmic diagnosis
+
+```{r}
+#| tbl-cap: "Langa-Weir dementia classification vs Algorithmic diagnosis, with HCAP weights"
+#| label: tbl-algorithmic-lw-2
+hcap_tables$tables$algorithmic_lw_binary
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$hcap_standard`
+:::
+
+The kappa is `r round(hcap_tables$summary$algorithmic_lw_binary_kappa, 3)`.
+
+
+### HRS classification model versus Algorithmic diagnosis
+
+```{r}
+#| tbl-cap: "Algorithmic dementia classification vs HRS classification model, with HCAP weights"
+#| label: tbl-algorithmic-hrs-2
+hcap_tables$tables$algorithmic_hrs_binary
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$hcap_hrs`
+:::
+
+The kappa is `r round(hcap_tables$summary$algorithmic_hrs_binary_kappa, 3)`.
+
+### Hudomiet versus Algorithmic diagnosis
+
+```{r}
+#| tbl-cap: "Algorithmic dementia classification vs Hudomiet, with HCAP weights"
+#| label: tbl-algorithmic-hudomiet-2
+hcap_tables$tables$algorithmic_hudomiet_binary
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$hcap_hrs`
+:::
+
+The kappa is `r round(hcap_tables$summary$algorithmic_hudomiet_binary_kappa, 3)`.
+
+### Langa-Weir versus HRS classification model
+
+```{r}
+#| tbl-cap: "Langa-Weir dementia classification vs HRS classification model, with HCAP weights"
+#| label: tbl-lw-hrs-2
+hcap_tables$tables$lw_hrs_binary
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$hcap_hrs`
+:::
+
+The kappa is `r round(hcap_tables$summary$lw_hrs_binary_kappa, 3)`.
+
+### Langa-Weir versus Hudomiet
+
+```{r}
+#| tbl-cap: "Langa-Weir dementia classification vs Hudomiet, with HCAP weights"
+#| label: tbl-lw-hudomiet-2
+hcap_tables$tables$lw_hudomiet_binary
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$hcap_hrs`
+:::
+
+The kappa is `r round(hcap_tables$summary$lw_hudomiet_binary_kappa, 3)`.
+
+### HRS classification model versus Hudomiet
+
+```{r}
+#| tbl-cap: "HRS classification model vs Hudomiet, with HCAP weights"
+#| label: tbl-hrs-hudomiet-2
+hcap_tables$tables$hrs_hudomiet_binary
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$hcap_hrs`
+:::
+
+The kappa is `r round(hcap_tables$summary$hrs_hudomiet_binary_kappa, 3)`.
+
+### Binary Agreement Matrix
+
+```{r}
+#| tbl-cap: "Pairwise kappa matrix for dementia versus non-dementia using consensus-panel weights for consensus comparisons and HCAP weights otherwise"
+#| label: tbl-agreement-matrix-2
+hcap_tables$tables$agreement_matrix_binary
+```
+
+::: {custom-style="Footnote text"}
+`r hcap_tables$notes$matrix_binary`
+:::
+
+
