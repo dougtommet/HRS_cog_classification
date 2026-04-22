@@ -93,16 +93,16 @@ hrs16_cog <- hrs16_cog %>%
 hrs16_cog <- hrs16_cog %>%
   rowwise() %>%
   mutate(
-    vdori = sum(rPD151, rPD152, rPD153, rPD154, na.rm = "exclude"),
+    vdori = sum(rPD151, rPD152, rPD153, rPD154, na.rm = TRUE),
     vdori = case_when(is.na(rPD151) & is.na(rPD152) & is.na(rPD153) & is.na(rPD154) ~ NA,
                       TRUE ~ vdori),
-    vdlfl2 = sum(rPD155, rPD156, na.rm = "exclude"),
+    vdlfl2 = sum(rPD155, rPD156, na.rm = TRUE),
     vdlfl2 = case_when(is.na(rPD155) & is.na(rPD156) ~ NA,
                        TRUE ~ vdlfl2),
-    vdlfl3 = sum(rPD157, rPD158, na.rm = "exclude"),
+    vdlfl3 = sum(rPD157, rPD158, na.rm = TRUE),
     vdlfl3 = case_when(is.na(rPD157) & is.na(rPD158) ~ NA,
                        TRUE ~ vdlfl3),
-    vdsevens = sum(rPD142, rPD143, rPD144, rPD145, rPD146, na.rm = "exclude"),
+    vdsevens = sum(rPD142, rPD143, rPD144, rPD145, rPD146, na.rm = TRUE),
     vdsevens = case_when(is.na(rPD142) & is.na(rPD143) & is.na(rPD144) & is.na(rPD145) & is.na(rPD146) ~ NA,
                       TRUE ~ vdsevens)
   ) %>%

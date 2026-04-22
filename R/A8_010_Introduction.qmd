@@ -1,0 +1,71 @@
+## Contents
+
+- Background and motivation
+
+- Overview of Analysis A7
+
+- Hudomiet BLVM definition
+
+- Methods: CFA model, factor score norming, classification algorithm
+
+- Results: comparison of classification methods
+
+- Conclusions and next steps
+
+## Background
+
+<div style="font-size: 0.8em; line-height: 1.3;">
+Classifying cognitive status in the HRS Core sample requires mapping a set of
+brief, self-administered cognitive measures onto clinically meaningful categories
+(Normal, MCI, Dementia).
+
+Previous work exported the "Manly-Jones" algorithm to the Core using a single
+latent cognitive performance domain and ADL/IADL functional impairment,
+with cutpoints calibrated to HCAP 2016 prevalence. That approach achieved:
+
+- **Weighted κ = 0.52** vs. HCAP algorithmic classification (3-way, unweighted)
+- **Weighted κ = 0.33** vs. HCAP consensus classification (3-way, unweighted)
+
+N = 2,993 HCAP participants with at least one non-missing cognitive measure.
+</div>
+
+## Goal of Analysis A7
+
+<div style="font-size: 0.8em; line-height: 1.3;">
+Refit and update the HCAP-algorithm-in-Core approach using:
+
+- Survey-weighted confirmatory factor analysis (CFA) on the full HRS 2016 age-65+ sample
+- Demographically normed T-scores from the resulting factor scores
+- An updated rule-based classification algorithm combining the normed T-score,
+  self-reported memory change (PD102), and informant-rated cognitive change (JORM)
+
+Then compare the resulting classifications against:
+
+- HCAP consensus panel diagnosis (Farron et al, 2025)
+- HCAP Algorithmic classification (Manly et al, 2022)
+- Langa-Weir 
+- HRS Classification (A7)
+- Hudomiet BLVM (Bayesian Latent Variable Model; Hudomiet et al, 2022)
+
+using survey-weighted kappa statistics.
+</div>
+
+## <span style="font-size: 0.7em;">Hudomiet BLVM (Hudomiet, Hurd & Rohwedder, 2022)</span>
+
+::: {style="font-size: 0.4em; line-height: 1.1;"}
+**_The Hudomiet classification is based on applying cuts to a continuous latent variable._** This latent variable ($c^*_{it}$) is defined in a factor analysis sense with indicators ($y_{its}$) being word recall immediate & delayed, serial 7s, mental status, interviewer assessment, proxy-reported problems (wandering, lost, left alone), subjective limitations, and IADLs. Using the clinical labels available in the ADAMS subsample (N = 856), the factor loadings $\phi_s$ linking each $y_{its}$ to $c^*_{it}$ are calibrated within a joint MCMC† such that people with a dementia diagnosis have $c^*$ values below 0, and people with normal cognition have $c^*$ values at or above 1. Using this calibration, Hudomiet and colleagues score $c^*$ over all available waves for HRS Core participants (N = 21,442, HRS 2000–2016) and model its variation as a function of a cubic polynomial of age, birth-year interactions with all covariates, and other sociodemographic characteristics, plus person-specific random intercepts and age slopes. This latter model is descriptive rather than predictive: it characterizes each person's cognitive trajectory across all observed waves rather than generating forward risk scores. The posterior estimates of $c^*$ at each wave incorporate all available cognitive performance, sociodemographic values, and the person's full longitudinal history. 
+
+Because demographics enter the model for $c^*$ directly, people with identical cognitive test responses but different demographic profiles will receive different $c^*$ values. Specifically, characteristics associated with higher dementia risk (older age, less education, minority race/ethnicity, lower lifetime earnings, history of stroke) shift $c^*$ downward, increasing the probability of crossing below the dementia threshold (0) or the CIND threshold (1), regardless of how the person performs on the cognitive items themselves. Classification thus reflects *absolute* cognitive standing on a population-wide scale anchored to ADAMS clinical diagnoses.‡ 
+
+The Hudomiet BLVM provides classifications (based on 901 individual posterior draws) for each HRS Core participant at all waves from 2000 to 2016, so the 2016 classifications incorporate up to 16 years of prior cognitive history. This is a fundamental asymmetry in any direct comparison with HRS Classification (A7) and Langa-Weir, which classify each wave purely from cross-sectional data.
+:::
+
+::: {style="font-size: 0.3em; line-height: 1.0;"}
+† The Markov Chain Monte Carlo (MCMC) Bayesian model jointly models: a latent cognition equation (the growth curve model for $c^*$); a clinical classification equation (eq. 2) - probit for ADAMS clinical labels as a function of $c^*$; A measurement model for cognitive tests; A proxy selection equation (probit for whether interview is proxy); A survival model using Gompertz hazard; and missing data models. Importantly, the random effects from the cognition trajectory are directly incorporated into the survival hazard, which means the model explicitly links cognitive decline to mortality risk.
+
+‡ Note: This contrasts with HRS Classification (A7), which explicitly removes demographic effects from the factor score (via a norming regression) before applying thresholds — so HRS Classification (A7) thresholds are applied to residual cognition *after* accounting for demographic group membership, yielding *relative* classifications (standing within demographic peers). Whether absolute or relative classification is preferable depends on the scientific question: absolute classification tracks clinical risk; relative classification tracks deviation from demographic expectation. Absolute may be more appropriate when the goal is clinical risk — a less-educated person genuinely has higher dementia incidence and the classification should reflect that. Relative may be more appropriate when the goal is detecting deviation from a person's expected trajectory — flagging who is performing worse than their demographic peers, which may be more sensitive to early decline within a group that starts with a lower baseline.
+:::
+
+::: {style="font-size: 0.2em; line-height: 1.0;"}
+Hudomiet, P., Hurd, M. D., & Rohwedder, S. (2022). Trends in inequalities in the prevalence of dementia in the United States. Proceedings of the National Academy of Sciences of the United States of America, 119(46), e2212205119. https://doi.org/10.1073/pnas.2212205119 
+:::

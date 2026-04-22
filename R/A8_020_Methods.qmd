@@ -1,0 +1,33 @@
+## Factor Score Norming — Overview
+
+<div style="font-size: 0.6em; line-height: 1.3;">
+The raw factor score `F` is put through a **three-stage normalization pipeline**,
+estimated in the HCAP normative subsample (`normexcld == 0`) and then applied to
+the full HRS 2016 sample:
+
+1. **Blom transformation** — maps `F` to a normal score (`f_blom`) within the
+   normative sample; a cubic spline model (knots at 5th, 35th, 65th, 95th %iles
+   of `F`) is used to apply the transformation portably to the full sample
+
+2. **Demographic adjustment** — survey-weighted GLM regresses the Blom-transformed
+   score on age splines (RCS centered at 70), sex, race/ethnicity, and years of
+   schooling, plus two-way interactions (R² ≈ 0.37); fitted values = `Eblom`
+
+3. **T-scaling** — standardized residual rescaled to mean = 50, SD = 10:
+
+$$TF = 50 + 10 \times \frac{\text{Pblom} - \text{Eblom}}{\text{SEE}}$$
+
+`TF` reflects **demographically-adjusted cognitive performance** relative to the
+normative HCAP sample.
+</div>
+
+## Algorithm Flow Diagram
+
+```{r}
+#| fig-cap: "HRS 2016 classification algorithm (A7) with HCAP subsample counts"
+#| label: fig-algorithm-v1
+#| out-width: "100%"
+
+knitr::include_graphics(here::here("Figures",
+  "HRS-Core-Diagnostic-Algorithm-With-Ns-HRS-Sample-2026-04-22.png"))
+```

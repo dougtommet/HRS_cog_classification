@@ -1,0 +1,33 @@
+## Summary
+
+<div style="font-size: 0.8em; line-height: 1.3;">
+Analysis A7 refits the HCAP-algorithm-in-Core approach with:
+
+- Survey-weighted CFA (WLSMV, N = 9,218 HRS 2016 age 65+)
+- Demographically normed T-scores (age, sex, race/ethnicity, education; R² ≈ 0.37)
+- Updated rule-based algorithm combining T-score, self-report memory change, and
+  informant-rated change (JORM)
+
+Compared against consensus panel, Langa-Weir, HRS Classification (A7), and Hudomiet BLVM
+in the HCAP subsample (N = 3,496) using survey-weighted kappa.
+</div>
+
+## Next Steps
+
+1. Integrate Analysis A7 outputs into the manuscript (Analysis 2) tables and figures
+
+2. Evaluate machine learning / predictive modeling approaches as an additional
+   comparator
+
+3. Full manuscript: all approaches (Algorithmic, PMM, Langa-Weir, Hudomiet BLVM) side
+   by side
+
+## Resources
+
+[A7 analysis report (html)](https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A7_000-Main_control_2026-04-17.html)
+
+[PMM analysis report (html)](https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/PMM_Analysis_Report_2026-03-25.html)
+
+[Slides2603 slide show (html)](https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides2603_2026-03-25.html)
+
+[Github repository](https://github.com/dougtommet/HRS_cog_classification)

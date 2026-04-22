@@ -1,0 +1,117 @@
+## HRS Classification (A7) vs. HCAP Algorithmic Classification
+
+::: {style="font-size: 0.7em;"}
+```{r}
+#| tbl-cap: "HRS Classification (A7) vs. HCAP Algorithmic classification — unweighted counts"
+#| label: tbl-hrs-algorithmic-unweighted
+
+hcap_tables$data$hcap_sample |>
+  dplyr::filter(!is.na(algorithmic), !is.na(hrs)) |>
+  dplyr::count(hrs, algorithmic) |>
+  tidyr::pivot_wider(names_from = algorithmic, values_from = n, values_fill = 0L) |>
+  dplyr::rename(`HRS Classification (A7)` = hrs) |>
+  gt::gt(rowname_col = "HRS Classification (A7)") |>
+  gt::tab_spanner("HCAP Algorithmic classification", columns = -1) |>
+  gt::tab_stubhead("HRS Classification (A7)") |>
+  gt::grand_summary_rows(
+    fns = list(Total = ~ sum(.)),
+    fmt = ~ gt::fmt_integer(.)
+  )
+```
+:::
+
+::: {style="font-size: 0.55em; line-height: 1.2;"}
+Unweighted N = `r hcap_tables$data$hcap_sample |> dplyr::filter(!is.na(algorithmic), !is.na(hrs)) |> nrow()` HCAP participants.
+Quadratic weighted κ = `r round(hcap_tables$summary$algorithmic_hrs_kappa, 3)` (HCAP population weights).
+:::
+
+## <span style="font-size: 0.85em;">HRS Classification (A7) vs. HCAP Algorithmic — Weighted %</span>
+
+::: {style="font-size: 0.7em;"}
+```{r}
+#| tbl-cap: "HRS Classification (A7) vs. HCAP Algorithmic classification — complex-sample weighted percentages"
+#| label: tbl-hrs-algorithmic-weighted-pct
+
+{
+  tab <- hcap_tables$tabs$three_class$algorithmic_hrs
+  pct <- prop.table(tab) * 100
+
+  pct_df <- as.data.frame.matrix(pct) |>
+    tibble::rownames_to_column("Algorithmic") |>
+    dplyr::mutate(Total = Normal + MCI + Dementia)
+
+  total_row <- pct_df |>
+    dplyr::summarise(
+      Algorithmic = "Total",
+      dplyr::across(c(Normal, MCI, Dementia, Total), sum)
+    )
+
+  dplyr::bind_rows(pct_df, total_row) |>
+    gt::gt(rowname_col = "Algorithmic") |>
+    gt::tab_spanner("HRS Classification (A7)", columns = c(Normal, MCI, Dementia)) |>
+    gt::tab_stubhead("HCAP Algorithmic classification") |>
+    gt::fmt_number(decimals = 1)
+}
+```
+:::
+
+::: {style="font-size: 0.55em; line-height: 1.2;"}
+`r hcap_tables$notes$hcap_hrs`
+Quadratic weighted κ = `r round(hcap_tables$summary$algorithmic_hrs_kappa, 3)`.
+:::
+
+## <span style="font-size: 0.6em;">3-way Agreement Matrix (Normal / MCI / Dementia)</span>
+
+```{r}
+#| tbl-cap: "Pairwise quadratic weighted kappa — 3-way classification"
+#| label: tbl-kappa-3way
+
+hcap_tables$tables$agreement_matrix |>
+  gt::cols_label(
+    `Algorithmic diagnosis`    = "HCAP Algorithmic classification",
+    `HRS classification model` = "HRS Classification (A7)",
+    `Hudomiet`                 = "Hudomiet BLVM"
+  ) |>
+  gt::text_transform(
+    locations = gt::cells_stub(),
+    fn = function(x) {
+      x <- gsub("Algorithmic diagnosis", "HCAP Algorithmic classification", x)
+      x <- gsub("HRS classification model", "HRS Classification (A7)", x)
+      x <- gsub("^Hudomiet$", "Hudomiet BLVM", x)
+      x
+    }
+  )
+```
+
+::: {style="font-size: 0.6em; line-height: 1.2;"}
+`r hcap_tables$notes$matrix_three`
+:::
+
+## <span style="font-size: 0.6em;">2-way Agreement Matrix (Dementia / Non-dementia)</span>
+
+::: {style="font-size: 0.5em;"}
+```{r}
+#| tbl-cap: "Pairwise kappa — dementia vs. non-dementia"
+#| label: tbl-kappa-2way
+
+hcap_tables$tables$agreement_matrix_binary |>
+  gt::cols_label(
+    `Algorithmic diagnosis`    = "HCAP Algorithmic classification",
+    `HRS classification model` = "HRS Classification (A7)",
+    `Hudomiet`                 = "Hudomiet BLVM"
+  ) |>
+  gt::text_transform(
+    locations = gt::cells_stub(),
+    fn = function(x) {
+      x <- gsub("Algorithmic diagnosis", "HCAP Algorithmic classification", x)
+      x <- gsub("HRS classification model", "HRS Classification (A7)", x)
+      x <- gsub("^Hudomiet$", "Hudomiet BLVM", x)
+      x
+    }
+  )
+```
+:::
+
+::: {style="font-size: 0.6em; line-height: 1.2;"}
+`r hcap_tables$notes$matrix_binary`
+:::

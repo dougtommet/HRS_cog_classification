@@ -16,15 +16,35 @@ The codebase is organized so that source code lives primarily in `R/` and `Stata
 
 ## Project Overview
 
-This repository contains seven related but distinct analysis workflows. Existing source files remain in place. The authoritative automation entrypoints are the root-level drivers listed below.
+This repository contains ten related but distinct analysis workflows. Existing source files remain in place. The authoritative automation entrypoints are the root-level drivers listed below. Source file naming follows an `A#_` prefix convention (e.g., `A0_`, `A1_`, `A7_`) that groups files by workflow.
 
-### Analysis 1: HRS Core actuarial algorithm derivation and validation
+### Analysis A0: HRS 2016 data processing
+
+- Driver: none (no root-level driver yet; render the control file directly)
+- Control: `./R/A0_000-Main_control.qmd`
+- Primary source programs:
+  - `./R/A0_001-libraries.R`
+  - `./R/A0_002-folder_paths.R`
+  - `./R/A0_005-read_data.R` through `./R/A0_030-merge_data.R`
+  - Corresponding `.qmd` chapter files: `./R/A0_005-read_data.qmd` through `./R/A0_030-merge_data.qmd`
+- Rebuild command:
+  - `quarto render R/A0_000-Main_control.qmd`
+- Final rendered output:
+  - `./R/A0_000-Main_control.html`
+- Main derived data products:
+  - `./R_objects/A0_030_hrs16_merged.rds`
+  - `./R_objects/A0_030_hcap16_merged.rds`
+- Purpose:
+  - Reads raw HRS 2016 data files, selects relevant variables, recodes demographics, IADL, functional items, cognitive items, classification variables, consensus weights, and merges everything into a single analysis-ready working file. This is a prerequisite for Analysis A7.
+
+### Analysis 1 (A1): HRS Core actuarial algorithm derivation and validation
 
 - Driver: `./Analysis1_Driver.R`
-- Control: `./R/000-master.qmd`
+- Control: `./R/A1_000-master.qmd` (renamed from `000-master.qmd`)
+- **Note:** `Analysis1_Driver.R` still references the old `R/000-master.qmd`, which has been deleted. Update the driver's `render_target` to point to `R/A1_000-master.qmd` before rebuilding.
 - Primary source programs:
-  - `./R/001-libraries.R` through `./R/030-implementing_algorithm_in_HCAP.R`
-  - `./R/_005-read_data.qmd` through `./R/_035-validation_comparison.qmd`
+  - `./R/A1_001-libraries.R` through `./R/A1_030-implementing_algorithm_in_HCAP.R`
+  - `./R/A1_005-read_data.qmd` through `./R/A1_035-validation_comparison.qmd`
 - Rebuild command:
   - `Rscript Analysis1_Driver.R`
 - Final rendered output:
@@ -109,6 +129,32 @@ This repository contains seven related but distinct analysis workflows. Existing
 - Purpose:
   - This is a temporary debugging workflow for rendering ad hoc QMD content and inspecting Mplus H5 outputs.
 
+### Analysis A7: HRS 2016 cognition classification
+
+- Driver: none (no root-level driver yet; render the control file directly)
+- Control: `./R/A7_000-Main_control.qmd`
+- Primary source programs:
+  - `./R/A7_001-libraries.R`
+  - `./R/A7_005-get_data.R`
+  - `./R/A7_050-mplus_model.R`
+  - `./R/A7_055-norm_factor_score.R`
+  - `./R/A7_075-implement_algorithm.R`
+  - `./R/A7_100-comparison_of_diagnoses.R`
+  - Corresponding `.qmd` chapter files for each step above
+- Rebuild command:
+  - `quarto render R/A7_000-Main_control.qmd`
+- Final rendered output:
+  - `./Reports/A7_000-Main_control_[date].html`
+- Main derived data products:
+  - `./R_objects/A7_005_hrs16_merged.rds`
+  - `./R_objects/A7_055_hrs16_merged.rds`
+  - `./R_objects/A7_075_hrs16_hcap.rds`
+  - `./mplus_output/A7/` (Mplus model runs: `model1/`, `model1a/`, `model_1a_fixed/`, `model_final/`)
+- Purpose:
+  - Fits a confirmatory factor model to HRS 2016 cognitive items in Mplus (WLSMV, complex survey design), normalizes the resulting factor scores, implements a diagnostic algorithm using cognitive and JORM thresholds, and compares the resulting classifications against HCAP consensus diagnoses, Langa-Weir, and Hudomiet classifications using weighted kappa and related statistics.
+- Prerequisite:
+  - Analysis A0 must be run first to produce `./R_objects/A0_030_hrs16_merged.rds`.
+
 ### Analysis 7: Slides2603 revealjs slide deck
 
 - Driver: `./Slides2603_Driver.R`
@@ -123,6 +169,24 @@ This repository contains seven related but distinct analysis workflows. Existing
   - Use one included `Slides2603_*.qmd` file per slide.
   - Keep shared setup, theme, and revealjs options in the control file.
   - Add new slides by appending additional include statements in the control file.
+
+### Analysis A8: Summary slide deck for Analysis A7
+
+- Driver: `./Analysis8_Driver.R`
+- Control: `./R/A8_Control.qmd`
+- Slide chapter files:
+  - `./R/A8_010_Introduction.qmd` — background and goals
+  - `./R/A8_020_Methods.qmd` — CFA model, factor score norming, classification algorithm
+  - `./R/A8_030_Results.qmd` — kappa comparison tables
+  - `./R/A8_040_Conclusion.qmd` — summary and next steps
+- Rebuild command:
+  - `Rscript Analysis8_Driver.R`
+- Final rendered output:
+  - `./Reports/Slides_A7summary_[date].html`
+- Purpose:
+  - A revealjs slide deck summarizing the methods and results of Analysis A7. Follows the same format, theme, and title-slide watermark as the Slides2603 deck. Sources data objects produced by Analysis A7 at render time.
+- Prerequisite:
+  - Analysis A0 and Analysis A7 must be run first to produce the required `R_objects/A7_*.rds` files.
 
 ## Workflow Rules
 

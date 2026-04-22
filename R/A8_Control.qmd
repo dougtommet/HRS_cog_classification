@@ -1,0 +1,71 @@
+---
+title: "HRS 2016 Cognitive Classification: Updated Algorithm"
+title-slide-attributes:
+  data-background-image: ../Figures/Gemini-Brown-Amphibian.png
+  data-background-size: contain
+  data-background-opacity: "1"
+author: "Rich Jones and Doug Tommet for HRS/HCAP Working Group"
+date: '`r Sys.Date()`'
+format:
+  revealjs:
+    theme: white
+    slide-number: true
+    self-contained: true
+    code-copy: true
+    code-line-numbers: true
+    fig-align: center
+    controls: true
+    controls-layout: bottom-right
+editor: source
+include-in-header:
+  - text: |
+      <style>
+      .reveal .slide-number {
+        top: 1em !important;
+        right: 1em !important;
+        bottom: auto !important;
+        left: auto !important;
+      }
+      .reveal pre {
+        max-height: 850px !important;
+        width: 100% !important;
+        overflow-y: auto !important;
+      }
+      .reveal pre code {
+        max-height: 850px !important;
+        overflow-y: auto !important;
+      }
+      </style>
+---
+
+```{r setup}
+#| include: false
+#| message: false
+#| warning: false
+
+invisible(
+  suppressMessages(
+    suppressPackageStartupMessages({
+      source(here::here("R", "A7_001-libraries.R"))
+    })
+  )
+)
+```
+
+```{r load-data}
+#| include: false
+
+hcap_tables_path <- here::here("R_objects", "A7_100_hcap_tables.rds")
+if (!file.exists(hcap_tables_path)) {
+  stop(
+    "Required object not found: R_objects/A7_100_hcap_tables.rds\n",
+    "Run Analysis A7 (quarto render R/A7_000-Main_control.qmd) before rendering these slides."
+  )
+}
+hcap_tables <- readRDS(hcap_tables_path)
+```
+
+{{< include A8_010_Introduction.qmd >}}
+{{< include A8_020_Methods.qmd >}}
+{{< include A8_030_Results.qmd >}}
+{{< include A8_040_Conclusion.qmd >}}

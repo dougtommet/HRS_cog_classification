@@ -36,20 +36,21 @@ variable_list <- c("mplusid", "HCAP16WGTR0", "STRATUM", "SECU_mplus",
 
 # Model 1 - Removing the immediate word recall
 fs::dir_create(here::here("mplus_output", "A7", "model1"))
-setwd(here::here("mplus_output", "A7", "model1"))
+withr::with_dir(here::here("mplus_output", "A7", "model1"), {
 
-mod1 <- MplusAutomation::mplusObject(
-  TITLE = mplus_title,
-  MODEL = mplus_model,
-  VARIABLE = mplus_variable,
-  ANALYSIS = mplus_analysis_wlsmv,
-  OUTPUT = mplus_output,
-  SAVEDATA = "H5RESULTS = model1.h5;",
-  usevariables = variable_list,
-  rdata = hrs16_nolabs
+  mod1 <- MplusAutomation::mplusObject(
+    TITLE = mplus_title,
+    MODEL = mplus_model,
+    VARIABLE = mplus_variable,
+    ANALYSIS = mplus_analysis_wlsmv,
+    OUTPUT = mplus_output,
+    SAVEDATA = "H5RESULTS = model1.h5;",
+    usevariables = variable_list,
+    rdata = hrs16_nolabs
+  )
+  MplusAutomation::mplusModeler(mod1, modelout = "model1.inp", run = 1, writeData = "always")
 
-)
-MplusAutomation::mplusModeler(mod1, modelout = "model1.inp", run = 1, writeData = "always")
+})
 
 
 
@@ -59,29 +60,30 @@ MplusAutomation::mplusModeler(mod1, modelout = "model1.inp", run = 1, writeData 
 # Fitting the model with mlr/probit
 
 fs::dir_create(here::here("mplus_output", "A7", "model1a"))
-setwd(here::here("mplus_output", "A7", "model1a"))
 
 mplus_analysis_mlr = "estimator = mlr; COVERAGE=0; link=PROBIT;
 TYPE = complex;"
 
-mod1a <- MplusAutomation::mplusObject(
-  TITLE = mplus_title,
-  MODEL = mplus_model,
-  VARIABLE = mplus_variable,
-  ANALYSIS = mplus_analysis_mlr,
-  OUTPUT = mplus_output,
-  SAVEDATA = "H5RESULTS = model1a.h5;",
-  usevariables = variable_list,
-  rdata = hrs16_nolabs
+withr::with_dir(here::here("mplus_output", "A7", "model1a"), {
 
-)
-MplusAutomation::mplusModeler(mod1a, modelout = "model1a.inp", run = 1, writeData = "always")
+  mod1a <- MplusAutomation::mplusObject(
+    TITLE = mplus_title,
+    MODEL = mplus_model,
+    VARIABLE = mplus_variable,
+    ANALYSIS = mplus_analysis_mlr,
+    OUTPUT = mplus_output,
+    SAVEDATA = "H5RESULTS = model1a.h5;",
+    usevariables = variable_list,
+    rdata = hrs16_nolabs
+  )
+  MplusAutomation::mplusModeler(mod1a, modelout = "model1a.inp", run = 1, writeData = "always")
+
+})
 
 
 
 
 fs::dir_create(here::here("mplus_output", "A7", "model_1a_fixed"))
-setwd(here::here("mplus_output", "A7", "model_1a_fixed"))
 
 model_1a_fixed_h5_path <- here::here("mplus_output", "A7", "model1a", "model1a.h5")
 # mplush5::mplus.view.results(model_1a_fixed_h5_path)
@@ -98,23 +100,26 @@ mplus_model_1a_fixed <- model_1a_fixed_results %>%
   str_c(collapse = " \n ")
 mplus_model_1a_fixed <- str_c(mplus_model_1a_fixed, " \n [F@0]; \n F@1;")
 
-mod_final <- MplusAutomation::mplusObject(
-  TITLE = mplus_title,
-  MODEL = mplus_model_1a_fixed,
-  VARIABLE = mplus_variable,
-  ANALYSIS = mplus_analysis_mlr,
-  OUTPUT = mplus_output,
-  SAVEDATA = "H5RESULTS = model_1a_fixed.h5; save = fscores; file = model_1a_fixed.dat;",
-  usevariables = variable_list,
-  rdata = hrs16_nolabs
+model_1a_fixed_fscores <- withr::with_dir(here::here("mplus_output", "A7", "model_1a_fixed"), {
 
-)
-MplusAutomation::mplusModeler(mod_final, modelout = "model_1a_fixed.inp", run = 1, writeData = "always")
+  mod_final <- MplusAutomation::mplusObject(
+    TITLE = mplus_title,
+    MODEL = mplus_model_1a_fixed,
+    VARIABLE = mplus_variable,
+    ANALYSIS = mplus_analysis_mlr,
+    OUTPUT = mplus_output,
+    SAVEDATA = "H5RESULTS = model_1a_fixed.h5; save = fscores; file = model_1a_fixed.dat;",
+    usevariables = variable_list,
+    rdata = hrs16_nolabs
+  )
+  MplusAutomation::mplusModeler(mod_final, modelout = "model_1a_fixed.inp", run = 1, writeData = "always")
 
-model_1a_fixed <- MplusAutomation::readModels("model_1a_fixed.out")
-model_1a_fixed_fscores <- model_1a_fixed[["savedata"]] %>%
-  tibble() %>%
-  select(MPLUSID, F, F_SE)
+  model_1a_fixed <- MplusAutomation::readModels("model_1a_fixed.out")
+  model_1a_fixed[["savedata"]] %>%
+    tibble() %>%
+    select(MPLUSID, F, F_SE)
+
+})
 
 
 hrs16_nolabs<- hrs16_nolabs %>%

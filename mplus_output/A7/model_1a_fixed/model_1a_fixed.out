@@ -1,6 +1,6 @@
-Mplus VERSION 8.11 (Mac)
+Mplus VERSION 9 (Mac)
 MUTHEN & MUTHEN
-04/17/2026   4:05 PM
+04/21/2026   5:00 PM
 
 INPUT INSTRUCTIONS
 
@@ -25,7 +25,6 @@ INPUT INSTRUCTIONS
 
   DATA:
   FILE = "model_1a_fixed_a46efea7995301c55172365a036401e3.dat";
-
   VARIABLE:
   NAMES = mplusid HCAP16WGTR0 STRATUM SECU_mplus vdori vdlfl1z vdlfl2 vdlfl3 vdwddelz
        vdexf7z vdsevens vdcount;
@@ -140,7 +139,7 @@ Optimization Specifications for the EM Algorithm
     Relative loglikelihood change                        0.100D-05
     Derivative                                           0.100D-02
 Optimization Specifications for the M step of the EM Algorithm for
-Categorical Latent variables
+Categorical Latent Variables
   Number of M step iterations                                    1
   M step convergence criterion                           0.100D-02
   Basis for M step termination                           ITERATION
@@ -653,8 +652,8 @@ SAVEDATA INFORMATION
     Standardized Model Results
     R-Square
 
-     Beginning Time:  16:05:24
-        Ending Time:  16:05:28
+     Beginning Time:  17:00:42
+        Ending Time:  17:00:46
        Elapsed Time:  00:00:04
 
 
@@ -668,4 +667,4 @@ Fax: (310) 391-8971
 Web: www.StatModel.com
 Support: Support@StatModel.com
 
-Copyright (c) 1998-2024 Muthen & Muthen
+Copyright (c) 1998-2025 Muthen & Muthen
