@@ -1,0 +1,64 @@
+
+## Converting 2016-2022 waves to 'long' data format
+
+This script takes several groups of **wave-wide variables** from the merged 2016–2022 dataset, **pivots each group to long format** (one row per person-wave), and merges them onto the existing long-format panel `hrs16_22_long`.
+
+The four HRS/HCAP wave letters used throughout are:
+
+- **P** = 2016
+- **Q** = 2018
+- **R** = 2020
+- **S** = 2022
+
+### Inputs
+
+| Object | Source file | Description |
+|----|----|----|
+| `hrs16_22_long` | `A7_052_hrs16_22_long.rds` | Existing long-format 2016–2022 panel (one row per id-wave) |
+| `hrs16_22_merged` | `A7_005_hrs16_22_merged.rds` | Wide-format merged dataset (one row per id, wave-prefixed columns) |
+
+### Step 1: Pivot Simple "x" Variables
+
+
+- Selects columns matching the pattern `x` + wave letter + single digit (e.g. `xP1`, `xQ2`, ...).
+- These are the demographic variables.
+- Uses `pivot_longer()` with `.value` to split each column name into a **wave** (`P`/`Q`/`R`/`S`) and a **variable number** (`1`, `2`, ...), creating one row per id-wave.
+- Since `.value` pivoting drops the `x` prefix from the resulting column names, `rename_with()` re-adds the `x` prefix (e.g. resulting columns become `x1`, `x2`, ...).
+
+### Step 2: Pivot Interaction Variables
+
+
+- Selects **interaction-term columns** with a double wave/number pattern (e.g. `xP1xP4`).
+- These are the interaction between demographic variables.
+- Renames each column from the raw format (`xP1xP4`) to a standardized format (`P_x1x4`), moving the wave letter to the front so it can be extracted during pivoting.
+- Pivots to long format using `.value`, splitting each column into **wave** and the remaining interaction variable name (e.g. `x1x4`), producing one row per id-wave.
+
+### Step 3: Merge Simple and Interaction Variables
+
+
+Combines the reshaped simple `x` variables and interaction variables into a single long data frame keyed by `id` and `wave`.
+
+### Step 4: Pivot the Jorm Cognitive Score
+
+Reshapes the four wave-specific Jorm score columns (`rPjorm`, `rQjorm`, `rRjorm`, `rSjorm`) into a single `jorm` column with a `wave` identifier.
+
+### Step 5: Pivot the D102 (Imputed) Variable
+
+Reshapes the four wave-specific imputed `D102` columns into a single `D102_imp` column with a `wave` identifier.
+
+### Step 6: Merge Everything into the Long Panel
+
+Sequentially left-joins the three newly reshaped long data frames onto the existing `hrs16_22_long` panel, keyed by `id` and `wave`, adding the `x*` variables, interaction terms, `jorm` score, and `D102_imp` as new columns.
+
+### Output
+
+| Object | Saved to |
+|----|----|
+| `hrs16_22_long` | `A7_053_hrs16_22_long.rds` |
+
+### Key Methodological Notes
+
+- The core technique throughout is **wide-to-long reshaping with `tidyr::pivot_longer()` using the `.value` sentinel**, which lets a single call split column names into both an identifier (wave) and a variable name, avoiding manual loops over waves.
+- Regex patterns (`names_pattern` / `matches()`) are used consistently to select and parse wave-prefixed or wave-embedded column names for the four HRS waves (P/Q/R/S).
+- Column renaming (`rename_with()`, `str_replace_all()`) is used before pivoting when the wave identifier isn't in a position `pivot_longer()` can parse directly (as with the interaction terms, where the wave letter needs to move to the front of the name).
+- All reshaped pieces are joined back to the master long panel using the composite key `id` + `wave`, preserving one row per person per wave.

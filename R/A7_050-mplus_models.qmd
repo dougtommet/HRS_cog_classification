@@ -140,11 +140,11 @@ hrs16_merged <- readRDS(here::here("R_objects", "A7_050_hrs16_merged.rds"))
 F_mean <- hrs16_merged %>%
   mutate(inHCAP_f = factor(inHCAP, levels = 0:1, labels = c("Not in HCAP", "In HCAP"))) %>%
   group_by(inHCAP_f) %>%
-  summarize(mean = mean(F, na.rm=TRUE))
+  summarize(mean = mean(PF, na.rm=TRUE))
 
 hrs16_merged %>%
   mutate(inHCAP_f = factor(inHCAP, levels = 0:1, labels = c("Not in HCAP", "In HCAP"))) %>%
-  ggplot(aes(x = F)) +
+  ggplot(aes(x = PF)) +
   geom_histogram() +
   geom_vline(data = F_mean, aes(xintercept = mean), color = "red") +
   facet_wrap(~inHCAP_f, ncol=1) +

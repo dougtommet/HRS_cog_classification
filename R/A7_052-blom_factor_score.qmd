@@ -1,0 +1,69 @@
+
+
+## Blom transformation
+
+This script derives a **normed, Blom-transformed version of the cognitive factor score (`PF`)** for the 2016 HRS HCAP data, using restricted cubic splines to flexibly model the relationship between the raw factor score and its normalized (Blom) rank, and then applies that model to the full 2016 sample and the 2016–2022 longitudinal sample.
+
+### Inputs
+
+| Object | Source file | Description |
+|----|----|----|
+| `hrs16_merged` | `A7_050_hrs16_merged.rds` | Full 2016 HCAP merged dataset |
+| `hrs16_22_long` | `A7_050_hrs16_22_long.rds` | Long-format 2016–2022 panel data |
+
+
+### Step 1: Define the Normative Sample
+
+
+- Restricts to respondents **not excluded from norming** (`normexcld == 0`).
+- Creates a zero-filled version of the HCAP 2016 weight (`HCAP16WGTR0`), replacing `NA` weights with 0.
+
+### Step 2: Build Restricted Cubic Spline Terms
+
+A helper function, `factor_splines(df, q)`, computes a **3-term restricted cubic spline basis** for the factor score `PF`, given four knot locations `q`:
+
+- `spF1` — linear term (equal to `PF` itself)
+- `spF2`, `spF3` — nonlinear spline basis terms, computed with the standard restricted cubic spline (natural spline) formula using knots `k1`–`k4`
+- Variable labels are attached to the three spline columns for documentation
+
+Knots are set at the **5th, 35th, 65th, and 95th percentiles** of `PF` in the normative sample:
+
+The spline basis is then generated for all three data frames, using the **same knots** derived from the norming sample:
+
+- `hrs16_cog_norm` — the normative sample
+- `hrs16_merged` — the full 2016 HCAP sample
+- `hrs16_22_long` — the 2016–2022 long panel (temporarily renaming `F` to `PF` to reuse the function, then dropping `PF` afterward)
+
+### Step 3: Blom Transform in the Normative Sample
+
+- Computes the **Blom-transformed** (normal-scores) version of `PF` within the normative sample only, using `rcompanion::blom()`.
+
+### Step 4: Fit and Apply the Norming Model
+
+A linear model predicts the Blom-transformed score from the spline basis:
+
+`F → Pblom`
+
+This model — **fit only on the normative sample** — is then used to generate predicted ("normed") Blom scores (`Pblom`) for **all three** data frames.
+
+- `hrs16_cog_norm$Pblom`
+- `hrs16_merged$Pblom`
+- `hrs16_22_long$Pblom`
+
+Each `Pblom` column is labelled: *"Predicted Blom score (model from HCAP normal sample)"*.
+
+This approach effectively **norms the factor score against the HCAP normative sample**, allowing scores from the broader 2016 sample and the 2016–2022 panel to be expressed on the same normalized scale.
+
+### Outputs
+
+| Object | Saved to |
+|----|----|
+| `hrs16_cog_norm` | `A7_052_hrs16_cog_norm.rds` |
+| `hrs16_merged` | `A7_052_hrs16_merged.rds` |
+| `hrs16_22_long` | `A7_052_hrs16_22_long.rds` |
+
+### Key Methodological Notes
+
+- **Knots and model are derived solely from the normative sample** (`normexcld == 0`), then applied out-of-sample to the full 2016 data and the longitudinal panel — this is the core "norming" step.
+- The restricted cubic spline uses a **3-degree-of-freedom** formulation (1 linear + 2 nonlinear terms) based on 4 knots, a standard approach (e.g., Harrell's `rcs`) for flexibly modeling non-linear relationships while keeping tails linear.
+- The **Blom transformation** converts the factor score to approximate normal scores (ranks transformed via the inverse normal CDF with the Blom correction), which is then predicted from the spline terms so it can be applied to samples outside the normative group.

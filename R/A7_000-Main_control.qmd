@@ -12,7 +12,7 @@ author:
 date: '`r Sys.Date()`'
 abstract: | 
   
-  **Objective:** 
+  **Objective:** Create a diagnostic algorithm in the HRS 2016 HCAP sample, and apply the algorithm to the HRS 2016-2022 waves.
 format: 
   html:
     toc: true
@@ -35,6 +35,8 @@ source(here::here("R", "A7_001-libraries.R"))
 #| eval: true
 source(here::here("R", "A7_005-get_data.R"))
 source(here::here("R", "A7_050-mplus_model.R"))
+source(here::here("R", "A7_052-blom_factor_score.R"))
+source(here::here("R", "A7_053-covariates_to_long_format.R"))
 source(here::here("R", "A7_055-norm_factor_score.R"))
 source(here::here("R", "A7_075-implement_algorithm.R"))
 source(here::here("R", "A7_100-comparison_of_diagnoses.R"))
@@ -43,6 +45,10 @@ source(here::here("R", "A7_100-comparison_of_diagnoses.R"))
 ```
 
 {{< include A7_050-mplus_models.qmd >}}
+
+{{< include A7_052-blom_factor_score.qmd >}}
+
+{{< include A7_053-covariates_to_long_format.qmd >}}
 
 {{< include A7_055-norm_factor_score.qmd >}}
 

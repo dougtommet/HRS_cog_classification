@@ -1,80 +1,66 @@
-# Norming Factor Scores
+## Norming Factor Scores
 
-The factor score `F` is put through a three-stage normalization pipeline:
+This script builds a **survey-weighted regression model predicting the normed Blom factor score (`Pblom`) from demographic/interaction variables**, using the 2016 HCAP normative sample. It then applies that model to generate **demographically-adjusted expected scores (`Eblom`)** across all three data frames, and converts the residual (observed minus expected, standardized) into a **T-scaled score (`TF`, mean 50, SD 10)** — a common approach for producing norm-referenced cognitive scores adjusted for demographic characteristics.
 
-1.  **Blom transformation** — maps `F` to a normal score (`f_blom`) within the normative sample, then fits a cubic spline model to predict Blom scores (`Pblom`) from `F` for application to the full sample
-2.  **Demographic adjustment** — regresses `Pblom` on age splines, sex, race/ethnicity, and education (and their two-way interactions) using a survey-weighted GLM estimated in the normative sample, producing expected Blom scores (`Eblom`)
-3.  **T-scaling** — converts the residual between observed and expected Blom scores into a T-score (`TF`) with mean 50 and SD 10
+### Inputs
 
-All three stages are estimated in the **normative sample** (`normexcld == 0`) and applied to both the normative sample and the **full analytic sample**.
+| Object | Source file | Description |
+|----|----|----|
+| `hrs16_cog_norm` | `A7_052_hrs16_cog_norm.rds` | Normative HCAP 2016 sample with `Pblom` |
+| `hrs16_merged` | `A7_052_hrs16_merged.rds` | Full 2016 HCAP sample with `Pblom` |
+| `hrs16_22_long` | `A7_053_hrs16_22_long.rds` | Long-format 2016–2022 panel |
 
-## Processing Steps
+### Step 1: Alias Wave-P ("2016") Variables to Generic Names
 
-### 1. Normative Sample Definition
 
-The normative subsample is defined by filtering to respondents with `normexcld == 0`. Missing HCAP weights are set to 0 (`HCAP16WGTR0`) to allow these cases to be included in the survey design object without causing errors.
+- Both `hrs16_cog_norm` and `hrs16_merged` are **cross-sectional 2016 (wave P) data**, so their wave-P-prefixed variables (`xP1`...`xP7` and interaction terms like `xP1xP4`) are copied into generic, wave-agnostic names (`x1`...`x7`, `x1x4`, etc.).
+- This lets the same model formula be applied consistently to the 2016 cross-sectional data and the long panel (`hrs16_22_long`), which already stores these variables under the generic `x*` names (from the earlier reshape in A7_053).
 
-### 2. Blom Transformation
+### Step 2: Fit the Demographic Model (Survey-Weighted)
 
-#### Direct Blom Transform
 
-Within `hrs16_cog_norm`, the factor score `F` is Blom-transformed, producing `f_blom`.
+- Defines the complex survey design (`SECU` primary sampling unit, `STRATUM` strata, `HCAP16WGTR0` weights) for the normative sample.
+- Fits a **survey-weighted GLM** predicting `Pblom` from the seven main-effect demographic terms (`x1`–`x7`) and a set of pairwise interaction terms — fit **only on the normative sample**, mirroring the norming approach used for `Pblom` itself.
 
-#### Cubic Spline Model for `F → Pblom`
 
-Rather than applying the Blom transform directly to the full sample (which would require re-ranking all scores), a **cubic spline regression** is fitted to predict `f_blom` from `F` within the normative sample. Knots are placed at the **5th, 35th, 65th, and 95th percentiles** of `F` in the normative sample.
+### Step 3: Predict Expected ("Eblom") Scores in All Samples
 
-Three spline basis terms are computed using the restricted cubic spline (RCS) truncated power basis:
 
--   `spF1` — linear term (`F` itself)
--   `spF2` — first nonlinear RCS component anchored at k1
--   `spF3` — second nonlinear RCS component anchored at k2
+- Uses the fitted model to generate **demographically-expected Blom scores (`Eblom`)** for the normative sample and the full 2016 sample.
 
-The model `glm(f_blom ~ spF1 + spF2 + spF3)` is estimated in the normative sample. Fitted values (`Pblom`) are then obtained for both the normative sample and the full sample, applying the **same knot locations** derived from the normative sample. This ensures the transformation is portable and does not depend on the distribution of `F` in the full sample.
+For the long panel, predictions are generated on a **filtered subset** (rows with non-missing `x1`, i.e. rows with demographic data available) and then merged back:
 
-### 3. Demographic Adjustment (`Eblom`)
+- This avoids errors from `augment()`/`predict()` on rows with missing predictors, then reattaches `Eblom` by `id` + `wave`, leaving `NA` for waves without demographic data.
 
-A survey-weighted GLM is estimated in the normative sample to regress `Pblom` on demographic covariates:
+### Step 4: Compute R² and Residual SD for Standardization
 
-**Survey design:** cluster = `SECU`, strata = `STRATUM`, weights = `HCAP16WGTR0`, nested = `TRUE`
+- Computes a **pseudo-R²** for the survey GLM as `1 - deviance/null.deviance` (~0.366).
+- Computes the **weighted standard deviation** of `Pblom` in the normative sample (~0.973) using `Hmisc::wtd.var()`.
+- Combines these to get the **standardized residual SD** (~0.775), which is used as the scaling denominator in the T-score formula below.
 
-**Model:**
+### Step 5: Compute T-Scaled Residual Score (`TF`)
 
-$$
-\text{Pblom} \sim x_1 + x_2 + x_3 + x_4 + x_5 + x_6 + x_7 + \text{(selected two-way interactions)}
-$$
+Applied identically to all three data frames:
 
-Where the covariates are:
+- `TF` is a **T-score** (mean 50, SD 10) representing how far a person's observed Blom score (`Pblom`) deviates from their demographically-expected score (`Eblom`), standardized by the residual SD.
+- This produces a cognitive score that is **normed against the HCAP sample and adjusted for demographic characteristics** (age, sex, race/ethnicity, education).
 
-| Covariate        | Description                                        |
-|------------------|----------------------------------------------------|
-| `x1`, `x2`, `x3` | Age restricted cubic spline terms (centered at 70) |
-| `x4`             | Female (centered at HCAP weighted mean)            |
-| `x5`             | Black (centered at HCAP weighted mean)             |
-| `x6`             | Hispanic (centered at HCAP weighted mean)          |
-| `x7`             | Years of schooling − 12                            |
+### Outputs
 
-Two-way interactions included: all combinations of x1–x3 with x4–x7, and among x4–x7 (except `x4x6` is included but `x5x6` is excluded as no respondents are both Black and Hispanic). The model R² is approximately **0.366**.
+| Object | Saved to |
+|----|----|
+| `hrs16_merged` | `A7_055_hrs16_merged.rds` |
+| `hrs16_cog_norm` | `A7_055_hrs16_cog_norm.rds` |
+| `hrs16_22_long` | `A7_055_hrs16_22_long.rds` |
+| `foo_glm` (fitted model) | `A7_055_foo_lm.rds` |
 
-Fitted values (`Eblom`) represent the **demographically expected** Blom score for each respondent given their age, sex, race/ethnicity, and education. `Eblom` is computed for both the normative and full samples using the model estimated in the normative sample.
+### Key Methodological Notes
 
-### 4. T-Scaled Residual (`TF`)
+- The model is fit **only in the normative sample** using **survey weights and design**, consistent with proper norming methodology, then applied out-of-sample to the full 2016 data and the 2016–2022 panel — the same "fit-in-norm, apply-to-all" pattern used for the Blom transform in the prior script (A7_052).
+- The wave-P variable aliasing step (Step 1) is necessary because the 2016 cross-sectional frames store demographic/interaction variables with a `xP*` prefix, while the long panel already uses generic `x*` names — aliasing lets one model formula work across all three data structures.
+- `TF` is analogous to a **standardized residual T-score**: values above 50 indicate better-than-expected cognitive performance given demographics, values below 50 indicate worse-than-expected performance, in SD-of-10 units.
+- Missing-data handling for the long panel (filtering to `!is.na(x1)` before prediction, then left-joining back) preserves all panel rows while avoiding prediction errors on waves lacking demographic covariates.
 
-The final score `TF` is the **standardized residual** of the observed Blom score from its demographic expectation, rescaled to a T-score distribution (mean = 50, SD = 10):
-
-$$
-TF = 50 + 10 \times \frac{\text{Pblom} - \text{Eblom}}{\text{SD}(\text{Pblom}) \times \sqrt{1 - R^2}}
-$$
-
-Where:
-
--   $\text{SD}(\text{Pblom}) = 0.9987769$ (estimated in the normative sample)
--   $R^2 = 0.366$ (from the demographic adjustment model)
--   The denominator $= 0.9987769 \times \sqrt{1 - 0.366} \approx 0.7953$ is the standard error of the estimate (SEE)
-
-Both constants are fixed at their normative-sample values and applied identically to the full sample, ensuring `TF` is anchored to the normative distribution.
-
-`TF` is conceptually equivalent to a demographically-normed cognitive performance score: values above 50 indicate better-than-expected performance for a respondent's demographic profile; values below 50 indicate worse-than-expected performance.
 
 ## Descriptive statistics of factor scores
 
@@ -91,12 +77,12 @@ F_mean <- hrs16_merged %>%
   filter(!is.na(normexcld)) %>%
   mutate(normexcld_f = factor(normexcld, labels = c("HCAP - Normative sample", "HCAP - Excluded sample"))) %>%
   group_by(normexcld_f) %>%
-  summarize(mean = mean(F, na.rm=TRUE))
+  summarize(mean = mean(PF, na.rm=TRUE))
 
 hrs16_merged %>%
   filter(!is.na(normexcld)) %>%
   mutate(normexcld_f = factor(normexcld, labels = c("HCAP - Normative sample", "HCAP - Excluded sample"))) %>%
-  ggplot(aes(x = F)) +
+  ggplot(aes(x = PF)) +
   geom_histogram() +
   geom_vline(data = F_mean, aes(xintercept = mean), color = "red") +
   facet_wrap(~normexcld_f, ncol=1) +
@@ -110,7 +96,7 @@ hrs16_merged %>%
 hrs16_merged %>%
   filter(!is.na(normexcld)) %>%
   mutate(normexcld_f = factor(normexcld, labels = c("HCAP - Normative sample", "HCAP - Excluded sample"))) %>%
-  select(F, normexcld_f) %>%
+  select(PF, normexcld_f) %>%
   gtsummary::tbl_summary(by = normexcld_f,
                          type = all_continuous() ~ "continuous2",
                          statistic = gtsummary::all_continuous2() ~ c(
