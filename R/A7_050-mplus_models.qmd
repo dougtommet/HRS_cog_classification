@@ -37,7 +37,7 @@ Fit statistics:
 #| tbl-cap: "Model 1: Fit statistics"
 #| label: tbl-model1-fit
 
-mplush5::mplus.print.model.fit.information(here::here("mplus_output", "A7", "model1", "model1.h5")) %>%
+mplush5::mplus.print.model.fit.information(here::here("mplus_output", "A7", "model_1", "model1.h5")) %>%
   filter(grepl("RMSEA : E", description) |
          grepl("SRMR", description) |
          grepl("CFI", description) ) %>%
@@ -59,7 +59,7 @@ Factor loadings:
 #| tbl-cap: "Model 1: Factor loadings"
 #| label: tbl-model1-loadings
 
-mplush5::mplus.print.standardized.model.results(here::here("mplus_output", "A7", "model1", "model1.h5"), "stdyx") %>%
+mplush5::mplus.print.standardized.model.results(here::here("mplus_output", "A7", "model_1", "model1.h5"), "stdyx") %>%
   filter(grepl("F BY", Statement))  %>%
   separate(Statement, into = c("f", "by", "item"), sep = " ") %>%
   mutate(item = str_to_lower(item)) %>%
@@ -96,7 +96,7 @@ Factor loadings:
 #| tbl-cap: "Model 1a: Factor loadings"
 #| label: tbl-model1a-loadings
 
-mplush5::mplus.print.standardized.model.results(here::here("mplus_output", "A7", "model1a", "model1a.h5"), "stdyx") %>%
+mplush5::mplus.print.standardized.model.results(here::here("mplus_output", "A7", "model_1a", "model1a.h5"), "stdyx") %>%
   filter(grepl("F BY", Statement))  %>%
   separate(Statement, into = c("f", "by", "item"), sep = " ") %>%
   mutate(item = str_to_lower(item)) %>%

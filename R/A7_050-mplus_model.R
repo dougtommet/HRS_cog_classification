@@ -53,8 +53,8 @@ variable_list <- c("mplusid", "HCAP16WGTR0", "STRATUM", "SECU_mplus",
                    "vdexf7z", "vdsevens", "vdcount")
 
 # Model 1 - Removing the immediate word recall
-fs::dir_create(here::here("mplus_output", "A7", "model1"))
-withr::with_dir(here::here("mplus_output", "A7", "model1"), {
+fs::dir_create(here::here("mplus_output", "A7", "model_1"))
+withr::with_dir(here::here("mplus_output", "A7", "model_1"), {
 
   mod1 <- MplusAutomation::mplusObject(
     TITLE = mplus_title,
@@ -77,12 +77,12 @@ withr::with_dir(here::here("mplus_output", "A7", "model1"), {
 # Fixing all item parameters
 # Fitting the model with mlr/probit
 
-fs::dir_create(here::here("mplus_output", "A7", "model1a"))
+fs::dir_create(here::here("mplus_output", "A7", "model_1a"))
 
 mplus_analysis_mlr = "estimator = mlr; COVERAGE=0; link=PROBIT;
 TYPE = complex;"
 
-withr::with_dir(here::here("mplus_output", "A7", "model1a"), {
+withr::with_dir(here::here("mplus_output", "A7", "model_1a"), {
 
   mod1a <- MplusAutomation::mplusObject(
     TITLE = mplus_title,
@@ -104,7 +104,7 @@ withr::with_dir(here::here("mplus_output", "A7", "model1a"), {
 
 
 
-model_1a_fixed_h5_path <- here::here("mplus_output", "A7", "model1a", "model1a.h5")
+model_1a_fixed_h5_path <- here::here("mplus_output", "A7", "model_1a", "model1a.h5")
 # mplush5::mplus.view.results(model_1a_fixed_h5_path)
 model_1a_fixed_results <- mplush5::mplus.print.model.results(model_1a_fixed_h5_path)
 
@@ -121,6 +121,7 @@ mplus_model_1a_fixed <- model_1a_fixed_results %>%
   str_c(collapse = " \n ")
 mplus_model_1a_fixed <- str_c(mplus_model_1a_fixed, " \n [F@0]; \n F@1;")
 
+fs::dir_create(here::here("mplus_output", "A7", "model_1a_fixed"))
 
 model_1a_fixed_fscores <- withr::with_dir(here::here("mplus_output", "A7", "model_1a_fixed"), {
 
@@ -162,7 +163,6 @@ hrs16_merged <- hrs16_merged %>%
 
 ################################################
 fs::dir_create(here::here("mplus_output", "A7", "model_1a_fixed_2016_2022"))
-setwd(here::here("mplus_output", "A7", "model_1a_fixed_2016_2022"))
 
 foo <- hrs16_22_nolabs %>%
   select(mplusid, SECU_mplus, STRATUM, starts_with("inHRS"), ends_with("WGTR"),
@@ -226,6 +226,9 @@ mplus_variable_2016_2022 <- gsub("HCAP16WGTR0", "weight", mplus_variable, fixed 
 mplus_variable_2016_2022 <- gsub("mplusid", "mplusid2", mplus_variable_2016_2022, fixed = TRUE)
 variable_list_2016_2022 <- c(variable_list[!variable_list %in% c("HCAP16WGTR0", "mplusid")], "weight", "mplusid2")
 
+
+model_1a_fixed_fscores <- withr::with_dir(here::here("mplus_output", "A7", "model_1a_fixed_2016_2022"), {
+
 mod_final <- MplusAutomation::mplusObject(
   TITLE = mplus_title,
   MODEL = mplus_model_1a_fixed,
@@ -243,7 +246,7 @@ model_1a_fixed <- MplusAutomation::readModels("model_1a_fixed.out")
 model_1a_fixed_fscores <- model_1a_fixed[["savedata"]] %>%
   tibble() %>%
   select(MPLUSID2, F, F_SE)
-
+})
 
 hrs16_22_long <- foo_long %>%
   left_join(model_1a_fixed_fscores, by = c("mplusid2" = "MPLUSID2"))  %>%
