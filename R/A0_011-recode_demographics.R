@@ -41,7 +41,10 @@ attr(tracker_demo$SCHLYRSimp, "label") <- "Number of years in school (imputed)"
 
 tracker_demo <- tracker_demo %>%
   mutate(
-    rage = PA019,
+    page = PA019,
+    qage = QA019,
+    rage = RA019,
+    sage = SA019,
     female = case_when(GENDER==2 ~ 1,
                        GENDER==1 ~ 0),
     black = case_when(RACE ==2 & !(HISPANIC %in% c(1, 2, 3)) ~ 1,
@@ -178,17 +181,48 @@ ageRCS <- function(data, age_var, knots = c(70, 78, 86, 94)) {
 }
 
 tracker_demo <- tracker_demo %>%
-  ageRCS("rage")
+  ageRCS("page") %>%
+  rename(spage1_16 = spage1,
+         spage2_16 = spage2,
+         spage3_16 = spage3)
+
+tracker_demo <- tracker_demo %>%
+  ageRCS("qage") %>%
+  rename(spage1_18 = spage1,
+         spage2_18 = spage2,
+         spage3_18 = spage3)
+tracker_demo <- tracker_demo %>%
+  ageRCS("rage") %>%
+  rename(spage1_20 = spage1,
+         spage2_20 = spage2,
+         spage3_20 = spage3)
+tracker_demo <- tracker_demo %>%
+  ageRCS("sage") %>%
+  rename(spage1_22 = spage1,
+         spage2_22 = spage2,
+         spage3_22 = spage3)
 
 
 # Age categories
 
 tracker_demo <- tracker_demo %>%
-  mutate(rage_cat = car::recode(rage, "lo:64=NA; 65:69=1; 70:74=2; 75:79=3; 80:84=4; 85:89=5; 90:hi=6"),
-         rage_cat_f = factor(rage_cat, levels = 1:6, labels = c("65-69", "70-74", "75-79", "80-84", "85-89", "90 and over"), ordered = TRUE)
+  mutate(page_cat = car::recode(page, "lo:64=NA; 65:69=1; 70:74=2; 75:79=3; 80:84=4; 85:89=5; 90:hi=6"),
+         page_cat_f = factor(page_cat, levels = 1:6, labels = c("65-69", "70-74", "75-79", "80-84", "85-89", "90 and over"), ordered = TRUE),
+         qage_cat = car::recode(qage, "lo:64=NA; 65:69=1; 70:74=2; 75:79=3; 80:84=4; 85:89=5; 90:hi=6"),
+         qage_cat_f = factor(qage_cat, levels = 1:6, labels = c("65-69", "70-74", "75-79", "80-84", "85-89", "90 and over"), ordered = TRUE),
+         rage_cat = car::recode(rage, "lo:64=NA; 65:69=1; 70:74=2; 75:79=3; 80:84=4; 85:89=5; 90:hi=6"),
+         rage_cat_f = factor(rage_cat, levels = 1:6, labels = c("65-69", "70-74", "75-79", "80-84", "85-89", "90 and over"), ordered = TRUE),
+         sage_cat = car::recode(sage, "lo:64=NA; 65:69=1; 70:74=2; 75:79=3; 80:84=4; 85:89=5; 90:hi=6"),
+         sage_cat_f = factor(sage_cat, levels = 1:6, labels = c("65-69", "70-74", "75-79", "80-84", "85-89", "90 and over"), ordered = TRUE)
          )
-attr(tracker_demo$rage_cat, "label") <- "R CURRENT AGE CALCULATION, grouped"
-attr(tracker_demo$rage_cat_f, "label") <- "R CURRENT AGE CALCULATION, grouped"
+attr(tracker_demo$page_cat, "label")   <- "CURRENT AGE CALCULATION (2016), grouped"
+attr(tracker_demo$page_cat_f, "label") <- "CURRENT AGE CALCULATION (2016), grouped"
+attr(tracker_demo$qage_cat, "label")   <- "CURRENT AGE CALCULATION (2018), grouped"
+attr(tracker_demo$qage_cat_f, "label") <- "CURRENT AGE CALCULATION (2018), grouped"
+attr(tracker_demo$rage_cat, "label")   <- "CURRENT AGE CALCULATION (2020), grouped"
+attr(tracker_demo$rage_cat_f, "label") <- "CURRENT AGE CALCULATION (2020), grouped"
+attr(tracker_demo$sage_cat, "label")   <- "CURRENT AGE CALCULATION (2022), grouped"
+attr(tracker_demo$sage_cat_f, "label") <- "CURRENT AGE CALCULATION (2022), grouped"
 
 # Sex ------------------------------------------------------------------
 
@@ -242,7 +276,7 @@ tracker_demo <- tracker_demo %>%
                                       TRUE ~ RaceAndEthnicity
                                       ),
          # Step 3: Apply value labels
-         RaceAndEthnicity <- labelled(RaceAndEthnicity, labels = c("White" = 1,
+         RaceAndEthnicity =  labelled(RaceAndEthnicity, labels = c("White" = 1,
                                                                    "Black or African-American (Not Hispanic)" = 2,
                                                                    "Hispanic (any racial group)" = 3,
                                                                    "All other racial groups" = 4
@@ -274,7 +308,7 @@ attr(tracker_demo$Educational_Attainment, "label") <- "Educational attainment"
 
 # ---------------------------------------------------------------------------
 ## Covariates for adjustment models, classificaiton models
-## x1-x3 = spage1, spage2, spage3
+## x1-x3 = spage1_16, spage2_16, spage3_16
 ## x4 = female centered at HCAP16WGTR-weighted mean for female, using STRATUM and SECU
 ## x5 = black centered at HCAP16WGTR-weighted mean for black, using STRATUM and SECU
 ## x6 = hisp centered at HCAP16WGTR-weighted mean for hisp, using STRATUM and SECU
@@ -289,26 +323,80 @@ attr(tracker_demo$Educational_Attainment, "label") <- "Educational attainment"
 # Create analytic covariates x1–x7
 tracker_demo<- tracker_demo %>%
   mutate(
-    x1 = spage1, # already centered at 70
-    x2 = spage2, # already 0 at 70
-    x3 = spage3, # already 0 at 70
-    x4 = female,
-    x5 = black,
-    x6 = hisp,
-    x7 = SCHLYRSimp-12
+    xP1 = case_when(inHRS_16==1 ~ spage1_16), # already centered at 70
+    xP2 = case_when(inHRS_16==1 ~ spage2_16), # already 0 at 70
+    xP3 = case_when(inHRS_16==1 ~ spage3_16), # already 0 at 70
+    xP4 = case_when(inHRS_16==1 ~ female),
+    xP5 = case_when(inHRS_16==1 ~ black),
+    xP6 = case_when(inHRS_16==1 ~ hisp),
+    xP7 = case_when(inHRS_16==1 ~ SCHLYRSimp-12)
   )
 # Apply variable labels (assuming haven::labelled)
-attr(tracker_demo$x1, "label") <- "Source: spage1"
-attr(tracker_demo$x2, "label") <- "Source: spage2"
-attr(tracker_demo$x3, "label") <- "Source: spage3"
-attr(tracker_demo$x4, "label") <- "Source: female"
-attr(tracker_demo$x5, "label") <- "Source: black"
-attr(tracker_demo$x6, "label") <- "Source: hisp"
-attr(tracker_demo$x7, "label") <- "Source: SCHLYRSimp"
+attr(tracker_demo$xP1, "label") <- "Source: spage1_16"
+attr(tracker_demo$xP2, "label") <- "Source: spage2_16"
+attr(tracker_demo$xP3, "label") <- "Source: spage3_16"
+attr(tracker_demo$xP4, "label") <- "Source: female"
+attr(tracker_demo$xP5, "label") <- "Source: black"
+attr(tracker_demo$xP6, "label") <- "Source: hisp"
+attr(tracker_demo$xP7, "label") <- "Source: SCHLYRSimp"
+
+tracker_demo<- tracker_demo %>%
+  mutate(
+    xQ1 = case_when(inHRS_18==1 ~ spage1_18), # already centered at 70
+    xQ2 = case_when(inHRS_18==1 ~ spage2_18), # already 0 at 70
+    xQ3 = case_when(inHRS_18==1 ~ spage3_18), # already 0 at 70
+    xQ4 = case_when(inHRS_18==1 ~ female),
+    xQ5 = case_when(inHRS_18==1 ~ black),
+    xQ6 = case_when(inHRS_18==1 ~ hisp),
+    xQ7 = case_when(inHRS_18==1 ~ SCHLYRSimp-12)
+  )
+attr(tracker_demo$xQ1, "label") <- "Source: spage1_18"
+attr(tracker_demo$xQ2, "label") <- "Source: spage2_18"
+attr(tracker_demo$xQ3, "label") <- "Source: spage3_18"
+attr(tracker_demo$xQ4, "label") <- "Source: female"
+attr(tracker_demo$xQ5, "label") <- "Source: black"
+attr(tracker_demo$xQ6, "label") <- "Source: hisp"
+attr(tracker_demo$xQ7, "label") <- "Source: SCHLYRSimp"
+
+tracker_demo<- tracker_demo %>%
+  mutate(
+    xR1 = case_when(inHRS_20==1 ~ spage1_20), # already centered at 70
+    xR2 = case_when(inHRS_20==1 ~spage2_20), # already 0 at 70
+    xR3 = case_when(inHRS_20==1 ~spage3_20), # already 0 at 70
+    xR4 = case_when(inHRS_20==1 ~female),
+    xR5 = case_when(inHRS_20==1 ~black),
+    xR6 = case_when(inHRS_20==1 ~hisp),
+    xR7 = case_when(inHRS_20==1 ~SCHLYRSimp-12)
+  )
+attr(tracker_demo$xR1, "label") <- "Source: spage1_20"
+attr(tracker_demo$xR2, "label") <- "Source: spage2_20"
+attr(tracker_demo$xR3, "label") <- "Source: spage3_20"
+attr(tracker_demo$xR4, "label") <- "Source: female"
+attr(tracker_demo$xR5, "label") <- "Source: black"
+attr(tracker_demo$xR6, "label") <- "Source: hisp"
+attr(tracker_demo$xR7, "label") <- "Source: SCHLYRSimp"
+
+tracker_demo<- tracker_demo %>%
+  mutate(
+    xS1 = case_when(inHRS_22==1 ~ spage1_22), # already centered at 70
+    xS2 = case_when(inHRS_22==1 ~ spage2_22), # already 0 at 70
+    xS3 = case_when(inHRS_22==1 ~ spage3_22), # already 0 at 70
+    xS4 = case_when(inHRS_22==1 ~ female),
+    xS5 = case_when(inHRS_22==1 ~ black),
+    xS6 = case_when(inHRS_22==1 ~ hisp),
+    xS7 = case_when(inHRS_22==1 ~ SCHLYRSimp-12)
+  )
+attr(tracker_demo$xS1, "label") <- "Source: spage1_22"
+attr(tracker_demo$xS2, "label") <- "Source: spage2_22"
+attr(tracker_demo$xS3, "label") <- "Source: spage3_22"
+attr(tracker_demo$xS4, "label") <- "Source: female"
+attr(tracker_demo$xS5, "label") <- "Source: black"
+attr(tracker_demo$xS6, "label") <- "Source: hisp"
+attr(tracker_demo$xS7, "label") <- "Source: SCHLYRSimp"
 
 
 # Create interaction terms: all two-way combinations excluding x1:x3
-covars <- paste0("x", 1:7)
+covars <- paste0("xP", 1:7)
 for (i in seq_along(covars)) {
   for (j in seq_along(covars)) {
     if (j <= i) next                            # skip lower triangle and self
@@ -320,10 +408,131 @@ for (i in seq_along(covars)) {
   }
 }
 
+tracker_demo <- tracker_demo %>%
+  select(-xP5xP6)
+
+attr(tracker_demo$xP1xP4, "label") <- "Interaction: spage1_16 X female"
+attr(tracker_demo$xP1xP5, "label") <- "Interaction: spage1_16 X black"
+attr(tracker_demo$xP1xP6, "label") <- "Interaction: spage1_16 X hisp"
+attr(tracker_demo$xP1xP7, "label") <- "Interaction: spage1_16 X SCHLYRS"
+attr(tracker_demo$xP2xP4, "label") <- "Interaction: spage2_16 X female"
+attr(tracker_demo$xP2xP5, "label") <- "Interaction: spage2_16 X black"
+attr(tracker_demo$xP2xP6, "label") <- "Interaction: spage2_16 X hisp"
+attr(tracker_demo$xP2xP7, "label") <- "Interaction: spage2_16 X SCHLYRS"
+attr(tracker_demo$xP3xP4, "label") <- "Interaction: spage3_16 X female"
+attr(tracker_demo$xP3xP5, "label") <- "Interaction: spage3_16 X blalck"
+attr(tracker_demo$xP3xP6, "label") <- "Interaction: spage3_16 X hisp"
+attr(tracker_demo$xP3xP7, "label") <- "Interaction: spage3_16 X SCHLYRS"
+attr(tracker_demo$xP4xP5, "label") <- "Interaction: female X black"
+attr(tracker_demo$xP4xP6, "label") <- "Interaction: female X hisp"
+attr(tracker_demo$xP4xP7, "label") <- "Interaction: female X SCHLYRS"
+attr(tracker_demo$xP5xP7, "label") <- "Interaction: black X SCHLYYRS"
+attr(tracker_demo$xP6xP7, "label") <- "Interaction: hisp X SCHLYRS"
+
+covars <- paste0("xQ", 1:7)
+for (i in seq_along(covars)) {
+  for (j in seq_along(covars)) {
+    if (j <= i) next                            # skip lower triangle and self
+    if (i <= 3 && j <= 3) next                  # skip x1:x3 interactions
+    xi <- covars[i]
+    xj <- covars[j]
+    new_name <- paste0(xi, xj)             # e.g., x1x4
+    tracker_demo[[new_name]] <- tracker_demo[[xi]] * tracker_demo[[xj]]
+  }
+}
+
+tracker_demo <- tracker_demo %>%
+  select(-xQ5xQ6)
+
+attr(tracker_demo$xQ1xQ4, "label") <- "Interaction: spage1_18 X female"
+attr(tracker_demo$xQ1xQ5, "label") <- "Interaction: spage1_18 X black"
+attr(tracker_demo$xQ1xQ6, "label") <- "Interaction: spage1_18 X hisp"
+attr(tracker_demo$xQ1xQ7, "label") <- "Interaction: spage1_18 X SCHLYRS"
+attr(tracker_demo$xQ2xQ4, "label") <- "Interaction: spage2_18 X female"
+attr(tracker_demo$xQ2xQ5, "label") <- "Interaction: spage2_18 X black"
+attr(tracker_demo$xQ2xQ6, "label") <- "Interaction: spage2_18 X hisp"
+attr(tracker_demo$xQ2xQ7, "label") <- "Interaction: spage2_18 X SCHLYRS"
+attr(tracker_demo$xQ3xQ4, "label") <- "Interaction: spage3_18 X female"
+attr(tracker_demo$xQ3xQ5, "label") <- "Interaction: spage3_18 X blalck"
+attr(tracker_demo$xQ3xQ6, "label") <- "Interaction: spage3_18 X hisp"
+attr(tracker_demo$xQ3xQ7, "label") <- "Interaction: spage3_18 X SCHLYRS"
+attr(tracker_demo$xQ4xQ5, "label") <- "Interaction: female X black"
+attr(tracker_demo$xQ4xQ6, "label") <- "Interaction: female X hisp"
+attr(tracker_demo$xQ4xQ7, "label") <- "Interaction: female X SCHLYRS"
+attr(tracker_demo$xQ5xQ7, "label") <- "Interaction: black X SCHLYYRS"
+attr(tracker_demo$xQ6xQ7, "label") <- "Interaction: hisp X SCHLYRS"
+
+covars <- paste0("xR", 1:7)
+for (i in seq_along(covars)) {
+  for (j in seq_along(covars)) {
+    if (j <= i) next                            # skip lower triangle and self
+    if (i <= 3 && j <= 3) next                  # skip x1:x3 interactions
+    xi <- covars[i]
+    xj <- covars[j]
+    new_name <- paste0(xi, xj)             # e.g., x1x4
+    tracker_demo[[new_name]] <- tracker_demo[[xi]] * tracker_demo[[xj]]
+  }
+}
+
+tracker_demo <- tracker_demo %>%
+  select(-xR5xR6)
+
+attr(tracker_demo$xR1xR4, "label") <- "Interaction: spage1_20 X female"
+attr(tracker_demo$xR1xR5, "label") <- "Interaction: spage1_20 X black"
+attr(tracker_demo$xR1xR6, "label") <- "Interaction: spage1_20 X hisp"
+attr(tracker_demo$xR1xR7, "label") <- "Interaction: spage1_20 X SCHLYRS"
+attr(tracker_demo$xR2xR4, "label") <- "Interaction: spage2_20 X female"
+attr(tracker_demo$xR2xR5, "label") <- "Interaction: spage2_20 X black"
+attr(tracker_demo$xR2xR6, "label") <- "Interaction: spage2_20 X hisp"
+attr(tracker_demo$xR2xR7, "label") <- "Interaction: spage2_20 X SCHLYRS"
+attr(tracker_demo$xR3xR4, "label") <- "Interaction: spage3_20 X female"
+attr(tracker_demo$xR3xR5, "label") <- "Interaction: spage3_20 X blalck"
+attr(tracker_demo$xR3xR6, "label") <- "Interaction: spage3_20 X hisp"
+attr(tracker_demo$xR3xR7, "label") <- "Interaction: spage3_20 X SCHLYRS"
+attr(tracker_demo$xR4xR5, "label") <- "Interaction: female X black"
+attr(tracker_demo$xR4xR6, "label") <- "Interaction: female X hisp"
+attr(tracker_demo$xR4xR7, "label") <- "Interaction: female X SCHLYRS"
+attr(tracker_demo$xR5xR7, "label") <- "Interaction: black X SCHLYYRS"
+attr(tracker_demo$xR6xR7, "label") <- "Interaction: hisp X SCHLYRS"
+
+covars <- paste0("xS", 1:7)
+for (i in seq_along(covars)) {
+  for (j in seq_along(covars)) {
+    if (j <= i) next                            # skip lower triangle and self
+    if (i <= 3 && j <= 3) next                  # skip x1:x3 interactions
+    xi <- covars[i]
+    xj <- covars[j]
+    new_name <- paste0(xi, xj)             # e.g., x1x4
+    tracker_demo[[new_name]] <- tracker_demo[[xi]] * tracker_demo[[xj]]
+  }
+}
+
+tracker_demo <- tracker_demo %>%
+  select(-xS5xS6)
+
+attr(tracker_demo$xS1xS4, "label") <- "Interaction: spage1_22 X female"
+attr(tracker_demo$xS1xS5, "label") <- "Interaction: spage1_22 X black"
+attr(tracker_demo$xS1xS6, "label") <- "Interaction: spage1_22 X hisp"
+attr(tracker_demo$xS1xS7, "label") <- "Interaction: spage1_22 X SCHLYRS"
+attr(tracker_demo$xS2xS4, "label") <- "Interaction: spage2_22 X female"
+attr(tracker_demo$xS2xS5, "label") <- "Interaction: spage2_22 X black"
+attr(tracker_demo$xS2xS6, "label") <- "Interaction: spage2_22 X hisp"
+attr(tracker_demo$xS2xS7, "label") <- "Interaction: spage2_22 X SCHLYRS"
+attr(tracker_demo$xS3xS4, "label") <- "Interaction: spage3_22 X female"
+attr(tracker_demo$xS3xS5, "label") <- "Interaction: spage3_22 X blalck"
+attr(tracker_demo$xS3xS6, "label") <- "Interaction: spage3_22 X hisp"
+attr(tracker_demo$xS3xS7, "label") <- "Interaction: spage3_22 X SCHLYRS"
+attr(tracker_demo$xS4xS5, "label") <- "Interaction: female X black"
+attr(tracker_demo$xS4xS6, "label") <- "Interaction: female X hisp"
+attr(tracker_demo$xS4xS7, "label") <- "Interaction: female X SCHLYRS"
+attr(tracker_demo$xS5xS7, "label") <- "Interaction: black X SCHLYYRS"
+attr(tracker_demo$xS6xS7, "label") <- "Interaction: hisp X SCHLYRS"
+
+
 # Center covariates that need centering
-# x1, x2, and x3 and x7 do not need centering
-# anything interacting with x1, x2, x3, and x7 do not need centering
-# x4, x5, x6, x4x5, x4x6, x5x6 all need centering
+# xP1, xP2, and xP3 and xP7 do not need centering
+# anything interacting with xP1, xP2, xP3, and xP7 do not need centering
+# xP4, xP5, xP6, xP4xP5, xP4xP6, xP5xP6 all need centering
 
 # Define your inHCAP sample
 df <- tracker_demo %>%
@@ -339,32 +548,53 @@ svy_design <- svydesign(
 )
 
 # Step 2: Compute weighted means for female, black, and hispanic
-mean_x4   <- svymean(~x4, svy_design, na.rm = TRUE)[1]
-mean_x5   <- svymean(~x5, svy_design, na.rm = TRUE)[1]
-mean_x6   <- svymean(~x6, svy_design, na.rm = TRUE)[1]
-mean_x4x5 <- svymean(~x4x5, svy_design, na.rm = TRUE)[1]
-mean_x4x6 <- svymean(~x4x6, svy_design, na.rm = TRUE)[1]
-mean_x5x6 <- svymean(~x5x6, svy_design, na.rm = TRUE)[1]
+mean_xP4   <- svymean(~xP4, svy_design, na.rm = TRUE)[1]
+mean_xP5   <- svymean(~xP5, svy_design, na.rm = TRUE)[1]
+mean_xP6   <- svymean(~xP6, svy_design, na.rm = TRUE)[1]
+mean_xP4xP5 <- svymean(~xP4xP5, svy_design, na.rm = TRUE)[1]
+mean_xP4xP6 <- svymean(~xP4xP6, svy_design, na.rm = TRUE)[1]
+# mean_xP5xP6 <- svymean(~xP5xP6, svy_design, na.rm = TRUE)[1]
 
 # Store the means for future use
 covariate_means <- list(
-  x4_mean = as.numeric(mean_x4),
-  x5_mean  = as.numeric(mean_x5),
-  x6_mean   = as.numeric(mean_x6),
-  x4x5_mean = as.numeric(mean_x4x5),
-  x4x6_mean = as.numeric(mean_x4x6),
-  x5x6_mean = as.numeric(mean_x5x6)
+  xP4_mean    = as.numeric(mean_xP4),
+  xP5_mean    = as.numeric(mean_xP5),
+  xP6_mean    = as.numeric(mean_xP6),
+  xP4xP5_mean = as.numeric(mean_xP4xP5),
+  xP4xP6_mean = as.numeric(mean_xP4xP6)
+  # xP5xP6_mean = as.numeric(mean_xP5xP6)
 )
 
 # Center select covariates
 tracker_demo <- tracker_demo %>%
   mutate(
-    x4   = x4 - covariate_means$x4_mean,
-    x5   = x5 - covariate_means$x5_mean,
-    x6   = x6 - covariate_means$x6_mean,
-    x4x5 = x4x5 - covariate_means$x4x5_mean,
-    x4x6 = x4x6 - covariate_means$x4x6_mean,
-    x5x6 = x5x6 - covariate_means$x5x6_mean
+    xP4    = xP4    - covariate_means$xP4_mean,
+    xP5    = xP5    - covariate_means$xP5_mean,
+    xP6    = xP6    - covariate_means$xP6_mean,
+    xP4xP5 = xP4xP5 - covariate_means$xP4xP5_mean,
+    xP4xP6 = xP4xP6 - covariate_means$xP4xP6_mean,
+    # xP5xP6 = xP5xP6 - covariate_means$xP5xP6_mean
+
+    xQ4    = xQ4    - covariate_means$xP4_mean,
+    xQ5    = xQ5    - covariate_means$xP5_mean,
+    xQ6    = xQ6    - covariate_means$xP6_mean,
+    xQ4xQ5 = xQ4xQ5 - covariate_means$xP4xP5_mean,
+    xQ4xQ6 = xQ4xQ6 - covariate_means$xP4xP6_mean,
+    # xQ5xQ6 = xQ5xQ6 - covariate_means$xP5xP6_mean
+
+    xR4    = xR4    - covariate_means$xP4_mean,
+    xR5    = xR5    - covariate_means$xP5_mean,
+    xR6    = xR6    - covariate_means$xP6_mean,
+    xR4xR5 = xR4xR5 - covariate_means$xP4xP5_mean,
+    xR4xR6 = xR4xR6 - covariate_means$xP4xP6_mean,
+    # xR5xR6 = xR5xR6 - covariate_means$xP5xP6_mean
+
+    xS4    = xS4    - covariate_means$xP4_mean,
+    xS5    = xS5    - covariate_means$xP5_mean,
+    xS6    = xS6    - covariate_means$xP6_mean,
+    xS4xS5 = xS4xS5 - covariate_means$xP4xP5_mean,
+    xS4xS6 = xS4xS6 - covariate_means$xP4xP6_mean,
+    # xS5xS6 = xS5xS6 - covariate_means$xP5xP6_mean
   )
 
 

@@ -9,13 +9,22 @@ tracker_demo <- readRDS(here::here("R_objects", "A0_011_tracker_demo.rds"))
 
 ## Demographic variables
 
-This script takes the tracker demographic file produced in the prior step (`A0_010_tracker_demo.rds`) and performs three major operations:
+This section describes how the tracker demographic file produced in the prior step (`A0_010_tracker_demo.rds`) is used to perform five major operations:
 
-1.  **Imputes missing years of schooling** (`SCHLYRSimp`) using predictive mean matching (PMM) via `mice`
-2.  **Derives descriptive demographic variables** — sex, age categories, race/ethnicity, and educational attainment
-3.  **Constructs analysis covariates** (x1–x7 and all eligible two-way interactions), then **centers** relevant covariates using HCAP-weighted means estimated in the HCAP subsample
+1. **Imputes missing years of schooling** (`SCHLYRSimp`) using predictive mean matching (PMM) via `mice`
+2. **Derives descriptive demographic variables** — sex, age categories, race/ethnicity, and educational attainment
+3. **Computes restricted cubic spline age terms** for all four waves (2016, 2018, 2020, 2022)
+4. **Constructs analysis covariates** (x1–x7 per wave) and all eligible two-way interactions
+5. **Centers relevant covariates** using HCAP-weighted means estimated in the HCAP subsample, applied consistently across all four waves
 
-The output is saved as `A0_011_tracker_demo.rds`.
+
+### Input Data
+
+| Object | Source File | Description |
+|---|---|---|
+| `tracker_demo` | `A0_010_tracker_demo.rds` | Demographics, weights, and sample indicators |
+
+The output is saved as `A0_011_tracker_demo.rds` and `A0_011_covariate_means.rds`.
 
 ### 1. Education Imputation (`SCHLYRSimp`)
 
@@ -33,6 +42,23 @@ Imputation is then carried out using `mice` with a single imputation (`m = 1`), 
 
 
 ### 2. Derived Demographic Variables
+
+#### Age (`page`, `qage`, `rage`, `sage`)
+
+Age variables for each wave are mapped directly from the Section A age variables: `page` = `PA019`, `qage` = `QA019`, `rage` = `RA019`, `sage` = `SA019`.
+
+Age is also grouped into an ordered 6-category factor for each wave (`xage_cat`, `xage_cat_f`):
+
+| Category | Age Range   |
+|----------|-------------|
+| 1        | 65–69       |
+| 2        | 70–74       |
+| 3        | 75–79       |
+| 4        | 80–84       |
+| 5        | 85–89       |
+| 6        | 90 and over |
+
+Ages below 65 are set to `NA`. Both a numeric (`xage_cat`) and ordered factor (`xage_cat_f`) version are created for each wave.
 
 #### Sex (`female`)
 
@@ -77,21 +103,6 @@ QSPtools::checkvar(tracker_demo, RaceAndEthnicity, RACE, HISPANIC) %>%
 ```
 
 
-#### Age (`rage`, `rage_cat`, `rage_cat_f`)
-
-`rage` maps directly to `PA019` (self-reported age). Age is grouped into an ordered 6-category factor:
-
-| Category | Age Range   |
-|----------|-------------|
-| 1        | 65–69       |
-| 2        | 70–74       |
-| 3        | 75–79       |
-| 4        | 80–84       |
-| 5        | 85–89       |
-| 6        | 90 and over |
-
-Ages below 65 are set to `NA`.
-
 #### Educational Attainment (`Educational_Attainment`)
 
 A four-category labelled variable is derived from `SCHLYRSimp`:
@@ -118,38 +129,70 @@ Restricted cubic splines (RCS) for age are computed using fixed knots at **70, 7
 -   `spage1`: Linear age term, **centered at 70** (deviation from age 70)
 -   `spage2`, `spage3`: Nonlinear spline components (zero at age 70 by construction)
 
+| Wave | Age variable | Output variables |
+|------|-------------|-----------------|
+| 2016 | `page` | `spage1_16`, `spage2_16`, `spage3_16` |
+| 2018 | `qage` | `spage1_18`, `spage2_18`, `spage3_18` |
+| 2020 | `rage` | `spage1_20`, `spage2_20`, `spage3_20` |
+| 2022 | `sage` | `spage1_22`, `spage2_22`, `spage3_22` |
+
 > The knot placement reflects a hockey-stick-shaped age–cognition relationship in the HCAP normative sample: near-linear decline through most of the age range, with a reversal in the oldest-old due to selective survival. More parameters are therefore allocated to the upper age range.
 
 
-### 4. Analysis Covariates (x1–x7)
+### 4. Analysis Covariates (x1–x7, per wave)
 
-Seven covariates are defined for use in adjustment and classification models:
+Seven covariates are defined per wave for use in adjustment and classification models. The wave prefix follows the HRS convention (P=2016, Q=2018, R=2020, S=2022):
 
-| Covariate | Source            | Centering                         |
-|-----------|-------------------|-----------------------------------|
-| `x1`      | `spage1`          | Centered at age 70 (see above)    |
-| `x2`      | `spage2`          | Zero at age 70 by construction    |
-| `x3`      | `spage3`          | Zero at age 70 by construction    |
-| `x4`      | `female`          | Centered at HCAP weighted mean    |
-| `x5`      | `black`           | Centered at HCAP weighted mean    |
-| `x6`      | `hisp`            | Centered at HCAP weighted mean    |
-| `x7`      | `SCHLYRSimp − 12` | Centered at 12 years of schooling |
+| Covariate | Source                  | Notes |
+|-----------|-------------------------|-------|
+| `x{w}1`   | `spage1_{yr}`           | Centered at age 70; only set for `inHRS_{yr}==1` |
+| `x{w}2`   | `spage2_{yr}`           | Zero at age 70 by construction |
+| `x{w}3`   | `spage3_{yr}`           | Zero at age 70 by construction |
+| `x{w}4`   | `female`                | Centered at HCAP weighted mean |
+| `x{w}5`   | `black`                 | Centered at HCAP weighted mean |
+| `x{w}6`   | `hisp`                  | Centered at HCAP weighted mean |
+| `x{w}7`   | `SCHLYRSimp − 12`       | Centered at 12 years of schooling |
+
+Covariates are only populated for respondents present in the corresponding wave (`inHRS_{yr}==1`); all others are `NA`.
 
 #### Two-Way Interactions
 
-All pairwise interactions among x1–x7 are generated **except**: - Interactions among x1, x2, and x3 (spline components with one another)
+All pairwise interactions among x1–x7 are generated **except**: 
 
-This yields interaction terms named `x1x4`, `x1x5`, ..., `x5x6`, etc.
+- Interactions among x1, x2, and x3 (spline components with one another)
+- The `x{w}5 × x{w}6` interaction (black × hisp), as no respondents in the sample are both Black and Hispanic
 
--   The only two-way interaction deliberately excluded from the covariate set is `black × hisp`, as no respondents in the sample are both Black and Hispanic.
+
+Interaction terms are named by concatenation (e.g., `xP1xP4`, `xQ2xQ5`). This pattern is applied identically to all four waves.
+
 
 #### Centering of Demographic Covariates
 
-`x4`, `x5`, `x6`, and their interactions (`x4x5`, `x4x6`, `x5x6`) are centered on **HCAP-weighted means** estimated from the `inHCAP == 1` subsample. The survey design uses `SECU` as the cluster ID, `STRATUM` as the strata, and `HCAP16WGTR` as the sampling weight (via `survey::svydesign`).
+`x{w}4` (female), `x{w}5` (black), `x{w}6` (hisp), and their interactions (`x{w}4x{w}5`, `x{w}4x{w}6`) are centered on **HCAP-weighted means** estimated from the `inHCAP == 1` subsample using 2016 survey design variables:
 
-The six computed means are stored in the named list `covariate_means` for reproducible application to future datasets.
+- Cluster: `SECU`
+- Strata: `STRATUM`  
+- Weight: `HCAP16WGTR`
 
-> Although centering means are estimated within the HCAP subsample, the centered covariates are applied to the full `tracker_demo` dataset.
+The five computed means are stored in the named list `covariate_means` and applied consistently to all four waves, so that centering is always relative to the 2016 HCAP reference distribution:
+
+| Object | Stored mean |
+|--------|-------------|
+| `xP4_mean` | Weighted mean of `female` |
+| `xP5_mean` | Weighted mean of `black` |
+| `xP6_mean` | Weighted mean of `hisp` |
+| `xP4xP5_mean` | Weighted mean of `female × black` |
+| `xP4xP6_mean` | Weighted mean of `female × hisp` |
+
+> Although centering means are estimated within the HCAP subsample, the centered covariates are applied to the full `tracker_demo` dataset across all waves.
+
+
+### Output Data
+
+| Object | Output File | Key Content |
+|---|---|---|
+| `tracker_demo` | `A0_011_tracker_demo.rds` | Full tracker_demo with imputed education, demographic recodes, age splines, covariates x1–x7, and interactions for all four waves |
+| `covariate_means` | `A0_011_covariate_means.rds` | Named list of HCAP-weighted means used for centering, for reproducible application to future datasets |
 
 
 

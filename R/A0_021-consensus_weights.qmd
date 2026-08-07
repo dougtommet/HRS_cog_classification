@@ -4,10 +4,19 @@
 
 ## Consensus sample weights
 
-This script reads the tracker demographics from `A0_011` and constructs two variables needed for analyses that use the **HCAP consensus panel diagnosis** (`consensuspaneldx`) as an outcome:
+This section describes the tracker demographics is used to construct two variables needed for analyses that use the **HCAP consensus panel diagnosis** (`consensuspaneldx`) as an outcome:
 
 1. **`inConsensus`** — a binary subpopulation membership indicator
 2. **`HCAP16WGTR_consensus`** — a sampling weight adjusted for the probability of selection into the consensus panel subsample and normalized to sum to 100
+
+
+> **Note on proxy interviews:** The tracker variable `PPROXY` distinguishes core interviews obtained with a proxy (codes 1, 2) from non-proxy core interviews (code 5) and interviews not obtained (code 9). Informant-only HCAP cases arise from this structure and affect the `samplingP` variable — see missing weight handling below.
+
+### Input Data
+
+| Object | Source File | Description |
+|---|---|---|
+| `tracker_demo` | `A0_011_tracker_demo.rds` | Demographics, weights, and sample indicators including `HCAP16WGTR`, `samplingP`, `inHCAP`, and `consensuspaneldx` |
 
 The output is saved as `A0_021_tracker_demo.rds`.
 
@@ -47,5 +56,21 @@ A three-valued indicator is derived to flag membership in the consensus panel su
 
 Respondents outside HCAP receive `NA` rather than 0 to distinguish non-eligibility from non-selection.
 
+> Note: `inConsensus` is constructed **after** `HCAP16WGTR_consensus` in the script, but is described first here because its definition clarifies which respondents the normalization denominator is summed over.
+
+
+### Variable Labels
+
+| Variable | Label |
+|---|---|
+| `inConsensus` | Indicator for HRS/HCAP consensuspaneldx subpopulation |
+| `HCAP16WGTR_consensus` | Normalized sampling weight for consensuspaneldx |
+
+
+### Output Data
+
+| Object | Output File | Key Content |
+|---|---|---|
+| `tracker_demo` | `A0_021_tracker_demo.rds` | tracker_demo with `inConsensus` and `HCAP16WGTR_consensus` appended |
 
 

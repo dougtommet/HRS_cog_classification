@@ -1,9 +1,25 @@
 
 
 
-## Rescaling
+## Cogntive Items Rescaling
 
-This script reads the recoded cognitive data from `A0_015` and applies a **smoothed min-max normalization** to a subset of cognitive domain scores, producing scaled versions (suffix `z`) bounded approximately in [0, 1]. The output is saved as `A0_016_hrs16_cog.rds`.
+This section describes the recoded cognitive data from the previous section and how a **smoothed min-max normalization**  was applied to a subset of cognitive domain scores, producing scaled versions (suffix `z`) bounded approximately in [0, 1]. 
+
+A key design decision is that **all four waves are rescaled using the 2016 wave as the reference distribution**. This means the min, max, and standard deviation used in the normalization formula are always drawn from the 2016 (`rPvd*`) variables, ensuring that the same raw test score maps to the same scaled value regardless of which wave it came from. This supports valid longitudinal comparisons across waves.
+
+> **Note:** The 2018 wave does not include `vdexf7` (Number Series), so `rQvdexf7z` is not produced. 
+
+
+### Input Data
+
+| Object | Source File | Description |
+|---|---|---|
+| `hrs16_cog` | `A0_015_hrs16_cog.rds` | HRS 2016 recoded cognitive items and domain scores |
+| `hrs18_cog` | `A0_015_hrs18_cog.rds` | HRS 2018 recoded cognitive items and domain scores |
+| `hrs20_cog` | `A0_015_hrs20_cog.rds` | HRS 2020 recoded cognitive items and domain scores |
+| `hrs22_cog` | `A0_015_hrs22_cog.rds` | HRS 2022 recoded cognitive items and domain scores |
+
+The output is saved as `A0_016_hrs{wave}_cog.rds` for each wave.
 
 
 ### Normalization Function (`minmax`)
@@ -14,7 +30,8 @@ $$
 \tilde{x} = \frac{x - \min(x) + c_n}{\max(x) - \min(x) + c_d}
 $$
 
-where the smoothing constants are derived from the sample standard deviation:
+where $\text{x}$ is the **reference variable** (always the 2016 wave version of the same score), and the smoothing constants are derived from its standard deviation:
+
 
 $$
 c_n = \frac{5}{8000} \cdot \text{SD}(x), \qquad c_d = \frac{10}{8000} \cdot \text{SD}(x)
@@ -23,16 +40,38 @@ $$
 The small additive constants $c_n$ (numerator) and $c_d$ (denominator) prevent the transformed values from collapsing exactly to 0 or 1 at the observed minimum and maximum, which is useful for downstream models (e.g., those involving log or logit links). Both constants scale with the standard deviation of the variable, keeping the adjustment proportionate across scores with different dispersions.
 
 
-## Variables Transformed
+### Variables Transformed
 
 Four cognitive scores receive the `minmax` transformation:
 
-| Input Variable | Output Variable | Label |
+| Input Variable | Output Variable | Label | Waves |
+|---|---|---|---|
+| `r{x}vdlfl1`  | `r{x}vdlfl1z`  | Animal naming (correct − errors) | All   |
+| `r{x}vdwdimm` | `r{x}vdwdimmz` | Word recall — Immediate          | All   |
+| `r{x}vdwddel` | `r{x}vdwddelz` | Word recall — Delayed            | All   |
+| `r{x}vdexf7`  | `r{x}vdexf7z`  | Number series                    | 2016, 2020, 2022 only |
+
+
+### Reference Distribution by Wave
+
+| Wave | Object | Wave Letter | Reference Object | Reference Letter |
+|------|--------|-------------|------------------|------------------|
+| 2016 | `hrs16_cog` | P | `hrs16_cog` | P (self-reference) |
+| 2018 | `hrs18_cog` | Q | `hrs16_cog` | P |
+| 2020 | `hrs20_cog` | R | `hrs16_cog` | P |
+| 2022 | `hrs22_cog` | S | `hrs16_cog` | P |
+
+Using the 2016 wave as a common reference means a respondent with a raw animal naming score of, say, 15 in 2022 will receive the same scaled value as a respondent with a score of 15 in 2016, enabling direct cross-wave comparisons.
+
+
+### Output Data
+
+| Object | Output File | Key Content |
 |---|---|---|
-| `vdlfl1` | `vdlfl1z` | Animal naming (correct − errors) |
-| `vdwdimm` | `vdwdimmz` | Word recall — Immediate |
-| `vdwddel` | `vdwddelz` | Word recall — Delayed |
-| `vdexf7` | `vdexf7z` | Number series |
+| `hrs16_cog` | `A0_016_hrs16_cog.rds` | 2016 cognitive data with added `rPvdlfl1z`, `rPvdwdimmz`, `rPvdwddelz`, `rPvdexf7z` |
+| `hrs18_cog` | `A0_016_hrs18_cog.rds` | 2018 cognitive data with added `rQvdlfl1z`, `rQvdwdimmz`, `rQvdwddelz` (no `vdexf7z`) |
+| `hrs20_cog` | `A0_016_hrs20_cog.rds` | 2020 cognitive data with added `rRvdlfl1z`, `rRvdwdimmz`, `rRvdwddelz`, `rRvdexf7z` |
+| `hrs22_cog` | `A0_016_hrs22_cog.rds` | 2022 cognitive data with added `rSvdlfl1z`, `rSvdwdimmz`, `rSvdwddelz`, `rSvdexf7z` |
 
 
 

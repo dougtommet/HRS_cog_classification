@@ -1,40 +1,62 @@
+
+```{r}
+hrs16_func <- readRDS(here::here("R_objects", "A0_013_hrs16_func.rds"))
+hrs18_func <- readRDS(here::here("R_objects", "A0_013_hrs18_func.rds"))
+hrs20_func <- readRDS(here::here("R_objects", "A0_013_hrs20_func.rds"))
+hrs22_func <- readRDS(here::here("R_objects", "A0_013_hrs22_func.rds"))
+```
+
 ## Informant & self-report of impairment
 
-This script reads the functional data selected in `A0_009_hrs16_func.rds` and derives two informant/self-report measures of cognitive change:
+This section describes the functional data for all four HRS waves (2016, 2018, 2020, 2022) and derives four sets of informant/self-report measures of cognitive change: 
 
-1.  **JORM score** (`jorm`) — a 16-item informant-rated scale of cognitive change, constructed from `PD506`–`PD553` and averaged across items
-2.  **Self-reported memory concern** (`self_concerns`) — a binary composite drawn from two self-report items capturing current memory rating and change from two years ago
+1. **JORM items** (`r{x}jorm1`–`r{x}jorm16`) — 16-item informant-rated scale of cognitive change, constructed from wave-specific `xD506`–`xD553`
+2. **JORM summary score** (`r{x}jorm`) — row-wise mean across the 16 JORM items
+3. **Self-reported memory concern** (`r{x}self_concerns`) — binary composite from two self-report items (added 2025-07-21)
+4. **Wandering/supervision items** (`r{x}D554`, `r{x}D555`, `r{x}D556`) — three binary indicators of wandering behavior and supervision needs (added 2026-05-12)
 
-The output is saved as `A0_013_hrs16_func.rds`.
+> **Note.** As of 2026-05-12, the recoding logic was refactored into a function to support consistent application across waves.
 
-## Processing Steps
+### Input Data
 
-### 1. JORM Item Construction (`jorm1`–`jorm16`)
+| Object | Source File | Description |
+|---|---|---|
+| `hrs16_func` | `A0_009_hrs16_func.rds` | HRS 2016 functional/informant raw items |
+| `hrs18_func` | `A0_009_hrs18_func.rds` | HRS 2018 functional/informant raw items |
+| `hrs20_func` | `A0_009_hrs20_func.rds` | HRS 2020 functional/informant raw items |
+| `hrs22_func` | `A0_009_hrs22_func.rds` | HRS 2022 functional/informant raw items |
 
-Each JORM item is constructed from a **pair** of raw HRS variables using a branching logic that maps the routing structure of the HRS questionnaire onto the standard 5-point JORM response scale.
+The output is saved as `A0_013_hrs{wave}_func.rds` for each wave.
 
-#### Source Variable Pairs
+### Processing Steps
 
-| JORM Item | Label | Raw Variables |
-|------------------------|------------------------|------------------------|
-| `jorm1` | Remembering things about family | PD506, PD507, PD508 |
-| `jorm2` | Remembering things that happened recently | PD509, PD510, PD511 |
-| `jorm3` | Recalling conversations a few days later | PD512, PD513, PD514 |
-| `jorm4` | Remembering telephone numbers | PD515, PD516, PD517 |
-| `jorm5` | Remembering day and month | PD518, PD519, PD520 |
-| `jorm6` | Remembering where things are kept | PD521, PD522, PD523 |
-| `jorm7` | Remembering where to find things | PD524, PD525, PD526 |
-| `jorm8` | Knowing how to work familiar machines | PD527, PD528, PD529 |
-| `jorm9` | Learning to use a new gadget | PD530, PD531, PD532 |
-| `jorm10` | Learning new things in general | PD533, PD534, PD535 |
-| `jorm11` | Following a story in a book or on TV | PD536, PD537, PD538 |
-| `jorm12` | Making decisions on everyday matters | PD539, PD540, PD541 |
-| `jorm13` | Handling money for shopping | PD542, PD543, PD544 |
-| `jorm14` | Handling financial matters | PD545, PD546, PD547 |
-| `jorm15` | Handling everyday arithmetic problems | PD548, PD549, PD550 |
-| `jorm16` | Using intelligence to understand what's going on | PD551, PD552, PD553 |
+#### 1. JORM Item Construction (`r{x}jorm1`–`r{x}jorm16`)
 
-#### Branching Recoding Logic
+Each JORM item is constructed from a **triplet** of raw HRS variables using a branching logic that maps the routing structure of the HRS questionnaire onto the standard 5-point JORM response scale. Wave prefixes follow the HRS convention (P = 2016, Q = 2018, R = 2020, S = 2022).
+
+
+##### Source Variable Pairs
+
+| JORM Item | Label | Raw Variables  |
+|-----------|-------|------------------------------|
+| `r{x}jorm1`  | Remembering things about family                  | xD506, xD507, xD508 |
+| `r{x}jorm2`  | Remembering things that happened recently        | xD509, xD510, xD511 |
+| `r{x}jorm3`  | Recalling conversations a few days later         | xD512, xD513, xD514 |
+| `r{x}jorm4`  | Remembering telephone numbers                    | xD515, xD516, xD517 |
+| `r{x}jorm5`  | Remembering day and month                        | xD518, xD519, xD520 |
+| `r{x}jorm6`  | Remembering where things are kept                | xD521, xD522, xD523 |
+| `r{x}jorm7`  | Remembering where to find things                 | xD524, xD525, xD526 |
+| `r{x}jorm8`  | Knowing how to work familiar machines            | xD527, xD528, xD529 |
+| `r{x}jorm9`  | Learning to use a new gadget                     | xD530, xD531, xD532 |
+| `r{x}jorm10` | Learning new things in general                   | xD533, xD534, xD535 |
+| `r{x}jorm11` | Following a story in a book or on TV             | xD536, xD537, xD538 |
+| `r{x}jorm12` | Making decisions on everyday matters             | xD539, xD540, xD541 |
+| `r{x}jorm13` | Handling money for shopping                      | xD542, xD543, xD544 |
+| `r{x}jorm14` | Handling financial matters                       | xD545, xD546, xD547 |
+| `r{x}jorm15` | Handling everyday arithmetic problems            | xD548, xD549, xD550 |
+| `r{x}jorm16` | Using intelligence to understand what's going on | xD551, xD552, xD553 |
+
+##### Branching Recoding Logic
 
 Each item uses the same three-variable branching structure (illustrated below using generic variables A, B, C):
 
@@ -48,26 +70,49 @@ Each item uses the same three-variable branching structure (illustrated below us
 
 Where A is the primary routing variable, B captures improvement direction, and C captures worsening direction. Any combination not listed above yields `NA`.
 
-### 2. JORM Summary Score (`jorm`)
+#### 2. JORM Summary Score (`r{x}jorm`)
 
 A row-wise mean of all 16 item scores is computed with `na.rm = TRUE`, yielding a continuous score ranging from 1 (much improved across all items) to 5 (much worse across all items). Items with missing values are excluded from the mean rather than set to zero.
 
-### 3. Self-Reported Memory Concern (`self_concerns`)
+#### 3. Self-Reported Memory Concern (`r{x}self_concerns`)
 
 A binary composite is derived from two HRS items:
 
--   **`PD101`** — *"How would you rate your memory at the present time?"*
--   **`PD102`** — *"Compared to two years ago, would you say your memory is better, the same, or worse?"*
+- **`xD101`** — *"How would you rate your memory at the present time?"*
+- **`xD102`** — *"Compared to two years ago, would you say your memory is better, the same, or worse?"*
 
-#### Recoding Rules (applied in priority order)
+##### Recoding Rules (applied in priority order)
 
-| Condition | `self_concerns` | Label |
-|------------------------|------------------------|------------------------|
-| `PD101` in {4, 5, 8, 9} — fair/poor or ambiguous rating | 1 | Worse or (Fair or Poor) |
-| `PD102` in {3, 8, 9} — worse or ambiguous change | 1 | Worse or (Fair or Poor) |
-| `PD101` in {1, 2, 3} — excellent/very good/good rating | 0 | (Same or Better) AND (Excellent, Very Good, Good) |
+| Condition | `r{x}self_concerns` | Label |
+|-----------|---------------------|-------|
+| `xD101` in {4, 5, 8, 9} — fair/poor or ambiguous rating | 1 | Worse or (Fair or Poor) |
+| `xD102` in {3, 8, 9} — worse or ambiguous change        | 1 | Worse or (Fair or Poor) |
+| `xD101` in {1, 2, 3} — excellent/very good/good rating  | 0 | (Same or Better) AND (Excellent, Very Good, Good) |
 | All other cases | `NA` | — |
 
 
+#### 4. Wandering and Supervision Items (`r{x}D554`, `r{x}D555`, `r{x}D556`)
+
+*Added 2026-05-12.* Three binary items about wandering behavior and supervision needs are recoded from raw HRS variables:
+
+| Variable | Label | Raw codes → Recoded value |
+|----------|-------|--------------------------|
+| `r{x}D554` | Ever get lost in a familiar environment?             | 1 → 1 (Yes); 5 → 0 (No); 8, 9 → `NA` |
+| `r{x}D555` | Ever wander off and not return by herself/himself?   | 1 → 1 (Yes); 5 → 0 (No); 8, 9 → `NA` |
+| `r{x}D556` | Can't be left alone for an hour or so? *(reversed)* | 1 → 0 (No); 5 → 1 (Yes); 8, 9 → `NA` |
+
+> **Note:** `r{x}D556` is **reverse-coded** relative to the raw item so that a value of 1 consistently indicates the more impaired state (cannot be left alone).
+
+All three items are labelled: `1 = "Yes"`, `0 = "No"`.
+
+
+### Output Data
+
+| Object | Output File | Key Content |
+|---|---|---|
+| `hrs16_func` | `A0_013_hrs16_func.rds` | 2016 JORM items + summary score + self_concerns + wandering items |
+| `hrs18_func` | `A0_013_hrs18_func.rds` | 2018 JORM items + summary score + self_concerns + wandering items |
+| `hrs20_func` | `A0_013_hrs20_func.rds` | 2020 JORM items + summary score + self_concerns + wandering items |
+| `hrs22_func` | `A0_013_hrs22_func.rds` | 2022 JORM items + summary score + self_concerns + wandering items |
 
 

@@ -1,7 +1,8 @@
 
-# Data selection
+# 2. Data selection
 
-This section describes the data selection process. It starts with the seven data files described above, selects the analysis relevant variables from each data file, and then saves them as intermediate data files for later use.  
+This section describes the data selection process. It starts with the seven data files described above, selects the analysis relevant variables from each data file, and then saves them as intermediate data files for later use.  Data are selected across four HRS waves (2016, 2018, 2020, 2022).
+
 
 
 ## Input Data
@@ -16,28 +17,38 @@ This section describes the data selection process. It starts with the seven data
 | `hrshcap` | `A0_005_hrshcap.rds` | HCAP clinical diagnosis & domain scores |
 | `hc16hp_r` | `A0_005_hc16hp_r.rds` | HCAP 2016 sampling weights |
 | `hcap_validation` | `A0_005_hcap_validation.rds` | HRS/HCAP validation subsample (N=50) |
-
-
+| `h18a_r` | `A0_005_h18a_r.rds` | HRS 2018 Section A (household/respondent info) |
+| `h18d_r` | `A0_005_h18d_r.rds` | HRS 2018 Section D (cognition & function) |
+| `h18g_r` | `A0_005_h18g_r.rds` | HRS 2018 Section G (IADL) |
+| `h20a_r` | `A0_005_h20a_r.rds` | HRS 2020 Section A (household/respondent info) |
+| `h20d_r` | `A0_005_h20d_r.rds` | HRS 2020 Section D (cognition & function) |
+| `h20g_r` | `A0_005_h20g_r.rds` | HRS 2020 Section G (IADL) |
+| `h22a_r` | `A0_005_h22a_r.rds` | HRS 2022 Section A (household/respondent info) |
+| `h22d_r` | `A0_005_h22d_r.rds` | HRS 2022 Section D (cognition & function) |
+| `h22g_r` | `A0_005_h22g_r.rds` | HRS 2022 Section G (IADL) |
 
 ## Processing Steps
 
 ### 1. Cognition (`hrs16_cog`)
 
-Variables are selected from `h16d_r` (HRS 2016 Section D) covering the major cognitive domains assessed in HRS:
+Variables are selected from each wave's Section D file covering the major cognitive domains assessed in HRS. The same variables are selected across all four waves (with wave-specific prefixes P/Q/R/S):
+
 
 | Variable(s) | Domain |
 |---|---|
-| `PD174` | Immediate word recall (10-word list) |
-| `PD184` | Delayed word recall |
-| `PD151–PD154` | Serial 7s subtraction |
-| `PD124`, `PD129` | Date/president orientation |
-| `PD155–PD156` | Object naming |
-| `PD157–PD158` | Vocabulary |
-| `PD142–PD146` | Backwards counting |
-| `PD196`, `PD198` | Additional cognitive items |
-| `PNSSCORE` | Nurse/proxy cognitive summary score |
+| `xD174` | Immediate word recall (10-word list) |
+| `xD184` | Delayed word recall |
+| `xD151–xD154` | Orientation to time (month, day, year, day of week) |
+| `xD124`, `xD129` | Backwards counting from 20 |
+| `xD155–xD156` | Object naming (scissors, cactus) |
+| `xD157–xD158` | President/vice-president naming |
+| `xD142–xD146` | Serial 7s subtraction |
+| `xD196`, `xD198` | Additional cognitive items |
+| `xNSSCORE` | Nurse/proxy cognitive summary score (2016, 2020, 2022 only) |
 
-After selection, normative exclusion flags from `normexcld` are joined by `HHID`/`PN` to identify respondents who should be excluded from normative cognitive scoring.
+
+For the 2016 wave (`hrs16_cog`), normative exclusion flags from `normexcld` are joined by `HHID`/`PN` to identify respondents who should be excluded from normative cognitive scoring. The 2018 wave data requires renaming of lowercase identifiers (`hhid`, `pn`, `qsubhh`) to match the uppercase convention used across waves.
+
 
 
 ### 2. HCAP Diagnosis & Domain Flags (`hrshcap`)
@@ -64,44 +75,48 @@ Retains `samplingP` (sampling probability) and `consensuspaneldx` (consensus pan
 
 Variables are selected from `h16d_r` covering:
 
-- `PD101`, `PD102` — Functional difficulty summary items
-- `PD502`, `PD505-PD553` — Full battery of ADL/functional limitation items
+- `xD101`, `xD102` — Functional difficulty summary items (`PD101` added 2025-07-21)
+- `xD502`, `xD505–xD553` — Full battery of ADL/functional limitation items
+- `xD554`, `xD555`, `xD556` — Additional functional items (added 2026-05-12)
 
+The same variable set is selected across all four waves.
 
 ### 6. Functional Impairment — IADL (`hrs16_iadl`)
 
 Variables are selected from `h16g_r` covering:
 
-- `PG013` — Additional IADL item 
-- `PG014`, `PG021`, `PG023`, `PG030`, `PG040`, `PG041`. `PG044`. `PG047`. `PG050`, `PG051`, `PG059` (selected items) — Core IADL battery (meal prep, managing money, using telephone, etc.)
+- `xG013` — Screener item used to determine IADL skip patterns (`PG013` added 2025-07-26)
+- `xG014`, `xG021`, `xG023`, `xG030`, `xG041`, `xG044`, `xG047`, `xG050`, `xG051`, `xG059` — Core IADL battery (dressing, bathing, eating, toileting, meal prep, grocery shopping, phone calls, medications, managing money)
+- `xG040` — Map reading item (included in 2016, 2018, 2020 but **not available in 2022**)
 
 
 ### 7. Demographics & Sampling Weights (`tracker_demo`)
 
-Core demographic and design variables are drawn from two sources and then joined:
+Core demographic and design variables are drawn from the tracker file and all four waves' Section A files, then joined together.
 
 **From `tracker`:**
 
 | Variable | Description |
 |---|---|
 | `SECU`, `STRATUM` | Complex survey design variables |
-| `PWGTR` | HRS person-level weight |
 | `HCAP16RESP` | HCAP 2016 response indicator |
-| `PIWTYPE` | Interview type |
-| `PAGE` | Age |
-| `PINSAMP`, `PIWWAVE`, `PIWYEAR` | Sample/wave/year indicators |
-| `PMARST` | Marital status |
-| `PNURSHM` | Nursing home residence |
-| `PPROXY` | Proxy interview flag |
+| `PWGTR`–`SWGTR` | HRS person-level weights (all four waves) |
+| `xIWTYPE` | Interview type (all four waves) |
+| `xAGE` | Age at interview (all four waves) |
+| `xINSAMP`, `xIWWAVE`, `xIWYEAR` | Sample/wave/year indicators (all four waves) |
+| `xMARST` | Marital status (all four waves) |
+| `xNURSHM` | Nursing home residence (all four waves) |
+| `xPROXY` | Proxy interview flag (all four waves) |
 | `GENDER`, `HISPANIC`, `RACE` | Sex/race/ethnicity |
 | `SCHLYRS`, `DEGREE` | Education (years & degree) |
 | `BIRTHYR` | Birth year |
 
-**From `h16a_r`:** 
+**From Section A files (all four waves):**
 
-`PA019` - Current age calculation
+`xA019` — Current age calculation
 
-The two files are merged together.
+All four waves are joined sequentially to `tracker_demo` via `left_join` on `HHID`, `PN`, and the wave-specific sub-household identifier.
+
 
 
 ## Output Data
@@ -110,10 +125,19 @@ The following intermediate files are saved:
 
 | Object | Output File | Key Content |
 |---|---|---|
-| `hrs16_cog` | `A0_009_hrs16_cog.rds` | Cognitive test items + normative exclusion flags |
-| `hrs16_iadl` | `A0_009_hrs16_iadl.rds` | IADL items |
-| `hrs16_func` | `A0_009_hrs16_func.rds` | ADL/functional limitation items |
-| `tracker_demo` | `A0_009_tracker_demo.rds` | Demographics, weights, survey design variables |
+| `hrs16_cog` | `A0_009_hrs16_cog.rds` | 2016 cognitive test items + normative exclusion flags |
+| `hrs16_iadl` | `A0_009_hrs16_iadl.rds` | 2016 IADL items |
+| `hrs16_func` | `A0_009_hrs16_func.rds` | 2016 ADL/functional limitation items |
+| `hrs18_cog` | `A0_009_hrs18_cog.rds` | 2018 cognitive test items |
+| `hrs18_iadl` | `A0_009_hrs18_iadl.rds` | 2018 IADL items |
+| `hrs18_func` | `A0_009_hrs18_func.rds` | 2018 ADL/functional limitation items |
+| `hrs20_cog` | `A0_009_hrs20_cog.rds` | 2020 cognitive test items |
+| `hrs20_iadl` | `A0_009_hrs20_iadl.rds` | 2020 IADL items |
+| `hrs20_func` | `A0_009_hrs20_func.rds` | 2020 ADL/functional limitation items |
+| `hrs22_cog` | `A0_009_hrs22_cog.rds` | 2022 cognitive test items |
+| `hrs22_iadl` | `A0_009_hrs22_iadl.rds` | 2022 IADL items (no SG040) |
+| `hrs22_func` | `A0_009_hrs22_func.rds` | 2022 ADL/functional limitation items |
+| `tracker_demo` | `A0_009_tracker_demo.rds` | Demographics, weights, survey design variables (all waves) |
 | `hrshcap` | `A0_009_hrshcap.rds` | HCAP diagnoses and domain impairment flags |
 | `hc16hp_r` | `A0_009_hc16hp_r.rds` | HCAP sampling weight |
 | `hcap_validation` | `A0_009_hcap_validation.rds` | HCAP validation subsample (N=50) |

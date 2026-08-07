@@ -4,18 +4,30 @@ tracker_demo <- readRDS(here::here("R_objects", "A0_010_tracker_demo.rds"))
 
 ```
 
-## Sample selection variables
+# 3. Sample identification
 
-This script reads the tracker demographic file and two HCAP auxiliary files, joins them together, and derives a set of sample membership indicators, an age eligibility flag, a unique respondent ID, and a recoded survey cluster variable for use in Mplus. The output is saved as `A0_010_tracker_demo.rds`.
+This section describes how the tracker demographic file and two HCAP auxiliary files (`hc16hp_r`, `hcap_validation`) are joined to `tracker_demo` and several derived variables are created.  The created variables are a set of sample membership indicators, age eligibility flags, a unique respondent ID, and a recoded survey cluster variable for use in Mplus. Indicators are created for all four HRS waves (2016, 2018, 2020, 2022). 
+
+## Input Data
+
+| Object | Source File | Description |
+|---|---|---|
+| `tracker_demo` | `A0_009_tracker_demo.rds` | Demographics, weights, survey design variables |
+| `hc16hp_r` | `A0_009_hc16hp_r.rds` | HCAP 2016 sampling weights |
+| `hcap_validation` | `A0_009_hcap_validation.rds` | HCAP validation subsample (N=50) |
+
+Both `hc16hp_r` and `hcap_validation` are joined to `tracker_demo` by `HHID` and `PN`.
+
+The output is saved as `A0_010_tracker_demo.rds`.
 
 
-#### `inHRS_16` — In HRS 2016 Core Interview
+### `inHRS_16` through `inHRS_22` — In HRS Core Interview
 
-A binary indicator for whether the respondent completed a core HRS 2016 interview, based on `PIWTYPE`:
+Binary indicators for whether the respondent completed a core HRS interview in each wave, based on the wave-specific interview type variable (`xIWTYPE`):
 
-| `PIWTYPE` | `inHRS_16` |
+| Condition | Value |
 |---|---|
-| 1 (core interview) | 1 |
+| `xIWTYPE == 1` (core interview) | 1 |
 | Any other value | 0 |
 
 ```{r}
@@ -24,15 +36,33 @@ QSPtools::checkvar(tracker_demo, inHRS_16, PIWTYPE) %>%
   gt::gt()
 ```
 
-### `nonzeroweight` — Positive Sampling Weight
+```{r}
+#| tbl-cap: "In HRS 2018 indicator"
+QSPtools::checkvar(tracker_demo, inHRS_18, QIWTYPE) %>%
+  gt::gt()
+```
 
-A binary indicator for whether the respondent has a positive HRS person-level weight (`PWGTR`):
+```{r}
+#| tbl-cap: "In HRS 2020 indicator"
+QSPtools::checkvar(tracker_demo, inHRS_20, RIWTYPE) %>%
+  gt::gt()
+```
 
-| Condition | `nonzeroweight` |
+```{r}
+#| tbl-cap: "In HRS 2022 indicator"
+QSPtools::checkvar(tracker_demo, inHRS_22, SIWTYPE) %>%
+  gt::gt()
+```
+
+### `nonzeroweight16` through `nonzeroweight22` — Positive Sampling Weight
+
+Binary indicators for whether the respondent has a positive HRS person-level weight in each wave (`PWGTR`, `QWGTR`, `RWGTR`, `SWGTR`):
+
+| Condition | Value |
 |---|---|
-| `PWGTR` is missing | 0 |
-| `PWGTR > 0` | 1 |
-| `PWGTR == 0` | 0 |
+| Weight is missing | 0 |
+| Weight > 0 | 1 |
+| Weight == 0 | 0 |
 
 
 ### `inHCAP` — In HCAP 2016
@@ -55,36 +85,54 @@ QSPtools::checkvar(tracker_demo, inHCAP, HCAP16RESP) %>%
 
 ### `inSamplingFrame` — Weight and HCAP Membership Cross-Classification
 
-A four-category labelled variable summarizing the cross-classification of weight status and HCAP participation:
+A four-category labelled variable summarizing the cross-classification of 2016 weight status and HCAP participation:
 
 | Value | Label | Condition |
 |---|---|---|
-| 1 | In HCAP, has weight | `nonzeroweight == 1` AND `inHCAP == 1` |
-| 2 | In HCAP, no weight | `nonzeroweight == 0` AND `inHCAP == 1` |
-| 3 | Has weight, not in HCAP | `nonzeroweight == 1` AND `inHCAP == 0` |
-| 4 | No weight, not in HCAP | `nonzeroweight == 0` AND `inHCAP == 0` |
+| 1 | In HCAP, has weight | `nonzeroweight16 == 1` AND `inHCAP == 1` |
+| 2 | In HCAP, no weight | `nonzeroweight16 == 0` AND `inHCAP == 1` |
+| 3 | Has weight, not in HCAP | `nonzeroweight16 == 1` AND `inHCAP == 0` |
+| 4 | No weight, not in HCAP | `nonzeroweight16 == 0` AND `inHCAP == 0` |
 
 ```{r}
 #| tbl-cap: "In the sampling frame indicator"
-QSPtools::checkvar(tracker_demo, inSamplingFrame, nonzeroweight, inHCAP) %>%
+QSPtools::checkvar(tracker_demo, inSamplingFrame, nonzeroweight16, inHCAP) %>%
   gt::gt()
 ```
 
-### `age65up` — Age 65 or Older
+### `age65up16` through `age65up22` — Age 65 or Older
 
-A binary eligibility indicator derived from self-reported age, with `PA019` (Section A age) taking priority over `PAGE` (tracker age):
+Binary age eligibility indicators for each wave, derived from self-reported age. The Section A age variable (`xA019`) takes priority over the tracker age variable (`xAGE`):
 
-| Condition | `age65up` |
+| Condition | Value |
 |---|---|
-| `PA019 >= 65` | 1 |
-| `PA019 < 65` | 0 |
-| `PA019` missing AND `PAGE >= 65` | 1 |
-| `PA019` missing AND `PAGE < 65` | 0 |
-| `PA019` missing and `PAGE` missing | `NA` |
+| `xA019 >= 65` | 1 |
+| `xA019 < 65` | 0 |
+| `xA019` missing AND `xAGE >= 65` | 1 |
+| `xA019` missing AND `xAGE < 65` | 0 |
+| Both `xA019` and `xAGE` missing | `NA` |
 
 ```{r}
-#| tbl-cap: "Age 65+ indicator"
-QSPtools::checkvar(tracker_demo, age65up, PA019, PAGE) %>%
+#| tbl-cap: "2016: Age 65+ indicator"
+QSPtools::checkvar(tracker_demo, age65up16, PA019, PAGE) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2018: Age 65+ indicator"
+QSPtools::checkvar(tracker_demo, age65up18, QA019, QAGE) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2020: Age 65+ indicator"
+QSPtools::checkvar(tracker_demo, age65up20, RA019, RAGE) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2022: Age 65+ indicator"
+QSPtools::checkvar(tracker_demo, age65up22, SA019, SAGE) %>%
   gt::gt()
 ```
 
@@ -104,6 +152,11 @@ $$
 This encoding creates a unique numeric identifier for each SECU-within-STRATUM combination in a format compatible with Mplus survey design specification.
 
 
+### Output Data
+
+| Object | Output File | Key Content |
+|---|---|---|
+| `tracker_demo` | `A0_010_tracker_demo.rds` | tracker_demo with all derived sample indicators appended |
 
 
 

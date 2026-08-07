@@ -1,9 +1,9 @@
 
 
 
-## Merging files together
+# 5. Merging files together
 
-This script brings together all upstream analytic data objects into a single merged file, applies a structured variable selection, and constructs three analytic samples via sequential exclusion criteria. A CONSORT-style flow diagram is generated to document sample attrition at each step.
+This section describes how all the upstream analytic data objects are brought together into a single merged file, applies a structured variable selection, and constructs four analytic samples. A CONSORT-style flow diagram is generated to document sample attrition at each step for the 2016 HCAP sample.
 
 
 *Input Data*
@@ -11,53 +11,77 @@ This script brings together all upstream analytic data objects into a single mer
 | Object | Source File | Description |
 |---|---|---|
 | `tracker_demo` | `A0_021_tracker_demo.rds` | Demographics, weights, covariates, consensus weight |
-| `langa_weir` | `A0_017_langa_weir.rds` | Langa-Weir cognitive classification (`cogfunction2016`) |
-| `hudomiet` | `A0_017_hudomiet.rds` | Hudomiet probabilistic cognitive classification |
-| `hrs16_cog` | `A0_016_hrs16_cog.rds` | Normalized cognitive domain scores |
-| `hrshcap` | `A0_014_hrshcap.rds` | HCAP diagnoses and domain impairment flags |
-| `hrs16_func` | `A0_013_hrs16_func.rds` | JORM score and self-reported memory concern |
-| `hrs16_iadl` | `A0_012_hrs16_iadl.rds` | ADL/IADL binary indicators and sum score |
+| `langa_weir`   | `A0_017_langa_weir.rds`   | Langa-Weir cognitive classification (`cogfunction2016`) |
+| `hudomiet`     | `A0_017_hudomiet.rds`     | Hudomiet probabilistic cognitive classification |
+| `hrshcap`      | `A0_014_hrshcap.rds`      | HCAP diagnoses and domain impairment flags |
+| `hrs16_cog`    | `A0_016_hrs16_cog.rds`    | 2016 normalized cognitive domain scores |
+| `hrs16_func`   | `A0_013_hrs16_func.rds`   | 2016 JORM score, self-reported memory concern, wandering items |
+| `hrs16_iadl`   | `A0_012_hrs16_iadl.rds`   | 2016 ADL/IADL binary indicators and sum score |
+| `hrs18_cog`    | `A0_016_hrs18_cog.rds`    | 2018 normalized cognitive domain scores |
+| `hrs18_func`   | `A0_013_hrs18_func.rds`   | 2018 JORM score, self-reported memory concern, wandering items |
+| `hrs18_iadl`   | `A0_012_hrs18_iadl.rds`   | 2018 ADL/IADL binary indicators and sum score |
+| `hrs20_cog`    | `A0_016_hrs20_cog.rds`    | 2020 normalized cognitive domain scores |
+| `hrs20_func`   | `A0_013_hrs20_func.rds`   | 2020 JORM score, self-reported memory concern, wandering items |
+| `hrs20_iadl`   | `A0_012_hrs20_iadl.rds`   | 2020 ADL/IADL binary indicators and sum score |
+| `hrs22_cog`    | `A0_016_hrs22_cog.rds`    | 2022 normalized cognitive domain scores |
+| `hrs22_func`   | `A0_013_hrs22_func.rds`   | 2022 JORM score, self-reported memory concern, wandering items |
+| `hrs22_iadl`   | `A0_012_hrs22_iadl.rds`   | 2022 ADL/IADL binary indicators and sum score |
 
 
 
-### 1. Merging
+
+## 1. Merging
 
 All seven input objects are joined to `tracker_demo` via sequential left joins on `HHID` and `PN`. The tracker file serves as the spine; all other datasets contribute additional columns.
 
-
-### 2. Variable Selection
-
-After merging, columns are reordered and a priority variable list is applied using `select()`. Variables are organized into the following groups:
-
-| Group | Variables |
+| Dataset(s) | Join Keys |
 |---|---|
-| Identifiers | `HHID`, `PN` |
-| Survey design & weights | `SECU`, `STRATUM`, `PWGTR`, `HCAP16WGTR`, `samplingP` |
-| Sample tracking | `PINSAMP`, `PIWWAVE`, `PIWYEAR`, `PMARST`, `PNURSHM`, `PPROXY` |
-| Demographics | `rage`, `PA019`, `PAGE`, `female`, `black`, `hisp`, `SCHLYRS`, `HISPANIC`, `RACE` |
-| Cognitive scores (normalized) | `vdori`, `vdlfl1z`, `vdlfl2`, `vdlfl3`, `vdwdimmz`, `vdwddelz`, `vdexf7z`, `vdsevens`, `vdcount` |
-| ADL/IADL items & sum | `rPG014`–`rPG059`, `iadl_imp`, raw `PG013`–`PG059` |
-| Self-report & informant | `PD102`, `jorm` |
-| Diagnoses & classification | `normexcld`, `vs1hcapdx`, `vs1hcapdxeap`, `consensuspaneldx` |
-| Langa-Weir classification | `cogfunction2016` |
-| Hudomiet classification | `PrDem`, `PrCIND`, `PrNorm`, `Cog`, `CogSd`, `Hudomiet_classification` |
-| All remaining variables | `everything()` |
+| `langa_weir`, `hudomiet`, `hrshcap` | `HHID`, `PN` |
+| `hrs16_cog`, `hrs16_func`, `hrs16_iadl` | `HHID`, `PN`, `PSUBHH` |
+| `hrs18_cog`, `hrs18_func`, `hrs18_iadl` | `HHID`, `PN`, `QSUBHH` |
+| `hrs20_cog`, `hrs20_func`, `hrs20_iadl` | `HHID`, `PN`, `RSUBHH` |
+| `hrs22_cog`, `hrs22_func`, `hrs22_iadl` | `HHID`, `PN`, `SSUBHH` |
+
+The wave-specific sub-household identifier (`xSUBHH`) is required as a join key for the wave-level data files to uniquely identify respondents within households across waves.
+
+## 2. Variable Selection
+
+After merging, columns are reordered and a priority variable list is applied using `select()`. Variables are organized into the following groups, with `everything()` appending any remaining columns not explicitly listed:
+
+| Group | Key Variables |
+|---|---|
+| Identifiers | `id`, `HHID`, `PN` |
+| Survey design & weights | `SECU`, `STRATUM`, `SECU_mplus`, `HCAP16WGTR`, `samplingP`, `inHCAP` |
+| Wave membership | `inHRS_16`–`inHRS_22`, `nonzeroweight16`–`nonzeroweight22` |
+| Wave-specific weights & tracking | `PWGTR`, `PINSAMP`, `PIWWAVE`, `PIWYEAR` (repeated for Q/R/S waves) |
+| Age (continuous & categorical) | `page`, `page_cat`, `page_cat_f` (repeated for Q/R/S waves) |
+| Demographics | `female`, `black`, `hisp`, `SCHLYRS`, `HISPANIC`, `RACE` |
+| Cognitive scores — 2016 | `rPvdori`, `rPvdlfl1z`, `rPvdlfl2`, `rPvdlfl3`, `rPvdwdimmz`, `rPvdwddelz`, `rPvdexf7z`, `rPvdsevens`, `rPvdcount` |
+| Cognitive scores — 2018 | Same as 2016 with Q prefix; **no `rQvdexf7z`** |
+| Cognitive scores — 2020/2022 | Same as 2016 with R/S prefix |
+| ADL/IADL & functional | `rPiadl_imp`, `rPjorm`, `rPself_concerns`, `rPD554`, `rPD555`, `rPD556` (repeated for Q/R/S waves) |
+| Diagnoses & classification | `normexcld`, `vs1hcapdx`, `vs1hcapdxeap`, `inConsensus`, `HCAP16WGTR_consensus`, `consensuspaneldx` |
+| Langa-Weir | `cogfunction2016` |
+| Hudomiet | `PrDem`, `PrCIND`, `PrNorm`, `Cog`, `CogSd`, `Hudomiet_classification` |
+| Wave-specific status | `PMARST`, `PNURSHM`, `PPROXY` (repeated for Q/R/S waves) |
+| All remaining | `everything()` |
 
 
-### 3. Sample Exclusion & CONSORT Diagram
+## 3. Sample Exclusion & CONSORT Diagram
 
-Four sequential exclusion flags are constructed to define the analytic samples:
+Four sequential exclusion flags are constructed to define the 2016-based analytic samples:
 
 | Flag | Exclusion Criterion |
 |---|---|
-| `not_in_hrs16` | `PIWTYPE != 1` — respondent did not complete a core HRS 2016 interview |
-| `not_in_sampling_frame` | `nonzeroweight == 0` AND `inHCAP == 0` — zero sampling weight and not in HCAP |
-| `age_young_or_not_in_hcap` | `age65up == 0` AND `inHCAP == 0` — under age 65 and not in HCAP |
-| `not_in_hcap` | `inHCAP == 0` — not in the HCAP subsample |
+| `not_in_hrs16` | `PIWTYPE != 1` — did not complete a core HRS 2016 interview |
+| `not_in_sampling_frame` | `nonzeroweight16 == 0` AND `inHCAP == 0` — zero sampling weight and not in HCAP |
+| `age_young_or_not_in_hcap` | `age65up16 == 0` AND `inHCAP == 0` — under age 65 and not in HCAP |
+| `not_in_hcap` | `inHCAP == 0` — not in the HCAP 2016 subsample |
 
-These flags are used to generate a CONSORT flow diagram tracing the sample from the full tracker file through to the final HCAP subsample.
+These flags are passed to `consort::consort_plot()` to generate a CONSORT flow diagram tracing sample attrition from the full tracker file through to the final HCAP subsample.
 
-#### CONSORT Flow
+
+### CONSORT Flow
 
 ```{r}
 
@@ -73,27 +97,29 @@ hrs16_consort
 
 n=2993 is the nonimputed data
 
-### 4. Analytic Sample Objects
+## 4. Analytic Sample Objects
 
-Three analytic datasets are derived from the merged file after applying exclusions:
+Four analytic datasets are derived from the merged file:
 
 | Object | Filters Applied | Description |
 |---|---|---|
-| `tracker_merged` | None | Full merged file, all respondents |
-| `hrs16_merged` | Excludes `not_in_hrs16`, `not_in_sampling_frame`, `age_young_or_not_in_hcap` | HRS 2016 analytic sample, age 65+, non-zero weight |
+| `tracker_merged` | None | Full merged file, all respondents in tracker |
+| `hrs16_merged` | Excludes `not_in_hrs16`, `not_in_sampling_frame`, `age_young_or_not_in_hcap` | HRS 2016 analytic sample: core interview, age 65+, non-zero weight or in HCAP |
 | `hcap16_merged` | All above + excludes `not_in_hcap` | HCAP 2016 subsample only |
+| `hrs16_22_merged` | `inHRS_16 == 1` OR `inHRS_18 == 1` OR `inHRS_20 == 1` OR `inHRS_22 == 1` | Any respondent with at least one core HRS interview across 2016–2022 |
 
-Exclusion flag columns are dropped from both `hrs16_merged` and `hcap16_merged` after filtering.
+Exclusion flag columns (`not_in_hrs16`, `a`, `not_in_sampling_frame`, `age_young_or_not_in_hcap`, `not_in_hcap`) are dropped from both `hrs16_merged` and `hcap16_merged` after filtering.
+
 
 ## Output Data
 
 | Object | Output File | Description |
 |---|---|---|
-| `tracker_merged` | `A0_030_tracker_merged.rds` | Full integrated dataset, all respondents |
-| `hrs16_merged` | `A0_030_hrs16_merged.rds` | HRS 2016 analytic sample (age 65+, core interview, non-zero weight) |
-| `hcap16_merged` | `A0_030_hcap16_merged.rds` | HCAP 2016 subsample |
-| `hrs16_consort` | `A0_030_hrs16_consort.rds` | CONSORT flow diagram object |
-
+| `tracker_merged`  | `A0_030_tracker_merged.rds`  | Full integrated dataset, all respondents |
+| `hrs16_merged`    | `A0_030_hrs16_merged.rds`    | HRS 2016 analytic sample (age 65+, core interview, non-zero weight or in HCAP) |
+| `hcap16_merged`   | `A0_030_hcap16_merged.rds`   | HCAP 2016 subsample |
+| `hrs16_consort`   | `A0_030_hrs16_consort.rds`   | CONSORT flow diagram object |
+| `hrs16_22_merged` | `A0_030_hrs16_22_merged.rds` | Multi-wave analytic sample: respondents in any of 2016–2022 |
 
 
 

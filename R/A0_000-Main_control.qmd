@@ -12,7 +12,7 @@ author:
 date: '`r Sys.Date()`'
 abstract: | 
   
-  **Objective:** The objective of this analysis is to create a working data file of the HRS 2016 sample.  It starts with the raw data files, selects the relevant variables, recodes the variables, merge the data files together, and then filters the data to the 2016 particiants.
+  **Objective:** This pipeline prepares longitudinal Health and Retirement Study (HRS) data across four waves (2016, 2018, 2020, 2022) for analyses of cognitive aging and impairment. Starting from raw HRS and HCAP (Harmonized Cognitive Assessment Protocol) data files, the pipeline selects and standardizes variables, recodes demographic characteristics, and derives analytic covariates including restricted cubic spline age terms, race/ethnicity indicators, and educational attainment. Cognitive test items are recoded into binary correct/incorrect indicators and domain-level summary scores spanning orientation, naming, serial subtraction, word recall, animal fluency, and number series; continuous scores are then rescaled using a smoothed min-max normalization anchored to the 2016 wave to support cross-wave comparability. Functional status is characterized through binary ADL/IADL impairment indicators, a total impairment sum score, and informant-rated cognitive change via the JORM scale. External cognitive classification datasets (Langa-Weir and Hudomiet) are prepared and integrated alongside HCAP clinical diagnoses and domain impairment flags. Sampling weights are constructed for both the full HCAP sample and the consensus panel subsample using inverse-probability weighting. All processed datasets are merged into a single analytic spine and filtered into four analytic samples: the full tracker file, the HRS 2016 sample (age 65+, core interview), the HCAP 2016 subsample, and a multi-wave longitudinal sample covering any respondent with at least one core interview between 2016 and 2022.
 format: 
   html:
     toc: true
@@ -43,6 +43,7 @@ source(here::here("R", "A0_014-recode_imputation_flag.R"))
 source(here::here("R", "A0_015-recode_cog_items.R"))
 source(here::here("R", "A0_016-rescale_cog_items.R"))
 source(here::here("R", "A0_017-recode_classification.R"))
+source(here::here("R", "A0_019-impute_self_concerns.R"))
 source(here::here("R", "A0_021-consensus_weights.R"))
 source(here::here("R", "A0_030-merge_data.R"))
 
@@ -53,9 +54,9 @@ source(here::here("R", "A0_030-merge_data.R"))
 
 {{< include A0_009-select_data.qmd >}}
 
-# Data recoding
-
 {{< include A0_010-sample_identification.qmd >}}
+
+# 4. Data recoding
 
 {{< include A0_011-recode_demographics.qmd >}}
 

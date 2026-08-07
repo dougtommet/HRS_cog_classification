@@ -1,17 +1,32 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
+
 
 ```{r}
 hrs16_iadl <- readRDS(here::here("R_objects", "A0_012_hrs16_iadl.rds"))
-
+hrs18_iadl <- readRDS(here::here("R_objects", "A0_012_hrs18_iadl.rds"))
+hrs20_iadl <- readRDS(here::here("R_objects", "A0_012_hrs20_iadl.rds"))
+hrs22_iadl <- readRDS(here::here("R_objects", "A0_012_hrs22_iadl.rds"))
 ```
 
 ## ADLs/IADLs
 
-This script reads the ADL/IADL data in `A0_009_hrs16_iadl.rds` and recodes raw HRS response codes into binary impairment indicators (1 = impaired, 0 = not impaired). A sum score across all items is then computed.
+This section describes how the ADL/IADL data for all four HRS waves (2016, 2018, 2020, 2022) was recoded into binary impairment indicators (1 = impaired, 0 = not impaired). A sum score across all items is then computed per wave. 
+
+The recoding logic was updated from `PMM_041_Data_cleaning_functional_items.R`. 
+
+> **Note:** The 2022 wave (`hrs22_iadl`) does not include `G040` (Difficulty Using Maps), which was not collected in that wave. The sum score for 2022 therefore ranges from 0–9, while the sum score for 2016, 2018, and 2020 ranges from 0–10.
+
+> **Note** As of 2026-05-12, the recoding logic was refactored into a function to support consistent application across waves.
+
+### Input Data
+
+| Object | Source File | Description |
+|---|---|---|
+| `hrs16_iadl` | `A0_009_hrs16_iadl.rds` | HRS 2016 ADL/IADL raw items |
+| `hrs18_iadl` | `A0_009_hrs18_iadl.rds` | HRS 2018 ADL/IADL raw items |
+| `hrs20_iadl` | `A0_009_hrs20_iadl.rds` | HRS 2020 ADL/IADL raw items |
+| `hrs22_iadl` | `A0_009_hrs22_iadl.rds` | HRS 2022 ADL/IADL raw items |
+
+The output is saved as `A0_012_hrs{wave}_iadl.rds` for each wave.
 
 ### General Response Code Mapping
 
@@ -28,38 +43,40 @@ All items share the same base recoding scheme for their raw response codes:
 
 ### Additional Routing Rules
 
-Several items have special routing logic tied to skip patterns in the HRS questionnaire.
+Several items have special routing logic tied to skip patterns in the HRS questionnaire. These apply identically across all four waves (substituting the appropriate wave prefix).
 
-**`PG013` routing (items `rPG014`, `rPG021`, `rPG023`, `rPG030`):** Respondents with `PG013 == 0` (no difficulties reported on the screener) who are otherwise missing on a given item are recoded to **0** (not impaired), reflecting the intended skip logic.
+**`xG013` routing (items `rxG014`, `rxG021`, `rxG023`, `rxG030`):** Respondents with `xG013 == 0` (no difficulties reported on the screener) who are otherwise missing on a given item are recoded to **0** (not impaired), reflecting the intended skip logic.
 
-**`PG014 == 5` routing (items `rPG021`, `rPG023`, `rPG030`):** If dressing (`PG014`) was not impaired and subsequent items are missing or coded 7/8, those items are recoded to **0**, again reflecting skip routing.
+**`xG014 == 5` routing (items `rxG021`, `rxG023`, `rxG030`):** If dressing (`xG014`) was not impaired and subsequent items are missing or coded 7/8, those items are recoded to **0**, again reflecting skip routing.
 
-**`rPG050` — Difficulty Taking Medications:** This item has an additional follow-up question (`PG051`) that is used when `PG050 == 7` (don't know):
+**`rxG050` — Difficulty Taking Medications:** This item has an additional follow-up question (`xG051`) that is used when `xG050 == 7` (don't know):
 
-| `PG050` | `PG051` | Recoded `rPG050` |
+| `xG050` | `xG051` | Recoded `rxG050` |
 |---------|---------|------------------|
 | 7       | 1       | 1 (Impaired)     |
 | 7       | 5       | 0 (Not impaired) |
 | 7       | 8       | `NA`             |
 
-------------------------------------------------------------------------
+---
 
 ## Derived Items
 
 ### Binary Impairment Indicators
 
-| Variable | Label                               | Type |
-|----------|-------------------------------------|------|
-| `rPG014` | ADL: Difficulty Dressing            | ADL  |
-| `rPG021` | ADL: Difficulty Bathing             | ADL  |
-| `rPG023` | ADL: Difficulty Eating              | ADL  |
-| `rPG030` | ADL: Difficulty Using Toilet        | ADL  |
-| `rPG040` | IADL: Difficulty Using Maps         | IADL |
-| `rPG041` | IADL: Difficulty Meal Prep          | IADL |
-| `rPG044` | IADL: Difficulty Grocery Shopping   | IADL |
-| `rPG047` | IADL: Difficulty Making Phone Calls | IADL |
-| `rPG050` | IADL: Difficulty Taking Medications | IADL |
-| `rPG059` | IADL: Difficulty Managing Money     | IADL |
+The following indicators are derived for each wave. Wave prefixes follow the HRS convention (P = 2016, Q = 2018, R = 2020, S = 2022). The `xG040` item is only available for 2016, 2018, and 2020.
+
+| Variable | Label                               | Type | Waves |
+|----------|-------------------------------------|------|-------|
+| `rxG014` | ADL: Difficulty Dressing            | ADL  | All   |
+| `rxG021` | ADL: Difficulty Bathing             | ADL  | All   |
+| `rxG023` | ADL: Difficulty Eating              | ADL  | All   |
+| `rxG030` | ADL: Difficulty Using Toilet        | ADL  | All   |
+| `rxG040` | IADL: Difficulty Using Maps         | IADL | 2016, 2018, 2020 only |
+| `rxG041` | IADL: Difficulty Meal Prep          | IADL | All   |
+| `rxG044` | IADL: Difficulty Grocery Shopping   | IADL | All   |
+| `rxG047` | IADL: Difficulty Making Phone Calls | IADL | All   |
+| `rxG050` | IADL: Difficulty Taking Medications | IADL | All   |
+| `rxG059` | IADL: Difficulty Managing Money     | IADL | All   |
 
 All indicators are labelled: `1 = "Impaired"`, `0 = "Not impaired"`.
 
@@ -160,19 +177,36 @@ hrs16_iadl %>%
 #| label: tbl-desc-iadls
 
 hrs16_iadl %>%
-  select(starts_with("r"), iadl_imp) %>%
+  select(starts_with("r"), rPiadl_imp) %>%
   labelled::to_factor() %>%
   gtsummary::tbl_summary(
-    type = c(iadl_imp) ~ "categorical"
+    type = c(rPiadl_imp) ~ "categorical"
   ) 
 
 
 ```
 
 
-### Sum Score (`iadl_imp`)
+### Sum Score (`r{x}iadl_imp`)
 
-A row-wise sum of all 10 binary indicators is computed, yielding a score from 0 to 10 representing the total number of ADL/IADL domains with impairment. Missing values on individual items are treated as 0 in the sum. 
+A row-wise sum of all binary indicators is computed per wave, yielding the total number of ADL/IADL domains with impairment. Missing values on individual items are ignored in the sum (`na.rm = TRUE`).
+
+| Wave | Variable | Items included | Score range |
+|------|----------|----------------|-------------|
+| 2016 | `rPiadl_imp` | `rPG014`, `rPG021`, `rPG023`, `rPG030`, `rPG040`, `rPG041`, `rPG044`, `rPG047`, `rPG050`, `rPG059` | 0–10 |
+| 2018 | `rQiadl_imp` | `rQG014`, `rQG021`, `rQG023`, `rQG030`, `rQG040`, `rQG041`, `rQG044`, `rQG047`, `rQG050`, `rQG059` | 0–10 |
+| 2020 | `rRiadl_imp` | `rRG014`, `rRG021`, `rRG023`, `rRG030`, `rRG040`, `rRG041`, `rRG044`, `rRG047`, `rRG050`, `rRG059` | 0–10 |
+| 2022 | `rSiadl_imp` | `rSG014`, `rSG021`, `rSG023`, `rSG030`, `rSG041`, `rSG044`, `rSG047`, `rSG050`, `rSG059` | 0–9 |
+
+
+### Output Data
+
+| Object | Output File | Key Content |
+|---|---|---|
+| `hrs16_iadl` | `A0_012_hrs16_iadl.rds` | 2016 recoded ADL/IADL indicators + sum score |
+| `hrs18_iadl` | `A0_012_hrs18_iadl.rds` | 2018 recoded ADL/IADL indicators + sum score |
+| `hrs20_iadl` | `A0_012_hrs20_iadl.rds` | 2020 recoded ADL/IADL indicators + sum score |
+| `hrs22_iadl` | `A0_012_hrs22_iadl.rds` | 2022 recoded ADL/IADL indicators + sum score (no G040) |
 
 
 

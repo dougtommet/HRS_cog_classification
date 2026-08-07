@@ -1,90 +1,297 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
 
 ```{r}
 hrs16_cog <- readRDS(here::here("R_objects", "A0_015_hrs16_cog.rds"))
+hrs18_cog <- readRDS(here::here("R_objects", "A0_015_hrs18_cog.rds"))
+hrs20_cog <- readRDS(here::here("R_objects", "A0_015_hrs20_cog.rds"))
+hrs22_cog <- readRDS(here::here("R_objects", "A0_015_hrs22_cog.rds"))
 ```
 
 ## Cognitive Items
 
-This script reads the raw HRS 2016 cognitive items `A0_009A0_009_hrs16_cog.rds` and performs two operations:
+This section describes the raw HRS cognitive items for all four waves (2016, 2018, 2020, 2022) and performs two recoding operations. 
 
 1. **Recodes individual cognitive test items** into binary correct/incorrect indicators or cleaned continuous scores
 2. **Constructs domain-level summary scores** by summing or combining item-level variables
 
-The output is saved as `A0_015_hrs16_cog.rds`.
+> **Note:** The 2018 wave (`hrs18_cog`, wave prefix Q) does **not** include the Number Series item (`QNSSCORE` / `rQvdexf7`), as it was not administered in that wave.
+
+> **Note:** As of 2026-05-12, the recoding logic was refactored into a function to support consistent application across waves:
+
+
+### Input Data
+
+| Object | Source File | Description |
+|---|---|---|
+| `hrs16_cog` | `A0_009_hrs16_cog.rds` | HRS 2016 raw cognitive items |
+| `hrs18_cog` | `A0_009_hrs18_cog.rds` | HRS 2018 raw cognitive items |
+| `hrs20_cog` | `A0_009_hrs20_cog.rds` | HRS 2020 raw cognitive items |
+| `hrs22_cog` | `A0_009_hrs22_cog.rds` | HRS 2022 raw cognitive items |
+
+The output is saved as `A0_015_hrs{wave}_cog.rds` for each wave.
+
+
+
 
 
 ### 1. Item-Level Recoding
 
-#### Orientation to Time (`rPD151`–`rPD154`)
+Wave prefixes follow the HRS convention: P = 2016, Q = 2018, R = 2020, S = 2022.
+
+#### Orientation to Time (`r{x}D151`–`r{x}D154`)
 
 Four date/time orientation items are each recoded to binary correct (1) / incorrect (0). Responses of don't know (8) and refuse (9) are scored as **incorrect (0)**.
 
 | Variable | Item | Source |
 |---|---|---|
-| `rPD151` | Month | PD151 |
-| `rPD152` | Day | PD152 |
-| `rPD153` | Year | PD153 |
-| `rPD154` | Day of week | PD154 |
+| `r{x}D151` | Month       | `xD151` |
+| `r{x}D152` | Day         | `xD152` |
+| `r{x}D153` | Year        | `xD153` |
+| `r{x}D154` | Day of week | `xD154` |
+
+| Raw Code | Recoded Value |
+|----------|---------------|
+| 1        | 1 (Correct)   |
+| 5        | 0 (Incorrect) |
+| 8        | 0 (Incorrect) |
+| 9        | 0 (Incorrect) |
 
 ```{r}
-#| tbl-cap: "Month"
+#| tbl-cap: "2016: Month"
 hrs16_cog %>%
   QSPtools::checkvar(rPD151, PD151) %>%
   gt::gt()
 ```
 
 ```{r}
-#| tbl-cap: "Day"
+#| tbl-cap: "2016: Day"
 hrs16_cog %>%
   QSPtools::checkvar(rPD152, PD152) %>%
   gt::gt()
 ```
 
 ```{r}
-#| tbl-cap: "Year"
+#| tbl-cap: "2016: Year"
 hrs16_cog %>%
   QSPtools::checkvar(rPD153, PD153) %>%
   gt::gt()
 ```
 
 ```{r}
-#| tbl-cap: "Day of week"
+#| tbl-cap: "2016: Day of week"
 hrs16_cog %>%
   QSPtools::checkvar(rPD154, PD154) %>%
   gt::gt()
 ```
 
-#### Object & Person Naming (`rPD155`–`rPD158`)
+```{r}
+#| tbl-cap: "2018: Month"
+hrs18_cog %>%
+  QSPtools::checkvar(rQD151, QD151) %>%
+  gt::gt()
+```
 
-Four naming items recoded to binary correct (1) / incorrect (0). Don't know and refuse are scored as **incorrect (0)**.
+```{r}
+#| tbl-cap: "2018: Day"
+hrs18_cog %>%
+  QSPtools::checkvar(rQD152, QD152) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2018: Year"
+hrs18_cog %>%
+  QSPtools::checkvar(rQD153, QD153) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2018: Day of week"
+hrs18_cog %>%
+  QSPtools::checkvar(rQD154, QD154) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2020: Month"
+hrs20_cog %>%
+  QSPtools::checkvar(rRD151, RD151) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2020: Day"
+hrs20_cog %>%
+  QSPtools::checkvar(rRD152, RD152) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2020: Year"
+hrs20_cog %>%
+  QSPtools::checkvar(rRD153, RD153) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2020: Day of week"
+hrs20_cog %>%
+  QSPtools::checkvar(rRD154, RD154) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2022: Month"
+hrs22_cog %>%
+  QSPtools::checkvar(rSD151, SD151) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2022: Day"
+hrs22_cog %>%
+  QSPtools::checkvar(rSD152, SD152) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2022: Year"
+hrs22_cog %>%
+  QSPtools::checkvar(rSD153, SD153) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2022: Day of week"
+hrs22_cog %>%
+  QSPtools::checkvar(rSD154, SD154) %>%
+  gt::gt()
+```
+
+#### Object & Person Naming  (`r{x}D155`–`r{x}D158`)
+
+Four naming items recoded to binary correct (1) / incorrect (0). Don't know and refuse are scored as **incorrect (0)**. The same recoding scheme as orientation items applies.
 
 | Variable | Item | Source |
 |---|---|---|
-| `rPD155` | Scissors (object naming) | PD155 |
-| `rPD156` | Cactus (object naming) | PD156 |
-| `rPD157` | President (person naming) | PD157 |
-| `rPD158` | Vice-president (person naming) | PD158 |
+| `r{x}D155` | Scissors (object naming)       | `xD155` |
+| `r{x}D156` | Cactus (object naming)         | `xD156` |
+| `r{x}D157` | President (person naming)      | `xD157` |
+| `r{x}D158` | Vice-president (person naming) | `xD158` |
+
 
 ```{r}
-#| tbl-cap: "Object naming: Scissors"
+#| tbl-cap: "2016: Object naming: Scissors"
 hrs16_cog %>%
   QSPtools::checkvar(rPD155, PD155) %>%
   gt::gt()
 ```
 
 ```{r}
-#| tbl-cap: "Object naming: Cactus"
+#| tbl-cap: "2016: Object naming: Cactus"
 hrs16_cog %>%
   QSPtools::checkvar(rPD156, PD156) %>%
   gt::gt()
 ```
 
-#### Serial 7s Subtraction (`rPD142`–`rPD146`)
+```{r}
+#| tbl-cap: "2016: Person naming: President"
+hrs16_cog %>%
+  QSPtools::checkvar(rPD157, PD157) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2016: Person naming: Vice-president"
+hrs16_cog %>%
+  QSPtools::checkvar(rPD158, PD158) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2018: Object naming: Scissors"
+hrs18_cog %>%
+  QSPtools::checkvar(rQD155, QD155) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2018: Object naming: Cactus"
+hrs18_cog %>%
+  QSPtools::checkvar(rQD156, QD156) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2018: Person naming: President"
+hrs18_cog %>%
+  QSPtools::checkvar(rQD157, QD157) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2018: Person naming: Vice-president"
+hrs18_cog %>%
+  QSPtools::checkvar(rQD158, QD158) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2020: Object naming: Scissors"
+hrs20_cog %>%
+  QSPtools::checkvar(rRD155, RD155) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2020: Object naming: Cactus"
+hrs20_cog %>%
+  QSPtools::checkvar(rRD156, RD156) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2020: Person naming: President"
+hrs20_cog %>%
+  QSPtools::checkvar(rRD157, RD157) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2020: Person naming: Vice-president"
+hrs20_cog %>%
+  QSPtools::checkvar(rRD158, RD158) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2022: Object naming: Scissors"
+hrs22_cog %>%
+  QSPtools::checkvar(rSD155, SD155) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2022: Object naming: Cactus"
+hrs22_cog %>%
+  QSPtools::checkvar(rSD156, SD156) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2022: Person naming: President"
+hrs22_cog %>%
+  QSPtools::checkvar(rSD157, SD157) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2022: Person naming: Vice-president"
+hrs22_cog %>%
+  QSPtools::checkvar(rSD158, SD158) %>%
+  gt::gt()
+```
+
+#### Serial 7s Subtraction (`r{x}D142`–`r{x}D146`)
 
 Five sequential subtraction items. Each is scored correct (1) if the respondent's answer equals the correct value for that step; don't know (998), refuse (999), and any other non-missing, non-correct values are scored **incorrect (0)**.
 
@@ -92,83 +299,136 @@ Correctness for steps 2–5 is evaluated **relative to the prior response** (i.e
 
 | Variable | Item | Correct Answer Rule |
 |---|---|---|
-| `rPD142` | Serial 7's — 1 | PD142 == 93 |
-| `rPD143` | Serial 7's — 2 | PD143 == PD142 − 7 |
-| `rPD144` | Serial 7's — 3 | PD144 == PD143 − 7 |
-| `rPD145` | Serial 7's — 4 | PD145 == PD144 − 7 |
-| `rPD146` | Serial 7's — 5 | PD146 == PD145 − 7 |
+| `r{x}D142` | Serial 7's — 1 | `xD142 == 93` |
+| `r{x}D143` | Serial 7's — 2 | `xD143 == xD142 − 7` |
+| `r{x}D144` | Serial 7's — 3 | `xD144 == xD143 − 7` |
+| `r{x}D145` | Serial 7's — 4 | `xD145 == xD144 − 7` |
+| `r{x}D146` | Serial 7's — 5 | `xD146 == xD145 − 7` |
+
 
 
 ```{r}
-#| tbl-cap: "Serial sevens"
+#| tbl-cap: "2016: Serial sevens"
 hrs16_cog %>%
-  QSPtools::checkvar(vdsevens, rPD142, rPD143, rPD144, rPD145, rPD146) %>%
+  QSPtools::checkvar(rPvdsevens, rPD142, rPD143, rPD144, rPD145, rPD146) %>%
   gt::gt()
 ```
 
-#### Animal Naming Errors (`rPD198`)
+```{r}
+#| tbl-cap: "2018: Serial sevens"
+hrs18_cog %>%
+  QSPtools::checkvar(rQvdsevens, rQD142, rQD143, rQD144, rQD145, rQD146) %>%
+  gt::gt()
+```
 
-`PD198` records the number of animal naming errors. Two special cases are handled before the score is used:
+```{r}
+#| tbl-cap: "2020: Serial sevens"
+hrs20_cog %>%
+  QSPtools::checkvar(rRvdsevens, rRD142, rRD143, rRD144, rRD145, rRD146) %>%
+  gt::gt()
+```
 
-- `PD198 == 98` (coded as missing in HRS) → recoded to **1** (the median error value)
+```{r}
+#| tbl-cap: "2022: Serial sevens"
+hrs22_cog %>%
+  QSPtools::checkvar(rSvdsevens, rSD142, rSD143, rSD144, rSD145, rSD146) %>%
+  gt::gt()
+```
+
+#### Animal Naming Errors `r{x}D198`)
+
+`xD198` records the number of animal naming errors. Two special cases are handled before the score is used:
+
+- `xD198 == 98` (coded as missing in HRS) → recoded to **1** (the median error value)
 - `NA` → recoded to **1** (median imputation)
 
 All other values are retained as-is.
 
 
-#### Count Backwards from 20 (`vdcount`)
+#### Count Backwards from 20 (`r{x}vdcount`)
 
 A binary indicator for whether the respondent correctly counted backwards from 20, allowing for two tries:
 
-| Condition | `vdcount` |
+| Condition | `r{x}vdcount` |
 |---|---|
-| First try correct (`PD124 == 1`) OR second try correct (`PD129 == 1`) | 1 |
-| First try incorrect (`PD124 == 5`) or wants to restart (6) or refuses (9) | 0 |
-| Second try incorrect (`PD129 == 5`) or refuses (9) — after failing first try | 1 |
+| First try correct (`xD124 == 1`) OR second try correct (`xD129 == 1`) | 1 |
+| First try incorrect (`xD124 == 5`), wants to restart (6), or refuses (9) | 0 |
+| Second try incorrect (`xD129 == 5`) or refuses (9) | 0 |
 
 > Note: A failed second try is scored as **1** (partial credit), consistent with the HRS scoring convention for this item.
 
 ```{r}
-#| tbl-cap: "Count backwards from twenty"
+#| tbl-cap: "2016: Count backwards from twenty"
 hrs16_cog %>%
-  QSPtools::checkvar(vdcount, PD124, PD129) %>%
+  QSPtools::checkvar(rPvdcount, PD124, PD129) %>%
   gt::gt()
 ```
 
-#### Word recall
+```{r}
+#| tbl-cap: "2018: Count backwards from twenty"
+hrs18_cog %>%
+  QSPtools::checkvar(rQvdcount, QD124, QD129) %>%
+  gt::gt()
+```
 
-Word recall items are carried forward with minimal transformation:
+```{r}
+#| tbl-cap: "2020: Count backwards from twenty"
+hrs20_cog %>%
+  QSPtools::checkvar(rRvdcount, RD124, RD129) %>%
+  gt::gt()
+```
+
+```{r}
+#| tbl-cap: "2022: Count backwards from twenty"
+hrs22_cog %>%
+  QSPtools::checkvar(rSvdcount, SD124, SD129) %>%
+  gt::gt()
+```
+
+#### Word recall (`r{x}vdwdimm`, `r{x}vdwddel`)
+
+Word recall items are carried forward with direct assignment:
+
+| Variable | Label | Source |
+|---|---|---|
+| `r{x}vdwdimm` | Word recall: Immediate | `xD174` |
+| `r{x}vdwddel` | Word recall: Delayed   | `xD184` |
+
+
+#### Number series (`r{x}vdexf7`)
+
+Available for 2016, 2020, and 2022 only — **not administered in 2018**. Codes 996, 997, and 999 are set to `NA`; all other non-missing values are retained.
+
 
 | Variable | Label | Source | Notes |
 |---|---|---|---|
-| `vdwdimm` | Word recall — Immediate | PD174 | Direct assignment |
-| `vdwddel` | Word recall — Delayed | PD184 | Direct assignment |
-
-
-#### Number series
-
-Number series item is carried forward with minimal transformation:
-
-| Variable | Label | Source | Notes |
-|---|---|---|---|
-| `vdexf7` | Number series | PNSSCORE | Codes 996, 997, 999 set to `NA` |
-
+| `r{x}vdexf7` | Number series | `xNSSCORE` | Codes 996, 997, 999 set to `NA` |
 
 
 
 ### 2. Domain-Level Summary Scores
 
-All summaries are row-wise. If **all** component items are missing, the score is set to `NA` rather than 0.
+All summaries are row-wise. If **all** component items are missing, the score is set to `NA` rather than 0. The same construction applies across all four waves.
 
 | Score | Label | Components | Range |
 |---|---|---|---|
-| `vdori` | Orientation to Time | `rPD151`–`rPD154` | 0–4 |
-| `vdlfl2` | Object naming | `rPD155`, `rPD156` | 0–2 |
-| `vdlfl3` | Person naming | `rPD157`, `rPD158` | 0–2 |
-| `vdsevens` | Serial 7's — number correct | `rPD142`–`rPD146` | 0–5 |
-| `vdlfl1` | Animal naming (correct − errors) | `PD196 − rPD198` | ≥ 0 (floored at 0) |
+| `r{x}vdori`    | Orientation to Time          | `r{x}D151`–`r{x}D154`                    | 0–4  |
+| `r{x}vdlfl2`   | Object naming                | `r{x}D155`, `r{x}D156`                   | 0–2  |
+| `r{x}vdlfl3`   | Person naming                | `r{x}D157`, `r{x}D158`                   | 0–2  |
+| `r{x}vdsevens` | Serial 7's — number correct  | `r{x}D142`–`r{x}D146`                    | 0–5  |
+| `r{x}vdlfl1`   | Animal naming (correct − errors) | `xD196 − r{x}D198`                   | ≥ 0 (floored at 0) |
 
-`vdlfl1` is floored at 0: if the number of errors exceeds the number of correct animals, the score is set to 0 rather than going negative.
+`r{x}vdlfl1` is floored at 0: if the number of errors exceeds the number of correct animals, the score is set to 0 rather than going negative.
 
+
+### Output Data
+
+| Object | Output File | Key Content |
+|---|---|---|
+| `hrs16_cog`       | `A0_015_hrs16_cog.rds`       | 2016 recoded cognitive items and domain scores |
+| `hrs16_cog_notes` | `A0_015_hrs16_cog_notes.rds` | Notes table documenting domain score construction |
+| `hrs18_cog`       | `A0_015_hrs18_cog.rds`       | 2018 recoded cognitive items and domain scores (no `vdexf7`) |
+| `hrs20_cog`       | `A0_015_hrs20_cog.rds`       | 2020 recoded cognitive items and domain scores |
+| `hrs22_cog`       | `A0_015_hrs22_cog.rds`       | 2022 recoded cognitive items and domain scores |
 
 

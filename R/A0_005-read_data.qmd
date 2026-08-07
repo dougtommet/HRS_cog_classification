@@ -1,28 +1,89 @@
-# Input data files
+# 1. Input data files
 
-The data files used in the analysis are:
+This script reads all raw source data files into R using `haven::read_dta()` and saves each as an `.rds` file for use in downstream processing steps. File paths are constructed using `fs::path()` relative to two root path variables — `hrs_data_path_source` (raw HRS/HCAP source data) and `hrs_data_path_derived` (derived HCAP products).
 
--   hc16hp_r.dta
+All files are in Stata `.dta` format. No recoding or variable transformation is performed at this stage.
 
--   trk2022tr_r.dta
 
--   H16A_R.dta
+## HRS Core Files
 
--   H16C_R.dta
+### Tracker
 
--   H16D_R.dta
+| Object | Source File | Description |
+|---|---|---|
+| `tracker` | `trk2022v1/trk2022tr_r.dta` | HRS tracker file (2022 release); contains sampling design variables, wave membership indicators, weights, and demographics for all HRS respondents |
 
--   H16G_R.dta Langa_Weir_Dementia_Classification/LangaWeir2020v2/cogfinalimp_9520wide.dta
+### Section Files (all four waves)
 
--   Dementia_Predicted_Probabilities_Files_Hurd/DementiaPredictedProbabilities/pdem_withvarnames.dta
+Section files are read for four HRS waves. Each wave contributes four sections:
 
--   Predicted_Cognition_and_Dementia_Measure_Hudomiet/PredictedCognitionDementiaMeasures/Dementia_HRS_2000-2016_Basic_Release1_2m.dta
+| Section | Description |
+|---|---|
+| A (`H{yy}A_R.dta`) | Household and respondent identifiers, age |
+| C (`H{yy}C_R.dta`) | Coverscreen / sample information |
+| D (`H{yy}D_R.dta`) | Cognition and functional status |
+| G (`H{yy}G_R.dta`) | IADL battery |
 
--   normexcld.dta
+| Object | Source File |
+|---|---|
+| `h16a_r` | `HRS/2016/stata/H16A_R.dta` |
+| `h16c_r` | `HRS/2016/stata/H16C_R.dta` |
+| `h16d_r` | `HRS/2016/stata/H16D_R.dta` |
+| `h16g_r` | `HRS/2016/stata/H16G_R.dta` |
+| `h18a_r` | `HRS/2018/stata/H18A_R.dta` |
+| `h18c_r` | `HRS/2018/stata/H18C_R.dta` |
+| `h18d_r` | `HRS/2018/stata/H18D_R.dta` |
+| `h18g_r` | `HRS/2018/stata/H18G_R.dta` |
+| `h20a_r` | `HRS/2020/stata/H20A_R.dta` |
+| `h20c_r` | `HRS/2020/stata/H20C_R.dta` |
+| `h20d_r` | `HRS/2020/stata/H20D_R.dta` |
+| `h20g_r` | `HRS/2020/stata/H20G_R.dta` |
+| `h22a_r` | `HRS/2022/stata/H22A_R.dta` |
+| `h22c_r` | `HRS/2022/stata/H22C_R.dta` |
+| `h22d_r` | `HRS/2022/stata/H22D_R.dta` |
+| `h22g_r` | `HRS/2022/stata/H22G_R.dta` |
 
--   hrshcap.dta
 
--   20240228-040.dta (HCAP validation)
+## HCAP Files
+
+| Object | Source File | Description |
+|---|---|---|
+| `hc16hp_r` | `HCAP/HCAP2016/HC16sta/hc16hp_r.dta` | HCAP 2016 sampling weights |
+| `normexcld` | `HCAP/2016/normexcld.dta` | Normative exclusion flags for the HCAP 2016 normative sample |
+| `hrshcap` | `HCAP/2016/hrshcap.dta` | HCAP 2016 clinical diagnoses and cognitive domain impairment flags |
+| `hcap_validation` | `stata/20240228-040.dta` | HCAP validation subsample (N=50); local project file |
+
+
+## External Cognitive Classification Files
+
+These are user-contributed datasets distributed through the HRS data portal.
+
+| Object | Source File | Description |
+|---|---|---|
+| `langa_weir` | `LangaWeir2020v2/cogfinalimp_9520wide.dta` | Langa-Weir dementia classification, waves 1995–2020, wide format |
+| `hurd` | `DementiaPredictedProbabilities/pdem_withvarnames.dta` | Hurd dementia predicted probabilities (available through wave 2007 only) |
+| `hudomiet` | `PredictedCognitionDementiaMeasures/Dementia_HRS_2000-2016_Basic_Release1_2m.dta` | Hudomiet probabilistic cognitive classification, waves 5–13 (2000–2016) |
+
+## Output Data
+
+All objects are saved as `.rds` files to the `R_objects/` directory:
+
+| Object | Output File |
+|---|---|
+| `tracker` | `A0_005_tracker.rds` |
+| `h16a_r`–`h16g_r` | `A0_005_h16a_r.rds`–`A0_005_h16g_r.rds` |
+| `h18a_r`–`h18g_r` | `A0_005_h18a_r.rds`–`A0_005_h18g_r.rds` |
+| `h20a_r`–`h20g_r` | `A0_005_h20a_r.rds`–`A0_005_h20g_r.rds` |
+| `h22a_r`–`h22g_r` | `A0_005_h22a_r.rds`–`A0_005_h22g_r.rds` |
+| `hc16hp_r` | `A0_005_hc16hp_r.rds` |
+| `normexcld` | `A0_005_normexcld.rds` |
+| `hrshcap` | `A0_005_hrshcap.rds` |
+| `hcap_validation` | `A0_005_hcap_validation.rds` |
+| `langa_weir` | `A0_005_langa_weir.rds` |
+| `hurd` | `A0_005_hurd.rds` |
+| `hudomiet` | `A0_005_hudomiet.rds` |
+
+
 
 
 

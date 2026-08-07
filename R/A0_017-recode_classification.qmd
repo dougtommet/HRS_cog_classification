@@ -2,7 +2,7 @@
 
 ## Diagnostic classification
 
-This script prepares two external cognitive classification datasets — **Langa-Weir** and **Hudomiet** — for integration into the analytic pipeline. Both are trimmed to the relevant wave/variables, identifiers are standardized to `HHID`/`PN`, and a derived three-category Hudomiet classification variable is constructed. 
+This section describes how two external cognitive classification datasets — **Langa-Weir** and **Hudomiet** — were prepared for integration into the analytic pipeline. Both are trimmed to the relevant wave/variables, identifiers are standardized to `HHID`/`PN`, and a derived three-category Hudomiet classification variable is constructed. 
 
 A third classifier (Hurd dementia probabilities) was evaluated but excluded because it is only available through wave 2007, making it incompatible with the 2016 analytic wave.
 
@@ -67,4 +67,10 @@ A three-category classification is derived by assigning each respondent to the c
 
 The variable is labelled: *"Hudomiet classification by highest class proportion"*.
 
+### Output Data
+
+| Object | Output File | Key Content |
+|---|---|---|
+| `langa_weir` | `A0_017_langa_weir.rds` | Langa-Weir 2016 cognitive classification with standardized identifiers |
+| `hudomiet`   | `A0_017_hudomiet.rds`   | Hudomiet wave 13 probabilities, parsed identifiers, and derived classification |
 
