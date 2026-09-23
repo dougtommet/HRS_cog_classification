@@ -1,0 +1,93 @@
+---
+title: "Two HRS Core cognitive classification methods informed by HRS/HCAP"
+author:
+  - name: "Richard N. Jones"
+    affiliation: "Brown University, Department of Psychiatry and Human Behavior, Department of Neurology"
+    orcid: "0000-0002-1049-218X"
+    email: "richard_jones@brown.edu"
+    address: "345 Blackstone Blvd, Providence, RI 02906"
+  - name: "Jennifer J. Manly"
+    affiliation: "Columbia University, Department of Neurology, Taub Institute for Research on Alzheimer’s Disease and the Aging Brain"
+  - name: "Douglas Tommet"
+    affiliation: "Brown University, Department of Psychiatry and Human Behavior"
+  - name: "Lindsay Kobayashi"
+    affiliation: "University of Michigan, Institute for Social Research, Department of Epidemiology"
+  - name: "Lindsay H. Ryan"
+    affiliation: "University of Michigan, Institute for Social Research, Department of Psychology"
+  - name: "Deborah A. Levine"
+    affiliation: "University of Michigan, Institute for Social Research"
+  - name: "Ryan J. McCammon"
+    affiliation: "University of Michigan, Institute for Social Research"
+  - name: "Steven G. Heeringa"
+    affiliation: "University of Michigan, Institute for Social Research"
+  - name: "David Weir"
+    affiliation: "University of Michigan, Institute for Social Research"
+  - name: "Kenneth M. Langa"
+    affiliation: "University of Michigan, Institute for Social Research, Department of Internal Medicine"
+date: '`r Sys.Date()`'
+format:
+  docx:
+    reference-doc: "../../reference_manuscript.docx"
+editor: source
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+#| include: false
+source(here::here("R", "MS_MAIN", "A1_001-libraries.R"))
+source(here::here("R", "MS_MAIN", "A1_002-folder_paths.R"))
+source(here::here("R", "MS_MAIN", "MS_001_analysis_cohort.R"))
+source(here::here("R", "MS_MAIN", "MS_010_results_objects.R"))
+```
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+# Abstract
+
+- **Importance:** population cognitive classification in HRS Core; dementia and MCI surveillance; limited assessment battery
+- **Objective:** describe two HRS Core methods calibrated to HRS/HCAP (Core algorithm, PMM); compare with the HRS/HCAP Algorithm, consensus, Langa-Weir, and Hudomiet
+- **Design:** 2016 HRS Core classification in HRS/HCAP participants; consensus-panel secondary comparator
+  - Study sample: HRS/HCAP 2016 participants, N = `r format(nrow(analysis2_hcap), big.mark = ",")`
+  - [Provenance: R/MS_MAIN/MS_001_analysis_cohort.R]
+- **Methods:** Core algorithm; PMM
+  - Primary comparator: HRS/HCAP Algorithm
+  - Secondary comparators: (1) HCAP consensus; (2) Langa-Weir; (3) Hudomiet classification
+  - Statistical analysis: dementia versus non-dementia kappa; 3-class quadratic weighted kappa (Normal, MCI, Dementia); all statistics other than frequencies use complex sampling weights 
+  - [Provenance: R/MS_MAIN/MS_010_results_objects.R]
+- **Results:** 
+  - Dementia/non-dementia kappa
+    - Core algorithm versus HRS/HCAP Algorithm: `r round(analysis2_a7$summary$algorithmic_hrs_binary_kappa, 3)`
+    - PMM versus HRS/HCAP Algorithm: `r round(analysis2_pmm$summary$algorithmic_combined_binary_kappa, 3)`
+  - 3-class kappa
+    - Core algorithm versus HRS/HCAP Algorithm: `r round(analysis2_a7$summary$algorithmic_hrs_kappa, 3)`
+    - PMM versus HRS/HCAP Algorithm: `r round(analysis2_pmm$summary$algorithmic_combined_kappa, 3)`
+  - [Provenance: R_objects/A7_100_hcap_tables.rds; R/PMM_110_Comparison_of_Consensus_Langa_Weir.R]
+- **Conclusions and relevance:** Two core classification approaches; agreement evidence rather than clinical validation; uncertainty in distinguishing MCI from normal cognition and dementia; limited precision of comparisons with consensus diagnoses because the consensus-panel subsample is small
+  - [Provenance: analysis design; inference]
+
+**Key terms**
+
+- **HRS/HCAP Algorithm**: c.f. Manly, Jones et al. (2022)
+
+- **Core algorithm**: HCAP algorithm adapted to the HRS Core data
+
+- **PMM**: Profile mixture model applied to data collected in the HRS Core with prediction calibrated using the HRS/HCAP sample and applied to the core
+
+<!-- This will insert a page break  -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+{{< include MS_Introduction.qmd >}}
+
+{{< include MS_Methods.qmd >}}
+
+{{< include MS_Results.qmd >}}
+
+{{< include MS_Discussion.qmd >}}

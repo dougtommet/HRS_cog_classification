@@ -25,9 +25,17 @@ execute:
 
 
 ```{r}
-source(here::here("R", "001-libraries.R"))
-source(here::here("R", "002-folder_paths.R"))
-source("/Users/rnj/DWork/GitHub/RNJmisc/varlablist.r")
+source(here::here("R", "A1_001-libraries.R"))
+source(here::here("R", "A1_002-folder_paths.R"))
+
+varlablist <- function(data) {
+  tibble::tibble(
+    variable = names(data),
+    label = purrr::map_chr(data, ~ attr(.x, "label") %||% "")
+  ) |>
+    knitr::kable(format = "html", caption = "Variables and labels") |>
+    kableExtra::kable_styling()
+}
 ```
 
 

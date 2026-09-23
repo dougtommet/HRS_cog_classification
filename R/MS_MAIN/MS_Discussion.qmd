@@ -1,0 +1,17 @@
+## Discussion
+
+- Two HRS Core classification approaches
+  - Rule-based Core algorithm; probabilistic PMM classification
+  - Same HRS/HCAP learning target; distinct measurement and classification assumptions
+  - [Provenance:analysis methods]
+- Primary comparison
+  - HRS/HCAP Algorithm; agreement and marginal-distribution evidence
+  - [Provenance: Tables 2-4]
+- Secondary comparisons
+  - Consensus: small validation subset; inverse-probability weights
+  - Langa-Weir and Hudomiet: established HRS comparators; different development targets
+  - [Provenance: R/A7_100-comparison_of_diagnoses.R]
+- Interpretation limits
+  - Classification agreement; no clinical diagnostic validation outside HCAP consensus subset
+  - MCI boundary; model-dependent and threshold-dependent assignments
+  - [Provenance: analysis design; inference]

@@ -1,0 +1,13 @@
+<!-- MS_Tab_Fig_Apndx-060-Figure-2.qmd -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+```{r}
+#| fig-cap: "PMM class probabilities in HRS/HCAP"
+#| label: fig-pmm-class-probabilities
+knitr::include_graphics(
+  here::here("Figures", "MS_Main-Figure-2-PMM-Class-Probabilities.png")
+)
+```

@@ -1,0 +1,67 @@
+---
+title: "Appendix 2. PMM and logistic regression"
+date: '`r Sys.Date()`'
+format: docx
+editor: source
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+PMM and logistic regression can both classify people into Normal, MCI, or Dementia. The difference is what they model.
+
+**Logistic regression**
+
+Logistic regression starts with a known outcome, $Y$, and predicts it from observed predictors, $X$:
+
+$$
+P(Y = \text{Dementia} \mid X)
+$$
+
+For example, it could predict dementia from word recall, serial sevens, ADLs, and Jorm score. It estimates how each predictor changes the log-odds of each outcome category. In a multinomial logistic model, the usual form is:
+
+$$
+\log \frac{P(Y=k \mid X)}{P(Y=\text{Normal} \mid X)}
+= \beta_{0k} + \beta_{1k}X_1 + \cdots + \beta_{pk}X_p
+$$
+
+The main modeling decision is the regression equation: which predictors, interactions, nonlinear terms, and coefficients to include.
+
+**PMM in this project**
+
+The PMM takes a generative approach. It asks: *If a person belongs to the Normal, MCI, or Dementia class, what pattern of cognitive-test, functional, self-report, and informant responses would we expect?* PMM models:
+
+$$
+P(X \mid C=k)
+$$
+
+for each cognitive class $C=k$, along with the class prevalence $P(C=k)$. It then uses Bayes' rule to obtain the classification probability:
+
+$$
+P(C=k \mid X)
+=
+\frac{P(X \mid C=k)P(C=k)}
+{\sum_j P(X \mid C=j)P(C=j)}
+$$
+
+So, instead of directly predicting diagnosis from scores, it describes the characteristic response distribution within each diagnosis class and asks which class best accounts for a person's observed pattern.
+
+For the final PMM, the cognition model uses the individual test scores, functional items, and self-report item directly. It estimates class probabilities from that whole response pattern. The separate Jorm PMM does the analogous job for people with informant data rather than cognitive testing.
+
+**Practical distinctions**
+
+- Logistic regression: "Given these scores, what is the probability of Dementia?"
+- PMM: "Which diagnosis class most plausibly generated this pattern of scores and reports?"
+- Logistic regression is discriminative: it models $P(Y \mid X)$ directly.
+- PMM is generative: it models $P(X \mid C)$, then derives $P(C \mid X)$.
+- Logistic regression commonly treats predictors as explanatory variables with regression coefficients.
+- PMM treats the observed responses as indicators of an underlying class-specific response profile.
+- Logistic regression needs explicit interactions or nonlinear terms when the meaning of one score depends on another.
+- A PMM can represent distinct multivariate profiles through class-specific item distributions, although it still relies on assumptions about within-class dependence.
+
+In this project, the important wrinkle is that the PMM is not purely exploratory latent class analysis. It is calibrated using the HRS/HCAP Algorithm classification as the known class in the HCAP sample, then applies the fixed calibrated model to Core data. That makes it a supervised, model-based classifier: conceptually closer to generative discriminant analysis than to an unsupervised profiling exercise.
+
+A concise manuscript description would be:
+
+> The PMM is a supervised, generative classifier that estimates the probability of each HRS/HCAP Algorithm class from the joint pattern of observed cognitive, functional, self-report, or informant responses.

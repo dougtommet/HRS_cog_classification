@@ -157,3 +157,51 @@ write_lca_model <- function(mod, mplus_mod_norms) {
 
   mplus_mod_fixed
 }
+
+
+# write_class_logits(pmm_103)
+# Returns an Mplus statement that fixes the class logits of the fixed-parameter
+# model at the known-class estimates, e.g. "[ c#1 @ 1.819 c#2 @ 0.768 ];".
+# Without this, Mplus re-estimates the class proportions by EM in the scoring
+# sample, and the posterior class probabilities no longer use the calibration
+# priors (plug-in Bayes rule; McLachlan, 1992).
+write_class_logits <- function(mod, known_class = "cg", fixed_class = "c") {
+  logits <- mod[["parameters"]][["unstandardized"]] %>%
+    as_tibble() %>%
+    filter(tolower(paramHeader) == "means",
+           grepl(str_c("^", known_class, "#"), param, ignore.case = TRUE)) %>%
+    mutate(param = str_replace(str_to_lower(param),
+                               str_c("^", str_to_lower(known_class)),
+                               fixed_class))
+
+  if (nrow(logits) == 0 || anyNA(logits$est)) {
+    stop("No class logits found for known class '", known_class, "'.")
+  }
+
+  str_c("[ ", str_c(logits$param, " @ ", logits$est, collapse = " "), " ];")
+}
+
+
+# weighted_class_logits(inhcap, "vs1hcapdxeap", "HCAP16WGTR")
+# Returns an Mplus statement that fixes the class logits at the survey-weighted
+# class proportions of the known-class variable, with the last class as the
+# reference, e.g. "[ c#1 @ 2.019 c#2 @ 0.842 ];".
+# Used because Mplus KNOWNCLASS estimates of the class logits reproduce the
+# unweighted class proportions even when WEIGHT is specified.
+weighted_class_logits <- function(data, class_var, weight_var, fixed_class = "c") {
+  props <- data %>%
+    filter(!is.na(.data[[class_var]]), !is.na(.data[[weight_var]])) %>%
+    group_by(class = .data[[class_var]]) %>%
+    summarise(w = sum(.data[[weight_var]]), .groups = "drop") %>%
+    arrange(class) %>%
+    mutate(p = w / sum(w))
+
+  if (nrow(props) < 2 || any(props$p <= 0)) {
+    stop("Weighted class proportions must be positive for every class.")
+  }
+
+  k <- nrow(props)
+  logits <- log(props$p[-k] / props$p[k])
+  str_c("[ ", str_c(fixed_class, "#", seq_len(k - 1), " @ ",
+                    format(logits, digits = 8), collapse = " "), " ];")
+}

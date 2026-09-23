@@ -1,0 +1,19 @@
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+## Appendix 1. Core algorithm: outline
+
+- Core cognition model
+  - Eight HRS Core cognitive indicators; survey-weighted factor model
+  - Demographic normalization and standardization
+  - [Provenance: `R/A7_050-mplus_model.R`; `R/A7_055-norm_factor_score.R`]
+- Classification rules
+  - Cognitive impairment; function; self-reported concerns; JORM for non-completers
+  - Normal, MCI, Dementia classifications
+  - [Provenance: `R/A7_075-implement_algorithm.R`]
+- Relationship to HRS/HCAP Algorithm
+  - HCAP-derived learning target; Core-measure operationalization
+  - [Provenance: `R/A7_100-comparison_of_diagnoses.R`]
+- Method details to document before prose drafting
+  - Factor-model specification; normalization reference sample; threshold identification; missing-data rules

@@ -108,6 +108,12 @@ MplusAutomation::mplusModeler(mod1, modelout = "pmm_hcap_103.inp", run = 1, writ
 pmm_103 <- read_mplus_model_quietly(here::here("mplus_output", "pmm_103", "pmm_hcap_103.out"))
 
 mplus_mod_fixed <- write_lca_model(pmm_103, mplus_mod_norms)
+# Fix class logits at the survey-weighted HCAP class proportions so that the
+# posterior class probabilities use the weighted calibration priors.
+mplus_mod_fixed <- sub("%OVERALL%",
+                       str_c("%OVERALL% \n ",
+                             weighted_class_logits(inhcap, "vs1hcapdxeap", "HCAP16WGTR")),
+                       mplus_mod_fixed, fixed = TRUE)
 mplus_variable_fixed = "categorical = vdori vdlfl2 vdlfl3 vdsevens vdcount nPG014 nPG021
    nPG023 nPG030  nPG040 nPG041 nPG044 nPG047 nPG050 nPG059 PD102;
 idvariable = id;
@@ -224,6 +230,11 @@ MplusAutomation::mplusModeler(mod1, modelout = "pmm_hcap_103_jorm.inp", run = 1,
 pmm_103_jorm <- read_mplus_model_quietly(here::here("mplus_output", "pmm_103_jorm", "pmm_hcap_103_jorm.out"))
 
 mplus_mod_fixed_jorm <- write_lca_model(pmm_103_jorm, "")
+# Fix class logits at the survey-weighted class proportions of the Jorm sample.
+mplus_mod_fixed_jorm <- sub("%OVERALL%",
+                            str_c("%OVERALL% \n ",
+                                  weighted_class_logits(inhcap_jorm, "vs1hcapdxeap", "HCAP16WGTR")),
+                            mplus_mod_fixed_jorm, fixed = TRUE)
 mplus_variable_fixed_jorm = "categorical = nPG014 nPG021
    nPG023 nPG030  nPG040 nPG041 nPG044 nPG047 nPG050 nPG059;
 idvariable = id;

@@ -46,8 +46,8 @@ include-in-header:
 invisible(
   suppressMessages(
     suppressPackageStartupMessages({
-      source(here::here("R", "001-libraries.R"))
-      source(here::here("R", "002-folder_paths.R"))
+      source(here::here("R", "A1_001-libraries.R"))
+      source(here::here("R", "A1_002-folder_paths.R"))
     })
   )
 )

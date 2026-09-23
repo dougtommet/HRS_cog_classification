@@ -1,0 +1,14 @@
+## Introduction
+
+- Population cognitive classification from brief HRS Core assessments
+  - Prevalence estimation; etiologic research; trial sampling; policy surveillance
+  - Core assessment constraints; incomplete cognitive testing; proxy/informant information
+- HRS/HCAP Algorithm as primary comparator
+  - HCAP neuropsychological assessment; actuarial Normal/MCI/Dementia classification
+  - HRS/HCAP Algorithm; primary HCAP-based comparator
+  - Manly et al. (2022); Farron et al. (2025)
+  - [Provenance: R/A7_100-comparison_of_diagnoses.R; existing manuscript materials]
+- Study aim
+  - Core algorithm and PMM; HRS/HCAP Algorithm primary comparator
+  - Secondary comparators: HCAP consensus; Langa-Weir; Hudomiet
+  - Classification margins; 3-class agreement; dementia/non-dementia agreement

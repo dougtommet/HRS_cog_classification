@@ -1,0 +1,31 @@
+## Results
+
+### Analytic samples and classification margins
+
+- Table 1: HRS/HCAP study sample characteristics
+  - Dynamic counts and descriptive statistics
+  - [Provenance: R/MS_MAIN/MS_Tab_Fig_Apndx-030-Table-1.qmd]
+- Table 2: weighted classification margins
+  - HRS/HCAP Algorithm; Core algorithm; PMM; Langa-Weir; Hudomiet
+  - [Provenance: R/MS_MAIN/MS_010_results_objects.R]
+- Figure 1: PMM class-probability distributions
+  - Probability separation; uncertainty near class boundaries
+  - [Provenance: R/PMM_112_Margins.R]
+
+### Agreement with HRS/HCAP Algorithm
+
+- Core algorithm versus HRS/HCAP Algorithm: 3-class kappa `r round(analysis2_a7$summary$algorithmic_hrs_kappa, 3)`; binary kappa `r round(analysis2_a7$summary$algorithmic_hrs_binary_kappa, 3)`
+  - [Provenance: R_objects/A7_100_hcap_tables.rds]
+- PMM versus HRS/HCAP Algorithm: 3-class kappa `r round(analysis2_pmm$summary$algorithmic_combined_kappa, 3)`; binary kappa `r round(analysis2_pmm$summary$algorithmic_combined_binary_kappa, 3)`
+  - [Provenance: R/PMM_110_Comparison_of_Consensus_Langa_Weir.R]
+- Table 3: pairwise agreement, comparators, weight definitions
+  - [Provenance: R/MS_MAIN/MS_010_results_objects.R]
+
+### Agreement with consensus and established HRS classifications
+
+- Core algorithm, PMM, Langa-Weir, Hudomiet
+  - Separate HCAP population and consensus-subsample estimands
+  - Weight-dependent interpretation
+  - [Provenance: R/MS_MAIN/MS_010_results_objects.R]
+- Table 4: A7 pairwise three-class agreement matrix
+  - [Provenance: R_objects/A7_100_hcap_tables.rds]

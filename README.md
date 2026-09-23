@@ -57,8 +57,8 @@ This repository contains ten related but distinct analysis workflows. Existing s
 
 - Driver: `./Analysis2_Driver.R`
 - Control files:
-  - `./R/MS_Main_Control.qmd`
-  - `./R/MS_Tab_Fig_Apndx_Control.qmd`
+  - `./R/MS_MAIN/MS_Main_Control.qmd`
+  - `./R/MS_MAIN/MS_Tab_Fig_Apndx_Control.qmd`
 - Rebuild command:
   - `Rscript Analysis2_Driver.R`
 - Final rendered outputs:

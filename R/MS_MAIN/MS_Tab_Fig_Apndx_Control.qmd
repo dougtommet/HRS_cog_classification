@@ -1,5 +1,5 @@
 ---
-title: "Prevalence of Dementia and Mild Cognitive Impairment in the Health and Retirement Study: Figures, Tables, and Appendices"
+title: "Two HRS Core cognitive classification methods informed by HRS/HCAP: Figures, tables, and appendices"
 author: 
   - name: "Richard N. Jones"
     affiliation: "Brown University, Department of Psychiatry and Human Behavior, Department of Neurology"
@@ -24,10 +24,10 @@ author:
     affiliation: "University of Michigan, Institute for Social Research"    
   - name: "Kenneth M. Langa"
     affiliation: "University of Michigan, Institute for Social Research, Department of Internal Medicine"
-date: 2025-07-22
+date: '`r Sys.Date()`'
 format: 
   docx:
-    reference-doc: "reference.docx"
+    reference-doc: "../../reference_manuscript.docx"
 editor: source
 execute:
   echo: false
@@ -39,21 +39,24 @@ execute:
 
 
 ```{r}
-source(here::here("R", "001-libraries.R"))
-source(here::here("R", "002-folder_paths.R"))
+source(here::here("R", "MS_MAIN", "A1_001-libraries.R"))
+source(here::here("R", "MS_MAIN", "A1_002-folder_paths.R"))
+source(here::here("R", "MS_MAIN", "MS_001_analysis_cohort.R"))
+source(here::here("R", "MS_MAIN", "MS_010_results_objects.R"))
 
 ```
 
 {{< include MS_Tab_Fig_Apndx-010-Cover_Page.qmd >}}
-{{< include MS_Tab_Fig_Apndx-020-Figure-1.qmd >}}
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
 {{< include MS_Tab_Fig_Apndx-030-Table-1.qmd >}}
 {{< include MS_Tab_Fig_Apndx-040-Table-2.qmd >}}
 {{< include MS_Tab_Fig_Apndx-050-Table-3.qmd >}}
-{{< include MS_Tab_Fig_Apndx-055-Table-3.2.qmd >}}
-{{< include MS_Tab_Fig_Apndx-060-Table-3.3.qmd >}}
-{{< include MS_Tab_Fig_Apndx-070-Table-4.qmd >}}
-{{< include MS_Tab_Fig_Apndx-100-Appendix-1.qmd >}}
-{{< include MS_Tab_Fig_Apndx-110-Appendix-2.qmd >}}
+{{< include MS_Tab_Fig_Apndx-020-Figure-1.qmd >}}
+{{< include MS_Tab_Fig_Apndx-060-Figure-2.qmd >}}
 
 
 <!-- This will insert a page break -->

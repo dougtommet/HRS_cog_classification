@@ -1,0 +1,27 @@
+---
+title: "Appendix 1. Development of the Core algorithm"
+date: '`r Sys.Date()`'
+format: docx
+editor: source
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+- **Core cognition model**
+  - Eight HRS Core cognitive indicators; single-factor, complex-survey model
+  - Initial model fit evaluated with WLSMV
+  - Fixed-parameter factor scores estimated with MLR, a probit link, and EAP scoring
+  - [Provenance: `R/A7_050-mplus_model.R`; `mplus_output/A7/model_1a_fixed/model_1a_fixed.inp`]
+- **Score normalization**
+  - Age, sex, race/ethnicity, education, and interaction covariates
+  - Blom transformation; demographically adjusted residual T score
+  - [Provenance: `R/A7_055-norm_factor_score.R`]
+- **Rule-based classification**
+  - Cognitive impairment; function; self-reported concerns; JORM for non-completers
+  - Normal, MCI, Dementia classifications
+  - [Provenance: `R/A7_075-implement_algorithm.R`]
+- **Relationship to HRS/HCAP Algorithm**
+  - HCAP-derived learning target; Core-measure operationalization
+  - [Provenance: `R/A7_100-comparison_of_diagnoses.R`]

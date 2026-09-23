@@ -1,0 +1,65 @@
+## Methods
+
+### Design and analytic samples
+
+- Study sample: HRS/HCAP 2016 participants, N = `r format(nrow(analysis2_hcap), big.mark = ",")`
+  - All HCAP participants; no Core cognitive-test requirement
+  - Participants without Core cognitive testing classified from informant data (Jorm IQCODE): Core algorithm Jorm fallback; PMM Jorm model
+  - Agreement-statistic samples: Core algorithm N = `r format(analysis2_n_compare[["core_algorithm"]], big.mark = ",")`; PMM N = `r format(analysis2_n_compare[["pmm"]], big.mark = ",")`
+  - [Provenance: R/MS_MAIN/MS_001_analysis_cohort.R; R_objects/A7_005_hrs16_merged.rds; R/A7_100-comparison_of_diagnoses.R; R/PMM_110_Comparison_of_Consensus_Langa_Weir.R]
+- Consensus panel subset
+  - Validation-subsample design; inverse-probability weighting to account for selection into the consensus panel
+  - [Provenance: R/A7_100-comparison_of_diagnoses.R; R/PMM_110_Comparison_of_Consensus_Langa_Weir.R]
+
+### HRS Core classification approaches
+
+- Two Core classification approaches
+  - Core algorithm
+    - Survey-weighted CFA; demographically normed cognitive score; cognitive/self-report/informant rules
+    - [Provenance: R/A7_050-mplus_model.R; R/A7_055-norm_factor_score.R; R/A7_075-implement_algorithm.R]
+  - PMM
+    - HRS/HCAP-calibrated probabilistic Normal/MCI/Dementia classification; combined cognition and Jorm models (i.e., two PMM models, one trained using cognition data, the other trained using informant data (Jorm IQCODE)).
+    - _Limitation_: The HRS/HCAP IQCODE look back window is the past 10 years, the Core IQCODE has a look back window of 2 years.
+    - [Provenance: R/PMM_103_calibration_model.R; R/PMM_110_Comparison_of_Consensus_Langa_Weir.R]
+
+#### Core algorithm
+  - Single-factor Core cognition model
+    - Not enough items to separately score 5 domains matching Manly et al. (2022)
+    - Initial 8-indicator, complex-survey model fit evaluated with WLSMV
+    - Factor scores estimated with MLR, a probit link, and EAP scoring after fixing item parameters to the MLR model estimates
+    - Factor-score normalization; age, sex, race/ethnicity, education covariates
+    - [Provenance: R/A7_050-mplus_model.R; mplus_output/A7/model_1a_fixed/model_1a_fixed.inp; R/A7_055-norm_factor_score.R]
+
+  - Rule-based classification
+    - Cognitive thresholds; self-reported concern; JORM for missing cognitive assessments
+    - Normal, MCI, Dementia output
+    - More detail in **Appendix 1**
+    - [Provenance: R/A7_075-implement_algorithm.R]
+
+#### PMM classification
+
+- HRS/HCAP calibration
+  - Known-class HRS/HCAP Algorithm classification; cognitive, functional, self-report, informant indicators
+  - No latent variables for overall cognition, individual tests used
+  - Fixed calibration parameters; Core application
+  - [Provenance: R/PMM_100_norming_npb.R; R/PMM_103_calibration_model.R]
+- Combined classification
+  - Cognition-model probabilities; JORM-model probabilities when available
+  - Probabilistic Normal/MCI/Dementia membership; replicated probability-weighted comparisons
+  - More detail in **Appendix 2**
+  - [Provenance: R/PMM_110_Comparison_of_Consensus_Langa_Weir.R]
+
+### Comparison classifications and estimands
+
+- Primary comparator: HRS/HCAP Algorithm
+  - HCAP population weights: HCAP16WGTR
+  - [Provenance: R/A7_100-comparison_of_diagnoses.R]
+- Secondary comparators
+  - HCAP consensus diagnosis: normalized HCAP16WGTR x samplingP^-1 weights
+  - Langa-Weir; Hudomiet classification
+  - [Provenance: R/A0_017-recode_classification.R; R/A7_100-comparison_of_diagnoses.R]
+- Agreement estimands
+  - 3-class quadratic weighted kappa
+  - Dementia versus non-dementia kappa
+  - Marginal Normal/MCI/Dementia distributions
+  - [Provenance: R/MS_MAIN/MS_010_results_objects.R]

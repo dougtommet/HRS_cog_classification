@@ -1,0 +1,15 @@
+<!-- MS_Tab_Fig_Apndx-020-Figure-1.qmd -->
+<!-- Rich Jones -->
+<!-- 2025-07-22 -->
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+
+```{r}
+#| fig-cap: "Core algorithm"
+#| label: fig-core-algorithm
+knitr::include_graphics(here::here("Figures", "HRS-Core-Diagnostic-Algorithm-With-Ns-HRS-Sample-2026-04-22.png"))
+```
+

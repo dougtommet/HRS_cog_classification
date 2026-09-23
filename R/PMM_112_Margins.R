@@ -135,6 +135,21 @@ margin_plot <- ggplot2::ggplot(
     strip.text = ggplot2::element_text(face = "bold")
   )
 
+margin_plot_manuscript <- margin_plot +
+  ggplot2::labs(
+    title = NULL,
+    x = "Class probability"
+  )
+
+ggplot2::ggsave(
+  filename = here::here("Figures", "MS_Main-Figure-2-PMM-Class-Probabilities.png"),
+  plot = margin_plot_manuscript,
+  width = 10,
+  height = 4.5,
+  units = "in",
+  dpi = 600
+)
+
 margin_table_data <- margins_sample |>
   dplyr::filter(!is.na(combined_class), !is.na(hcap_weight)) |>
   dplyr::group_by(combined_class) |>
@@ -183,6 +198,7 @@ PMM_112 <- list(
     langa_weir_margin_table_data = langa_weir_margin_table_data
   ),
   figure = margin_plot,
+  manuscript_figure = margin_plot_manuscript,
   table = add_margin_note(format_margin_table(margin_table_data), combined_margin_note),
   langa_weir_table = add_margin_note(format_margin_table(langa_weir_margin_table_data), langa_weir_margin_note)
 )
