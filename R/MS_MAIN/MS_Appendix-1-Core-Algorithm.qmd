@@ -1,6 +1,6 @@
 ---
 title: "Appendix 1. Development of the Core algorithm"
-date: '`r Sys.Date()`'
+date: today
 format: docx
 editor: source
 execute:

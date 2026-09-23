@@ -14,8 +14,6 @@ author:
     affiliation: "University of Michigan, Institute for Social Research, Department of Epidemiology"
   - name: "Lindsay H. Ryan"
     affiliation: "University of Michigan, Institute for Social Research, Department of Psychology"
-  - name: "Deborah A. Levine"
-    affiliation: "University of Michigan, Institute for Social Research"
   - name: "Ryan J. McCammon"
     affiliation: "University of Michigan, Institute for Social Research"
   - name: "Steven G. Heeringa"
@@ -24,7 +22,7 @@ author:
     affiliation: "University of Michigan, Institute for Social Research"    
   - name: "Kenneth M. Langa"
     affiliation: "University of Michigan, Institute for Social Research, Department of Internal Medicine"
-date: '`r Sys.Date()`'
+date: today
 format: 
   docx:
     reference-doc: "../../reference_manuscript.docx"

@@ -1,6 +1,6 @@
 ---
 title: "Appendix 2. PMM and logistic regression"
-date: '`r Sys.Date()`'
+date: today
 format: docx
 editor: source
 execute:

@@ -1,6 +1,6 @@
 ---
 title: "Appendix 3: Comparisons with other study classifications"
-date: '`r Sys.Date()`'
+date: today
 format: docx
 editor: source
 execute:
