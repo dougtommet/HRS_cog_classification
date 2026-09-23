@@ -1,6 +1,6 @@
 Mplus VERSION 9 (Mac)
 MUTHEN & MUTHEN
-03/25/2026   4:06 AM
+09/23/2026  11:13 AM
 
 INPUT INSTRUCTIONS
 
@@ -29,6 +29,7 @@ INPUT INSTRUCTIONS
   TYPE = complex mixture;
   MODEL:
   %OVERALL%
+   [ c#1 @ -0.14665973 c#2 @ -0.14869742 ];
 
 
 
@@ -315,86 +316,86 @@ RANDOM STARTS RESULTS RANKED FROM THE BEST TO THE WORST LOGLIKELIHOOD VALUES
 
 Final stage loglikelihood values at local maxima, seeds, and initial stage start numbers:
 
-            -996.858  749453           33
-            -996.858  399671           13
-            -996.859  887676           22
-            -996.859  443917           60
-            -996.859  626891           32
-            -996.859  902278           21
-            -996.859  27071            15
-            -996.859  127215           9
-            -996.859  569131           26
-            -996.859  851945           18
-            -996.859  987090           70
-            -996.859  992389           77
-            -996.859  967237           48
-            -996.859  783110           72
-            -996.859  967902           52
-            -996.859  603842           61
-            -996.859  85462            51
-            -996.859  784664           75
-            -996.859  207896           25
-            -996.859  685657           69
-            -996.859  153942           31
-            -996.859  637345           19
-            -996.859  467339           66
-            -996.859  260601           36
-            -996.859  475420           71
-            -996.859  645664           39
-            -996.859  407168           44
-            -996.859  565819           65
-            -996.859  120506           45
-            -996.859  915107           54
-            -996.859  68985            17
-            -996.859  259507           53
-            -996.859  366706           29
-            -996.859  136842           58
-            -996.859  754100           56
-            -996.859  848163           47
-            -996.859  551639           55
-            -996.859  761633           50
-            -996.859  285380           1
-            -996.859  789985           67
-            -996.859  608496           4
-            -996.859  533738           11
-            -996.859  432148           30
-            -996.859  318230           46
-            -996.859  372176           23
-            -996.859  354559           73
-            -996.859  966014           37
-            -996.859  341041           34
-            -996.859  253358           2
-            -996.859  107446           12
-            -996.859  246261           38
-            -996.859  347515           24
-            -996.859  391179           78
-            -996.859  352277           42
-            -996.859  696773           80
-            -996.859  830392           35
-            -996.859  392418           28
-            -996.859  422103           62
-            -996.859  415931           10
-            -996.859  903420           5
-            -996.859  76974            16
-            -996.859  364676           27
-            -996.859  957392           79
-            -996.859  195873           6
-            -996.859  650371           14
-            -996.859  804561           59
-            -996.859  93468            3
-            -996.859  370466           41
-            -996.859  227563           63
-            -996.859  939021           8
-            -996.859  311214           64
-            -996.859  568859           49
-            -996.859  573096           20
-            -996.859  unperturbed      0
-            -996.859  915642           40
-            -996.859  462953           7
-            -996.859  963053           43
-            -996.859  76337            76
-            -996.859  471398           74
-            -996.859  405079           68
+           -1021.155  462953           7
+           -1021.155  227563           63
+           -1021.155  685657           69
+           -1021.155  830392           35
+           -1021.155  784664           75
+           -1021.155  352277           42
+           -1021.155  902278           21
+           -1021.155  568859           49
+           -1021.155  754100           56
+           -1021.155  392418           28
+           -1021.155  650371           14
+           -1021.155  987090           70
+           -1021.155  341041           34
+           -1021.155  405079           68
+           -1021.155  966014           37
+           -1021.155  467339           66
+           -1021.155  565819           65
+           -1021.155  391179           78
+           -1021.155  27071            15
+           -1021.155  153942           31
+           -1021.155  603842           61
+           -1021.155  443917           60
+           -1021.155  804561           59
+           -1021.155  136842           58
+           -1021.155  311214           64
+           -1021.155  364676           27
+           -1021.155  551639           55
+           -1021.155  915107           54
+           -1021.155  259507           53
+           -1021.155  967902           52
+           -1021.155  85462            51
+           -1021.155  761633           50
+           -1021.155  347515           24
+           -1021.155  626891           32
+           -1021.155  749453           33
+           -1021.155  318230           46
+           -1021.155  120506           45
+           -1021.155  407168           44
+           -1021.155  963053           43
+           -1021.155  573096           20
+           -1021.155  370466           41
+           -1021.155  915642           40
+           -1021.155  957392           79
+           -1021.155  246261           38
+           -1021.155  851945           18
+           -1021.155  260601           36
+           -1021.155  475420           71
+           -1021.155  789985           67
+           -1021.155  76974            16
+           -1021.155  939021           8
+           -1021.155  68985            17
+           -1021.155  432148           30
+           -1021.155  366706           29
+           -1021.155  481835           57
+           -1021.155  399671           13
+           -1021.155  569131           26
+           -1021.155  207896           25
+           -1021.155  533738           11
+           -1021.155  696773           80
+           -1021.155  887676           22
+           -1021.155  415931           10
+           -1021.155  127215           9
+           -1021.155  76337            76
+           -1021.155  637345           19
+           -1021.155  645664           39
+           -1021.155  992389           77
+           -1021.155  372176           23
+           -1021.155  354559           73
+           -1021.155  471398           74
+           -1021.155  107446           12
+           -1021.155  848163           47
+           -1021.155  967237           48
+           -1021.155  783110           72
+           -1021.155  unperturbed      0
+           -1021.155  903420           5
+           -1021.155  253358           2
+           -1021.155  93468            3
+           -1021.155  195873           6
+           -1021.155  285380           1
+           -1021.155  608496           4
 
 
 
@@ -413,19 +414,17 @@ THE MODEL ESTIMATION TERMINATED NORMALLY
 
 MODEL FIT INFORMATION
 
-Number of Free Parameters                        2
+Number of Free Parameters                        0
 
 Loglikelihood
 
-          H0 Value                        -996.858
-          H0 Scaling Correction Factor      1.8775
-            for MLR
+          H0 Value                       -1021.155
 
 Information Criteria
 
-          Akaike (AIC)                    1997.716
-          Bayesian (BIC)                  2004.438
-          Sample-Size Adjusted BIC        1998.101
+          Akaike (AIC)                    2042.310
+          Bayesian (BIC)                  2042.310
+          Sample-Size Adjusted BIC        2042.310
             (n* = (n + 2) / 24)
 
 Chi-Square Test of Model Fit for the Binary and Ordered Categorical
@@ -433,30 +432,30 @@ Chi-Square Test of Model Fit for the Binary and Ordered Categorical
 
           Pearson Chi-Square
 
-          Value                           1018.828
-          Degrees of Freedom                  1013
-          P-Value                           0.4427
+          Value                           1088.558
+          Degrees of Freedom                  1016
+          P-Value                           0.0562
 
           Likelihood Ratio Chi-Square
 
-          Value                            549.058
-          Degrees of Freedom                  1013
+          Value                            604.760
+          Degrees of Freedom                  1016
           P-Value                           1.0000
 
-** Of the 7840 cells in the latent class indicator table, 8
+** Of the 7840 cells in the latent class indicator table, 7
    were deleted in the calculation of chi-square due to extreme values.
 
 Chi-Square Test for MCAR under the Unrestricted Latent Class Indicator Model
 
           Pearson Chi-Square
 
-          Value                           2276.281
+          Value                           2304.476
           Degrees of Freedom                  6786
           P-Value                           1.0000
 
           Likelihood Ratio Chi-Square
 
-          Value                           1806.359
+          Value                           1811.254
           Degrees of Freedom                  6786
           P-Value                           1.0000
 
@@ -468,9 +467,9 @@ BASED ON THE ESTIMATED MODEL
     Latent
    Classes
 
-       1         94.13604          0.44195
-       2          9.66283          0.04537
-       3        109.20113          0.51268
+       1         67.49211          0.31686
+       2         67.35473          0.31622
+       3         78.15316          0.36692
 
 
 FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
@@ -479,9 +478,9 @@ BASED ON ESTIMATED POSTERIOR PROBABILITIES
     Latent
    Classes
 
-       1         94.13604          0.44195
-       2          9.66283          0.04537
-       3        109.20113          0.51268
+       1         88.31961          0.41465
+       2         34.67239          0.16278
+       3         90.00801          0.42257
 
 
 FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
@@ -492,14 +491,14 @@ Class Counts and Proportions
     Latent
    Classes
 
-       1               95          0.44539
-       2                5          0.02290
-       3              113          0.53171
+       1               91          0.42523
+       2               25          0.11568
+       3               98          0.45909
 
 
 CLASSIFICATION QUALITY
 
-     Entropy                         0.875
+     Entropy                         0.778
 
 
 Average Latent Class Probabilities for Most Likely Latent Class Membership (Row)
@@ -507,9 +506,9 @@ by Latent Class (Column)
 
            1        2        3
 
-    1   0.976    0.013    0.011
-    2   0.158    0.512    0.330
-    3   0.007    0.052    0.941
+    1   0.956    0.043    0.001
+    2   0.071    0.762    0.167
+    3   0.000    0.123    0.877
 
 
 Classification Probabilities for the Most Likely Latent Class Membership (Column)
@@ -517,9 +516,9 @@ by Latent Class (Row)
 
            1        2        3
 
-    1   0.984    0.008    0.008
-    2   0.128    0.259    0.613
-    3   0.009    0.015    0.976
+    1   0.980    0.020    0.000
+    2   0.113    0.542    0.346
+    3   0.001    0.046    0.953
 
 
 Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
@@ -527,9 +526,9 @@ by Latent Class (Row)
 
               1        2        3
 
-    1      4.822    0.033    0.000
-    2     -1.562   -0.863    0.000
-    3     -4.663   -4.194    0.000
+    1      8.443    4.536    0.000
+    2     -1.121    0.449    0.000
+    3     -6.673   -3.036    0.000
 
 
 MODEL RESULTS
@@ -600,13 +599,13 @@ Latent Class 3
 Categorical Latent Variables
 
  Means
-    C#1               -0.148      0.178     -0.833      0.405
-    C#2               -2.425      1.028     -2.359      0.018
+    C#1               -0.147      0.000    999.000    999.000
+    C#2               -0.149      0.000    999.000    999.000
 
 
 QUALITY OF NUMERICAL RESULTS
 
-     Condition Number for the Information Matrix              0.445E-01
+     Condition Number for the Information Matrix              0.100E+01
        (ratio of smallest to largest eigenvalue)
 
 
@@ -1091,9 +1090,9 @@ SAVEDATA INFORMATION
     Latent Class Indicator Odds Ratios for the Latent Classes
     Standardized Model Results
 
-     Beginning Time:  04:06:06
-        Ending Time:  04:06:08
-       Elapsed Time:  00:00:02
+     Beginning Time:  11:13:11
+        Ending Time:  11:13:12
+       Elapsed Time:  00:00:01
 
 
 

@@ -162,3 +162,15 @@
 - `Rscript Analysis2_Driver.R` completed successfully after each final change.
 - The five dated DOCXs are valid OOXML and display the render date.
 - The tables/figures DOCX passed OOXML and Pandoc checks; Table 1 and Table 2 percentages display to one decimal place, and Figure 2 is embedded at the expected high resolution.
+
+### Table 1 row-order fix
+
+- The Jorm "Missing" row (3,283; participants who completed Core cognitive testing, so no Jorm was collected) sorted above the Jorm Mean (SD) row. It therefore displayed under the Langa-Weir block as a second "Missing" entry. `MS_Tab_Fig_Apndx-030-Table-1.qmd` now orders rows within each variable as: header or Mean (SD) first, categories by descending count, Missing last.
+- Page break before Table 1: already present in `MS_Tab_Fig_Apndx_Control.qmd` after the cover page include. It is also present in the 15:03 render of `Reports/MS_Tab_Fig_Apndx_2026-09-23.docx` (the break paragraph follows the Date line).
+
+### PMM Recalculation and Updated Reporting
+
+- Removed `#| eval: false` from `R/PMM_000_Analysis_Report_Control.qmd`. Analysis 3 now evaluates the documented PMM preparation, calibration, and scoring scripts during rendering rather than relying only on pre-existing saved objects.
+- `Rscript Analysis3_Driver.R` completed after the guard was removed, refreshing the PMM Mplus outputs, class-probability figures, and `Reports/PMM_Analysis_Report_2026-09-23.html`.
+- `Rscript Analysis2_Driver.R` completed using the refreshed PMM outputs; the manuscript, tables/figures report, and three appendices now reflect the updated PMM results.
+- Table 1 row ordering was also corrected so the Jorm Mean (SD) appears before the Jorm missingness row; regenerated figures, DOCX reports, and Slides2603 output were refreshed with the current PMM results.

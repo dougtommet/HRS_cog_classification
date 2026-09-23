@@ -43,7 +43,6 @@ source(here::here("R", "A1_002-folder_paths.R"))
 ```
 
 ```{r}
-#| eval: false
 source(here::here("R", "PMM_027_custom_functions.R"))
 source(here::here("R", "PMM_031_Pull_data.R"))
 source(here::here("R", "PMM_033_Sample_identification.R"))

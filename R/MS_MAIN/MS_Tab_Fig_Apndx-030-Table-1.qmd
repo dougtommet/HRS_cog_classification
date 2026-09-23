@@ -163,7 +163,14 @@ summary_final <- summary_final %>%
   mutate(
     sortorder = sub(" .*", "", sub("^\\s+", "", study_sample)),
     sortorder = as.numeric(gsub(",", "", sortorder)),
-    sortorder = ifelse(is.na(sortorder), 999999, sortorder)
+    sortorder = ifelse(is.na(sortorder), 999999, sortorder),
+    # Within each variable: header or Mean (SD) row first, categories by
+    # descending count, Missing row last.
+    sortorder = dplyr::case_when(
+      value == "Mean (SD)" ~ 999999,
+      value == "Missing" ~ -1,
+      TRUE ~ sortorder
+    )
   )
 
 summary_final <- summary_final %>%
