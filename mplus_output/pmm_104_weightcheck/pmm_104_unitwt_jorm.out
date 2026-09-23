@@ -1,0 +1,1043 @@
+Mplus VERSION 9 (Mac)
+MUTHEN & MUTHEN
+09/23/2026   7:01 AM
+
+INPUT INSTRUCTIONS
+
+  ! Unit-weight copy of pmm_hcap_103_jorm.inp (PMM_104_weight_check.R)
+  TITLE:
+  x1-x3: age splines
+    x4: female
+    x5: black
+    x6: hispanic
+    x7: school years
+  DATA:
+  FILE = "pmm_104_unitwt_jorm.dat";
+  VARIABLE:
+  NAMES = id vs1hcapdxeap HCAP16WGTR STRATUM SECU_mplus nPG014 nPG021 nPG023 nPG030
+       nPG040 nPG041 nPG044 nPG047 nPG050 nPG059 jorm;
+   MISSING=.;
+   categorical =  nPG014 nPG021
+     nPG023 nPG030  nPG040 nPG041 nPG044 nPG047 nPG050 nPG059;
+  idvariable = id;
+  classes = cg (3);
+  knownclass = cg  (vs1hcapdxeap = 1 vs1hcapdxeap = 2 vs1hcapdxeap = 3);
+  weight = HCAP16WGTR; stratification = STRATUM; cluster = SECU_mplus;
+  ANALYSIS:
+  estimator = mlr;
+  ALGORITHM=INTEGRATION;
+  starts = 80;
+  processors = 12;
+  TYPE = complex mixture;
+  MODEL:
+  %OVERALL%
+
+     %cg#2%
+     [nPG014$1 nPG021$1 nPG023$1 nPG030$1 nPG040$1
+      nPG041$1 nPG044$1 nPG047$1 nPG050$1 nPG059$1
+      jorm];
+     %cg#3%
+     [nPG014$1 nPG021$1 nPG023$1 nPG030$1 nPG040$1
+      nPG041$1 nPG044$1 nPG047$1 nPG050$1 nPG059$1
+      jorm];
+
+  OUTPUT:
+  standardized;
+  SAVEDATA:
+  H5RESULTS = pmm_104_unitwt_jorm.h5;
+
+
+
+*** WARNING in MODEL command
+  Variable is uncorrelated with all other variables within class:  JORM
+*** WARNING in MODEL command
+  At least one variable is uncorrelated with all other variables within class.
+  Check that this is what is intended.
+   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+x1-x3: age splines
+x4: female
+x5: black
+x6: hispanic
+x7: school years
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         213
+
+Number of dependent variables                                   11
+Number of independent variables                                  0
+Number of continuous latent variables                            0
+Number of categorical latent variables                           1
+
+Observed dependent variables
+
+  Continuous
+   JORM
+
+  Binary and ordered categorical (ordinal)
+   NPG014      NPG021      NPG023      NPG030      NPG040      NPG041
+   NPG044      NPG047      NPG050      NPG059
+
+Categorical latent variables
+   CG
+
+  Knownclass            CG
+
+Variables with special functions
+
+  Stratification        STRATUM
+  Cluster variable      SECU_MPL
+  Weight variable       HCAP16WG
+  ID variable           ID
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent Variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Random Starts Specifications
+  Number of initial stage random starts                         80
+  Number of final stage optimizations                           80
+  Number of initial stage iterations                             1
+  Initial stage convergence criterion                    0.100D+01
+  Random starts scale                                    0.500D+01
+  Random seed for generating random starts                       0
+Link                                                         LOGIT
+Cholesky                                                       OFF
+
+Input data file(s)
+  pmm_104_unitwt_jorm.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns            31
+     Number of y missing data patterns           1
+     Number of u missing data patterns          31
+     Number of strata                           49
+     Number of clusters                         83
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              NPG014        NPG021        NPG023        NPG030        NPG040
+              ________      ________      ________      ________      ________
+ NPG014         0.981
+ NPG021         0.977         0.995
+ NPG023         0.977         0.991         0.995
+ NPG030         0.958         0.967         0.967         0.972
+ NPG040         0.732         0.737         0.737         0.737         0.742
+ NPG041         0.709         0.714         0.714         0.714         0.662
+ NPG044         0.704         0.704         0.704         0.695         0.634
+ NPG047         0.878         0.892         0.892         0.873         0.709
+ NPG050         0.977         0.991         0.995         0.967         0.737
+ NPG059         0.761         0.765         0.761         0.751         0.620
+ JORM           0.981         0.995         0.995         0.972         0.742
+
+
+           Covariance Coverage
+              NPG041        NPG044        NPG047        NPG050        NPG059
+              ________      ________      ________      ________      ________
+ NPG041         0.718
+ NPG044         0.643         0.709
+ NPG047         0.709         0.700         0.897
+ NPG050         0.714         0.704         0.892         0.995
+ NPG059         0.624         0.634         0.732         0.761         0.765
+ JORM           0.718         0.709         0.897         0.995         0.765
+
+
+           Covariance Coverage
+              JORM
+              ________
+ JORM           1.000
+
+
+     PROPORTION OF DATA PRESENT FOR U
+
+
+           Covariance Coverage
+              NPG014        NPG021        NPG023        NPG030        NPG040
+              ________      ________      ________      ________      ________
+ NPG014         0.981
+ NPG021         0.977         0.995
+ NPG023         0.977         0.991         0.995
+ NPG030         0.958         0.967         0.967         0.972
+ NPG040         0.732         0.737         0.737         0.737         0.742
+ NPG041         0.709         0.714         0.714         0.714         0.662
+ NPG044         0.704         0.704         0.704         0.695         0.634
+ NPG047         0.878         0.892         0.892         0.873         0.709
+ NPG050         0.977         0.991         0.995         0.967         0.737
+ NPG059         0.761         0.765         0.761         0.751         0.620
+
+
+           Covariance Coverage
+              NPG041        NPG044        NPG047        NPG050        NPG059
+              ________      ________      ________      ________      ________
+ NPG041         0.718
+ NPG044         0.643         0.709
+ NPG047         0.709         0.700         0.897
+ NPG050         0.714         0.704         0.892         0.995
+ NPG059         0.624         0.634         0.732         0.761         0.765
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              JORM
+              ________
+ JORM           1.000
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    NPG014
+      Category 1    0.488          102.000
+      Category 2    0.512          107.000
+    NPG021
+      Category 1    0.434           92.000
+      Category 2    0.566          120.000
+    NPG023
+      Category 1    0.660          140.000
+      Category 2    0.340           72.000
+    NPG030
+      Category 1    0.628          130.000
+      Category 2    0.372           77.000
+    NPG040
+      Category 1    0.392           62.000
+      Category 2    0.608           96.000
+    NPG041
+      Category 1    0.471           72.000
+      Category 2    0.529           81.000
+    NPG044
+      Category 1    0.444           67.000
+      Category 2    0.556           84.000
+    NPG047
+      Category 1    0.482           92.000
+      Category 2    0.518           99.000
+    NPG050
+      Category 1    0.547          116.000
+      Category 2    0.453           96.000
+    NPG059
+      Category 1    0.454           74.000
+      Category 2    0.546           89.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     JORM                  3.755       0.364       2.200    0.47%       3.000      3.100      3.438
+             213.000       0.660      -1.426       5.000   13.15%       4.000      4.750
+
+RANDOM STARTS RESULTS RANKED FROM THE BEST TO THE WORST LOGLIKELIHOOD VALUES
+
+Final stage loglikelihood values at local maxima, seeds, and initial stage start numbers:
+
+           -1433.792  352277           42
+           -1433.792  392418           28
+           -1433.792  227563           63
+           -1433.792  987090           70
+           -1433.792  127215           9
+           -1433.792  887676           22
+           -1433.792  650371           14
+           -1433.792  443917           60
+           -1433.792  830392           35
+           -1433.792  391179           78
+           -1433.792  85462            51
+           -1433.792  285380           1
+           -1433.792  366706           29
+           -1433.792  415931           10
+           -1433.792  93468            3
+           -1433.792  903420           5
+           -1433.792  626891           32
+           -1433.792  939021           8
+           -1433.792  471398           74
+           -1433.792  957392           79
+           -1433.792  120506           45
+           -1433.792  551639           55
+           -1433.792  481835           57
+           -1433.792  603842           61
+           -1433.792  68985            17
+           -1433.792  966014           37
+           -1433.792  784664           75
+           -1433.792  637345           19
+           -1433.792  347515           24
+           -1433.792  259507           53
+           -1433.792  915107           54
+           -1433.792  27071            15
+           -1433.792  565819           65
+           -1433.792  915642           40
+           -1433.792  902278           21
+           -1433.792  967902           52
+           -1433.792  645664           39
+           -1433.792  354559           73
+           -1433.792  967237           48
+           -1433.792  399671           13
+           -1433.792  804561           59
+           -1433.792  311214           64
+           -1433.792  789985           67
+           -1433.792  761633           50
+           -1433.792  260601           36
+           -1433.792  685657           69
+           -1433.792  432148           30
+           -1433.792  992389           77
+           -1433.792  568859           49
+           -1433.792  207896           25
+           -1433.792  467339           66
+           -1433.792  341041           34
+           -1433.792  370466           41
+           -1433.792  407168           44
+           -1433.792  unperturbed      0
+           -1433.792  848163           47
+           -1433.792  462953           7
+           -1433.792  76337            76
+           -1433.792  851945           18
+           -1433.792  76974            16
+           -1433.792  608496           4
+           -1433.792  749453           33
+           -1433.792  364676           27
+           -1433.792  136842           58
+           -1433.792  253358           2
+           -1433.792  405079           68
+           -1433.792  246261           38
+           -1433.792  533738           11
+           -1433.792  372176           23
+           -1433.792  107446           12
+           -1433.792  569131           26
+           -1433.792  195873           6
+           -1433.792  153942           31
+           -1433.792  754100           56
+           -1433.792  696773           80
+           -1433.792  963053           43
+           -1433.792  573096           20
+           -1433.792  475420           71
+           -1433.792  783110           72
+           -1433.792  318230           46
+
+
+
+THE BEST LOGLIKELIHOOD VALUE HAS BEEN REPLICATED.  RERUN WITH AT LEAST TWICE THE
+RANDOM STARTS TO CHECK THAT THE BEST LOGLIKELIHOOD IS STILL OBTAINED AND REPLICATED.
+
+
+     WARNING:  THE VARIANCE CONTRIBUTION FROM A STRATUM WITH A SINGLE CLUSTER
+     (PSU) IS BASED ON THE DIFFERENCE BETWEEN THE SINGLE CLUSTER VALUE AND
+     THE OVERALL CLUSTER MEAN.
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       36
+
+Loglikelihood
+
+          H0 Value                       -1433.792
+          H0 Scaling Correction Factor      0.9383
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    2939.584
+          Bayesian (BIC)                  3060.590
+          Sample-Size Adjusted BIC        2946.517
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit for the Binary and Ordered Categorical
+(Ordinal) Outcomes**
+
+          Pearson Chi-Square
+
+          Value                           1583.608
+          Degrees of Freedom                  3008
+          P-Value                           1.0000
+
+          Likelihood Ratio Chi-Square
+
+          Value                            399.239
+          Degrees of Freedom                  3008
+          P-Value                           1.0000
+
+** Of the 7840 cells in the latent class indicator table, 16
+   were deleted in the calculation of chi-square due to extreme values.
+
+Chi-Square Test for MCAR under the Unrestricted Latent Class Indicator Model
+
+          Pearson Chi-Square
+
+          Value                            859.560
+          Degrees of Freedom                 20356
+          P-Value                           1.0000
+
+          Likelihood Ratio Chi-Square
+
+          Value                            334.858
+          Degrees of Freedom                 20356
+          P-Value                           1.0000
+
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THE ESTIMATED MODEL
+
+    Latent
+   Classes
+
+       1         57.00000          0.26761
+       2         64.00000          0.30047
+       3         92.00000          0.43192
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1 (1)
+
+ Means
+    JORM               3.078      0.044     69.726      0.000
+
+ Thresholds
+    NPG014$1           1.812      0.317      5.716      0.000
+    NPG021$1           1.812      0.277      6.541      0.000
+    NPG023$1           3.314      0.709      4.678      0.000
+    NPG030$1           2.342      0.444      5.278      0.000
+    NPG040$1           1.335      0.314      4.251      0.000
+    NPG041$1           2.464      0.602      4.092      0.000
+    NPG044$1           1.969      0.415      4.745      0.000
+    NPG047$1           1.946      0.438      4.446      0.000
+    NPG050$1           2.140      0.479      4.467      0.000
+    NPG059$1           2.420      0.513      4.719      0.000
+
+ Variances
+    JORM               0.452      0.035     12.973      0.000
+
+Latent Class 2 (2)
+
+ Means
+    JORM               3.722      0.087     42.760      0.000
+
+ Thresholds
+    NPG014$1          -0.433      0.223     -1.944      0.052
+    NPG021$1          -0.647      0.247     -2.620      0.009
+    NPG023$1           0.419      0.257      1.627      0.104
+    NPG030$1          -0.067      0.210     -0.318      0.750
+    NPG040$1          -0.693      0.343     -2.021      0.043
+    NPG041$1          -0.624      0.298     -2.095      0.036
+    NPG044$1          -0.827      0.285     -2.897      0.004
+    NPG047$1          -0.307      0.220     -1.398      0.162
+    NPG050$1           0.159      0.268      0.593      0.553
+    NPG059$1          -0.336      0.268     -1.254      0.210
+
+ Variances
+    JORM               0.452      0.035     12.973      0.000
+
+Latent Class 3 (3)
+
+ Means
+    JORM               4.198      0.086     48.984      0.000
+
+ Thresholds
+    NPG014$1          -0.760      0.208     -3.645      0.000
+    NPG021$1          -1.204      0.257     -4.677      0.000
+    NPG023$1           0.043      0.179      0.243      0.808
+    NPG030$1           0.178      0.154      1.155      0.248
+    NPG040$1          -2.005      0.417     -4.804      0.000
+    NPG041$1          -1.589      0.344     -4.618      0.000
+    NPG044$1          -1.526      0.349     -4.371      0.000
+    NPG047$1          -1.170      0.283     -4.141      0.000
+    NPG050$1          -0.677      0.187     -3.619      0.000
+    NPG059$1          -1.846      0.366     -5.048      0.000
+
+ Variances
+    JORM               0.452      0.035     12.973      0.000
+
+Categorical Latent Variables
+
+ Means
+    CG#1              -0.479      0.202     -2.366      0.018
+    CG#2              -0.363      0.208     -1.746      0.081
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.588E-02
+       (ratio of smallest to largest eigenvalue)
+
+
+LATENT CLASS INDICATOR MEANS AND PROBABILITIES FOR EACH LATENT CLASS
+
+     MEAN/PROBABILITY PROFILES FOR CG
+                       Latent class
+                     1      2      3
+     NPG014
+       Category 1  0.860  0.393  0.319
+       Category 2  0.140  0.607  0.681
+     NPG021
+       Category 1  0.860  0.344  0.231
+       Category 2  0.140  0.656  0.769
+     NPG023
+       Category 1  0.965  0.603  0.511
+       Category 2  0.035  0.397  0.489
+     NPG030
+       Category 1  0.912  0.483  0.544
+       Category 2  0.088  0.517  0.456
+     NPG040
+       Category 1  0.792  0.333  0.119
+       Category 2  0.208  0.667  0.881
+     NPG041
+       Category 1  0.922  0.349  0.169
+       Category 2  0.078  0.651  0.831
+     NPG044
+       Category 1  0.878  0.304  0.179
+       Category 2  0.122  0.696  0.821
+     NPG047
+       Category 1  0.875  0.424  0.237
+       Category 2  0.125  0.576  0.763
+     NPG050
+       Category 1  0.895  0.540  0.337
+       Category 2  0.105  0.460  0.663
+     NPG059
+       Category 1  0.918  0.417  0.136
+       Category 2  0.082  0.583  0.864
+     JORM          3.078  3.722  4.198
+
+
+RESULTS IN PROBABILITY SCALE
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1 (1)
+
+ NPG014
+    Category 1         0.860      0.038     22.473      0.000
+    Category 2         0.140      0.038      3.669      0.000
+ NPG021
+    Category 1         0.860      0.033     25.714      0.000
+    Category 2         0.140      0.033      4.198      0.000
+ NPG023
+    Category 1         0.965      0.024     40.225      0.000
+    Category 2         0.035      0.024      1.463      0.144
+ NPG030
+    Category 1         0.912      0.036     25.691      0.000
+    Category 2         0.088      0.036      2.470      0.013
+ NPG040
+    Category 1         0.792      0.052     15.285      0.000
+    Category 2         0.208      0.052      4.022      0.000
+ NPG041
+    Category 1         0.922      0.044     21.175      0.000
+    Category 2         0.078      0.044      1.802      0.072
+ NPG044
+    Category 1         0.878      0.045     19.677      0.000
+    Category 2         0.122      0.045      2.746      0.006
+ NPG047
+    Category 1         0.875      0.048     18.277      0.000
+    Category 2         0.125      0.048      2.611      0.009
+ NPG050
+    Category 1         0.895      0.045     19.829      0.000
+    Category 2         0.105      0.045      2.333      0.020
+ NPG059
+    Category 1         0.918      0.038     23.883      0.000
+    Category 2         0.082      0.038      2.123      0.034
+
+Latent Class 2 (2)
+
+ NPG014
+    Category 1         0.393      0.053      7.405      0.000
+    Category 2         0.607      0.053     11.415      0.000
+ NPG021
+    Category 1         0.344      0.056      6.174      0.000
+    Category 2         0.656      0.056     11.787      0.000
+ NPG023
+    Category 1         0.603      0.062      9.794      0.000
+    Category 2         0.397      0.062      6.443      0.000
+ NPG030
+    Category 1         0.483      0.052      9.237      0.000
+    Category 2         0.517      0.052      9.874      0.000
+ NPG040
+    Category 1         0.333      0.076      4.373      0.000
+    Category 2         0.667      0.076      8.746      0.000
+ NPG041
+    Category 1         0.349      0.068      5.154      0.000
+    Category 2         0.651      0.068      9.621      0.000
+ NPG044
+    Category 1         0.304      0.060      5.037      0.000
+    Category 2         0.696      0.060     11.514      0.000
+ NPG047
+    Category 1         0.424      0.054      7.891      0.000
+    Category 2         0.576      0.054     10.732      0.000
+ NPG050
+    Category 1         0.540      0.067      8.104      0.000
+    Category 2         0.460      0.067      6.912      0.000
+ NPG059
+    Category 1         0.417      0.065      6.391      0.000
+    Category 2         0.583      0.065      8.948      0.000
+
+Latent Class 3 (3)
+
+ NPG014
+    Category 1         0.319      0.045      7.041      0.000
+    Category 2         0.681      0.045     15.054      0.000
+ NPG021
+    Category 1         0.231      0.046      5.050      0.000
+    Category 2         0.769      0.046     16.835      0.000
+ NPG023
+    Category 1         0.511      0.045     11.415      0.000
+    Category 2         0.489      0.045     10.929      0.000
+ NPG030
+    Category 1         0.544      0.038     14.218      0.000
+    Category 2         0.456      0.038     11.897      0.000
+ NPG040
+    Category 1         0.119      0.044      2.718      0.007
+    Category 2         0.881      0.044     20.192      0.000
+ NPG041
+    Category 1         0.169      0.048      3.499      0.000
+    Category 2         0.831      0.048     17.145      0.000
+ NPG044
+    Category 1         0.179      0.051      3.487      0.000
+    Category 2         0.821      0.051     16.040      0.000
+ NPG047
+    Category 1         0.237      0.051      4.637      0.000
+    Category 2         0.763      0.051     14.941      0.000
+ NPG050
+    Category 1         0.337      0.042      8.063      0.000
+    Category 2         0.663      0.042     15.866      0.000
+ NPG059
+    Category 1         0.136      0.043      3.166      0.002
+    Category 2         0.864      0.043     20.054      0.000
+
+
+EQUALITY TESTS OF MEANS/PROBABILITIES ACROSS THE LATENT CLASSES
+
+                    Chi-Square     P-Value   Degrees of Freedom
+
+
+NPG014
+  Overall test         57.437      0.000        2
+  Class 1 vs. 2        33.539      0.000        1
+  Class 1 vs. 3        57.298      0.000        1
+  Class 2 vs. 3         1.464      0.226        1
+
+NPG021
+  Overall test         66.937      0.000        2
+  Class 1 vs. 2        36.565      0.000        1
+  Class 1 vs. 3        63.913      0.000        1
+  Class 2 vs. 3         2.389      0.122        1
+
+NPG023
+  Overall test         18.967      0.000        2
+  Class 1 vs. 2        14.078      0.000        1
+  Class 1 vs. 3        18.860      0.000        1
+  Class 2 vs. 3         1.177      0.278        1
+
+NPG030
+  Overall test         23.348      0.000        2
+  Class 1 vs. 2        22.184      0.000        1
+  Class 1 vs. 3        21.296      0.000        1
+  Class 2 vs. 3         0.900      0.343        1
+
+NPG040
+  Overall test         49.249      0.000        2
+  Class 1 vs. 2        18.778      0.000        1
+  Class 1 vs. 3        44.879      0.000        1
+  Class 2 vs. 3         5.703      0.017        1
+
+NPG041
+  Overall test         35.063      0.000        2
+  Class 1 vs. 2        21.596      0.000        1
+  Class 1 vs. 3        35.007      0.000        1
+  Class 2 vs. 3         4.243      0.039        1
+
+NPG044
+  Overall test         45.436      0.000        2
+  Class 1 vs. 2        29.529      0.000        1
+  Class 1 vs. 3        41.349      0.000        1
+  Class 2 vs. 3         2.133      0.144        1
+
+NPG047
+  Overall test         39.814      0.000        2
+  Class 1 vs. 2        20.415      0.000        1
+  Class 1 vs. 3        39.767      0.000        1
+  Class 2 vs. 3         5.797      0.016        1
+
+NPG050
+  Overall test         32.015      0.000        2
+  Class 1 vs. 2        13.394      0.000        1
+  Class 1 vs. 3        29.726      0.000        1
+  Class 2 vs. 3         7.184      0.007        1
+
+NPG059
+  Overall test         42.973      0.000        2
+  Class 1 vs. 2        23.118      0.000        1
+  Class 1 vs. 3        42.923      0.000        1
+  Class 2 vs. 3        10.226      0.001        1
+
+JORM
+  Overall test        226.704      0.000        2
+  Class 1 vs. 2        46.220      0.000        1
+  Class 1 vs. 3       160.931      0.000        1
+  Class 2 vs. 3        12.312      0.000        1
+
+
+LATENT CLASS INDICATOR ODDS RATIOS FOR THE LATENT CLASSES
+
+                                                95% C.I.
+                    Estimate       S.E.  Lower 2.5% Upper 2.5%
+
+Latent Class 1 Compared to Latent Class 2
+
+ NPG014
+    Category > 1       0.106      0.041      0.050      0.226
+ NPG021
+    Category > 1       0.086      0.035      0.039      0.190
+ NPG023
+    Category > 1       0.055      0.043      0.012      0.251
+ NPG030
+    Category > 1       0.090      0.046      0.033      0.245
+ NPG040
+    Category > 1       0.132      0.062      0.053      0.329
+ NPG041
+    Category > 1       0.046      0.030      0.012      0.168
+ NPG044
+    Category > 1       0.061      0.031      0.022      0.167
+ NPG047
+    Category > 1       0.105      0.052      0.040      0.279
+ NPG050
+    Category > 1       0.138      0.075      0.048      0.398
+ NPG059
+    Category > 1       0.063      0.036      0.021      0.195
+
+Latent Class 1 Compared to Latent Class 3
+
+ NPG014
+    Category > 1       0.076      0.026      0.039      0.149
+ NPG021
+    Category > 1       0.049      0.018      0.023      0.103
+ NPG023
+    Category > 1       0.038      0.029      0.009      0.166
+ NPG030
+    Category > 1       0.115      0.054      0.046      0.288
+ NPG040
+    Category > 1       0.035      0.018      0.013      0.094
+ NPG041
+    Category > 1       0.017      0.012      0.005      0.067
+ NPG044
+    Category > 1       0.030      0.016      0.010      0.088
+ NPG047
+    Category > 1       0.044      0.022      0.017      0.117
+ NPG050
+    Category > 1       0.060      0.031      0.022      0.165
+ NPG059
+    Category > 1       0.014      0.009      0.004      0.050
+
+Latent Class 2 Compared to Latent Class 3
+
+ NPG014
+    Category > 1       0.721      0.195      0.425      1.225
+ NPG021
+    Category > 1       0.573      0.207      0.282      1.161
+ NPG023
+    Category > 1       0.687      0.238      0.349      1.354
+ NPG030
+    Category > 1       1.278      0.330      0.770      2.119
+ NPG040
+    Category > 1       0.269      0.148      0.092      0.790
+ NPG041
+    Category > 1       0.381      0.178      0.152      0.954
+ NPG044
+    Category > 1       0.497      0.238      0.194      1.270
+ NPG047
+    Category > 1       0.422      0.151      0.209      0.852
+ NPG050
+    Category > 1       0.433      0.135      0.235      0.799
+ NPG059
+    Category > 1       0.221      0.104      0.088      0.558
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1 (1)
+
+ Means
+    JORM               4.577      0.189     24.221      0.000
+
+ Thresholds
+    NPG014$1           0.999      0.175      5.716      0.000
+    NPG021$1           0.999      0.153      6.541      0.000
+    NPG023$1           1.827      0.391      4.678      0.000
+    NPG030$1           1.291      0.245      5.278      0.000
+    NPG040$1           0.736      0.173      4.251      0.000
+    NPG041$1           1.358      0.332      4.092      0.000
+    NPG044$1           1.086      0.229      4.745      0.000
+    NPG047$1           1.073      0.241      4.446      0.000
+    NPG050$1           1.180      0.264      4.467      0.000
+    NPG059$1           1.334      0.283      4.719      0.000
+
+ Variances
+    JORM               1.000      0.000    999.000    999.000
+
+Latent Class 2 (2)
+
+ Means
+    JORM               5.534      0.230     24.108      0.000
+
+ Thresholds
+    NPG014$1          -0.239      0.123     -1.944      0.052
+    NPG021$1          -0.357      0.136     -2.620      0.009
+    NPG023$1           0.231      0.142      1.627      0.104
+    NPG030$1          -0.037      0.116     -0.318      0.750
+    NPG040$1          -0.382      0.189     -2.021      0.043
+    NPG041$1          -0.344      0.164     -2.095      0.036
+    NPG044$1          -0.456      0.157     -2.897      0.004
+    NPG047$1          -0.170      0.121     -1.398      0.162
+    NPG050$1           0.088      0.148      0.593      0.553
+    NPG059$1          -0.186      0.148     -1.254      0.210
+
+ Variances
+    JORM               1.000      0.000    999.000    999.000
+
+Latent Class 3 (3)
+
+ Means
+    JORM               6.242      0.344     18.149      0.000
+
+ Thresholds
+    NPG014$1          -0.419      0.115     -3.645      0.000
+    NPG021$1          -0.664      0.142     -4.677      0.000
+    NPG023$1           0.024      0.099      0.243      0.808
+    NPG030$1           0.098      0.085      1.155      0.248
+    NPG040$1          -1.106      0.230     -4.804      0.000
+    NPG041$1          -0.876      0.190     -4.618      0.000
+    NPG044$1          -0.841      0.192     -4.371      0.000
+    NPG047$1          -0.645      0.156     -4.141      0.000
+    NPG050$1          -0.373      0.103     -3.619      0.000
+    NPG059$1          -1.018      0.202     -5.048      0.000
+
+ Variances
+    JORM               1.000      0.000    999.000    999.000
+
+
+STDY Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1 (1)
+
+ Means
+    JORM               4.577      0.189     24.221      0.000
+
+ Thresholds
+    NPG014$1           0.999      0.175      5.716      0.000
+    NPG021$1           0.999      0.153      6.541      0.000
+    NPG023$1           1.827      0.391      4.678      0.000
+    NPG030$1           1.291      0.245      5.278      0.000
+    NPG040$1           0.736      0.173      4.251      0.000
+    NPG041$1           1.358      0.332      4.092      0.000
+    NPG044$1           1.086      0.229      4.745      0.000
+    NPG047$1           1.073      0.241      4.446      0.000
+    NPG050$1           1.180      0.264      4.467      0.000
+    NPG059$1           1.334      0.283      4.719      0.000
+
+ Variances
+    JORM               1.000      0.000    999.000    999.000
+
+Latent Class 2 (2)
+
+ Means
+    JORM               5.534      0.230     24.108      0.000
+
+ Thresholds
+    NPG014$1          -0.239      0.123     -1.944      0.052
+    NPG021$1          -0.357      0.136     -2.620      0.009
+    NPG023$1           0.231      0.142      1.627      0.104
+    NPG030$1          -0.037      0.116     -0.318      0.750
+    NPG040$1          -0.382      0.189     -2.021      0.043
+    NPG041$1          -0.344      0.164     -2.095      0.036
+    NPG044$1          -0.456      0.157     -2.897      0.004
+    NPG047$1          -0.170      0.121     -1.398      0.162
+    NPG050$1           0.088      0.148      0.593      0.553
+    NPG059$1          -0.186      0.148     -1.254      0.210
+
+ Variances
+    JORM               1.000      0.000    999.000    999.000
+
+Latent Class 3 (3)
+
+ Means
+    JORM               6.242      0.344     18.149      0.000
+
+ Thresholds
+    NPG014$1          -0.419      0.115     -3.645      0.000
+    NPG021$1          -0.664      0.142     -4.677      0.000
+    NPG023$1           0.024      0.099      0.243      0.808
+    NPG030$1           0.098      0.085      1.155      0.248
+    NPG040$1          -1.106      0.230     -4.804      0.000
+    NPG041$1          -0.876      0.190     -4.618      0.000
+    NPG044$1          -0.841      0.192     -4.371      0.000
+    NPG047$1          -0.645      0.156     -4.141      0.000
+    NPG050$1          -0.373      0.103     -3.619      0.000
+    NPG059$1          -1.018      0.202     -5.048      0.000
+
+ Variances
+    JORM               1.000      0.000    999.000    999.000
+
+
+STD Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1 (1)
+
+ Means
+    JORM               3.078      0.044     69.726      0.000
+
+ Thresholds
+    NPG014$1           1.812      0.317      5.716      0.000
+    NPG021$1           1.812      0.277      6.541      0.000
+    NPG023$1           3.314      0.709      4.678      0.000
+    NPG030$1           2.342      0.444      5.278      0.000
+    NPG040$1           1.335      0.314      4.251      0.000
+    NPG041$1           2.464      0.602      4.092      0.000
+    NPG044$1           1.969      0.415      4.745      0.000
+    NPG047$1           1.946      0.438      4.446      0.000
+    NPG050$1           2.140      0.479      4.467      0.000
+    NPG059$1           2.420      0.513      4.719      0.000
+
+ Variances
+    JORM               0.452      0.035     12.973      0.000
+
+Latent Class 2 (2)
+
+ Means
+    JORM               3.722      0.087     42.760      0.000
+
+ Thresholds
+    NPG014$1          -0.433      0.223     -1.944      0.052
+    NPG021$1          -0.647      0.247     -2.620      0.009
+    NPG023$1           0.419      0.257      1.627      0.104
+    NPG030$1          -0.067      0.210     -0.318      0.750
+    NPG040$1          -0.693      0.343     -2.021      0.043
+    NPG041$1          -0.624      0.298     -2.095      0.036
+    NPG044$1          -0.827      0.285     -2.897      0.004
+    NPG047$1          -0.307      0.220     -1.398      0.162
+    NPG050$1           0.159      0.268      0.593      0.553
+    NPG059$1          -0.336      0.268     -1.254      0.210
+
+ Variances
+    JORM               0.452      0.035     12.973      0.000
+
+Latent Class 3 (3)
+
+ Means
+    JORM               4.198      0.086     48.984      0.000
+
+ Thresholds
+    NPG014$1          -0.760      0.208     -3.645      0.000
+    NPG021$1          -1.204      0.257     -4.677      0.000
+    NPG023$1           0.043      0.179      0.243      0.808
+    NPG030$1           0.178      0.154      1.155      0.248
+    NPG040$1          -2.005      0.417     -4.804      0.000
+    NPG041$1          -1.589      0.344     -4.618      0.000
+    NPG044$1          -1.526      0.349     -4.371      0.000
+    NPG047$1          -1.170      0.283     -4.141      0.000
+    NPG050$1          -0.677      0.187     -3.619      0.000
+    NPG059$1          -1.846      0.366     -5.048      0.000
+
+ Variances
+    JORM               0.452      0.035     12.973      0.000
+
+
+SAVEDATA INFORMATION
+
+
+  Results in H5 Format
+
+  Save file
+    pmm_104_unitwt_jorm.h5
+
+  List of results saved
+
+    Summary of Analysis
+    Model Fit Information
+    Model Results
+    Results in Probability Scale
+    Latent Class Indicator Odds Ratios for the Latent Classes
+    Standardized Model Results
+
+     Beginning Time:  07:01:24
+        Ending Time:  07:01:25
+       Elapsed Time:  00:00:01
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2025 Muthen & Muthen

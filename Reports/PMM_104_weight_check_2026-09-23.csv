@@ -1,0 +1,818 @@
+paramHeader,param,LatentClass,est_weighted,est_unit,model,diff,type,class_specific
+VDORI.ON,X1,1,-0.076,-0.076,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X2,1,0.391,0.391,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X3,1,-1.647,-1.647,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X4,1,0.76,0.76,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X5,1,-0.031,-0.031,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X6,1,-0.204,-0.204,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X7,1,0.146,0.146,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X1X4,1,0.007,0.007,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X1X5,1,0.138,0.138,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X1X6,1,0.082,0.082,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X1X7,1,-0.01,-0.01,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X2X4,1,-0.273,-0.273,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X2X5,1,-1.067,-1.067,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X2X6,1,-1.065,-1.065,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X2X7,1,0.029,0.029,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X3X4,1,1.132,1.132,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X3X5,1,4.982,4.982,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X3X6,1,9.34,9.34,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X3X7,1,-0.09,-0.09,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X4X5,1,1.014,1.014,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X4X6,1,-0.106,-0.106,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X4X7,1,-0.054,-0.054,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X5X7,1,-0.013,-0.013,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X6X7,1,-0.081,-0.081,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X1,1,-0.006,-0.006,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X2,1,0.016,0.016,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X3,1,-0.042,-0.042,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X4,1,0.001,0.001,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X5,1,-0.028,-0.028,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X6,1,-0.033,-0.033,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X7,1,0.009,0.009,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X1X4,1,0.003,0.003,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X1X5,1,0.001,0.001,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X1X6,1,0.003,0.003,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X1X7,1,0.001,0.001,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X2X4,1,-0.015,-0.015,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X2X5,1,0.002,0.002,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X2X6,1,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X2X7,1,-0.004,-0.004,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X3X4,1,0.047,0.047,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X3X5,1,-0.022,-0.022,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X3X6,1,-0.049,-0.049,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X3X7,1,0.014,0.014,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X4X5,1,-0.01,-0.01,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X4X6,1,0.022,0.022,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X4X7,1,0.003,0.003,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X5X7,1,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X6X7,1,-0.004,-0.004,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X1,1,-0.069,-0.069,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X2,1,-0.544,-0.544,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X3,1,3.344,3.344,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X4,1,-0.783,-0.783,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X5,1,-1.332,-1.332,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X6,1,-0.658,-0.658,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X7,1,0.206,0.206,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X1X4,1,-0.101,-0.101,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X1X5,1,0.309,0.309,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X1X6,1,0.487,0.487,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X1X7,1,0.031,0.031,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X2X4,1,1.714,1.714,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X2X5,1,-2.129,-2.129,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X2X6,1,-3.447,-3.447,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X2X7,1,-0.226,-0.226,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X3X4,1,-7.026,-7.026,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X3X5,1,10.395,10.395,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X3X6,1,14.016,14.016,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X3X7,1,1.296,1.296,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X4X5,1,-0.668,-0.668,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X4X6,1,1.013,1.013,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X4X7,1,-0.018,-0.018,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X5X7,1,0.316,0.316,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X6X7,1,0.127,0.127,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X1,1,-0.08,-0.08,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X2,1,0.29,0.29,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X3,1,-1.424,-1.424,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X4,1,-0.272,-0.272,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X5,1,-0.921,-0.921,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X6,1,-1.132,-1.132,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X7,1,0.065,0.065,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X1X4,1,0.14,0.14,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X1X5,1,0.055,0.055,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X1X6,1,-0.021,-0.021,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X1X7,1,0,0,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X2X4,1,-0.81,-0.81,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X2X5,1,-0.106,-0.106,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X2X6,1,0.466,0.466,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X2X7,1,0.026,0.026,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X3X4,1,4.157,4.157,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X3X5,1,0.195,0.195,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X3X6,1,-2.935,-2.935,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X3X7,1,-0.185,-0.185,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X4X5,1,0.032,0.032,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X4X6,1,0.334,0.334,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X4X7,1,0.11,0.11,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X5X7,1,0.204,0.204,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X6X7,1,0.098,0.098,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X1,1,-0.006,-0.006,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X2,1,0.019,0.019,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X3,1,-0.103,-0.103,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X4,1,0.055,0.055,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X5,1,-0.067,-0.067,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X6,1,-0.013,-0.013,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X7,1,0.019,0.019,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X1X4,1,0.006,0.006,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X1X5,1,0.006,0.006,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X1X6,1,-0.004,-0.004,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X1X7,1,0,0,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X2X4,1,-0.04,-0.04,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X2X5,1,-0.028,-0.028,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X2X6,1,0.036,0.036,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X2X7,1,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X3X4,1,0.188,0.188,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X3X5,1,0.093,0.093,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X3X6,1,-0.18,-0.18,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X3X7,1,0.008,0.008,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X4X5,1,0.026,0.026,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X4X6,1,-0.025,-0.025,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X4X7,1,0.001,0.001,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X5X7,1,-0.005,-0.005,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X6X7,1,-0.012,-0.012,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X1,1,-0.006,-0.006,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X2,1,0.008,0.008,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X3,1,-0.066,-0.066,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X4,1,0.061,0.061,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X5,1,-0.086,-0.086,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X6,1,0.006,0.006,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X7,1,0.021,0.021,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X1X4,1,0.008,0.008,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X1X5,1,0.005,0.005,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X1X6,1,-0.008,-0.008,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X1X7,1,0,0,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X2X4,1,-0.037,-0.037,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X2X5,1,-0.05,-0.05,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X2X6,1,0.006,0.006,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X2X7,1,0,0,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X3X4,1,0.168,0.168,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X3X5,1,0.236,0.236,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X3X6,1,0.048,0.048,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X3X7,1,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X4X5,1,0.012,0.012,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X4X6,1,-0.028,-0.028,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X4X7,1,0.003,0.003,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X5X7,1,-0.006,-0.006,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X6X7,1,-0.013,-0.013,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X1,1,-0.003,-0.003,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X2,1,-0.01,-0.01,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X3,1,0.066,0.066,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X4,1,-0.03,-0.03,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X5,1,-0.191,-0.191,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X6,1,-0.115,-0.115,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X7,1,0.026,0.026,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X1X4,1,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X1X5,1,0,0,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X1X6,1,0.007,0.007,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X1X7,1,0,0,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X2X4,1,0.016,0.016,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X2X5,1,-0.004,-0.004,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X2X6,1,-0.053,-0.053,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X2X7,1,-0.001,-0.001,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X3X4,1,-0.086,-0.086,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X3X5,1,0.057,0.057,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X3X6,1,0.28,0.28,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X3X7,1,0.004,0.004,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X4X5,1,0.064,0.064,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X4X6,1,0,0,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X4X7,1,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X5X7,1,0.011,0.011,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X6X7,1,-0.006,-0.006,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X1,1,-0.054,-0.054,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X2,1,-0.007,-0.007,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X3,1,0.531,0.531,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X4,1,-0.68,-0.68,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X5,1,-1.815,-1.815,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X6,1,-0.46,-0.46,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X7,1,0.166,0.166,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X1X4,1,0.012,0.012,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X1X5,1,0.076,0.076,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X1X6,1,0.198,0.198,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X1X7,1,0.011,0.011,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X2X4,1,0.111,0.111,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X2X5,1,-0.527,-0.527,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X2X6,1,-1.109,-1.109,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X2X7,1,-0.042,-0.042,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X3X4,1,-0.885,-0.885,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X3X5,1,1.564,1.564,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X3X6,1,6.662,6.662,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X3X7,1,0.162,0.162,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X4X5,1,0.606,0.606,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X4X6,1,-0.563,-0.563,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X4X7,1,0.011,0.011,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X5X7,1,0.159,0.159,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X6X7,1,-0.073,-0.073,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X1,1,-0.058,-0.058,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X2,1,-0.092,-0.092,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X3,1,0.424,0.424,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X4,1,-0.349,-0.349,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X5,1,-0.891,-0.891,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X6,1,1.844,1.844,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X7,1,0.221,0.221,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X1X4,1,0.213,0.213,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X1X5,1,-0.156,-0.156,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X1X6,1,0.054,0.054,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X1X7,1,0.012,0.012,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X2X4,1,-0.924,-0.924,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X2X5,1,1.138,1.138,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X2X6,1,0.282,0.282,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X2X7,1,-0.011,-0.011,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X3X4,1,3.667,3.667,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X3X5,1,-5.257,-5.257,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X3X6,1,-3.898,-3.898,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X3X7,1,-0.183,-0.183,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X4X5,1,-0.042,-0.042,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X4X6,1,-2.154,-2.154,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X4X7,1,-0.118,-0.118,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X5X7,1,-0.003,-0.003,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X6X7,1,0.082,0.082,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.WITH,VDLFL1Z,1,0,0,cognition,0,other,FALSE
+VDWDIMMZ.WITH,VDWDDELZ,1,0.019,NA,cognition,NA,other,FALSE
+VDWDIMMZ.WITH,VDEXF7Z,1,0,NA,cognition,NA,other,FALSE
+VDWDDELZ.WITH,VDLFL1Z,1,0,0,cognition,0,other,FALSE
+VDWDDELZ.WITH,VDEXF7Z,1,0,NA,cognition,NA,other,FALSE
+VDEXF7Z.WITH,VDLFL1Z,1,0,0,cognition,0,other,FALSE
+Intercepts,VDLFL1Z,1,0.187,0.186,cognition,0.0010000000000000009,mean/intercept,TRUE
+Intercepts,VDWDIMMZ,1,0.546,0.543,cognition,0.0030000000000000027,mean/intercept,TRUE
+Intercepts,VDWDDELZ,1,0.453,0.451,cognition,0.0020000000000000018,mean/intercept,TRUE
+Intercepts,VDEXF7Z,1,0.639,0.637,cognition,0.0020000000000000018,mean/intercept,TRUE
+Thresholds,VDORI$1,1,-7.487,-7.244,cognition,-0.24300000000000033,threshold,TRUE
+Thresholds,VDORI$2,1,-5.911,-5.626,cognition,-0.28499999999999925,threshold,TRUE
+Thresholds,VDORI$3,1,-3.922,-3.983,cognition,0.06099999999999994,threshold,TRUE
+Thresholds,VDORI$4,1,-1.64,-1.618,cognition,-0.021999999999999797,threshold,TRUE
+Thresholds,VDLFL2$1,1,-7.935,-7.795,cognition,-0.13999999999999968,threshold,TRUE
+Thresholds,VDLFL2$2,1,-4.165,-4.395,cognition,0.22999999999999954,threshold,TRUE
+Thresholds,VDLFL3$1,1,-4.843,-5.052,cognition,0.20899999999999963,threshold,TRUE
+Thresholds,VDLFL3$2,1,-1.147,-1.156,cognition,0.008999999999999897,threshold,TRUE
+Thresholds,VDSEVENS$1,1,-3.259,-3.29,cognition,0.03100000000000014,threshold,TRUE
+Thresholds,VDSEVENS$2,1,-2.067,-2.069,cognition,0.0019999999999997797,threshold,TRUE
+Thresholds,VDSEVENS$3,1,-1.518,-1.521,cognition,0.0029999999999998916,threshold,TRUE
+Thresholds,VDSEVENS$4,1,-0.733,-0.721,cognition,-0.01200000000000001,threshold,TRUE
+Thresholds,VDSEVENS$5,1,0.197,0.211,cognition,-0.013999999999999985,threshold,TRUE
+Thresholds,VDCOUNT$1,1,-3.458,-3.374,cognition,-0.08400000000000007,threshold,TRUE
+Thresholds,NPG014$1,1,2.418,2.262,cognition,0.15600000000000014,threshold,TRUE
+Thresholds,NPG021$1,1,3.03,2.757,cognition,0.2729999999999997,threshold,TRUE
+Thresholds,NPG023$1,1,4.049,3.854,cognition,0.19500000000000028,threshold,TRUE
+Thresholds,NPG030$1,1,3.129,2.932,cognition,0.19700000000000006,threshold,TRUE
+Thresholds,NPG040$1,1,2.398,2.094,cognition,0.30400000000000027,threshold,TRUE
+Thresholds,NPG041$1,1,3.365,3.162,cognition,0.2030000000000003,threshold,TRUE
+Thresholds,NPG044$1,1,2.92,2.778,cognition,0.1419999999999999,threshold,TRUE
+Thresholds,NPG047$1,1,4.009,3.791,cognition,0.21800000000000042,threshold,TRUE
+Thresholds,NPG050$1,1,3.947,3.772,cognition,0.17500000000000027,threshold,TRUE
+Thresholds,NPG059$1,1,3.736,3.435,cognition,0.30100000000000016,threshold,TRUE
+Thresholds,PD102$1,1,-4.198,-4.21,cognition,0.011999999999999567,threshold,TRUE
+Thresholds,PD102$2,1,1.18,1.158,cognition,0.02200000000000002,threshold,TRUE
+Residual.Variances,VDLFL1Z,1,0.005,0.005,cognition,0,other,FALSE
+Residual.Variances,VDWDIMMZ,1,0.023,0.023,cognition,0,other,FALSE
+Residual.Variances,VDWDDELZ,1,0.032,0.032,cognition,0,other,FALSE
+Residual.Variances,VDEXF7Z,1,0.02,0.023,cognition,-0.002999999999999999,other,FALSE
+VDORI.ON,X1,2,-0.076,-0.076,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X2,2,0.391,0.391,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X3,2,-1.647,-1.647,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X4,2,0.76,0.76,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X5,2,-0.031,-0.031,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X6,2,-0.204,-0.204,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X7,2,0.146,0.146,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X1X4,2,0.007,0.007,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X1X5,2,0.138,0.138,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X1X6,2,0.082,0.082,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X1X7,2,-0.01,-0.01,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X2X4,2,-0.273,-0.273,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X2X5,2,-1.067,-1.067,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X2X6,2,-1.065,-1.065,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X2X7,2,0.029,0.029,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X3X4,2,1.132,1.132,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X3X5,2,4.982,4.982,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X3X6,2,9.34,9.34,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X3X7,2,-0.09,-0.09,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X4X5,2,1.014,1.014,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X4X6,2,-0.106,-0.106,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X4X7,2,-0.054,-0.054,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X5X7,2,-0.013,-0.013,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X6X7,2,-0.081,-0.081,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X1,2,-0.006,-0.006,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X2,2,0.016,0.016,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X3,2,-0.042,-0.042,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X4,2,0.001,0.001,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X5,2,-0.028,-0.028,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X6,2,-0.033,-0.033,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X7,2,0.009,0.009,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X1X4,2,0.003,0.003,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X1X5,2,0.001,0.001,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X1X6,2,0.003,0.003,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X1X7,2,0.001,0.001,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X2X4,2,-0.015,-0.015,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X2X5,2,0.002,0.002,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X2X6,2,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X2X7,2,-0.004,-0.004,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X3X4,2,0.047,0.047,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X3X5,2,-0.022,-0.022,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X3X6,2,-0.049,-0.049,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X3X7,2,0.014,0.014,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X4X5,2,-0.01,-0.01,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X4X6,2,0.022,0.022,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X4X7,2,0.003,0.003,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X5X7,2,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X6X7,2,-0.004,-0.004,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X1,2,-0.069,-0.069,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X2,2,-0.544,-0.544,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X3,2,3.344,3.344,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X4,2,-0.783,-0.783,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X5,2,-1.332,-1.332,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X6,2,-0.658,-0.658,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X7,2,0.206,0.206,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X1X4,2,-0.101,-0.101,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X1X5,2,0.309,0.309,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X1X6,2,0.487,0.487,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X1X7,2,0.031,0.031,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X2X4,2,1.714,1.714,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X2X5,2,-2.129,-2.129,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X2X6,2,-3.447,-3.447,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X2X7,2,-0.226,-0.226,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X3X4,2,-7.026,-7.026,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X3X5,2,10.395,10.395,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X3X6,2,14.016,14.016,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X3X7,2,1.296,1.296,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X4X5,2,-0.668,-0.668,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X4X6,2,1.013,1.013,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X4X7,2,-0.018,-0.018,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X5X7,2,0.316,0.316,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X6X7,2,0.127,0.127,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X1,2,-0.08,-0.08,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X2,2,0.29,0.29,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X3,2,-1.424,-1.424,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X4,2,-0.272,-0.272,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X5,2,-0.921,-0.921,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X6,2,-1.132,-1.132,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X7,2,0.065,0.065,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X1X4,2,0.14,0.14,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X1X5,2,0.055,0.055,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X1X6,2,-0.021,-0.021,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X1X7,2,0,0,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X2X4,2,-0.81,-0.81,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X2X5,2,-0.106,-0.106,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X2X6,2,0.466,0.466,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X2X7,2,0.026,0.026,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X3X4,2,4.157,4.157,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X3X5,2,0.195,0.195,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X3X6,2,-2.935,-2.935,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X3X7,2,-0.185,-0.185,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X4X5,2,0.032,0.032,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X4X6,2,0.334,0.334,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X4X7,2,0.11,0.11,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X5X7,2,0.204,0.204,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X6X7,2,0.098,0.098,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X1,2,-0.006,-0.006,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X2,2,0.019,0.019,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X3,2,-0.103,-0.103,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X4,2,0.055,0.055,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X5,2,-0.067,-0.067,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X6,2,-0.013,-0.013,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X7,2,0.019,0.019,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X1X4,2,0.006,0.006,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X1X5,2,0.006,0.006,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X1X6,2,-0.004,-0.004,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X1X7,2,0,0,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X2X4,2,-0.04,-0.04,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X2X5,2,-0.028,-0.028,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X2X6,2,0.036,0.036,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X2X7,2,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X3X4,2,0.188,0.188,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X3X5,2,0.093,0.093,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X3X6,2,-0.18,-0.18,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X3X7,2,0.008,0.008,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X4X5,2,0.026,0.026,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X4X6,2,-0.025,-0.025,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X4X7,2,0.001,0.001,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X5X7,2,-0.005,-0.005,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X6X7,2,-0.012,-0.012,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X1,2,-0.006,-0.006,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X2,2,0.008,0.008,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X3,2,-0.066,-0.066,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X4,2,0.061,0.061,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X5,2,-0.086,-0.086,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X6,2,0.006,0.006,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X7,2,0.021,0.021,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X1X4,2,0.008,0.008,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X1X5,2,0.005,0.005,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X1X6,2,-0.008,-0.008,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X1X7,2,0,0,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X2X4,2,-0.037,-0.037,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X2X5,2,-0.05,-0.05,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X2X6,2,0.006,0.006,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X2X7,2,0,0,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X3X4,2,0.168,0.168,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X3X5,2,0.236,0.236,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X3X6,2,0.048,0.048,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X3X7,2,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X4X5,2,0.012,0.012,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X4X6,2,-0.028,-0.028,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X4X7,2,0.003,0.003,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X5X7,2,-0.006,-0.006,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X6X7,2,-0.013,-0.013,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X1,2,-0.003,-0.003,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X2,2,-0.01,-0.01,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X3,2,0.066,0.066,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X4,2,-0.03,-0.03,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X5,2,-0.191,-0.191,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X6,2,-0.115,-0.115,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X7,2,0.026,0.026,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X1X4,2,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X1X5,2,0,0,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X1X6,2,0.007,0.007,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X1X7,2,0,0,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X2X4,2,0.016,0.016,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X2X5,2,-0.004,-0.004,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X2X6,2,-0.053,-0.053,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X2X7,2,-0.001,-0.001,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X3X4,2,-0.086,-0.086,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X3X5,2,0.057,0.057,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X3X6,2,0.28,0.28,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X3X7,2,0.004,0.004,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X4X5,2,0.064,0.064,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X4X6,2,0,0,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X4X7,2,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X5X7,2,0.011,0.011,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X6X7,2,-0.006,-0.006,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X1,2,-0.054,-0.054,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X2,2,-0.007,-0.007,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X3,2,0.531,0.531,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X4,2,-0.68,-0.68,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X5,2,-1.815,-1.815,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X6,2,-0.46,-0.46,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X7,2,0.166,0.166,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X1X4,2,0.012,0.012,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X1X5,2,0.076,0.076,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X1X6,2,0.198,0.198,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X1X7,2,0.011,0.011,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X2X4,2,0.111,0.111,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X2X5,2,-0.527,-0.527,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X2X6,2,-1.109,-1.109,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X2X7,2,-0.042,-0.042,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X3X4,2,-0.885,-0.885,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X3X5,2,1.564,1.564,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X3X6,2,6.662,6.662,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X3X7,2,0.162,0.162,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X4X5,2,0.606,0.606,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X4X6,2,-0.563,-0.563,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X4X7,2,0.011,0.011,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X5X7,2,0.159,0.159,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X6X7,2,-0.073,-0.073,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X1,2,-0.058,-0.058,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X2,2,-0.092,-0.092,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X3,2,0.424,0.424,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X4,2,-0.349,-0.349,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X5,2,-0.891,-0.891,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X6,2,1.844,1.844,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X7,2,0.221,0.221,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X1X4,2,0.213,0.213,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X1X5,2,-0.156,-0.156,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X1X6,2,0.054,0.054,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X1X7,2,0.012,0.012,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X2X4,2,-0.924,-0.924,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X2X5,2,1.138,1.138,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X2X6,2,0.282,0.282,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X2X7,2,-0.011,-0.011,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X3X4,2,3.667,3.667,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X3X5,2,-5.257,-5.257,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X3X6,2,-3.898,-3.898,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X3X7,2,-0.183,-0.183,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X4X5,2,-0.042,-0.042,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X4X6,2,-2.154,-2.154,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X4X7,2,-0.118,-0.118,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X5X7,2,-0.003,-0.003,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X6X7,2,0.082,0.082,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.WITH,VDLFL1Z,2,0,0,cognition,0,other,FALSE
+VDWDIMMZ.WITH,VDWDDELZ,2,0.019,NA,cognition,NA,other,FALSE
+VDWDIMMZ.WITH,VDEXF7Z,2,0,NA,cognition,NA,other,FALSE
+VDWDDELZ.WITH,VDLFL1Z,2,0,0,cognition,0,other,FALSE
+VDWDDELZ.WITH,VDEXF7Z,2,0,NA,cognition,NA,other,FALSE
+VDEXF7Z.WITH,VDLFL1Z,2,0,0,cognition,0,other,FALSE
+Intercepts,VDLFL1Z,2,0.154,0.155,cognition,-0.0010000000000000009,mean/intercept,TRUE
+Intercepts,VDWDIMMZ,2,0.456,0.456,cognition,0,mean/intercept,TRUE
+Intercepts,VDWDDELZ,2,0.337,0.328,cognition,0.009000000000000008,mean/intercept,TRUE
+Intercepts,VDEXF7Z,2,0.555,0.554,cognition,0.0010000000000000009,mean/intercept,TRUE
+Thresholds,VDORI$1,2,-4.648,-4.715,cognition,0.06700000000000017,threshold,TRUE
+Thresholds,VDORI$2,2,-3.881,-3.956,cognition,0.07500000000000018,threshold,TRUE
+Thresholds,VDORI$3,2,-2.956,-2.86,cognition,-0.09600000000000009,threshold,TRUE
+Thresholds,VDORI$4,2,-0.863,-0.877,cognition,0.014000000000000012,threshold,TRUE
+Thresholds,VDLFL2$1,2,-6.248,-6.889,cognition,0.641,threshold,TRUE
+Thresholds,VDLFL2$2,2,-2.932,-3.093,cognition,0.16100000000000003,threshold,TRUE
+Thresholds,VDLFL3$1,2,-4.156,-4.102,cognition,-0.05399999999999938,threshold,TRUE
+Thresholds,VDLFL3$2,2,-0.321,-0.325,cognition,0.0040000000000000036,threshold,TRUE
+Thresholds,VDSEVENS$1,2,-2.07,-2.089,cognition,0.019000000000000128,threshold,TRUE
+Thresholds,VDSEVENS$2,2,-1.004,-1.043,cognition,0.038999999999999924,threshold,TRUE
+Thresholds,VDSEVENS$3,2,-0.405,-0.418,cognition,0.012999999999999956,threshold,TRUE
+Thresholds,VDSEVENS$4,2,0.143,0.153,cognition,-0.010000000000000009,threshold,TRUE
+Thresholds,VDSEVENS$5,2,1.019,1.076,cognition,-0.05700000000000016,threshold,TRUE
+Thresholds,VDCOUNT$1,2,-2.818,-2.665,cognition,-0.15300000000000002,threshold,TRUE
+Thresholds,NPG014$1,2,1.571,1.447,cognition,0.12399999999999989,threshold,TRUE
+Thresholds,NPG021$1,2,1.78,1.776,cognition,0.0040000000000000036,threshold,TRUE
+Thresholds,NPG023$1,2,2.444,2.484,cognition,-0.040000000000000036,threshold,TRUE
+Thresholds,NPG030$1,2,2.018,2.01,cognition,0.008000000000000007,threshold,TRUE
+Thresholds,NPG040$1,2,1.107,1.05,cognition,0.05699999999999994,threshold,TRUE
+Thresholds,NPG041$1,2,2.033,1.934,cognition,0.09899999999999998,threshold,TRUE
+Thresholds,NPG044$1,2,1.556,1.55,cognition,0.006000000000000005,threshold,TRUE
+Thresholds,NPG047$1,2,2.141,2.114,cognition,0.027000000000000135,threshold,TRUE
+Thresholds,NPG050$1,2,2.287,2.402,cognition,-0.11500000000000021,threshold,TRUE
+Thresholds,NPG059$1,2,1.932,1.952,cognition,-0.020000000000000018,threshold,TRUE
+Thresholds,PD102$1,2,-3.789,-3.356,cognition,-0.4330000000000003,threshold,TRUE
+Thresholds,PD102$2,2,0.778,0.707,cognition,0.07100000000000006,threshold,TRUE
+Residual.Variances,VDLFL1Z,2,0.005,0.005,cognition,0,other,FALSE
+Residual.Variances,VDWDIMMZ,2,0.023,0.023,cognition,0,other,FALSE
+Residual.Variances,VDWDDELZ,2,0.032,0.032,cognition,0,other,FALSE
+Residual.Variances,VDEXF7Z,2,0.02,0.023,cognition,-0.002999999999999999,other,FALSE
+VDORI.ON,X1,3,-0.076,-0.076,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X2,3,0.391,0.391,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X3,3,-1.647,-1.647,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X4,3,0.76,0.76,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X5,3,-0.031,-0.031,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X6,3,-0.204,-0.204,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X7,3,0.146,0.146,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X1X4,3,0.007,0.007,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X1X5,3,0.138,0.138,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X1X6,3,0.082,0.082,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X1X7,3,-0.01,-0.01,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X2X4,3,-0.273,-0.273,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X2X5,3,-1.067,-1.067,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X2X6,3,-1.065,-1.065,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X2X7,3,0.029,0.029,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X3X4,3,1.132,1.132,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X3X5,3,4.982,4.982,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X3X6,3,9.34,9.34,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X3X7,3,-0.09,-0.09,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X4X5,3,1.014,1.014,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X4X6,3,-0.106,-0.106,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X4X7,3,-0.054,-0.054,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X5X7,3,-0.013,-0.013,cognition,0,regression (fixed norms),FALSE
+VDORI.ON,X6X7,3,-0.081,-0.081,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X1,3,-0.006,-0.006,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X2,3,0.016,0.016,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X3,3,-0.042,-0.042,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X4,3,0.001,0.001,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X5,3,-0.028,-0.028,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X6,3,-0.033,-0.033,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X7,3,0.009,0.009,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X1X4,3,0.003,0.003,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X1X5,3,0.001,0.001,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X1X6,3,0.003,0.003,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X1X7,3,0.001,0.001,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X2X4,3,-0.015,-0.015,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X2X5,3,0.002,0.002,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X2X6,3,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X2X7,3,-0.004,-0.004,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X3X4,3,0.047,0.047,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X3X5,3,-0.022,-0.022,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X3X6,3,-0.049,-0.049,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X3X7,3,0.014,0.014,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X4X5,3,-0.01,-0.01,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X4X6,3,0.022,0.022,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X4X7,3,0.003,0.003,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X5X7,3,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDLFL1Z.ON,X6X7,3,-0.004,-0.004,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X1,3,-0.069,-0.069,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X2,3,-0.544,-0.544,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X3,3,3.344,3.344,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X4,3,-0.783,-0.783,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X5,3,-1.332,-1.332,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X6,3,-0.658,-0.658,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X7,3,0.206,0.206,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X1X4,3,-0.101,-0.101,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X1X5,3,0.309,0.309,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X1X6,3,0.487,0.487,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X1X7,3,0.031,0.031,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X2X4,3,1.714,1.714,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X2X5,3,-2.129,-2.129,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X2X6,3,-3.447,-3.447,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X2X7,3,-0.226,-0.226,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X3X4,3,-7.026,-7.026,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X3X5,3,10.395,10.395,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X3X6,3,14.016,14.016,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X3X7,3,1.296,1.296,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X4X5,3,-0.668,-0.668,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X4X6,3,1.013,1.013,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X4X7,3,-0.018,-0.018,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X5X7,3,0.316,0.316,cognition,0,regression (fixed norms),FALSE
+VDLFL2.ON,X6X7,3,0.127,0.127,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X1,3,-0.08,-0.08,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X2,3,0.29,0.29,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X3,3,-1.424,-1.424,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X4,3,-0.272,-0.272,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X5,3,-0.921,-0.921,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X6,3,-1.132,-1.132,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X7,3,0.065,0.065,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X1X4,3,0.14,0.14,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X1X5,3,0.055,0.055,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X1X6,3,-0.021,-0.021,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X1X7,3,0,0,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X2X4,3,-0.81,-0.81,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X2X5,3,-0.106,-0.106,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X2X6,3,0.466,0.466,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X2X7,3,0.026,0.026,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X3X4,3,4.157,4.157,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X3X5,3,0.195,0.195,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X3X6,3,-2.935,-2.935,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X3X7,3,-0.185,-0.185,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X4X5,3,0.032,0.032,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X4X6,3,0.334,0.334,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X4X7,3,0.11,0.11,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X5X7,3,0.204,0.204,cognition,0,regression (fixed norms),FALSE
+VDLFL3.ON,X6X7,3,0.098,0.098,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X1,3,-0.006,-0.006,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X2,3,0.019,0.019,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X3,3,-0.103,-0.103,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X4,3,0.055,0.055,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X5,3,-0.067,-0.067,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X6,3,-0.013,-0.013,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X7,3,0.019,0.019,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X1X4,3,0.006,0.006,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X1X5,3,0.006,0.006,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X1X6,3,-0.004,-0.004,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X1X7,3,0,0,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X2X4,3,-0.04,-0.04,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X2X5,3,-0.028,-0.028,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X2X6,3,0.036,0.036,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X2X7,3,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X3X4,3,0.188,0.188,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X3X5,3,0.093,0.093,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X3X6,3,-0.18,-0.18,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X3X7,3,0.008,0.008,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X4X5,3,0.026,0.026,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X4X6,3,-0.025,-0.025,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X4X7,3,0.001,0.001,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X5X7,3,-0.005,-0.005,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.ON,X6X7,3,-0.012,-0.012,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X1,3,-0.006,-0.006,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X2,3,0.008,0.008,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X3,3,-0.066,-0.066,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X4,3,0.061,0.061,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X5,3,-0.086,-0.086,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X6,3,0.006,0.006,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X7,3,0.021,0.021,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X1X4,3,0.008,0.008,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X1X5,3,0.005,0.005,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X1X6,3,-0.008,-0.008,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X1X7,3,0,0,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X2X4,3,-0.037,-0.037,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X2X5,3,-0.05,-0.05,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X2X6,3,0.006,0.006,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X2X7,3,0,0,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X3X4,3,0.168,0.168,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X3X5,3,0.236,0.236,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X3X6,3,0.048,0.048,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X3X7,3,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X4X5,3,0.012,0.012,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X4X6,3,-0.028,-0.028,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X4X7,3,0.003,0.003,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X5X7,3,-0.006,-0.006,cognition,0,regression (fixed norms),FALSE
+VDWDDELZ.ON,X6X7,3,-0.013,-0.013,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X1,3,-0.003,-0.003,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X2,3,-0.01,-0.01,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X3,3,0.066,0.066,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X4,3,-0.03,-0.03,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X5,3,-0.191,-0.191,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X6,3,-0.115,-0.115,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X7,3,0.026,0.026,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X1X4,3,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X1X5,3,0,0,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X1X6,3,0.007,0.007,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X1X7,3,0,0,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X2X4,3,0.016,0.016,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X2X5,3,-0.004,-0.004,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X2X6,3,-0.053,-0.053,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X2X7,3,-0.001,-0.001,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X3X4,3,-0.086,-0.086,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X3X5,3,0.057,0.057,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X3X6,3,0.28,0.28,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X3X7,3,0.004,0.004,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X4X5,3,0.064,0.064,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X4X6,3,0,0,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X4X7,3,-0.002,-0.002,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X5X7,3,0.011,0.011,cognition,0,regression (fixed norms),FALSE
+VDEXF7Z.ON,X6X7,3,-0.006,-0.006,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X1,3,-0.054,-0.054,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X2,3,-0.007,-0.007,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X3,3,0.531,0.531,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X4,3,-0.68,-0.68,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X5,3,-1.815,-1.815,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X6,3,-0.46,-0.46,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X7,3,0.166,0.166,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X1X4,3,0.012,0.012,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X1X5,3,0.076,0.076,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X1X6,3,0.198,0.198,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X1X7,3,0.011,0.011,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X2X4,3,0.111,0.111,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X2X5,3,-0.527,-0.527,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X2X6,3,-1.109,-1.109,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X2X7,3,-0.042,-0.042,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X3X4,3,-0.885,-0.885,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X3X5,3,1.564,1.564,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X3X6,3,6.662,6.662,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X3X7,3,0.162,0.162,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X4X5,3,0.606,0.606,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X4X6,3,-0.563,-0.563,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X4X7,3,0.011,0.011,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X5X7,3,0.159,0.159,cognition,0,regression (fixed norms),FALSE
+VDSEVENS.ON,X6X7,3,-0.073,-0.073,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X1,3,-0.058,-0.058,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X2,3,-0.092,-0.092,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X3,3,0.424,0.424,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X4,3,-0.349,-0.349,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X5,3,-0.891,-0.891,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X6,3,1.844,1.844,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X7,3,0.221,0.221,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X1X4,3,0.213,0.213,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X1X5,3,-0.156,-0.156,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X1X6,3,0.054,0.054,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X1X7,3,0.012,0.012,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X2X4,3,-0.924,-0.924,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X2X5,3,1.138,1.138,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X2X6,3,0.282,0.282,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X2X7,3,-0.011,-0.011,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X3X4,3,3.667,3.667,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X3X5,3,-5.257,-5.257,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X3X6,3,-3.898,-3.898,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X3X7,3,-0.183,-0.183,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X4X5,3,-0.042,-0.042,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X4X6,3,-2.154,-2.154,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X4X7,3,-0.118,-0.118,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X5X7,3,-0.003,-0.003,cognition,0,regression (fixed norms),FALSE
+VDCOUNT.ON,X6X7,3,0.082,0.082,cognition,0,regression (fixed norms),FALSE
+VDWDIMMZ.WITH,VDLFL1Z,3,0,0,cognition,0,other,FALSE
+VDWDIMMZ.WITH,VDWDDELZ,3,0.019,NA,cognition,NA,other,FALSE
+VDWDIMMZ.WITH,VDEXF7Z,3,0,NA,cognition,NA,other,FALSE
+VDWDDELZ.WITH,VDLFL1Z,3,0,0,cognition,0,other,FALSE
+VDWDDELZ.WITH,VDEXF7Z,3,0,NA,cognition,NA,other,FALSE
+VDEXF7Z.WITH,VDLFL1Z,3,0,0,cognition,0,other,FALSE
+Intercepts,VDLFL1Z,3,0.114,0.12,cognition,-0.0059999999999999915,mean/intercept,TRUE
+Intercepts,VDWDIMMZ,3,0.358,0.358,cognition,0,mean/intercept,TRUE
+Intercepts,VDWDDELZ,3,0.227,0.223,cognition,0.0040000000000000036,mean/intercept,TRUE
+Intercepts,VDEXF7Z,3,0.456,0.469,cognition,-0.012999999999999956,mean/intercept,TRUE
+Thresholds,VDORI$1,3,-2.58,-2.533,cognition,-0.04700000000000015,threshold,TRUE
+Thresholds,VDORI$2,3,-1.775,-1.669,cognition,-0.10599999999999987,threshold,TRUE
+Thresholds,VDORI$3,3,-0.996,-0.821,cognition,-0.17500000000000004,threshold,TRUE
+Thresholds,VDORI$4,3,0.176,0.391,cognition,-0.21500000000000002,threshold,TRUE
+Thresholds,VDLFL2$1,3,-5.342,-6.134,cognition,0.7920000000000007,threshold,TRUE
+Thresholds,VDLFL2$2,3,-1.32,-1.72,cognition,0.3999999999999999,threshold,TRUE
+Thresholds,VDLFL3$1,3,-2.013,-2.226,cognition,0.21300000000000008,threshold,TRUE
+Thresholds,VDLFL3$2,3,0.532,0.497,cognition,0.03500000000000003,threshold,TRUE
+Thresholds,VDSEVENS$1,3,-1.413,-1.594,cognition,0.18100000000000005,threshold,TRUE
+Thresholds,VDSEVENS$2,3,-0.299,-0.442,cognition,0.14300000000000002,threshold,TRUE
+Thresholds,VDSEVENS$3,3,0.477,0.208,cognition,0.269,threshold,TRUE
+Thresholds,VDSEVENS$4,3,0.964,0.708,cognition,0.256,threshold,TRUE
+Thresholds,VDSEVENS$5,3,1.588,1.425,cognition,0.16300000000000003,threshold,TRUE
+Thresholds,VDCOUNT$1,3,-2.121,-2.062,cognition,-0.05900000000000016,threshold,TRUE
+Thresholds,NPG014$1,3,0.621,0.618,cognition,0.0030000000000000027,threshold,TRUE
+Thresholds,NPG021$1,3,0.603,0.653,cognition,-0.050000000000000044,threshold,TRUE
+Thresholds,NPG023$1,3,1.335,1.337,cognition,-0.0020000000000000018,threshold,TRUE
+Thresholds,NPG030$1,3,1.262,1.327,cognition,-0.06499999999999995,threshold,TRUE
+Thresholds,NPG040$1,3,0.275,0.363,cognition,-0.08799999999999997,threshold,TRUE
+Thresholds,NPG041$1,3,0.503,0.57,cognition,-0.06699999999999995,threshold,TRUE
+Thresholds,NPG044$1,3,0.595,0.57,cognition,0.025000000000000022,threshold,TRUE
+Thresholds,NPG047$1,3,0.872,0.916,cognition,-0.04400000000000004,threshold,TRUE
+Thresholds,NPG050$1,3,0.955,1.053,cognition,-0.09799999999999998,threshold,TRUE
+Thresholds,NPG059$1,3,0.718,0.668,cognition,0.04999999999999993,threshold,TRUE
+Thresholds,PD102$1,3,-3.14,-2.879,cognition,-0.2610000000000001,threshold,TRUE
+Thresholds,PD102$2,3,0.624,0.537,cognition,0.08699999999999997,threshold,TRUE
+Residual.Variances,VDLFL1Z,3,0.005,0.005,cognition,0,other,FALSE
+Residual.Variances,VDWDIMMZ,3,0.023,0.023,cognition,0,other,FALSE
+Residual.Variances,VDWDDELZ,3,0.032,0.032,cognition,0,other,FALSE
+Residual.Variances,VDEXF7Z,3,0.02,0.023,cognition,-0.002999999999999999,other,FALSE
+Means,CG#1,Categorical.Latent.Variables,1.819,1.819,cognition,0,class logit,TRUE
+Means,CG#2,Categorical.Latent.Variables,0.768,0.768,cognition,0,class logit,TRUE
+VDWDDELZ.WITH,VDWDIMMZ,1,NA,0.019,cognition,NA,other,FALSE
+VDEXF7Z.WITH,VDWDIMMZ,1,NA,0,cognition,NA,other,FALSE
+VDEXF7Z.WITH,VDWDDELZ,1,NA,0,cognition,NA,other,FALSE
+VDWDDELZ.WITH,VDWDIMMZ,2,NA,0.019,cognition,NA,other,FALSE
+VDEXF7Z.WITH,VDWDIMMZ,2,NA,0,cognition,NA,other,FALSE
+VDEXF7Z.WITH,VDWDDELZ,2,NA,0,cognition,NA,other,FALSE
+VDWDDELZ.WITH,VDWDIMMZ,3,NA,0.019,cognition,NA,other,FALSE
+VDEXF7Z.WITH,VDWDIMMZ,3,NA,0,cognition,NA,other,FALSE
+VDEXF7Z.WITH,VDWDDELZ,3,NA,0,cognition,NA,other,FALSE
+Means,JORM,1,3.074,3.078,jorm,-0.0040000000000000036,mean/intercept,TRUE
+Thresholds,NPG014$1,1,1.826,1.812,jorm,0.014000000000000012,threshold,TRUE
+Thresholds,NPG021$1,1,2.309,1.812,jorm,0.4970000000000001,threshold,TRUE
+Thresholds,NPG023$1,1,2.754,3.314,jorm,-0.56,threshold,TRUE
+Thresholds,NPG030$1,1,2.287,2.342,jorm,-0.05500000000000016,threshold,TRUE
+Thresholds,NPG040$1,1,1.579,1.335,jorm,0.244,threshold,TRUE
+Thresholds,NPG041$1,1,2.57,2.464,jorm,0.10599999999999987,threshold,TRUE
+Thresholds,NPG044$1,1,2.232,1.969,jorm,0.2630000000000001,threshold,TRUE
+Thresholds,NPG047$1,1,2.445,1.946,jorm,0.4989999999999999,threshold,TRUE
+Thresholds,NPG050$1,1,2.471,2.14,jorm,0.33099999999999996,threshold,TRUE
+Thresholds,NPG059$1,1,3.716,2.42,jorm,1.2960000000000003,threshold,TRUE
+Variances,JORM,1,0.426,0.452,jorm,-0.026000000000000023,other,FALSE
+Means,JORM,2,3.666,3.722,jorm,-0.05600000000000005,mean/intercept,TRUE
+Thresholds,NPG014$1,2,-0.112,-0.433,jorm,0.321,threshold,TRUE
+Thresholds,NPG021$1,2,-0.261,-0.647,jorm,0.386,threshold,TRUE
+Thresholds,NPG023$1,2,0.582,0.419,jorm,0.16299999999999998,threshold,TRUE
+Thresholds,NPG030$1,2,0.205,-0.067,jorm,0.272,threshold,TRUE
+Thresholds,NPG040$1,2,-0.568,-0.693,jorm,0.125,threshold,TRUE
+Thresholds,NPG041$1,2,-0.303,-0.624,jorm,0.321,threshold,TRUE
+Thresholds,NPG044$1,2,-0.439,-0.827,jorm,0.38799999999999996,threshold,TRUE
+Thresholds,NPG047$1,2,0.168,-0.307,jorm,0.475,threshold,TRUE
+Thresholds,NPG050$1,2,0.271,0.159,jorm,0.11200000000000002,threshold,TRUE
+Thresholds,NPG059$1,2,-0.036,-0.336,jorm,0.30000000000000004,threshold,TRUE
+Variances,JORM,2,0.426,0.452,jorm,-0.026000000000000023,other,FALSE
+Means,JORM,3,4.186,4.198,jorm,-0.012000000000000455,mean/intercept,TRUE
+Thresholds,NPG014$1,3,-0.863,-0.76,jorm,-0.10299999999999998,threshold,TRUE
+Thresholds,NPG021$1,3,-1.138,-1.204,jorm,0.06600000000000006,threshold,TRUE
+Thresholds,NPG023$1,3,0.096,0.043,jorm,0.053000000000000005,threshold,TRUE
+Thresholds,NPG030$1,3,0.05,0.178,jorm,-0.128,threshold,TRUE
+Thresholds,NPG040$1,3,-2.105,-2.005,jorm,-0.10000000000000009,threshold,TRUE
+Thresholds,NPG041$1,3,-1.808,-1.589,jorm,-0.21900000000000008,threshold,TRUE
+Thresholds,NPG044$1,3,-1.401,-1.526,jorm,0.125,threshold,TRUE
+Thresholds,NPG047$1,3,-1.321,-1.17,jorm,-0.15100000000000002,threshold,TRUE
+Thresholds,NPG050$1,3,-0.718,-0.677,jorm,-0.040999999999999925,threshold,TRUE
+Thresholds,NPG059$1,3,-1.651,-1.846,jorm,0.19500000000000006,threshold,TRUE
+Variances,JORM,3,0.426,0.452,jorm,-0.026000000000000023,other,FALSE
+Means,CG#1,Categorical.Latent.Variables,-0.479,-0.479,jorm,0,class logit,TRUE
+Means,CG#2,Categorical.Latent.Variables,-0.363,-0.363,jorm,0,class logit,TRUE
