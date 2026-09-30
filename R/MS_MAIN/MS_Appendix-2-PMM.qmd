@@ -60,7 +60,7 @@ For the final PMM, the cognition model uses the individual test scores, function
 - Logistic regression needs explicit interactions or nonlinear terms when the meaning of one score depends on another.
 - A PMM can represent distinct multivariate profiles through class-specific item distributions, although it still relies on assumptions about within-class dependence.
 
-In this project, the important wrinkle is that the PMM is not purely exploratory latent class analysis. It is calibrated using the HRS/HCAP Algorithm classification as the known class in the HCAP sample, then applies the fixed calibrated model to Core data. That makes it a supervised, model-based classifier: conceptually closer to generative discriminant analysis than to an unsupervised profiling exercise.
+In this project, the important wrinkle is that the PMM is not purely exploratory latent class analysis. It is calibrated using the HRS/HCAP Algorithm classification as the known class in the HCAP sample, then scores the Core measures of the same HCAP participants with the calibrated parameters (including the class proportions) held fixed. That makes it a supervised, model-based classifier: conceptually closer to generative discriminant analysis than to an unsupervised profiling exercise.
 
 A concise manuscript description would be:
 

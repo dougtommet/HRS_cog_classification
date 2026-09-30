@@ -7,6 +7,10 @@
   - [Provenance: R/MS_MAIN/MS_Tab_Fig_Apndx-030-Table-1.qmd]
 - Table 2: weighted classification margins
   - HRS/HCAP Algorithm; Core algorithm; PMM; Langa-Weir; Hudomiet
+  - HCAP16WGTR-weighted margins
+    - HRS/HCAP Algorithm: `r analysis2_margin_text("HRS/HCAP Algorithm")`
+    - Core algorithm: `r analysis2_margin_text("Core algorithm")`
+    - PMM: `r analysis2_margin_text("PMM")`
   - [Provenance: R/MS_MAIN/MS_010_results_objects.R]
 - Figure 1: PMM class-probability distributions
   - Probability separation; uncertainty near class boundaries

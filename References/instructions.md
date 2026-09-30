@@ -22,7 +22,7 @@ Workflows depend on derived data written by earlier workflows. Rebuild upstream 
 
 A4 (Stata) reads `R_objects/025_hrs16_cog.dta` from A1. A6 is ad hoc debugging.
 
-Links under "Final rendered output" point to the most recent report committed to `main`, served through raw.githack.com. They only work after the report is pushed, and they must be updated by hand when a newer report is committed. DOCX links download rather than display.
+Links under "Final rendered output" point to the most recent report committed to `main`, served through raw.githack.com. They only work after the report is pushed, and they must be updated by hand when a newer report is committed. DOCX links open in Microsoft's Office Online viewer, which fetches the file from raw.githubusercontent.com (this works only while the repository is public).
 
 ### Analysis A0: HRS 2016–2022 data processing
 
@@ -80,12 +80,12 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis2_Driver.R`
 - Final rendered output:
   - `./Reports/MS_Main_[date].docx`, `MS_Tab_Fig_Apndx_[date].docx`, `MS_Appendix_1_[date].docx`, `MS_Appendix_2_[date].docx`, `MS_Appendix_3_[date].docx`
-  - Most recent:
-    - https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/MS_Main_2026-09-23.docx
-    - https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/MS_Tab_Fig_Apndx_2026-09-23.docx
-    - https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/MS_Appendix_1_2026-09-23.docx
-    - https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/MS_Appendix_2_2026-09-23.docx
-    - https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/MS_Appendix_3_2026-09-23.docx
+  - Most recent (opens in the Office Online viewer):
+    - [Manuscript](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Main_2026-09-30.docx)
+    - [Tables and figures](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Tab_Fig_Apndx_2026-09-30.docx)
+    - [Appendix 1](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_1_2026-09-30.docx)
+    - [Appendix 2](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_2_2026-09-30.docx)
+    - [Appendix 3](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_3_2026-09-30.docx)
 - Data inputs:
   - `./R_objects/A7_005_hrs16_merged.rds`, `./R_objects/A7_100_hcap_tables.rds` (Analysis A7)
   - `./R_objects/PMM_100.RDS`, `./mplus_output/pmm_103/`, `./mplus_output/pmm_103_jorm/` (Analysis A3)
@@ -93,7 +93,7 @@ Links under "Final rendered output" point to the most recent report committed to
 - Main derived data products:
   - `./Figures/MS_Main-Figure-2-PMM-Class-Probabilities.png`
 - Date initiated: 2026-03-24
-- Date last updated: 2026-09-23
+- Date last updated: 2026-09-30
 
 ### Analysis A3: PMM profile mixture modeling analysis report
 
