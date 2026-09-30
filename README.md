@@ -260,6 +260,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - rendered reports in `./Reports`
   - figures in `./Figures`
   - references and project guidance in `./References`
+  - repository maintenance scripts in `./tools`
 - Keep root drivers small and orchestration-focused.
 - If a workflow produces multiple final artifacts, the driver may render multiple control files.
 
@@ -280,5 +281,23 @@ For most work in this repository, the expected pattern is:
 2. Let the driver call the project control file.
 3. Let the control file include the analysis-specific child QMD files or call the necessary R/Stata code.
 4. Look for final human-readable outputs in `Reports/` or `Figures/`.
+5. Stage the new outputs (`git add`), run `python3 tools/update_readme.py`, and commit the outputs, sources, and README together.
 
 That pattern keeps the workflows easier to rebuild, document, and automate without changing the legacy source structure.
+
+## Keeping This README Current
+
+`tools/update_readme.py` refreshes the parts of the Project Overview that change when an analysis is rerun. Everything else in this README is hand-written and is not touched.
+
+- What it updates, for each `### Analysis A#:` section:
+  - "Most recent" links: the newest dated report tracked in git (committed or staged). HTML and PNG files link through raw.githack.com; DOCX files link through the Office Online viewer.
+  - "Date last updated": the latest commit touching that analysis's source files, or today if any of them has uncommitted changes.
+  - It then copies the Project Overview into `References/instructions.md` so the two stay identical.
+- Usage, from the project root:
+  - `python3 tools/update_readme.py` rewrites both files in place.
+  - `python3 tools/update_readme.py --check` changes nothing; it prints a diff and exits 1 if either file is stale.
+- Configuration: the `ANALYSES` table at the top of the script maps each analysis to its report filename patterns and source paths. Update it when you add an analysis or rename its outputs. The new analysis also needs its own `### Analysis A#:` section in this README, written by hand.
+- Limits:
+  - Links point at `main` on GitHub, so they work only after the files are pushed.
+  - "Date initiated" is written by hand. Git history does not always show where an analysis began.
+  - Requires only Python 3 and git. It retries git natively if an Intel (x86_64) Python on Apple Silicon cannot run `/usr/bin/git`.
