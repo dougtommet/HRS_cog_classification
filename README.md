@@ -20,7 +20,7 @@ This repository contains ten related but distinct analysis workflows. Existing s
 
 ### Analysis A0: HRS 2016 data processing
 
-- Driver: none (no root-level driver yet; render the control file directly)
+- Driver: `./Analysis0_Driver.R`
 - Control: `./R/A0_000-Main_control.qmd`
 - Primary source programs:
   - `./R/A0_001-libraries.R`
@@ -28,9 +28,11 @@ This repository contains ten related but distinct analysis workflows. Existing s
   - `./R/A0_005-read_data.R` through `./R/A0_030-merge_data.R`
   - Corresponding `.qmd` chapter files: `./R/A0_005-read_data.qmd` through `./R/A0_030-merge_data.qmd`
 - Rebuild command:
-  - `quarto render R/A0_000-Main_control.qmd`
+  - `Rscript Analysis0_Driver.R`
 - Final rendered output:
-  - `./R/A0_000-Main_control.html`
+  - `./Reports/A0_HRS_data_processing_[date].html`
+- Data inputs:
+  - Raw HRS/HCAP files read from Dropbox paths set in `./R/A0_002-folder_paths.R` (machine-specific)
 - Main derived data products:
   - `./R_objects/A0_030_hrs16_merged.rds`
   - `./R_objects/A0_030_hcap16_merged.rds`
@@ -131,7 +133,7 @@ This repository contains ten related but distinct analysis workflows. Existing s
 
 ### Analysis A7: HRS 2016 cognition classification
 
-- Driver: none (no root-level driver yet; render the control file directly)
+- Driver: `./Analysis7_Driver.R`
 - Control: `./R/A7_000-Main_control.qmd`
 - Primary source programs:
   - `./R/A7_001-libraries.R`
@@ -142,9 +144,11 @@ This repository contains ten related but distinct analysis workflows. Existing s
   - `./R/A7_100-comparison_of_diagnoses.R`
   - Corresponding `.qmd` chapter files for each step above
 - Rebuild command:
-  - `quarto render R/A7_000-Main_control.qmd`
+  - `Rscript Analysis7_Driver.R`
 - Final rendered output:
-  - `./Reports/A7_000-Main_control_[date].html`
+  - `./Reports/A7_HRS_cog_classification_[date].html`
+- Shared data export:
+  - `./Data/Dx_for_LK-2026-06-11.csv` (written by `A7_075`; person-wave `dx_v1` diagnoses for 2016–2022; filename is hard-coded)
 - Main derived data products:
   - `./R_objects/A7_005_hrs16_merged.rds`
   - `./R_objects/A7_055_hrs16_merged.rds`
