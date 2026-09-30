@@ -174,3 +174,20 @@
 - `Rscript Analysis3_Driver.R` completed after the guard was removed, refreshing the PMM Mplus outputs, class-probability figures, and `Reports/PMM_Analysis_Report_2026-09-23.html`.
 - `Rscript Analysis2_Driver.R` completed using the refreshed PMM outputs; the manuscript, tables/figures report, and three appendices now reflect the updated PMM results.
 - Table 1 row ordering was also corrected so the Jorm Mean (SD) appears before the Jorm missingness row; regenerated figures, DOCX reports, and Slides2603 output were refreshed with the current PMM results.
+
+### PMM results updated with weighted priors (refit complete)
+
+- The PMM calibration and scoring models were refit with the weighted-prior code. With the `eval: false` guard removed (see the entry above), `Analysis3_Driver.R` refits them, and Analysis 2 and Slides2603 were rebuilt from the refreshed outputs.
+- Verified: `pmm_hcap_103b.inp` fixes `[ c#1 @ 2.01895756 c#2 @ 0.84226366 ]` and `pmm_hcap_103b_jorm.inp` fixes `[ c#1 @ -0.14665973 c#2 @ -0.14869742 ]`. The 103b model-estimated class proportions are 69.4/21.4/9.2% (Normal/MCI/Dementia), matching the weighted HCAP priors.
+- The fix made a big difference for MCI. PMM weighted margins (Table 2, HCAP16WGTR), free priors to weighted priors:
+  - Normal: 82.3% to 76.7%
+  - MCI: 4.7% to 13.6%
+  - Dementia: 12.9% to 9.7%
+- Agreement changed little, and the pattern holds: PMM agrees with the HRS/HCAP Algorithm at least as well as the Core algorithm does.
+  - PMM vs HRS/HCAP Algorithm: 3-class kappa 0.509 to 0.509; binary kappa 0.437 to 0.429. Core algorithm: 0.505 and 0.352 (unchanged).
+  - PMM vs HCAP consensus: 3-class 0.528 to 0.486; binary 0.384 to 0.464.
+  - PMM vs Langa-Weir: 3-class 0.583 to 0.575; binary 0.487 to 0.480.
+  - PMM vs Hudomiet: 3-class 0.633 to 0.623; binary 0.515 to 0.529.
+- PMM MCI (13.6%) remains below the HRS/HCAP Algorithm's weighted MCI proportion (21.4%). Modal assignment still favors Normal at the Normal/MCI boundary.
+- Updated outputs: `Figures/MS_Main-Figure-2-PMM-Class-Probabilities.png`, the Slides2603 class-probability figures, and the dated Analysis 2 DOCX reports. The free-prior outputs remain in `mplus_output/*/archive_free_priors/`.
+- Next: commit and push the refit outputs and rebuilt reports. Update the manuscript's PMM text for the new margins. Each Analysis 3 render now refits all PMM models, so expect longer run times.
