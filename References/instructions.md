@@ -251,8 +251,10 @@ Links under "Final rendered output" point to the most recent report committed to
   - rendered reports in ./Reports
   - figures in ./Figures
   - references and project guidance in ./References
+  - repository maintenance scripts in ./tools
 - Keep root drivers small and orchestration-focused.
 - If a workflow produces multiple final artifacts, the driver may render multiple control files.
+- After rendering and staging new outputs, run `python3 tools/update_readme.py` to refresh the README links and dates and sync the Project Overview here. Do not edit the "Most recent" or "Date last updated" lines by hand.
 
 ## Dependencies And Notes
 
