@@ -94,6 +94,39 @@ analysis2_class_margins <- dplyr::bind_rows(
     names_glue = "{classification}_{.value}"
   )
 
+# "Normal x%, MCI y%, Dementia z%" for one method's HCAP16WGTR-weighted margins.
+analysis2_margin_text <- function(method_name) {
+  margins <- analysis2_class_margins |>
+    dplyr::filter(.data$method == method_name)
+  percents <- vapply(
+    analysis2_pmm$labels$class,
+    function(class) margins[[paste0(class, "_weighted_percent")]],
+    numeric(1)
+  )
+  paste0(names(percents), " ", sprintf("%.1f%%", percents), collapse = ", ")
+}
+
+# PMM class proportions fixed in the scoring models (weighted_class_logits() in
+# R/PMM_101_mplus_function.R), read back from the model-estimated class
+# proportions in the Mplus output. Mplus classes 1-3 are Normal, MCI, Dementia.
+analysis2_pmm_prior_text <- function(model_path) {
+  class_counts <- suppressWarnings(MplusAutomation::readModels(model_path))[["class_counts"]][["modelEstimated"]]
+  paste0(
+    analysis2_pmm$labels$class[class_counts$class], " ",
+    sprintf("%.1f%%", 100 * class_counts$proportion),
+    collapse = ", "
+  )
+}
+
+analysis2_pmm_priors <- c(
+  cognition = analysis2_pmm_prior_text(
+    here::here("mplus_output", "pmm_103", "pmm_hcap_103b.out")
+  ),
+  jorm = analysis2_pmm_prior_text(
+    here::here("mplus_output", "pmm_103_jorm", "pmm_hcap_103b_jorm.out")
+  )
+)
+
 analysis2_class_margin_display <- analysis2_class_margins |>
   dplyr::mutate(
     method = factor(

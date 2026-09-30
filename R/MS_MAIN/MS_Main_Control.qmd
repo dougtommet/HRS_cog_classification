@@ -74,7 +74,7 @@ source(here::here("R", "MS_MAIN", "MS_010_results_objects.R"))
 
 - **Core algorithm**: HCAP algorithm adapted to the HRS Core data
 
-- **PMM**: Profile mixture model applied to data collected in the HRS Core with prediction calibrated using the HRS/HCAP sample and applied to the core
+- **PMM**: Profile mixture model using measures collected in the HRS Core, calibrated to the HRS/HCAP Algorithm and scored in the HRS/HCAP sample
 
 <!-- This will insert a page break  -->
 

@@ -14,4 +14,5 @@
 - Interpretation limits
   - Classification agreement; no clinical diagnostic validation outside HCAP consensus subset
   - MCI boundary; model-dependent and threshold-dependent assignments
-  - [Provenance: analysis design; inference]
+  - PMM agreement with the HRS/HCAP Algorithm is in-sample (apparent error rate; McLachlan, 1992); expected to be optimistic relative to application in new samples
+  - [Provenance: analysis design; inference; R/PMM_103_calibration_model.R]

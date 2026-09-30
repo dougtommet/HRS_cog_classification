@@ -41,8 +41,14 @@
 - HRS/HCAP calibration
   - Known-class HRS/HCAP Algorithm classification; cognitive, functional, self-report, informant indicators
   - No latent variables for overall cognition, individual tests used
-  - Fixed calibration parameters; Core application
+  - Calibration parameters fixed for scoring; scored in the same HRS/HCAP sample used for calibration (in-sample classification); not yet applied to the HRS Core sample outside HCAP
   - [Provenance: R/PMM_100_norming_npb.R; R/PMM_103_calibration_model.R]
+- Class proportions (priors)
+  - Class-specific parameters estimated with HCAP16WGTR; MLR estimation, Bayes-rule posterior classification (plug-in rule; McLachlan, 1992)
+  - Class proportions fixed at the HCAP16WGTR-weighted HRS/HCAP Algorithm distribution, computed outside Mplus; Mplus KNOWNCLASS estimates class proportions from unweighted counts
+    - Cognition model: `r analysis2_pmm_priors[["cognition"]]`
+    - Jorm model: `r analysis2_pmm_priors[["jorm"]]`
+  - [Provenance: R/PMM_101_mplus_function.R; R/PMM_103_calibration_model.R; R/PMM_104_weight_check.R; mplus_output/pmm_103/pmm_hcap_103b.out; mplus_output/pmm_103_jorm/pmm_hcap_103b_jorm.out]
 - Combined classification
   - Cognition-model probabilities; JORM-model probabilities when available
   - Probabilistic Normal/MCI/Dementia membership; replicated probability-weighted comparisons
