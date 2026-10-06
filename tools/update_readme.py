@@ -63,6 +63,11 @@ ANALYSES = {
         "outputs": [("Report", "Reports/PMM_Analysis_Report_*.html")],
         "sources": ["R/PMM_*.R", "R/PMM_*.qmd", "Analysis3_Driver.R"],
     },
+    "A3_2": {
+        "outputs": [("Report", "Reports/A3_2_PMM_scoring_*.html")],
+        "fallback": "no driver render committed yet.",
+        "sources": ["R/A3_2/*.R", "R/A3_2/*.qmd", "Analysis3_2_Driver.R"],
+    },
     "A4": {
         "outputs": [(f"Figure {i}", f"Figures/Stata_Ad_Hoc_fig{i}.png") for i in range(1, 5)],
         "fallback": "no driver output committed. Legacy figures: {githack}Stata/fig1.png (also `fig2.png`–`fig4.png`)",
@@ -165,9 +170,9 @@ def update_section(section, cfg, tracked):
 
 
 def update_readme(text, tracked):
-    parts = re.split(r"(?m)^(?=### Analysis A\d+:)", text)
+    parts = re.split(r"(?m)^(?=### Analysis A\d+(?:_\d+)?:)", text)
     for n, part in enumerate(parts):
-        m = re.match(r"### Analysis (A\d+):", part)
+        m = re.match(r"### Analysis (A\d+(?:_\d+)?):", part)
         if m and m.group(1) in ANALYSES:
             parts[n] = update_section(part, ANALYSES[m.group(1)], tracked)
     return "".join(parts)

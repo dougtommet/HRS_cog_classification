@@ -1,0 +1,151 @@
+<script>
+// Relocates Quarto's auto-generated title block (title/author/date) into
+// the start of the first .page div, so it renders on page 1 instead of
+// floating outside the page stack.
+document.addEventListener('DOMContentLoaded', function () {
+  var header = document.getElementById('title-block-header');
+  var firstPage = document.querySelector('.page');
+  if (header && firstPage) {
+    while (header.lastChild) {
+      firstPage.insertBefore(header.lastChild, firstPage.firstChild);
+    }
+    header.remove();
+  }
+});
+</script>
+
+<script>
+// Relocates Quarto/Pandoc endnotes into the .page div where each footnote
+// was actually referenced, so footnotes render on their originating page
+// instead of being collected at the end of the document.
+document.addEventListener('DOMContentLoaded', function () {
+  var footnotesSection = document.getElementById('footnotes');
+  if (!footnotesSection) return;
+
+  // Preserve original global numbering before notes are split across pages.
+  var allNotes = Array.prototype.slice.call(footnotesSection.querySelectorAll('li'));
+  allNotes.forEach(function (note, idx) {
+    note.setAttribute('value', idx + 1);
+  });
+
+  document.querySelectorAll('a.footnote-ref').forEach(function (ref) {
+    var page = ref.closest('.page');
+    if (!page) return;
+
+    var noteId = ref.getAttribute('href').slice(1);
+    var note = document.getElementById(noteId);
+    if (!note) return;
+
+    var container = page.querySelector('.page-footnotes');
+    if (!container) {
+      container = document.createElement('div');
+      container.className = 'page-footnotes';
+      container.innerHTML = '<ol></ol>';
+      page.appendChild(container);
+    }
+    container.querySelector('ol').appendChild(note);
+  });
+
+  footnotesSection.remove();
+});
+</script>
+
+<script>
+// Quarto's native TOC only scans top-level headings, so headings nested
+// inside our .page divs are invisible to it and the sidebar renders empty.
+// Build the #TOC nav manually so letter.css's existing sidebar styles apply.
+//
+// Pandoc only promotes a `.page` div into a `<section>` (making it visible to
+// Quarto's native TOC) when the div's first block is its ONE AND ONLY
+// top-level heading. Pages with multiple h2s (like a page with several
+// sections) stay plain `<div class="page">`s that Pandoc's TOC scan never
+// sees. This means a document can end up with a native #TOC that silently
+// lists only some pages' headings depending on their shape. So we always
+// discard whatever (possibly incomplete) native TOC Pandoc emitted and
+// rebuild it ourselves from every `.page h2`/`.page h3` in the document.
+document.addEventListener('DOMContentLoaded', function () {
+  var existingNav = document.getElementById('TOC');
+  var existingSidebar = existingNav ? existingNav.closest('#quarto-margin-sidebar') : null;
+  if (existingSidebar) {
+    existingSidebar.remove();
+  } else if (existingNav) {
+    existingNav.remove();
+  }
+
+  var headings = Array.prototype.slice.call(document.querySelectorAll('.page h2, .page h3'));
+  if (!headings.length) return;
+
+  // When a `.page` div gets promoted to a `<section>`, its sole heading loses
+  // its own id (the id moves to the section), so fall back to the nearest
+  // ancestor id in that case.
+  function headingId(heading) {
+    if (heading.id) return heading.id;
+    var withId = heading.closest('[id]');
+    return withId ? withId.id : '';
+  }
+
+  var sidebar = document.createElement('div');
+  sidebar.id = 'quarto-margin-sidebar';
+
+  var nav = document.createElement('nav');
+  nav.id = 'TOC';
+  nav.setAttribute('role', 'doc-toc');
+
+  var title = document.createElement('h2');
+  title.className = 'toc-title';
+  title.textContent = 'Table of contents';
+  nav.appendChild(title);
+
+  var rootList = document.createElement('ul');
+  var currentSublist = null;
+
+  headings.forEach(function (heading) {
+    var li = document.createElement('li');
+    var a = document.createElement('a');
+    a.href = '#' + headingId(heading);
+    a.textContent = heading.textContent;
+    li.appendChild(a);
+
+    if (heading.tagName === 'H2') {
+      rootList.appendChild(li);
+      currentSublist = null;
+    } else {
+      if (!currentSublist) {
+        if (!rootList.lastElementChild) return;
+        currentSublist = document.createElement('ul');
+        rootList.lastElementChild.appendChild(currentSublist);
+      }
+      currentSublist.appendChild(li);
+    }
+  });
+
+  // Duplicate the list as a print-only TOC inside the page stack, since the
+  // sidebar is hidden in print. Its links are plain #id hrefs, which Chrome
+  // turns into working internal links in the exported PDF. It fills an
+  // explicit `::: {#print-toc}` div if the document has one; otherwise it is
+  // inserted on page 1, just below the relocated title/author/date.
+  var printToc = document.getElementById('print-toc');
+  if (!printToc) {
+    var firstPage = document.querySelector('.page');
+    if (firstPage) {
+      printToc = document.createElement('nav');
+      printToc.id = 'print-toc';
+      var titleParts = firstPage.querySelectorAll(':scope > h1.title, :scope > p.author, :scope > p.date');
+      var anchor = titleParts.length ? titleParts[titleParts.length - 1].nextSibling : firstPage.firstChild;
+      firstPage.insertBefore(printToc, anchor);
+    }
+  }
+  if (printToc) {
+    printToc.setAttribute('role', 'doc-toc');
+    var printTitle = document.createElement('p');
+    printTitle.className = 'print-toc-title';
+    printTitle.textContent = 'Contents';
+    printToc.appendChild(printTitle);
+    printToc.appendChild(rootList.cloneNode(true));
+  }
+
+  nav.appendChild(rootList);
+  sidebar.appendChild(nav);
+  document.body.appendChild(sidebar);
+});
+</script>

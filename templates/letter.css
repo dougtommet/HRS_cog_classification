@@ -1,0 +1,662 @@
+/* ==========================================================================
+   Letter Document Stylesheet for Quarto & HTML (8.5" × 11" with 1.0" margins)
+   ========================================================================== */
+
+
+/* By the way you could automate the production of pdf output:
+
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
+  --headless=new \
+  --disable-gpu \
+  --no-pdf-header-footer \
+  --print-to-pdf="output.pdf" \
+  "file://$(pwd)/document.html"
+*/
+
+/* --------------------------------------------------------------------------
+   Global Box Sizing
+   --------------------------------------------------------------------------
+   The asterisk (*) is a universal selector that applies this rule to every
+   single element on the page.
+
+   By default, browsers calculate the width of a box by adding width + padding
+   + border. This means an 8.5in wide container with 1.0in padding would actually
+   render wider, spilling off a standard paper sheet.
+
+   Setting 'box-sizing: border-box' tells the browser that the 8.5in measurement
+   already includes any internal padding and border lines, keeping the sheet
+   strictly locked to exact Letter paper dimensions.
+   -------------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+}
+
+/* --------------------------------------------------------------------------
+   Physical Paper Page Setup (Print & PDF Engines)
+   --------------------------------------------------------------------------
+   The @page rule talks directly to printing systems, browser print dialogs,
+   and PDF converters (like Chrome headless).
+
+   'size: 8.5in 11in' locks the output to 8.5 inches wide by 11 inches tall
+   (standard US Letter) in portrait orientation.
+
+   'margin: 1.0in' creates an unprintable safe margin around the outer edge of
+   the paper so content is not cut off by physical printer margins.
+   -------------------------------------------------------------------------- */
+@page {
+  size: 8.5in 11in;
+  margin: 1.0in;
+}
+
+/* --------------------------------------------------------------------------
+   Neutralize Quarto Outer Containers
+   --------------------------------------------------------------------------
+   Quarto wraps markdown content inside several auto-generated wrapper <div>
+   containers: #quarto-content, .page-columns, and main.content.
+
+   By default, these wrappers have background colors, drop shadows, and responsive
+   widths designed for standard web pages. We strip them here using '!important'
+   (which forces our choice over Quarto's defaults) so they become transparent,
+   borderless shells. This allows our custom '.page' divs to take center stage
+   as the visible sheets of paper.
+   -------------------------------------------------------------------------- */
+#quarto-content,
+.page-columns,
+main.content {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 auto !important;
+  width: auto !important;
+  max-width: 100% !important;
+}
+
+/* --------------------------------------------------------------------------
+   Screen Presentation: Simulated Stacked Letter Sheets
+   --------------------------------------------------------------------------
+   '@media screen' ensures these styles only apply when viewing the document
+   in a web browser on a monitor, tablet, or phone, not when printing.
+
+   1. 'body': Gives the browser background a medium-gray tone (#d1d5db) so the
+      white paper sheets visually pop off the screen, and adds vertical padding
+      so the top sheet does not touch the browser window edge.
+
+   2. '.page': Styles each markdown div marked with '::: {.page}' into an authentic
+      sheet of paper:
+      - 'background: #ffffff': Crisp white sheet.
+      - 'width: 8.5in' & 'min-height: 11in': Exact physical US Letter paper aspect ratio.
+      - 'margin: 0 auto 25mm auto': Centers each sheet horizontally in the window
+        and adds a 25mm visual gap between successive pages.
+      - 'padding: 1.0in': Keeps text inset by 1.0 inches on all sides so it does not touch
+        the paper edges.
+      - 'box-shadow': Soft drop-shadow underneath the paper to give it depth.
+      - 'border': Subtle boundary line defining the paper edge.
+      - 'overflow: hidden': Prevents any oversized content from bleeding beyond
+        the sheet boundary.
+   -------------------------------------------------------------------------- */
+@media screen {
+  body {
+    background-color: #d1d5db;
+    margin: 0;
+    padding: 30px 0;
+  }
+
+  .page {
+    background: #ffffff;
+    width: 8.5in;
+    min-height: 11in;
+    margin: 0 auto 25mm auto;
+    padding: 1.0in;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid #c7c7c7;
+    overflow: hidden;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Print & PDF Presentation: Clean Pagination
+   --------------------------------------------------------------------------
+   '@media print' executes when sending the document to a printer or exporting
+   to PDF ('Print to PDF').
+
+   1. 'body' & '.page' resets: Strips away the gray desk background, drop shadows,
+      and decorative sheet borders so ink is not wasted on paper shadows.
+
+   2. 'page-break-after: always' & 'break-after: page': Forces the printer to
+      eject the current sheet and start every '::: {.page}' block on a fresh,
+      new physical page.
+
+   3. 'break-after: avoid': Tells the print engine never to strand headings
+      (h1–h4) as orphans at the very bottom of a page without body text beneath.
+
+   4. 'break-inside: avoid': Instructs tables, figures, code boxes, and output
+      cells not to split in half across page folds whenever possible.
+   -------------------------------------------------------------------------- */
+@media print {
+  body {
+    background: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page {
+    background: none !important;
+    width: 100% !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    page-break-after: always;
+    break-after: page;
+  }
+
+  h1, h2, h3, h4 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  table, figure, pre, .cell {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Base Typography & Heading Hierarchy
+   --------------------------------------------------------------------------
+   Establishes consistent typographic rules across all textual content.
+
+   - 'body, p': Base paragraph text is locked to 11pt Arial, with a tight 1.1
+     line spacing for high-density document publishing.
+
+   - 'h1': 11pt Arial, bold, line spacing 1.2. The 'text-transform: uppercase'
+     rule forces all primary titles into capitalized letters automatically,
+     matching report guidelines without editing markdown text manually.
+
+   - 'h2': 11pt Arial, bold, normal casing, single spacing (1.0).
+
+   - 'h3': 11pt Arial, bold, italicized, single spacing (1.0).
+
+   - 'h4': 11pt Arial, regular weight, italicized, single spacing (1.0).
+   -------------------------------------------------------------------------- */
+body, p {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11pt;
+  line-height: 1.1;
+  font-weight: normal;
+  font-style: normal;
+}
+
+h1 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11pt;
+  line-height: 1.2;
+  font-weight: bold;
+  font-style: normal;
+  text-transform: uppercase;
+  margin-top: 1.2em;
+  margin-bottom: 0.6em;
+}
+
+h2 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11pt;
+  line-height: 1.0;
+  font-weight: bold;
+  font-style: normal;
+  text-transform: none;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+
+h3 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11pt;
+  line-height: 1.0;
+  font-weight: bold;
+  font-style: italic;
+  text-transform: none;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+
+h4 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11pt;
+  line-height: 1.0;
+  font-weight: normal;
+  font-style: italic;
+  text-transform: none;
+  margin-top: 0.8em;
+  margin-bottom: 0.4em;
+}
+
+/* --------------------------------------------------------------------------
+   Custom Utility Class: .compact
+   --------------------------------------------------------------------------
+   Used by wrapping content in '::: {.compact}' in markdown.
+   Forces all nested text, lists, and table cells down to 9pt Arial with
+   single line height (1.0). Useful for dense data, metadata, or notes.
+   -------------------------------------------------------------------------- */
+.compact,
+.compact p,
+.compact li,
+.compact td,
+.compact th {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9pt;
+  line-height: 1.0;
+}
+
+/* --------------------------------------------------------------------------
+   Custom Utility Class: .abstract
+   --------------------------------------------------------------------------
+   Used by wrapping text in '::: {.abstract}' in markdown.
+   Sets font size to 10pt Arial with a 1.2 line height, and indents the left
+   and right margins significantly (+0.75 inches on each side) to distinguish the
+   summary block from normal page text.
+   -------------------------------------------------------------------------- */
+.abstract {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+  line-height: 1.2;
+  margin: 1.5em 0.75in;
+}
+
+.abstract p {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+  line-height: 1.2;
+}
+
+/* --------------------------------------------------------------------------
+   Custom Utility Class: .center
+   --------------------------------------------------------------------------
+   Used by wrapping content in '::: {.center}' in markdown.
+   Centers text and block content horizontally within the page margins.
+   -------------------------------------------------------------------------- */
+.center {
+  text-align: center;
+  margin: 1.5em auto;
+}
+
+/* --------------------------------------------------------------------------
+   Custom Container: .page-footnotes
+   --------------------------------------------------------------------------
+   Populated by a script (see letter_css_scripts.html) that moves each endnote
+   into the .page div where it was referenced, so notes render on their
+   originating page instead of collecting at the end of the document.
+   -------------------------------------------------------------------------- */
+.page-footnotes {
+  margin-top: 1.5em;
+  padding-top: 6px;
+  border-top: 1px solid #9ca3af;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 8pt;
+  line-height: 1.3;
+}
+
+.page-footnotes ol {
+  margin: 0;
+  padding-left: 1.4em;
+}
+
+.page-footnotes li {
+  margin-bottom: 3px;
+}
+
+.page-footnotes li p {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 8pt;
+  margin: 0;
+}
+
+/* Footnote reference superscript in body text: 8pt but positioned for 11pt context */
+.footnote-ref sup {
+  font-size: 8pt;
+  vertical-align: super;
+}
+
+/* --------------------------------------------------------------------------
+   Text Size Variants: LaTeX-style sizing for inline spans and block divs
+   --------------------------------------------------------------------------
+   Inline usage:  [text]{.HUGE}, [text]{.tiny}, etc. — class lands on a
+   <span>, which has no competing font-size rule, so it applies directly.
+
+   Block usage:   ::: {.HUGE}\n paragraph(s) \n::: — class lands on a
+   <div> wrapping <p> children. Since 'body, p { font-size: 11pt; }' targets
+   <p> directly, that rule beats inheritance from the parent div unless we
+   also add an explicit '.HUGE p' (etc.) descendant rule here.
+   -------------------------------------------------------------------------- */
+.HUGE, .HUGE p { font-size: 36pt; }
+.huge, .huge p { font-size: 24pt; }
+.LARGE, .LARGE p { font-size: 16pt; }
+.Large, .Large p { font-size: 14pt; }
+.large, .large p { font-size: 12pt; }
+.small, .small p { font-size: 9pt; }
+.footnotesize, .footnotesize p { font-size: 8pt; }
+.tiny, .tiny p { font-size: 6pt; }
+
+/* --------------------------------------------------------------------------
+   Terminal Inputs, Code Chunks & Preformatted Outputs
+   --------------------------------------------------------------------------
+   Quarto outputs syntax-highlighted code chunks and knitr execution returns
+   inside diverse wrappers (.sourceCode, pre, code, .cell-output).
+
+   1. Typography: Standardizes every code element to 8pt fixed-width monospace
+      (SFMono, Menlo, Consolas) with 1.2 line spacing so columns align properly.
+
+   2. Background & Borders: Wraps outer code cells in a very light gray background
+      tint (#f9fafb) with a subtle 1px border (#e5e7eb) and rounded corners (4px).
+
+   3. Reset Inner Blocks: Forces nested pre/code children to be transparent and
+      borderless to prevent awkward double borders and shifted backgrounds.
+
+   4. Inline Code: Single backticks `like this` get a small gray badge (#f3f4f6)
+      without breaking text line heights.
+   -------------------------------------------------------------------------- */
+pre,
+code,
+pre code,
+div.sourceCode,
+div.sourceCode pre,
+.cell-output,
+.cell-output pre,
+.cell-output-stdout,
+.cell-output-stdout pre,
+.cell-output-stderr,
+.cell-output-stderr pre,
+pre > code.sourceCode,
+pre > code.sourceCode > span {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-size: 8pt !important;
+  line-height: 1.2 !important;
+}
+
+div.sourceCode,
+div.sourceCode pre,
+.cell-output,
+.cell-output pre,
+.cell-output-stdout,
+.cell-output-stderr {
+  background-color: #f9fafb !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 4px;
+}
+
+div.sourceCode,
+.cell-output {
+  margin: 0.8em 0 !important;
+  padding: 8px 12px !important;
+}
+
+div.sourceCode pre,
+.cell-output pre,
+.cell-output-stdout pre,
+.cell-output-stderr pre {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+code:not(pre code) {
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 3px;
+  padding: 1px 4px;
+}
+
+/* Container backgrounds: very light gray tint with subtle border */
+div.sourceCode,
+.cell-output,
+pre:not(div.sourceCode pre):not(.cell-output pre) {
+  background-color: #f9fafb !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 4px;
+  margin: 0.8em 0 !important;
+  padding: 8px 12px !important;
+}
+
+/* Prevent nested pre tags inside styled wrappers from doubling borders or padding */
+div.sourceCode pre,
+.cell-output pre,
+.cell-output-stdout pre,
+.cell-output-stderr pre {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+/* --------------------------------------------------------------------------
+   Markdown Tables
+   --------------------------------------------------------------------------
+   Approximates Quarto's default bootstrap ".table" look (light gray gridlines,
+   bold header row with a heavier bottom rule, and a caption styled like a
+   figure caption) using the same gray palette as the code blocks above.
+   -------------------------------------------------------------------------- */
+table {
+  border-collapse: collapse;
+  margin: 0.8em 0;
+  width: auto;
+}
+
+th,
+td {
+  border: 1px solid #e5e7eb;
+  padding: 6px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+thead th {
+  background-color: #f9fafb;
+  border-bottom: 2px solid #d1d5db;
+  font-weight: bold;
+}
+
+caption {
+  caption-side: bottom;
+  font-style: italic;
+  font-size: 9pt;
+  margin-top: 0.4em;
+  text-align: left;
+}
+
+/* --------------------------------------------------------------------------
+   Automated Page Numbering Setup
+   --------------------------------------------------------------------------
+   Coordinates automatic page numbering for both on-screen viewing and printing.
+
+   1. Screen Numbering (@media screen):
+      - 'body { counter-reset: pageCounter; }': Initializes a variable counter
+        called 'pageCounter' starting at zero.
+      - '.page { counter-increment: pageCounter; }': Bumps the counter up by 1
+        each time a new '.page' sheet appears in the document.
+      - '.page::after': Generates a floating footer label (e.g., "Page 1") pinned
+        12mm from the bottom and 20mm from the right edge of each sheet.
+
+   2. Print Numbering (@page & @media print):
+      - '@bottom-right { content: "Page " counter(page); }': Instructs native
+        print and PDF engines to print real hardware page numbers in the bottom-
+        right margin box.
+      - '.page::after { display: none !important; }': Hides the on-screen simulated
+        label during print so pages do not show duplicate numbers.
+   -------------------------------------------------------------------------- */
+@media screen {
+  body {
+    counter-reset: pageCounter;
+  }
+
+  .page {
+    position: relative;
+    counter-increment: pageCounter;
+  }
+
+  .page::after {
+    content: "Page " counter(pageCounter);
+    position: absolute;
+    bottom: 12mm;
+    right: 20mm;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9pt;
+    color: #6b7280;
+  }
+}
+
+@page {
+  size: 8.5in 11in;
+  margin: 1.0in;
+  @bottom-right {
+    content: "Page " counter(page);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9pt;
+    color: #6b7280;
+  }
+}
+
+@media print {
+  .page::after {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Table of Contents: Floating Screen Sidebar
+   ========================================================================== */
+
+@media screen {
+  /* Position Quarto's margin sidebar in the viewport next to the Letter sheets */
+  #quarto-margin-sidebar,
+  #TOC {
+    display: block !important;
+    position: fixed !important;
+    top: 30px;
+    /* Pins the TOC to the right of the centered 8.5in sheet */
+    left: calc(50% + 4.25in + 10px);
+    width: 260px;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+    background: #ffffff;
+    padding: 16px 20px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    z-index: 1000;
+  }
+
+  /* Style the TOC header and link hierarchy */
+  #TOC h2,
+  #TOC .toc-title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 0 0 10px 0;
+    color: #111827;
+  }
+
+  #TOC ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  #TOC ul ul {
+    padding-left: 14px;
+  }
+
+  #TOC li {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8.5pt;
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+
+  #TOC a {
+    color: #374151;
+    text-decoration: none;
+  }
+
+  #TOC a:hover,
+  #TOC a.active {
+    color: #1d4ed8;
+    text-decoration: underline;
+  }
+}
+
+/* Ensure the TOC disappears during print and PDF export */
+@media print {
+  #quarto-margin-sidebar,
+  #TOC {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Table of Contents: Print-Only Copy
+   ==========================================================================
+   letter_css_scripts.html clones the sidebar's list into #print-toc, placed
+   below the title on page 1 (or in an explicit `::: {#print-toc}` div). It is
+   hidden on screen, where the sidebar already serves, and shown in print so
+   the PDF gets a TOC whose entries link to their headings.
+   -------------------------------------------------------------------------- */
+@media screen {
+  #print-toc {
+    display: none;
+  }
+}
+
+@media print {
+  #print-toc {
+    display: block;
+    margin: 1.2em 0 1.5em 0;
+  }
+
+  #print-toc .print-toc-title {
+    font-weight: bold;
+    margin: 0 0 0.4em 0;
+  }
+
+  #print-toc ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  #print-toc ul ul {
+    padding-left: 1.5em;
+  }
+
+  #print-toc li {
+    line-height: 1.3;
+  }
+
+  #print-toc a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Title Block Spacing Control
+   --------------------------------------------------------------------------
+   letter_css_scripts.html relocates title/author/date into .page and removes
+   the #title-block-header wrapper, so these must be targeted by class.
+   -------------------------------------------------------------------------- */
+.page > h1.title {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 1.2;
+}
+
+.page > p.author,
+.page > p.date {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11pt;
+  line-height: 1.2;
+  margin: 0;
+}

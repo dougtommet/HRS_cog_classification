@@ -7,7 +7,21 @@ Read and follow:
 
 ## Project Overview
 
-This repository contains ten related but distinct analysis workflows. Existing source files remain in place. The authoritative automation entrypoints are the root-level drivers listed below. Source file naming follows an `A#_` prefix convention (e.g., `A0_`, `A1_`, `A7_`) that groups files by workflow.
+This repository contains eleven related but distinct analysis workflows. Existing source files remain in place. The authoritative automation entrypoints are the root-level drivers listed below. Source file naming follows an `A#_` prefix convention (e.g., `A0_`, `A1_`, `A7_`) that groups files by workflow.
+
+|Analysis|Title|Purpose|
+|:-------|:--------------------|:--------------------------------------------------------------------------------|
+|[Analysis A0](#analysis-a0-hrs-20162022-data-processing)|HRS 2016–2022 data processing|Reads raw HRS 2016–2022 Core and HCAP 2016 files; recodes demographics, cognitive items, ADL/IADL, functional items, Jorm IQCODE, external classifications (Langa-Weir, Hudomiet), and consensus weights; and merges everything into the analytic spine used by Analysis A7.|
+|[Analysis A1](#analysis-a1-hrs-core-actuarial-algorithm-derivation-and-validation-legacy)|HRS Core actuarial algorithm derivation and validation (legacy)|Derives and validates the original HRS Core actuarial cognitive algorithm by recoding data, fitting factor models, norming scores, finding cut points, and applying and validating the algorithm in HCAP. Superseded by Analysis A7, but its saved objects remain inputs to Analyses A3 and A4.|
+|[Analysis A2](#analysis-a2-manuscript-tablesfigures-and-appendices)|Manuscript, tables/figures, and appendices|Produces the manuscript in outline mode, a tables-and-figures document, and Appendices 1–3, computing reported values from saved Analysis A7 and PMM results at render time.|
+|[Analysis A3](#analysis-a3-pmm-profile-mixture-modeling-analysis-report)|PMM profile mixture modeling analysis report|Calibrates known-class profile mixture models to the HRS/HCAP Algorithm in HCAP, scores participants for Normal/MCI/Dementia probabilities, and reports results for cognition and Jorm models.|
+|[Analysis A3_2](#analysis-a3_2-pmm-classification-applied-to-hrs-core-20162022)|PMM classification applied to HRS Core 2016–2022|Applies the fixed HCAP 2016 PMM parameters from Analysis A3 to HRS Core respondents age 65+ in 2016, 2018, 2020, and 2022, producing per-person-wave probabilities for Normal, MCI, and Dementia.|
+|[Analysis A4](#analysis-a4-stata-ad-hoc-concordance-and-figures)|Stata ad hoc concordance and figures|Merges Core and HCAP factor scores, evaluates their correlation and impairment-category concordance, and produces four figures.|
+|[Analysis A5](#analysis-a5-sharing-and-data-dictionary-report)|Sharing and data-dictionary report|Documents the cognitive, functional, covariate, classification, and survey-design variables in the prepared HRS/HCAP data object for sharing.|
+|[Analysis A6](#analysis-a6-temporary-and-debugging-workflow)|Temporary and debugging workflow|Renders ad hoc QMD content (currently PMM comparison tables) and summarizes Mplus H5 outputs.|
+|[Analysis A7](#analysis-a7-hrs-core-cognitive-classification-2016-derivation-20162022-application)|HRS Core cognitive classification (2016 derivation, 2016–2022 application)|Fits a survey-weighted CFA to HRS 2016 Core cognitive items, creates demographically adjusted T-scores normed in the HCAP normative sample, applies the fixed 2016 Core algorithm to 2016–2022 person-waves, and compares 2016 classifications with HRS/HCAP Algorithm, consensus, Langa-Weir, and Hudomiet classifications in HCAP.|
+|[Analysis A8](#analysis-a8-summary-slide-deck-for-analysis-a7)|Summary slide deck for Analysis A7|Presents the methods and results of Analysis A7 in a Revealjs slide deck.|
+|[Analysis A9](#analysis-a9-pmm-slide-deck-slides2603)|PMM slide deck (Slides2603)|Presents the PMM approach, covariate adjustment, probabilistic classification, margins, and comparator tables in a Revealjs slide deck.|
 
 ### Run order
 
@@ -18,6 +32,7 @@ Workflows depend on derived data written by earlier workflows. Rebuild upstream 
 2. **PMM:** A1 → A3 → A9 (Slides2603)
    - A3 reads the unprefixed A1 objects (e.g., `R_objects/025_hrs16_cog.rds`, `014_hrshcap.rds`), not A0 output. `Analysis1_Driver.R` is currently broken (see Analysis A1), so A3 relies on the saved A1 objects.
    - A5 reads `R_objects/PMM_045.RDS` from A3.
+   - A3_2 (PMM scoring of HRS Core 2016–2022) runs after A3 and A0. It reads the A3 fixed-parameter Mplus inputs and `R_objects/A0_030_hrs16_22_merged.rds`.
 3. **Manuscript:** A2 last. It reads A7 results (`R_objects/A7_*.rds`) and re-sources the PMM comparison and margins scripts, which read the A3 Mplus outputs.
 
 A4 (Stata) reads `R_objects/025_hrs16_cog.dta` from A1. A6 is ad hoc debugging.
@@ -43,7 +58,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `./R_objects/A0_030_hrs16_22_merged.rds`
   - `./R_objects/A0_030_hcap16_merged.rds`
 - Date initiated: 2026-04-16
-- Date last updated: 2026-09-30
+- Date last updated: 2026-10-06
 
 ### Analysis A1: HRS Core actuarial algorithm derivation and validation (legacy)
 
@@ -116,6 +131,28 @@ Links under "Final rendered output" point to the most recent report committed to
   - `./mplus_output/pmm_102/`, `./mplus_output/pmm_103/`, `./mplus_output/pmm_103_jorm/`
 - Date initiated: 2025-07-24
 - Date last updated: 2026-09-23
+
+### Analysis A3_2: PMM classification applied to HRS Core 2016–2022
+
+- Purpose:
+  - Treats the Analysis A3 PMM as a scoring machine, with every parameter (including the class logits) fixed at the HCAP 2016 values in `pmm_hcap_103b.inp` and `pmm_hcap_103b_jorm.inp`. Scores all HRS Core respondents age 65+ interviewed in 2016, 2018, 2020, and 2022 to obtain Normal/MCI/Dementia probabilities per person-wave. Uses the Jorm model when a Jorm IQCODE is present, otherwise the cognition model. Inputs come from Analysis A0. A check scores HCAP 2016 participants from A0 inputs and compares them with the A3 probabilities.
+- Driver: `./Analysis3_2_Driver.R`
+- Control: `./R/A3_2/A3_2_000-Main_control.qmd` (US Letter report using `./templates/letter.css`)
+  - Source programs: `./R/A3_2/A3_2_001-libraries.R`, `A3_2_010-build_scoring_data.R`, `A3_2_020-score_mplus.R`, `A3_2_030-check_hcap16.R`
+- Rebuild command:
+  - `Rscript Analysis3_2_Driver.R`
+- Final rendered output:
+  - `./Reports/A3_2_PMM_scoring_[date].html`
+  - Most recent: no driver render committed yet.
+- Data inputs:
+  - `./R_objects/A0_030_hrs16_22_merged.rds` (Analysis A0)
+  - `./R_objects/PMM_100.RDS`, `./mplus_output/pmm_103/pmm_hcap_103b.inp` and `.out`, `./mplus_output/pmm_103_jorm/pmm_hcap_103b_jorm.inp` and `.out` (Analysis A3)
+- Main derived data products:
+  - `./R_objects/A3_2_pmm_probs_hrs16_22.rds` and `.dta` (hhid, pn, wave, p_normal, p_mci, p_dementia, pmm_model)
+  - `./R_objects/A3_2_010_scoring_long.rds`, `A3_2_020_category_check.rds`, `A3_2_030_hcap16_check.rds`
+  - `./mplus_output/A3_2/`
+- Date initiated: 2026-10-06
+- Date last updated: 2026-10-06
 
 ### Analysis A4: Stata ad hoc concordance and figures
 

@@ -1,0 +1,278 @@
+---
+title: "Analysis A3_2: PMM classification of HRS Core 2016 to 2022"
+author: "Douglas Tommet and Richard N. Jones"
+date: '`r Sys.Date()`'
+format:
+  html:
+    css: "../../templates/letter.css"
+    theme: none
+    embed-resources: true
+    toc: true
+    toc-location: right
+    include-after-body: "../../templates/letter_css_scripts.html"
+    html-math-method: mathjax
+execute:
+  echo: false
+  warning: false
+  message: false
+editor: source
+editor_options:
+  chunk_output_type: console
+---
+
+```{r}
+#| label: setup
+#| include: false
+source(here::here("R", "A3_2", "A3_2_001-libraries.R"))
+source(here::here("R", "A3_2", "A3_2_010-build_scoring_data.R"))
+source(here::here("R", "A3_2", "A3_2_020-score_mplus.R"))
+source(here::here("R", "A3_2", "A3_2_030-check_hcap16.R"))
+
+a3_2   <- readRDS(here::here("R_objects", "A3_2_010_scoring_long.rds"))
+probs  <- readRDS(here::here("R_objects", "A3_2_pmm_probs_hrs16_22.rds"))
+check  <- readRDS(here::here("R_objects", "A3_2_030_hcap16_check.rds"))
+scoring <- a3_2$scoring
+waves   <- sort(unique(scoring$wave))
+
+covariate_rows <- tribble(
+  ~mplus,       ~label,                      ~type,
+  "age",        "Age, years",                "cont",
+  "female",     "Female",                    "bin",
+  "black",      "Black (not Hispanic)",      "bin",
+  "hisp",       "Hispanic",                  "bin",
+  "SCHLYRSimp", "Years of schooling (imputed)", "cont"
+)
+all_rows <- dplyr::bind_rows(covariate_rows,
+                             dplyr::select(a3_2$inputs, mplus, label, type))
+
+not_asked <- a3_2$source_log |> dplyr::filter(!present)
+is_not_asked <- function(v, w) any(not_asked$mplus == v & not_asked$wave == w)
+
+# An input is "not administered" in a wave when the source variable is absent
+# from that wave's Core file or is missing for every scored respondent.
+not_administered <- function(v, w) {
+  is_not_asked(v, w) || all(is.na(scoring[[v]][scoring$wave == w]))
+}
+ns_absent  <- waves[purrr::map_lgl(waves, function(w) not_administered("vdexf7z", w))]
+ns_present <- setdiff(waves, ns_absent)
+list_waves <- function(x) if (length(x) == 0) "none of the scored waves" else paste(x, collapse = ", ")
+```
+
+::: {.page}
+
+::: {.abstract}
+This analysis applies the profile mixture model (PMM) from Analysis A3 to the HRS Core samples of 2016, 2018, 2020, and 2022. We treat the model as a scoring machine. Every parameter, including the class proportions, is fixed at the value estimated in HRS/HCAP 2016. The model returns, for each person-wave, the probability of membership in the Normal, MCI, and Dementia classes. The scored sample is all respondents interviewed in a wave who were age 65 or older at that wave. The output file is `R_objects/A3_2_pmm_probs_hrs16_22.rds` (and `.dta`), with one row per person-wave.
+:::
+
+## Input variables by wave
+
+The table summarizes each model input among scored person-waves. Inputs come from the Analysis A0 wave-specific recodes, renamed to the Analysis A3 model names. Binary inputs show the percent coded 1. Other inputs show the mean (SD). The Jorm IQCODE is collected only when a proxy informant answers for the respondent.
+
+::: {.compact}
+```{r}
+#| label: a32-inputs
+summ <- function(x, type) {
+  x <- x[!is.na(x)]
+  if (length(x) == 0) return("not administered")
+  if (type == "bin") sprintf("%.1f%%", 100 * mean(x)) else sprintf("%.2f (%.2f)", mean(x), stats::sd(x))
+}
+tab_inputs <- purrr::map_dfr(seq_len(nrow(all_rows)), function(i) {
+  v <- all_rows$mplus[i]
+  vals <- purrr::map_chr(waves, function(w) summ(scoring[[v]][scoring$wave == w], all_rows$type[i]))
+  tibble::tibble(Variable = all_rows$label[i], !!!stats::setNames(as.list(vals), waves))
+})
+n_row <- tibble::tibble(Variable = "Person-waves, N",
+  !!!stats::setNames(as.list(format(as.vector(table(scoring$wave)), big.mark = ",")), waves))
+knitr::kable(dplyr::bind_rows(n_row, tab_inputs), format = "html", align = c("l", rep("r", length(waves))))
+```
+:::
+
+:::
+
+::: {.page}
+
+## Missing data in the model inputs
+
+The table shows the percent of scored person-waves missing each input. "Not administered" marks an input that is absent from that wave's Core data or missing for every respondent in that wave. These data are missing by design. Mplus treats these inputs as missing, and the model scores each respondent from the remaining inputs. Person-waves missing a covariate cannot be scored, because the model conditions the cognitive tests on the covariates. The bottom rows show which model scored each person-wave.
+
+::: {.compact}
+```{r}
+#| label: a32-missing
+pct_miss <- function(v, w) {
+  if (not_administered(v, w)) return("not administered")
+  sprintf("%.1f%%", 100 * mean(is.na(scoring[[v]][scoring$wave == w])))
+}
+tab_miss <- purrr::map_dfr(seq_len(nrow(all_rows)), function(i) {
+  v <- all_rows$mplus[i]
+  vals <- purrr::map_chr(waves, function(w) pct_miss(v, w))
+  tibble::tibble(Variable = all_rows$label[i], !!!stats::setNames(as.list(vals), waves))
+})
+model_counts <- probs |>
+  dplyr::mutate(pmm_model = dplyr::coalesce(pmm_model, "not scored")) |>
+  dplyr::count(pmm_model, wave) |>
+  dplyr::mutate(n = format(n, big.mark = ",")) |>
+  tidyr::pivot_wider(names_from = wave, values_from = n, values_fill = "0") |>
+  dplyr::mutate(Variable = dplyr::recode(pmm_model,
+    cognition = "Scored with cognition model, N",
+    jorm = "Scored with Jorm model, N",
+    `not scored` = "Not scored, N")) |>
+  dplyr::select(Variable, dplyr::all_of(as.character(waves)))
+knitr::kable(dplyr::bind_rows(tab_miss, model_counts), format = "html",
+             align = c("l", rep("r", length(waves))))
+```
+:::
+
+**Number series.** The HRS Core does not include the number series test in every wave, so its absence in some waves is by design. In the scored person-waves, number series scores are not available in `r list_waves(ns_absent)`, and are present in `r list_waves(ns_present)`. The HCAP 2016 calibration model includes number series. Person-waves without it are scored from the other cognitive tests and the functional and informant items. Their class probabilities rest on less information than those of person-waves with a number series score.
+
+:::
+
+```{r}
+#| label: a32-probit-wide
+# Temporary long-to-wide reshape for the cross-wave scatterplot matrices only.
+# Mplus saves posteriors to 3 decimals, so p is clamped to [0.0005, 0.9995]
+# (half the rounding unit) before the probit transform; |z| <= 3.29.
+p_lo <- 0.0005
+p_hi <- 1 - p_lo
+z_bound <- stats::qnorm(p_hi)
+
+probit_wide <- function(var) {
+  probs |>
+    dplyr::filter(!is.na(.data[[var]])) |>
+    dplyr::mutate(z = stats::qnorm(pmin(pmax(.data[[var]], p_lo), p_hi))) |>
+    dplyr::select(hhid, pn, wave, z) |>
+    tidyr::pivot_wider(names_from = wave, values_from = z, names_prefix = "z_") |>
+    dplyr::select(dplyr::all_of(stringr::str_c("z_", waves)))
+}
+
+pairs_z <- function(d, title) {
+  names(d) <- stringr::str_remove(names(d), "^z_")
+  panel_hist <- function(x, ...) {
+    usr <- par("usr"); on.exit(par(usr = usr))
+    par(usr = c(usr[1:2], 0, 1.5))
+    x <- x[!is.na(x)]
+    h <- hist(x, breaks = seq(-3.4, 3.4, 0.2), plot = FALSE)
+    rect(h$breaks[-length(h$breaks)], 0, h$breaks[-1], h$counts / max(h$counts),
+         col = "grey75", border = "white")
+  }
+  pairs(d, pch = 16, cex = 0.3, col = grDevices::rgb(0, 0, 0, 0.12),
+        diag.panel = panel_hist, gap = 0.5, main = title)
+}
+
+cor_table <- function(d) {
+  names(d) <- stringr::str_remove(names(d), "^z_")
+  r <- stats::cor(d, use = "pairwise.complete.obs")
+  n <- crossprod(!is.na(as.matrix(d)))
+  out <- matrix(sprintf("%.2f", r), nrow(r), dimnames = dimnames(r))
+  out[upper.tri(out)] <- format(n[upper.tri(n)], big.mark = ",")
+  diag(out) <- format(diag(n), big.mark = ",")
+  knitr::kable(out, format = "html", align = rep("r", ncol(out)))
+}
+
+z_normal   <- probit_wide("p_normal")
+z_mci      <- probit_wide("p_mci")
+z_dementia <- probit_wide("p_dementia")
+```
+
+::: {.page}
+
+## Class probabilities across waves
+
+The next three pages show one class each. Each matrix plots the same respondents' probit-transformed class probability, z = Φ⁻¹(p), across the four waves. A point appears in a panel when the respondent was scored in both waves. Mplus saves probabilities to three decimals, so values of 0.000 and 1.000 are set to 0.0005 and 0.9995 before the transform. This bounds z at ±`r sprintf("%.2f", z_bound)`, and points at the bounds mark respondents classified with near certainty. The table under each matrix gives Pearson correlations below the diagonal, the number of respondents scored in both waves above the diagonal, and the number scored in each wave on the diagonal.
+
+### P(Normal)
+
+```{r}
+#| label: a32-pairs-normal
+#| fig-width: 5.4
+#| fig-height: 5.4
+pairs_z(z_normal, "Probit of P(Normal), by wave")
+```
+
+::: {.compact}
+```{r}
+#| label: a32-cor-normal
+cor_table(z_normal)
+```
+:::
+
+:::
+
+::: {.page}
+
+### P(MCI)
+
+```{r}
+#| label: a32-pairs-mci
+#| fig-width: 5.4
+#| fig-height: 5.4
+pairs_z(z_mci, "Probit of P(MCI), by wave")
+```
+
+::: {.compact}
+```{r}
+#| label: a32-cor-mci
+cor_table(z_mci)
+```
+:::
+
+:::
+
+::: {.page}
+
+### P(Dementia)
+
+```{r}
+#| label: a32-pairs-dementia
+#| fig-width: 5.4
+#| fig-height: 5.4
+pairs_z(z_dementia, "Probit of P(Dementia), by wave")
+```
+
+::: {.compact}
+```{r}
+#| label: a32-cor-dementia
+cor_table(z_dementia)
+```
+:::
+
+:::
+
+::: {.page}
+
+## Check: HCAP 2016 reproduction of Analysis A3
+
+Analysis A3 scored the HRS/HCAP 2016 participants from Analysis A1 inputs. This analysis scores the same people from Analysis A0 inputs with the same fixed model. If the two pipelines code the inputs the same way, the probabilities agree. The first table compares the probabilities. The second compares each input among participants observed in both pipelines.
+
+```{r}
+#| label: a32-check-probs
+cp <- check$probs
+knitr::kable(tibble::tibble(
+  Statistic = c("HCAP participants in Analysis A3", "Matched in Analysis A0 2016 file",
+                "Scored in both", "Same model used (cognition or Jorm), %",
+                "Largest class difference < 0.001, %", "Largest class difference < 0.01, %",
+                "Largest class difference, maximum",
+                "Correlation, P(Normal)", "Correlation, P(MCI)", "Correlation, P(Dementia)",
+                "Same modal class, %"),
+  Value = c(format(cp$n_hcap_a3, big.mark = ","), format(cp$n_matched_a0, big.mark = ","),
+            format(cp$n_both_scored, big.mark = ","),
+            sprintf("%.1f", c(cp$pct_same_model, cp$pct_diff_lt_001, cp$pct_diff_lt_01)),
+            sprintf("%.4f", cp$max_abs_diff),
+            sprintf("%.4f", c(cp$r_normal, cp$r_mci, cp$r_dementia)),
+            sprintf("%.1f", cp$pct_same_modal))),
+  format = "html", align = c("l", "r"))
+```
+
+::: {.compact}
+```{r}
+#| label: a32-check-inputs
+check$inputs |>
+  dplyr::mutate(pct_identical = sprintf("%.1f", pct_identical),
+                max_abs_diff  = sprintf("%.4f", max_abs_diff)) |>
+  knitr::kable(format = "html",
+               col.names = c("Input", "N in both", "Identical, %", "Max difference",
+                             "Missing in A1 only", "Missing in A0 only"),
+               align = c("l", rep("r", 5)))
+```
+:::
+
+:::

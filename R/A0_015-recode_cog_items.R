@@ -179,7 +179,7 @@ recode_cog_fx <- function(df, x) {
         .data[[paste0("r", x, "D152")]],
         .data[[paste0("r", x, "D153")]],
         .data[[paste0("r", x, "D154")]],
-        na.rm = "exclude"),
+        na.rm = TRUE),
       !!new_col := case_when(is.na(.data[[paste0("r", x, "D151")]]) & is.na(.data[[paste0("r", x, "D152")]]) & is.na(.data[[paste0("r", x, "D153")]]) & is.na(.data[[paste0("r", x, "D154")]]) ~ NA,
                         TRUE ~ tempvar)
       ) %>%
@@ -193,7 +193,7 @@ recode_cog_fx <- function(df, x) {
       tempvar = sum(
         .data[[paste0("r", x, "D155")]],
         .data[[paste0("r", x, "D156")]],
-        na.rm = "exclude"),
+        na.rm = TRUE),
       !!new_col := case_when(is.na(.data[[paste0("r", x, "D155")]]) & is.na(.data[[paste0("r", x, "D156")]]) ~ NA,
                          TRUE ~ tempvar)
     ) %>%
@@ -207,7 +207,7 @@ recode_cog_fx <- function(df, x) {
       tempvar = sum(
         .data[[paste0("r", x, "D157")]],
         .data[[paste0("r", x, "D158")]],
-        na.rm = "exclude"),
+        na.rm = TRUE),
       !!new_col := case_when(is.na(.data[[paste0("r", x, "D157")]]) & is.na(.data[[paste0("r", x, "D158")]]) ~ NA,
                          TRUE ~ tempvar)
     ) %>%
@@ -224,7 +224,7 @@ recode_cog_fx <- function(df, x) {
         .data[[paste0("r", x, "D144")]],
         .data[[paste0("r", x, "D145")]],
         .data[[paste0("r", x, "D146")]],
-        na.rm = "exclude"),
+        na.rm = TRUE),
       !!new_col := case_when(is.na(.data[[paste0("r", x, "D142")]]) & is.na(.data[[paste0("r", x, "D143")]]) & is.na(.data[[paste0("r", x, "D144")]]) & is.na(.data[[paste0("r", x, "D145")]]) & is.na(.data[[paste0("r", x, "D146")]]) ~ NA,
                            TRUE ~ tempvar)
     ) %>%
@@ -347,7 +347,6 @@ saveRDS(hrs16_cog_notes, here::here("R_objects", "A0_015_hrs16_cog_notes.rds"))
 saveRDS(hrs18_cog,       here::here("R_objects", "A0_015_hrs18_cog.rds"))
 saveRDS(hrs20_cog,       here::here("R_objects", "A0_015_hrs20_cog.rds"))
 saveRDS(hrs22_cog,       here::here("R_objects", "A0_015_hrs22_cog.rds"))
-
 
 
 
