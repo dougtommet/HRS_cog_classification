@@ -94,19 +94,17 @@ vars <- c(
 )
 
 summary_final <- purrr::map_df(vars, summarize_variable, data = study_sample) %>%
-  mutate(value = case_when(is.na(value) ~ "Blank, partial interview", 
+  mutate(value = case_when(is.na(value) & variable == "langa_weir_classification" ~ "Missing",
+                           is.na(value) ~ "Blank, partial interview",
                            !is.na(value) ~ value)) %>%
   rename(study_sample = n_pct_or_mean_sd) %>%
   arrange(factor(variable, levels = vars), value)
 
 missing_summary <- tibble::tibble(
-  variable = c("langa_weir_classification", "jorm"),
+  variable = "jorm",
   value = "Missing",
   study_sample = format(
-    c(
-      sum(is.na(study_sample$langa_weir_classification)),
-      sum(is.na(study_sample$jorm))
-    ),
+    sum(is.na(study_sample$jorm)),
     big.mark = ","
   )
 )

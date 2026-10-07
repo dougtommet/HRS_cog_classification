@@ -56,8 +56,14 @@ ANALYSES = {
             ("Appendix 1", "Reports/MS_Appendix_1_*.docx"),
             ("Appendix 2", "Reports/MS_Appendix_2_*.docx"),
             ("Appendix 3", "Reports/MS_Appendix_3_*.docx"),
+            ("Combined PDF", "Reports/MS_Combined_*.pdf"),
         ],
         "sources": ["R/MS_MAIN/*.R", "R/MS_MAIN/*.qmd", "Analysis2_Driver.R"],
+    },
+    "A2_2": {
+        "outputs": [("Slides", "Reports/Slides_A2summary_*.html")],
+        "fallback": "no driver render committed yet.",
+        "sources": ["R/Analysis_2_2/*.qmd", "Analysis2_2_Driver.R"],
     },
     "A3": {
         "outputs": [("Report", "Reports/PMM_Analysis_Report_*.html")],

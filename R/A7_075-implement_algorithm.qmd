@@ -186,8 +186,26 @@ svy_design <- svydesign(
   nest = TRUE
 )
 
-gtsummary::tbl_svysummary(svy_design,
-                          include = c("dx_v1", "vs1hcapdxeap"))
+# Display only: weights divided by 1,000 so weighted counts print in
+# thousands (project reporting rule). Percentages are unchanged.
+# format_weighted_thousands() and weighted_thousands_note are defined in
+# R/A7_100-comparison_of_diagnoses.R, which the control file sources first.
+svy_design_k <- svydesign(
+  ids = ~SECU,
+  strata = ~STRATUM,
+  weights = ~HCAP16WGTR0_k,
+  data = hrs16_hcap |> dplyr::mutate(HCAP16WGTR0_k = HCAP16WGTR0 / 1000),
+  nest = TRUE
+)
+
+gtsummary::tbl_svysummary(svy_design_k,
+                          include = c("dx_v1", "vs1hcapdxeap"),
+                          digits = gtsummary::all_categorical() ~ list(
+                            function(x) format_weighted_thousands(x * 1000),
+                            1
+                          )) |>
+  gtsummary::as_gt() |>
+  gt::tab_source_note(weighted_thousands_note)
 
 ```
 
@@ -202,7 +220,8 @@ weighted_tab %>%
   rownames_to_column("dx_v1") %>%
   gt::gt() %>%
   gt::tab_spanner("HCAP Dementia and MCI Classification", 2:4) %>%
-  gt::fmt_number(decimals=0)
+  gt::fmt(columns = where(is.numeric), fns = format_weighted_thousands) %>%
+  gt::tab_source_note(weighted_thousands_note)
 
 
 ```

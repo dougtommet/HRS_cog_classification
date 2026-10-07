@@ -1,0 +1,8 @@
+## HRS/HCAP Algorithm
+
+![](../../Figures/HCAP-algorithm.png){fig-align="center" height="560"}
+
+<div style="font-size: 0.4em; line-height: 1.1;">
+Source: Manly et al. (2022), JAMA Neurology, 79(12), 1242-1249.
+</div>
+

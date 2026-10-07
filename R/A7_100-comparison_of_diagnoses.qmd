@@ -21,12 +21,7 @@ hcap_tables <- readRDS(here::here("R_objects", "A7_100_hcap_tables.rds"))
 ```{r}
 #| tbl-cap: "Langa-Weir diagnosis vs Consensus panel diagnosis, with consensus-panel sample weights"
 #| label: tbl-lw-consensus-3
-format_weighted_tab(
-  hcap_tables$tabs$three_class$lw_consensus,
-  row_name = "langa_weir",
-  stubhead = "Langa-Weir classification",
-  spanner = "Consensus panel diagnosis"
-)
+hcap_tables$tables$lw_consensus
 ```
 
 ::: {custom-style="Footnote text"}
@@ -72,7 +67,7 @@ hcap_tables$tables$consensus_hudomiet
 ```
 
 ::: {custom-style="Footnote text"}
-`r hcap_tables$notes$consensus_hudomiet`
+`r hcap_tables$notes$consensus_standard`
 :::
 
 The quadratic weighted kappa is `r round(hcap_tables$summary$consensus_hudomiet_kappa, 3)`.
@@ -231,7 +226,7 @@ hcap_tables$tables$consensus_hudomiet_binary
 ```
 
 ::: {custom-style="Footnote text"}
-`r hcap_tables$notes$consensus_hudomiet`
+`r hcap_tables$notes$consensus_standard`
 :::
 
 The kappa is `r round(hcap_tables$summary$consensus_hudomiet_binary_kappa, 3)`.

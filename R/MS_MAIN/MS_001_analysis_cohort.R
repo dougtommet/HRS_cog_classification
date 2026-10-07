@@ -10,7 +10,10 @@ analysis2_tracker <- readRDS(
 
 analysis2_hcap <- analysis2_tracker |>
   dplyr::filter(inHCAP == 1) |>
-  dplyr::mutate(rage = PA019)
+  dplyr::mutate(
+    rage = PA019,
+    jorm = rPjorm
+  )
 
 stopifnot(
   nrow(analysis2_hcap) == 3496,

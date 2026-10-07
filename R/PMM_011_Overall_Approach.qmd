@@ -22,6 +22,10 @@ We will use a **_supervised latent profile model_** trained with known class lab
 ![](excalidraw/PMM-011-Calibration_Model.excalidraw.svg){width="90%"}
 :::
 
+:::{.callout-note}
+**Final model.** The figures in this section include a latent cognition factor. This was our original design. The final model omits the factor, because the model without it agreed better with the criterion classifications. @fig-pmm-final, in the profile mixture model results, shows the final model.
+:::
+
 where:
 
 |||
@@ -109,7 +113,7 @@ R users are in a bind because there is no easy way to constrain parameters in R.
 
 Below is a cartoon of the classification model:
 
-::: {#fig-fig2 layout-align="center" fig-cap="Classification model"}
+::: {#fig-classification layout-align="center" fig-cap="Classification model"}
 ![](excalidraw/PMM-012-Classification_Model.excalidraw.svg){width="90%"}
 :::
 

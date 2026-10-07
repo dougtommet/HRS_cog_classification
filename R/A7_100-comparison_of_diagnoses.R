@@ -50,7 +50,49 @@ binary_kappa_from_tab <- function(tab) {
   )
 }
 
-format_weighted_tab <- function(tab, row_name, stubhead, spanner) {
+####################################################
+# Display of survey-weighted population counts
+#
+# Weighted counts from HCAP population weights are shown in thousands
+# (project reporting rule; see References/instructions.md). Entries that
+# would round below 1 (fewer than 1,000 persons) keep two significant
+# digits. Totals are summed in full units before display. The function
+# uses base R only, so the gt tables saved to A7_100_hcap_tables.rds
+# render in any session that reads them.
+format_weighted_thousands <- function(x) {
+  k <- x / 1000
+  vapply(k, function(v) {
+    if (is.na(v)) return("")
+    if (v == 0) return("0")
+    if (abs(signif(v, 2)) < 1) {
+      return(formatC(signif(v, 2), format = "fg", digits = 2, flag = "#"))
+    }
+    format(round(v), big.mark = ",", scientific = FALSE, trim = TRUE)
+  }, character(1))
+}
+
+weighted_thousands_note <- paste(
+  "Cell entries are survey-weighted population counts in thousands.",
+  "Entries for fewer than 1,000 persons show two significant digits."
+)
+
+# Consensus-panel weights are rescaled to sum to 100 (see consensus_wt),
+# so those tables show weighted percentages, not counts.
+format_weighted_cells <- function(gt_tbl, units) {
+  if (units == "thousands") {
+    gt_tbl |>
+      gt::fmt(columns = where(is.numeric), fns = format_weighted_thousands) |>
+      gt::cols_align(align = "right", columns = where(is.numeric)) |>
+      gt::tab_source_note(weighted_thousands_note)
+  } else {
+    gt_tbl |>
+      gt::fmt_number(decimals = 0)
+  }
+}
+
+format_weighted_tab <- function(tab, row_name, stubhead, spanner,
+                                units = c("thousands", "percent")) {
+  units <- match.arg(units)
   tab_df <- tab |>
     as.data.frame.matrix() |>
     tibble::rownames_to_column(row_name)
@@ -67,11 +109,13 @@ format_weighted_tab <- function(tab, row_name, stubhead, spanner) {
   dplyr::bind_rows(tab_df, total_row) |>
     gt::gt(rowname_col = row_name) |>
     gt::tab_spanner(spanner, columns = 2:4) |>
-    gt::tab_stubhead(stubhead) %>%
-    gt::fmt_number(decimals = 0)
+    gt::tab_stubhead(stubhead) |>
+    format_weighted_cells(units)
 }
 
-format_binary_weighted_tab <- function(tab, row_name, stubhead, spanner) {
+format_binary_weighted_tab <- function(tab, row_name, stubhead, spanner,
+                                       units = c("thousands", "percent")) {
+  units <- match.arg(units)
   tab_df <- tab |>
     as.data.frame.matrix() |>
     tibble::rownames_to_column(row_name)
@@ -88,8 +132,8 @@ format_binary_weighted_tab <- function(tab, row_name, stubhead, spanner) {
   dplyr::bind_rows(tab_df, total_row) |>
     gt::gt(rowname_col = row_name) |>
     gt::tab_spanner(spanner, columns = 2:3) |>
-    gt::tab_stubhead(stubhead) %>%
-    gt::fmt_number(decimals = 0)
+    gt::tab_stubhead(stubhead) |>
+    format_weighted_cells(units)
 }
 
 build_agreement_matrix <- function(kappas, metric_name) {
@@ -345,25 +389,29 @@ hcap_tables <- list(
       tabs_3class$algorithmic_consensus,
       row_name = "algorithmic",
       stubhead = "Algorithmic diagnosis",
-      spanner = "Consensus panel diagnosis"
+      spanner = "Consensus panel diagnosis",
+      units = "percent"
     ),
     lw_consensus = format_weighted_tab(
       tabs_3class$lw_consensus,
       row_name = "langa_weir",
       stubhead = "Langa-Weir classification",
-      spanner = "Consensus panel diagnosis"
+      spanner = "Consensus panel diagnosis",
+      units = "percent"
     ),
     consensus_hrs = format_weighted_tab(
       tabs_3class$consensus_hrs,
       row_name = "consensus",
       stubhead = "Consensus panel diagnosis",
-      spanner = "HRS classification model"
+      spanner = "HRS classification model",
+      units = "percent"
     ),
     consensus_hudomiet = format_weighted_tab(
       tabs_3class$consensus_hudomiet,
       row_name = "consensus",
       stubhead = "Consensus panel diagnosis",
-      spanner = "Hudomiet"
+      spanner = "Hudomiet",
+      units = "percent"
     ),
 
     algorithmic_lw = format_weighted_tab(
@@ -409,25 +457,29 @@ hcap_tables <- list(
       tabs_binary$algorithmic_consensus,
       row_name = "algorithmic_binary",
       stubhead = "Algorithmic diagnosis",
-      spanner = "Consensus panel diagnosis"
+      spanner = "Consensus panel diagnosis",
+      units = "percent"
     ),
     lw_consensus_binary = format_binary_weighted_tab(
       tabs_binary$lw_consensus,
       row_name = "langa_weir_binary",
       stubhead = "Langa-Weir classification",
-      spanner = "Consensus panel diagnosis"
+      spanner = "Consensus panel diagnosis",
+      units = "percent"
     ),
     consensus_hrs_binary = format_binary_weighted_tab(
       tabs_binary$consensus_hrs,
       row_name = "consensus_binary",
       stubhead = "Consensus panel diagnosis",
-      spanner = "HRS classification model"
+      spanner = "HRS classification model",
+      units = "percent"
     ),
     consensus_hudomiet_binary = format_binary_weighted_tab(
       tabs_binary$consensus_hudomiet,
       row_name = "consensus_binary",
       stubhead = "Consensus panel diagnosis",
-      spanner = "Hudomiet"
+      spanner = "Hudomiet",
+      units = "percent"
     ),
 
     algorithmic_lw_binary = format_binary_weighted_tab(
@@ -493,7 +545,8 @@ hcap_tables <- list(
   notes = list(
     consensus_standard = paste(
       "Note: This comparison uses the HRS/HCAP validation subsample.",
-      "Weights are computed as HCAP16WGTR * samplingP^(-1) and are normalized within the consensus sample."
+      "Weights are computed as HCAP16WGTR * samplingP^(-1).",
+      "Cell entries are weighted percentages of the validation subsample."
     ),
     hcap_standard = paste(
       "Note: This comparison uses the HCAP sample.",
@@ -502,7 +555,8 @@ hcap_tables <- list(
     ),
     consensus_hrs = paste(
       "Note: This comparison uses the HRS/HCAP validation subsample.",
-      "Weights are the consensus-sample weights HCAP16WGTR * samplingP^(-1), normalized within the consensus sample."
+      "Weights are the consensus-sample weights HCAP16WGTR * samplingP^(-1).",
+      "Cell entries are weighted percentages of the validation subsample."
     ),
     hcap_hrs = paste(
       "Note: This comparison uses the HCAP sample.",

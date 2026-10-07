@@ -1,0 +1,8 @@
+## PMM: class probabilities
+
+![](../../Figures/Slides2603_results_class_probabilities.png){fig-align="center" height="520"}
+
+<div style="font-size: 0.5em; line-height: 1.2;">
+Each vertical bar is one HRS/HCAP participant, with the probabilities of Normal, MCI, and Dementia stacked. Participants are sorted by probability.
+</div>
+

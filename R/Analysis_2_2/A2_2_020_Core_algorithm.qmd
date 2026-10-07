@@ -1,0 +1,4 @@
+## Core algorithm
+
+![](../../Figures/HRS-algorithm_2024-12-19.png){fig-align="center" height="580"}
+

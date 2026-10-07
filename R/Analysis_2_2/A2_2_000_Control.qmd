@@ -1,0 +1,73 @@
+---
+title: "Two HRS Core cognitive classification methods informed by HRS/HCAP"
+title-slide-attributes:
+  data-background-image: ../../Figures/Gemini-Brown-Amphibian.png
+  data-background-size: contain
+  data-background-opacity: "1"
+author: "Rich Jones and Doug Tommet for HRS/HCAP Working Group"
+date: '`r Sys.Date()`'
+format:
+  revealjs:
+    theme: white
+    slide-number: true
+    self-contained: true
+    code-copy: true
+    code-line-numbers: true
+    fig-align: center
+    controls: true
+    controls-layout: bottom-right
+editor: source
+execute:
+  echo: false
+  warning: false
+  message: false
+include-in-header:
+  - text: |
+      <style>
+      .reveal .slide-number {
+        top: 1em !important;
+        right: 1em !important;
+        bottom: auto !important;
+        left: auto !important;
+      }
+      .reveal pre {
+        max-height: 850px !important;
+        width: 100% !important;
+        overflow-y: auto !important;
+      }
+      .reveal pre code {
+        max-height: 850px !important;
+        overflow-y: auto !important;
+      }
+      </style>
+---
+
+```{r setup}
+#| include: false
+
+# Same results objects as the Analysis A2 manuscript, so the numbers on these
+# slides match the A2 report. Requires Analysis A7 (R_objects/A7_100_hcap_tables.rds)
+# and Analysis A3 (PMM outputs) to be current.
+invisible(
+  suppressMessages(
+    suppressPackageStartupMessages({
+      source(here::here("R", "MS_MAIN", "A1_001-libraries.R"))
+      source(here::here("R", "MS_MAIN", "A1_002-folder_paths.R"))
+      source(here::here("R", "MS_MAIN", "MS_001_analysis_cohort.R"))
+      source(here::here("R", "MS_MAIN", "MS_010_results_objects.R"))
+    })
+  )
+)
+```
+
+
+{{< include A2_2_005_Contents.qmd >}}
+{{< include A2_2_010_Key_terms.qmd >}}
+{{< include A2_2_015_HRS_HCAP_algorithm.qmd >}}
+{{< include A2_2_020_Core_algorithm.qmd >}}
+{{< include A2_2_022_PMM_structure.qmd >}}
+{{< include A2_2_025_PMM_preliminary_model.qmd >}}
+{{< include A2_2_030_PMM_covariate_adjustment.qmd >}}
+{{< include A2_2_040_PMM_class_probabilities.qmd >}}
+{{< include A2_2_045_Agreement_with_HRS_HCAP.qmd >}}
+{{< include A2_2_050_Summary.qmd >}}

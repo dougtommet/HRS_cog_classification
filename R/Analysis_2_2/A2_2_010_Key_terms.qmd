@@ -1,0 +1,12 @@
+## Key terms: three algorithms
+
+<div style="font-size: 0.6em; line-height: 1.2;">
+
+| Term | Meaning |
+|:-----|:--------------------------------------------------------------|
+| **HRS/HCAP Algorithm** | The actuarial (rule-based) classification of HRS/HCAP 2016 participants as Normal, MCI, or Dementia (Manly et al., 2022). It uses five cognitive domains adjusted for age, sex, race, ethnicity, and education in a robust norms group (a subsample free of conditions that affect cognition), plus informant reports and self-rated memory concerns. It is the primary comparator in this work. |
+| **Core algorithm** | The HRS/HCAP Algorithm adapted to HRS Core data. One general cognition score from the Core tests, adjusted for the same demographic terms, replaces the five domains. Cut points, self-rated memory concerns, and the Jorm IQCODE (an informant questionnaire, used when cognitive tests are missing) assign the class. |
+| **PMM** | Profile mixture model. A statistical model calibrated to the HRS/HCAP Algorithm classes, using HRS Core cognitive tests, ADL and IADL items (daily activities), self-reported memory concerns, and the Jorm IQCODE. It gives each person a probability of being Normal, MCI, or Dementia. |
+
+</div>
+

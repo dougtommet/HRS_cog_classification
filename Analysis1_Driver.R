@@ -2,8 +2,8 @@
 
 setwd(here::here())
 
-render_target <- here::here("R", "000-master.qmd")
-rendered_output <- here::here("R", "000-master.html")
+render_target <- here::here("R", "A1_000-master.qmd")
+rendered_output <- here::here("R", "A1_000-master.html")
 final_output <- here::here("Reports", stringr::str_c("HRS_cognition_", Sys.Date(), ".html"))
 
 fs::dir_create(here::here("Reports"))

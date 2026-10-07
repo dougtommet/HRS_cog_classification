@@ -53,6 +53,7 @@ source(here::here("R", "MS_MAIN", "MS_010_results_objects.R"))
 {{< include MS_Tab_Fig_Apndx-030-Table-1.qmd >}}
 {{< include MS_Tab_Fig_Apndx-040-Table-2.qmd >}}
 {{< include MS_Tab_Fig_Apndx-050-Table-3.qmd >}}
+{{< include MS_Tab_Fig_Apndx-055-Table-4.qmd >}}
 {{< include MS_Tab_Fig_Apndx-020-Figure-1.qmd >}}
 {{< include MS_Tab_Fig_Apndx-060-Figure-2.qmd >}}
 
@@ -64,5 +65,4 @@ source(here::here("R", "MS_MAIN", "MS_010_results_objects.R"))
 ```
 
 Thanks for reading.
-
 

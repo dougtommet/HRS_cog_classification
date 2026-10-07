@@ -14,6 +14,7 @@ This repository contains eleven related but distinct analysis workflows. Existin
 |[Analysis A0](#analysis-a0-hrs-20162022-data-processing)|HRS 2016–2022 data processing|Reads raw HRS 2016–2022 Core and HCAP 2016 files; recodes demographics, cognitive items, ADL/IADL, functional items, Jorm IQCODE, external classifications (Langa-Weir, Hudomiet), and consensus weights; and merges everything into the analytic spine used by Analysis A7.|
 |[Analysis A1](#analysis-a1-hrs-core-actuarial-algorithm-derivation-and-validation-legacy)|HRS Core actuarial algorithm derivation and validation (legacy)|Derives and validates the original HRS Core actuarial cognitive algorithm by recoding data, fitting factor models, norming scores, finding cut points, and applying and validating the algorithm in HCAP. Superseded by Analysis A7, but its saved objects remain inputs to Analyses A3 and A4.|
 |[Analysis A2](#analysis-a2-manuscript-tablesfigures-and-appendices)|Manuscript, tables/figures, and appendices|Produces the manuscript in outline mode, a tables-and-figures document, and Appendices 1–3, computing reported values from saved Analysis A7 and PMM results at render time.|
+|[Analysis A2_2](#analysis-a2_2-summary-slide-deck-for-analysis-a2)|Summary slide deck for Analysis A2|Presents the three classification algorithms (HRS/HCAP, Core, PMM), the PMM model figures, and agreement of the Core algorithm and the PMM with the HRS/HCAP Algorithm in a Revealjs slide deck.|
 |[Analysis A3](#analysis-a3-pmm-profile-mixture-modeling-analysis-report)|PMM profile mixture modeling analysis report|Calibrates known-class profile mixture models to the HRS/HCAP Algorithm in HCAP, scores participants for Normal/MCI/Dementia probabilities, and reports results for cognition and Jorm models.|
 |[Analysis A3_2](#analysis-a3_2-pmm-classification-applied-to-hrs-core-20162022)|PMM classification applied to HRS Core 2016–2022|Applies the fixed HCAP 2016 PMM parameters from Analysis A3 to HRS Core respondents age 65+ in 2016, 2018, 2020, and 2022, producing per-person-wave probabilities for Normal, MCI, and Dementia.|
 |[Analysis A4](#analysis-a4-stata-ad-hoc-concordance-and-figures)|Stata ad hoc concordance and figures|Merges Core and HCAP factor scores, evaluates their correlation and impairment-category concordance, and produces four figures.|
@@ -34,6 +35,7 @@ Workflows depend on derived data written by earlier workflows. Rebuild upstream 
    - A5 reads `R_objects/PMM_045.RDS` from A3.
    - A3_2 (PMM scoring of HRS Core 2016–2022) runs after A3 and A0. It reads the A3 fixed-parameter Mplus inputs and `R_objects/A0_030_hrs16_22_merged.rds`.
 3. **Manuscript:** A2 last. It reads A7 results (`R_objects/A7_*.rds`) and re-sources the PMM comparison and margins scripts, which read the A3 Mplus outputs.
+   - A2_2 (summary slides for A2) reads the same inputs as A2 and `Figures/Slides2603_results_class_probabilities.png` from A9 (Slides2603).
 
 A4 (Stata) reads `R_objects/025_hrs16_cog.dta` from A1. A6 is ad hoc debugging.
 
@@ -95,6 +97,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis2_Driver.R`
 - Final rendered output:
   - `./Reports/MS_Main_[date].docx`, `MS_Tab_Fig_Apndx_[date].docx`, `MS_Appendix_1_[date].docx`, `MS_Appendix_2_[date].docx`, `MS_Appendix_3_[date].docx`
+  - `./Reports/MS_Combined_[date].pdf`: the five DOCX files converted with LibreOffice and joined in reading order (manuscript, tables and figures, Appendices 1 to 3). Skipped with a warning if LibreOffice or the R package `qpdf` is missing.
   - Most recent (opens in the Office Online viewer):
     - [Manuscript](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Main_2026-09-30.docx)
     - [Tables and figures](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Tab_Fig_Apndx_2026-09-30.docx)
@@ -109,6 +112,27 @@ Links under "Final rendered output" point to the most recent report committed to
   - `./Figures/MS_Main-Figure-2-PMM-Class-Probabilities.png`
 - Date initiated: 2026-03-24
 - Date last updated: 2026-09-30
+
+### Analysis A2_2: Summary slide deck for Analysis A2
+
+- Purpose:
+  - Revealjs deck summarizing Analysis A2: glossary of the three algorithms (HRS/HCAP, Core, PMM), algorithm and PMM figures, and agreement of the Core algorithm and the PMM with the HRS/HCAP Algorithm. Same format, theme, and title-slide background as Analyses A8 and A9.
+- Driver: `./Analysis2_2_Driver.R`
+- Control: `./R/Analysis_2_2/A2_2_000_Control.qmd`
+  - One included `A2_2_###_*.qmd` file per slide, numbered in steps of 5; reorder slides by reordering the include lines in the control file.
+  - Computes values from `./R/MS_MAIN/MS_010_results_objects.R`, the same results objects as Analysis A2.
+- Rebuild command:
+  - `Rscript Analysis2_2_Driver.R`
+- Final rendered output:
+  - `./Reports/Slides_A2summary_[date].html`
+  - Most recent: no driver render committed yet.
+- Data inputs:
+  - Analysis A2 inputs: `./R_objects/A7_100_hcap_tables.rds` (Analysis A7); `./R_objects/PMM_100.RDS`, `./mplus_output/pmm_103/`, `./mplus_output/pmm_103_jorm/` (Analysis A3)
+  - Figures: `./Figures/HCAP-algorithm.png`, `./Figures/HRS-algorithm_2024-12-19.png`, `./Figures/Slides2603_results_class_probabilities.png` (written by Analysis A9); `./R/excalidraw/PMM-012-Preliminary_Model.excalidraw.svg`, `PMM-013-Approaches_to_constrained_regression.excalidraw.svg`, `PMM-103-PMM-no-latent.excalidraw.svg`
+- Main derived data products:
+  - None
+- Date initiated: 2026-10-07
+- Date last updated: 2026-10-07
 
 ### Analysis A3: PMM profile mixture modeling analysis report
 
@@ -293,9 +317,22 @@ Links under "Final rendered output" point to the most recent report committed to
 - If a workflow produces multiple final artifacts, the driver may render multiple control files.
 - After rendering and staging new outputs, run `python3 tools/update_readme.py` to refresh the README links and dates and sync the Project Overview here. Do not edit the "Most recent" or "Date last updated" lines by hand.
 
+## Reporting Rules
+
+### Survey-weighted population counts
+
+- Report survey-weighted population counts in thousands, not single persons. Survey weights scale a sample of a few thousand respondents up to the national population, so an exact figure such as 50,132,671 claims a precision the sample cannot support. Report that estimate as 50,133 (thousands), and report a subgroup of about 500,000 persons as 500.
+- State the unit in every table that shows weighted counts. Use a note under the table ("Cell entries are survey-weighted population counts in thousands.") or a column header such as "Weighted N (× 1,000)". In prose, write the unit out (for example, "50.1 million adults").
+- Keep two significant digits for entries below 1 (fewer than 1,000 persons). For example, 432 persons appear as 0.43 and 46 persons as 0.046. Never print 0 for a nonzero cell.
+- Scale only at display. Compute totals, percentages, and agreement statistics (kappa) from the full-unit values, and sum totals before rounding.
+- Treat this rule as a presentation standard, not as a statement of sampling error. Rounding to thousands does not convey the uncertainty of an estimate. When a population count supports an inference, report its 95% confidence interval from the survey design (strata, clusters, and weights).
+- Apply the rule only to weights that sum to population totals (for example, `HCAP16WGTR`). Weights rescaled to sum to the sample size or to 100 (for example, the consensus-panel weights in `R/A7_100-comparison_of_diagnoses.R`) yield sample-scaled counts or percentages. Label those as such and do not convert them to thousands.
+- In Analysis A7, use `format_weighted_thousands()` and `weighted_thousands_note`, defined in `R/A7_100-comparison_of_diagnoses.R`.
+
 ## Dependencies And Notes
 
 - R workflows depend on Quarto plus the R packages loaded by the workflow-specific library scripts (e.g., ./R/A0_001-libraries.R, ./R/A1_001-libraries.R, ./R/A7_001-libraries.R) and the scripts they source.
+- Analysis A2's combined PDF depends on LibreOffice (found on the PATH or at `/Applications/LibreOffice.app`) and the R package `qpdf`.
 - Analysis A4 depends on Stata and the user-written commands used in the ad hoc script, including:
   - baplot
   - checkvar
@@ -306,7 +343,7 @@ Links under "Final rendered output" point to the most recent report committed to
 
 When working in this repository, first report:
 
-- which of the ten analysis drivers (A0–A9) is authoritative for the requested task
+- which analysis driver (A0–A9, A2_2, A3_2) is authoritative for the requested task
 - the exact rebuild command(s)
 - the expected final output artifact(s) and destination path(s)
 

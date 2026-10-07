@@ -1,0 +1,20 @@
+## PMM: covariate adjustment
+
+:::: {.columns}
+::: {.column width="58%"}
+![](../excalidraw/PMM-012-Preliminary_Model.excalidraw.svg){width="100%"}
+:::
+
+::: {.column width="42%"}
+<div style="font-size: 0.5em; line-height: 1.2;">
+Each cognitive test on age, sex, race, ethnicity, education, and their interactions in the HRS/HCAP robust norms sample.
+
+The regression coefficients describe expected test performance for a person free of conditions that affect cognition.
+
+We save these coefficients and fix them in the PMM. 
+
+This step matches the norming step of the HRS/HCAP Algorithm.
+</div>
+:::
+::::
+

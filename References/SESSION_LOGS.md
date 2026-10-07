@@ -208,3 +208,51 @@
 - Report update (same day): inputs absent from a wave's Core file, or missing for every respondent in a wave, are labeled "not administered" (missing by design). Added a number series paragraph that lists the waves with and without number series from the data. Open question: Rich recalls number series as absent in 2014, 2016 (taken from HCAP), 2018, and 2020. The A0 and A1 code reads Core `PNSSCORE`, `RNSSCORE`, and `SNSSCORE`, so this needs to be checked against the raw files.
 - Follow-up: the HRS question concordance lists wNSSCORE in 2010, 2012, 2020, and 2022 (Rich). That agrees with A0 for 2018 (absent) and 2020/2022 (present). It does not list 2016, yet A0_009 selects `PNSSCORE` from Core `H16D_R.dta` without error. To check: `codebook PNSSCORE` in H16D_R. Report wording changed from "alternate waves" to "not in every wave".
 - Report update: replaced the per-wave scatterplot matrices with one matrix per class (Normal, MCI, Dementia) across the four waves, each on its own page. Probabilities are reshaped long-to-wide inside the report only and probit-transformed (z = qnorm(p)) after clamping to [0.0005, 0.9995] because Mplus saves posteriors to 3 decimals (Rich chose clamp-only over more Mplus precision). Each matrix has a correlation table underneath (r below diagonal, pairwise N above, wave N on diagonal).
+
+### 2026-10-07 Reporting rule: weighted population counts in thousands
+
+- Request (Rich): report survey-weighted population counts in thousands, not exact persons, because grossing up a modest sample to an exact count implies false precision. Apply in the A7 report and add the rule to the project rules. Do not change `_AgentKit`.
+- Decisions (Rich): the shared table helpers may carry the new format into other reports; label units with a note under each table; entries below 1 (fewer than 1,000 persons) keep two significant digits.
+- Rule added as "Reporting Rules" in `References/instructions.md` and `README.md`. It is framed as a presentation standard; inferences on population counts need a design-based 95% confidence interval.
+- Code: `R/A7_100-comparison_of_diagnoses.R` gains `format_weighted_thousands()`, `weighted_thousands_note`, and a `units` argument ("thousands" or "percent") for `format_weighted_tab()` and `format_binary_weighted_tab()`. Tables using HCAP population weights now show thousands with a note. The eight consensus-panel tables keep `units = "percent"` because `consensus_wt` is rescaled to sum to 100.
+- Code: `R/A7_075-implement_algorithm.qmd` weighted `tbl_svysummary` (display design with weights / 1,000; percentages now show one decimal) and weighted `dx_v1` by `vs1hcapdxeap` crosstab now show thousands with the note.
+- A2 and A8 do not display weighted counts from A7 (they use unweighted n, weighted percentages, and kappas), so their output should not change.
+- Fix after first rerun: the Langa-Weir vs Consensus table in `R/A7_100-comparison_of_diagnoses.qmd` called `format_weighted_tab()` directly and so got the thousands format. It now prints the stored `hcap_tables$tables$lw_consensus`, like the other tables.
+- Consensus table notes (Rich): "normalized within the consensus sample" replaced by "Cell entries are weighted percentages of the validation subsample." The two Consensus vs Hudomiet tables referenced an undefined note (`notes$consensus_hudomiet`) and printed none; they now use `notes$consensus_standard`.
+- Next: Rich reruns `Rscript Analysis7_Driver.R` locally and checks the tables.
+
+### 2026-10-07 Analysis A3 report: final PMM figure
+
+- Request (Rich): add `R/excalidraw/PMM-103-PMM-no-latent.excalidraw.svg` (final PMM, no latent cognition factor; cognition and function model plus informant model) to the A3 report with explanatory text.
+- Placement: figure (`@fig-pmm-final`) and text at the top of "Model - Individual item indicators" in `R/PMM_103_calibration_model.qmd`; a callout after Figure 1 in `R/PMM_011_Overall_Approach.qmd` notes that the background figures show the original latent-factor design.
+- Figure vs Mplus inputs: the informant panel shows the Jorm only, but `pmm_hcap_103b_jorm.inp` also uses the ten ADL/IADL items. The dashed covariate box shows baa x hisp, which `pmm_hcap_103b.inp` does not include (24 terms). Text follows the Mplus inputs. Open for Rich: revise the drawing.
+- Figure label fix (Rich): `R/PMM_011_Overall_Approach.qmd` used `#fig-fig2` twice (preliminary model and classification model). The classification model figure is now `#fig-classification`; no cross-references used `fig-fig2`.
+- Next: Rich renders Analysis 3 locally and reviews.
+
+### 2026-10-07 Analysis A2: combined PDF
+
+- Request (Rich): the A2 driver should also produce one dated PDF that joins all A2 DOCX outputs.
+- Decisions (Rich): code inline in `Analysis2_Driver.R` (not in a control file, because only the driver runs after all five DOCX files are final); LibreOffice for conversion; output `Reports/MS_Combined_[date].pdf`; order manuscript, tables and figures, Appendices 1 to 3; if LibreOffice is missing, warn with install instructions and skip; delete interim PDFs.
+- Implementation: LibreOffice runs headless with a temporary profile, so it works while LibreOffice is open; `qpdf::pdf_combine()` joins the PDFs. On Unix, the call clears `LD_LIBRARY_PATH`, because R's value stopped LibreOffice from loading its libraries in a Linux test.
+- Tested on dummy DOCX files: five pages in order; temporary folders removed. Not yet run on the real manuscript files.
+- `tools/update_readme.py` lists the combined PDF as an A2 output. README and instructions list the output and the LibreOffice and `qpdf` dependencies.
+
+### 2026-10-07 Analysis A2_2 created: summary slide deck for Analysis A2
+
+- Request (Rich): new subproject in folder `Analysis_2_2` with a driver, a control file, and a Revealjs deck in the A8/A9 format; one slide per included QMD, numbered in steps of 5.
+- Content requested: glossary of the three algorithms (HRS/HCAP, Core, PMM); figures `HCAP-algorithm.png`, `HRS-algorithm_2024-12-19.png`, `Slides2603_results_class_probabilities.png`, and excalidraw `PMM-103-PMM-no-latent`, `PMM-013-Approaches_to_constrained_regression`, `PMM-012-Preliminary_Model`; agreement of the Core algorithm and the PMM with the HRS/HCAP Algorithm.
+- Files: `Analysis2_2_Driver.R`; `R/Analysis_2_2/A2_2_000_Control.qmd`; slides `A2_2_005` to `A2_2_050`. Output `Reports/Slides_A2summary_[date].html`.
+- Decisions (Claude, for Rich to review): folder placed under `R/` per the repository layout rule; "watermark" read as the title-slide background `Figures/Gemini-Brown-Amphibian.png` used in A8 and A9; agreement values come from `R/MS_MAIN/MS_010_results_objects.R` so they match the A2 report; kappas shown to 2 decimals.
+- README, instructions, and `tools/update_readme.py` updated with an A2_2 section.
+- Next: Rich renders locally and reviews.
+
+### 2026-10-07 PMM residual structure checked
+
+- Question (Rich): does the final PMM let residual covariances differ by known class; are STDYX results available? A table of Cohen's d and q across classes was considered and dropped (Rich).
+- Finding (`mplus_output/pmm_103/pmm_hcap_103.inp` and `.out`): only means, intercepts, and thresholds vary by class. Residual variances of the four continuous scores are free but class-invariant (Mplus default). Residual covariances sit in %OVERALL%: only vdwdimmz with vdwddelz is non-zero (fixed at 0.01853, STDYX r = 0.70); the other five are fixed at 0. Categorical indicators have no within-class residual associations. Link is LOGIT. STDYX is printed (OUTPUT: STANDARDIZED).
+- Corrected the residual-covariance sentence added earlier today to `R/PMM_103_calibration_model.qmd`.
+
+#### Open Questions / Deferred Issues
+
+- **Possible bug: duplicate residual covariance statements in the PMM cognition model.** The generated `pmm_hcap_103.inp` (and `pmm_hcap_103b.inp`) lists the six residual covariances among vdlfl1z, vdwdimmz, vdwddelz, and vdexf7z twice. The first block fixes all six at robust-norms values (for example, vdwdimmz with vdlfl1z @ 0.00203). A second block then fixes five of them at 0 (all but vdwdimmz with vdwddelz). Mplus applies the later statement, and the output confirms the zeros. To do: confirm whether the zeros are intended. If not, fix the generator (`R/PMM_101_mplus_function.R` or `R/PMM_103_calibration_model.R`), refit Analysis A3, and rerun A3_2, A2, A2_2, and A9, which use the PMM parameters.
+

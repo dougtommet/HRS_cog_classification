@@ -12,7 +12,10 @@
     - Core algorithm: `r analysis2_margin_text("Core algorithm")`
     - PMM: `r analysis2_margin_text("PMM")`
   - [Provenance: R/MS_MAIN/MS_010_results_objects.R]
-- Figure 1: PMM class-probability distributions
+- Figure 1: Core algorithm
+  - Classification rules and participant counts
+  - [Provenance: R/MS_MAIN/MS_Tab_Fig_Apndx-020-Figure-1.qmd]
+- Figure 2: PMM class-probability distributions
   - Probability separation; uncertainty near class boundaries
   - [Provenance: R/PMM_112_Margins.R]
 

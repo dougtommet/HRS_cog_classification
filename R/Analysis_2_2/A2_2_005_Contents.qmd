@@ -1,0 +1,7 @@
+## Contents
+
+- Three classification algorithms: HRS/HCAP, Core, PMM
+- How the Core algorithm and the PMM work
+- Agreement of the Core algorithm and the PMM with the HRS/HCAP Algorithm
+- Summary
+

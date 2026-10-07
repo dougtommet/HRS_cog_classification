@@ -2,6 +2,26 @@
 
 ## Model - Individual item indicators
 
+### Final model structure
+
+@fig-pmm-final shows the final profile mixture model. It differs from the models in the background section in one respect: it has no latent cognition factor. Our original design (@fig-fig1) placed a general cognitive performance factor between the classes and the cognitive test scores. In the final model, each cognitive test score is a direct indicator of class. We dropped the factor because the model without it agreed better with the criterion classifications.
+
+::: {#fig-pmm-final layout-align="center" fig-cap="Final profile mixture model: cognition and function model (top) and informant model (bottom), with no latent cognition factor"}
+![](excalidraw/PMM-103-PMM-no-latent.excalidraw.svg){width="90%"}
+:::
+
+The figure shows two models. The cognition and function model applies to participants who completed cognitive testing. Its indicators are nine cognitive test scores, ten ADL and IADL items, and one self-report item on memory concerns. The informant model applies to participants who did not complete cognitive testing and have an informant report on the Jorm IQCODE. Its indicators are the Jorm IQCODE and the same ten ADL and IADL items. Each participant receives class probabilities from one model: the informant model when a Jorm IQCODE is present, and the cognition and function model otherwise.
+
+|Element|Meaning|
+|:------|:------------------------------------------------------------|
+|cg|Cognitive class (Normal, MCI, Dementia). The square around the circle marks a known class: during calibration, class membership is fixed to the HRS/HCAP Algorithm classification. Class proportions are fixed at the survey-weighted HCAP distribution.|
+|Arrows from cg|Indicator means and thresholds differ by class.|
+|K|Regression coefficients of the nine cognitive test scores on 24 sociodemographic terms. We estimated these coefficients in the robust norms group and fixed them in the final model (see @fig-fig3).|
+|Dashed box|The sociodemographic terms: three age spline terms, sex, Black or African American race (baa), Hispanic ethnicity (hisp), years of schooling (edu), and two-way interactions among them. The model omits the race by ethnicity interaction. These terms adjust the cognitive indicators. They do not predict class.|
+
+Residual variances of the four continuous cognitive scores are estimated but held equal across classes. One residual covariance is not zero: immediate with delayed word recall (vdwdimmz with vdwddelz), fixed at the robust norms group value and equal across classes. All other residual covariances are zero, so indicators are independent within class apart from that pair. The figure does not show this covariance.
+
+
 ### Cognition model
 
 This model kept the neuropsych items as separate indicators (no GCP factor).  It allowed the neuropsych items, individual functional impairment indicators, subjective memory complaints, and informant scores to vary by class.

@@ -1,6 +1,6 @@
-Mplus VERSION 8.11 (Mac)
+Mplus VERSION 9 (Mac)
 MUTHEN & MUTHEN
-08/07/2026   5:09 PM
+10/07/2026   5:05 AM
 
 INPUT INSTRUCTIONS
 
@@ -25,7 +25,6 @@ INPUT INSTRUCTIONS
 
   DATA:
   FILE = "model1_a46efea7995301c55172365a036401e3.dat";
-
   VARIABLE:
   NAMES = mplusid HCAP16WGTR0 STRATUM SECU_mplus vdori vdlfl1z vdlfl2 vdlfl3 vdwddelz
        vdexf7z vdsevens vdcount;
@@ -469,9 +468,9 @@ SAVEDATA INFORMATION
     Standardized Model Results
     R-Square
 
-     Beginning Time:  17:09:33
-        Ending Time:  17:09:33
-       Elapsed Time:  00:00:00
+     Beginning Time:  05:05:41
+        Ending Time:  05:05:42
+       Elapsed Time:  00:00:01
 
 
 
@@ -484,4 +483,4 @@ Fax: (310) 391-8971
 Web: www.StatModel.com
 Support: Support@StatModel.com
 
-Copyright (c) 1998-2024 Muthen & Muthen
+Copyright (c) 1998-2025 Muthen & Muthen

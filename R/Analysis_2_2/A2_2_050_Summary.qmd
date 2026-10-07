@@ -1,0 +1,22 @@
+## Summary
+
+```{r}
+#| include: false
+a2_2_kappa <- function(method, column) {
+  analysis2_agreement |>
+    dplyr::filter(classification_2 == "HRS/HCAP Algorithm", classification_1 == method) |>
+    dplyr::pull({{ column }}) |>
+    sprintf(fmt = "%.2f")
+}
+```
+
+<div style="font-size: 0.75em; line-height: 1.3;">
+
+- Both Core methods take their structure from the HRS/HCAP Algorithm: demographic adjustment set in a robust norms group, plus function, self-report, and informant data.
+- Agreement with the HRS/HCAP Algorithm, three classes: Core algorithm `r a2_2_kappa("Core Algorithm", three_class_kappa)`; PMM `r a2_2_kappa("PMM", three_class_kappa)`.
+- Agreement for dementia vs. no dementia: Core algorithm `r a2_2_kappa("Core Algorithm", binary_kappa)`; PMM `r a2_2_kappa("PMM", binary_kappa)`.
+- CAUTION: these agreement statistics are in-sample (HRS/HCAP used for derivation and evaluation of the Core algorithms.)
+- The PMM also gives each person a probability for each class, which carries classification uncertainty into later analyses.
+
+</div>
+
