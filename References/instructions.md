@@ -31,7 +31,7 @@ Workflows depend on derived data written by earlier workflows. Rebuild upstream 
 1. **Core algorithm (current):** A0 → A7 → A8
    - `Rscript Analysis0_Driver.R`, then `Rscript Analysis7_Driver.R`, then `Rscript Analysis8_Driver.R`
 2. **PMM:** A1 → A3 → A9 (Slides2603)
-   - A3 reads the unprefixed A1 objects (e.g., `R_objects/025_hrs16_cog.rds`, `014_hrshcap.rds`), not A0 output. `Analysis1_Driver.R` is currently broken (see Analysis A1), so A3 relies on the saved A1 objects.
+   - A3 reads the unprefixed A1 objects (e.g., `R_objects/025_hrs16_cog.rds`, `014_hrshcap.rds`), not A0 output. The A1 driver renders from saved objects; its data-processing and model-fitting block is disabled with `eval: false`.
    - A5 reads `R_objects/PMM_045.RDS` from A3.
    - A3_2 (PMM scoring of HRS Core 2016–2022) runs after A3 and A0. It reads the A3 fixed-parameter Mplus inputs and `R_objects/A0_030_hrs16_22_merged.rds`.
 3. **Manuscript:** A2 last. It reads A7 results (`R_objects/A7_*.rds`) and re-sources the PMM comparison and margins scripts, which read the A3 Mplus outputs.
@@ -67,26 +67,27 @@ Links under "Final rendered output" point to the most recent report committed to
 - Purpose:
   - Original derivation and validation of the HRS Core actuarial algorithm: read and recode data, fit factor models, norm scores, find cut points, and apply and validate the algorithm in HCAP. Superseded by Analysis A7, but its saved objects are still inputs to Analyses A3 and A4.
 - Driver: `./Analysis1_Driver.R`
-  - Known issue: the driver still targets the deleted `R/000-master.qmd`. Point `render_target` at `R/A1_000-master.qmd` before rebuilding.
+  - Renders `R/A1_000-master.qmd` from saved analysis objects. The master document's data-processing and model-fitting block is disabled with `eval: false`, so running the driver does not rebuild those objects.
 - Control: `./R/A1_000-master.qmd`
   - Source programs: `./R/A1_001-libraries.R` through `./R/A1_030-implementing_algorithm_in_HCAP.R`; `./R/A1_005-read_data.qmd` through `./R/A1_035-validation_comparison.qmd`
 - Rebuild command:
   - `Rscript Analysis1_Driver.R`
 - Final rendered output:
   - `./Reports/HRS_cognition_[date].html`
-  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/HRS_cognition_2025-07-22.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/HRS_cognition_2026-10-07.html
 - Data inputs:
   - Raw HRS 2016 and HCAP 2016 files read from machine-specific Dropbox paths set in `./R/A1_002-folder_paths.R`
 - Main derived data products:
   - `./R_objects/0##_*.rds` (unprefixed, e.g., `025_hrs16_cog.rds`, `014_hrshcap.rds`)
   - `./R_objects/025_hrs16_cog.dta`
 - Date initiated: 2024-07-25 (first repository commit; the earliest report is dated 2024-07-19)
-- Date last updated: 2026-04-17
+- Date last updated: 2026-10-07
 
 ### Analysis A2: Manuscript, tables/figures, and appendices
 
 - Purpose:
   - Manuscript (outline mode), tables and figures document, and Appendices 1–3. All reported values are computed from saved Analysis A7 and PMM results at render time.
+  - The shared cohort maps the 2016 Core IQCODE field `rPjorm` to `jorm` for Table 1. The tables document includes Tables 1–4 (including the A7 pairwise agreement matrix) and Figures 1–2.
 - Driver: `./Analysis2_Driver.R`
 - Control:
   - `./R/MS_MAIN/MS_Main_Control.qmd`
@@ -98,12 +99,13 @@ Links under "Final rendered output" point to the most recent report committed to
 - Final rendered output:
   - `./Reports/MS_Main_[date].docx`, `MS_Tab_Fig_Apndx_[date].docx`, `MS_Appendix_1_[date].docx`, `MS_Appendix_2_[date].docx`, `MS_Appendix_3_[date].docx`
   - `./Reports/MS_Combined_[date].pdf`: the five DOCX files converted with LibreOffice and joined in reading order (manuscript, tables and figures, Appendices 1 to 3). Skipped with a warning if LibreOffice or the R package `qpdf` is missing.
-  - Most recent (opens in the Office Online viewer):
-    - [Manuscript](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Main_2026-09-30.docx)
-    - [Tables and figures](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Tab_Fig_Apndx_2026-09-30.docx)
-    - [Appendix 1](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_1_2026-09-30.docx)
-    - [Appendix 2](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_2_2026-09-30.docx)
-    - [Appendix 3](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_3_2026-09-30.docx)
+  - Most recent:
+    - [Manuscript](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Main_2026-10-07.docx)
+    - [Tables and figures](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Tab_Fig_Apndx_2026-10-07.docx)
+    - [Appendix 1](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_1_2026-10-07.docx)
+    - [Appendix 2](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_2_2026-10-07.docx)
+    - [Appendix 3](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_3_2026-10-07.docx)
+    - [Combined PDF](https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/MS_Combined_2026-10-07.pdf)
 - Data inputs:
   - `./R_objects/A7_005_hrs16_merged.rds`, `./R_objects/A7_100_hcap_tables.rds` (Analysis A7)
   - `./R_objects/PMM_100.RDS`, `./mplus_output/pmm_103/`, `./mplus_output/pmm_103_jorm/` (Analysis A3)
@@ -111,7 +113,7 @@ Links under "Final rendered output" point to the most recent report committed to
 - Main derived data products:
   - `./Figures/MS_Main-Figure-2-PMM-Class-Probabilities.png`
 - Date initiated: 2026-03-24
-- Date last updated: 2026-09-30
+- Date last updated: 2026-10-07
 
 ### Analysis A2_2: Summary slide deck for Analysis A2
 
@@ -125,7 +127,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis2_2_Driver.R`
 - Final rendered output:
   - `./Reports/Slides_A2summary_[date].html`
-  - Most recent: no driver render committed yet.
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides_A2summary_2026-10-07.html
 - Data inputs:
   - Analysis A2 inputs: `./R_objects/A7_100_hcap_tables.rds` (Analysis A7); `./R_objects/PMM_100.RDS`, `./mplus_output/pmm_103/`, `./mplus_output/pmm_103_jorm/` (Analysis A3)
   - Figures: `./Figures/HCAP-algorithm.png`, `./Figures/HRS-algorithm_2024-12-19.png`, `./Figures/Slides2603_results_class_probabilities.png` (written by Analysis A9); `./R/excalidraw/PMM-012-Preliminary_Model.excalidraw.svg`, `PMM-013-Approaches_to_constrained_regression.excalidraw.svg`, `PMM-103-PMM-no-latent.excalidraw.svg`
@@ -146,7 +148,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis3_Driver.R`
 - Final rendered output:
   - `./Reports/PMM_Analysis_Report_[date].html`
-  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/PMM_Analysis_Report_2026-09-23.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/PMM_Analysis_Report_2026-10-07.html
 - Data inputs:
   - Analysis A1 objects: `./R_objects/025_hrs16_cog.rds`, `013_hrs16_func.rds`, `012_hrs16_iadl.rds`, `014_hrshcap.rds`, `005_tracker.rds`, `005_hc16hp_r.rds`, `005_langa_weir.rds`, `005_hudomiet.rds`
   - `./Stata/20240228-040.dta` (HCAP validation sample)
@@ -154,7 +156,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `./R_objects/PMM_*.RDS`
   - `./mplus_output/pmm_102/`, `./mplus_output/pmm_103/`, `./mplus_output/pmm_103_jorm/`
 - Date initiated: 2025-07-24
-- Date last updated: 2026-09-23
+- Date last updated: 2026-10-07
 
 ### Analysis A3_2: PMM classification applied to HRS Core 2016–2022
 
@@ -252,7 +254,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis7_Driver.R`
 - Final rendered output:
   - `./Reports/A7_HRS_cog_classification_[date].html`
-  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A7_HRS_cog_classification_2026-08-07.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A7_HRS_cog_classification_2026-10-07.html
 - Data inputs:
   - `./R_objects/A0_030_hrs16_merged.rds`, `A0_030_hrs16_22_merged.rds`, `A0_030_hcap16_merged.rds` (Analysis A0)
 - Main derived data products:
@@ -260,7 +262,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `./mplus_output/A7/`
   - `./Data/Dx_for_LK-2026-06-11.csv` (shared export of person-wave `dx_v1` diagnoses, 2016–2022; filename is hard-coded in `A7_075`)
 - Date initiated: 2026-04-17
-- Date last updated: 2026-09-30
+- Date last updated: 2026-10-07
 
 ### Analysis A8: Summary slide deck for Analysis A7
 
@@ -273,7 +275,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis8_Driver.R`
 - Final rendered output:
   - `./Reports/Slides_A7summary_[date].html`
-  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides_A7summary_2026-09-23.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides_A7summary_2026-10-07.html
 - Data inputs:
   - `./R_objects/A7_100_hcap_tables.rds` (Analysis A7)
 - Main derived data products:
@@ -292,7 +294,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Slides2603_Driver.R`
 - Final rendered output:
   - `./Reports/Slides2603_[date].html`
-  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides2603_2026-09-23.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides2603_2026-10-07.html
 - Data inputs:
   - Analysis A3 outputs (`./R_objects/PMM_*.RDS`, `./mplus_output/pmm_103*/`), via `R/PMM_110_Comparison_of_Consensus_Langa_Weir.R` and `R/PMM_112_Margins.R`
 - Main derived data products:
