@@ -1,0 +1,59 @@
+
+```{r}
+A7_070_threshold_calibration <- readRDS(here::here("R_objects", "A7_070_threshold_calibration.rds"))
+cal <- A7_070_threshold_calibration
+pct <- function(x) sprintf("%.1f%%", 100 * x)
+```
+
+# Threshold calibration
+
+The Core algorithm T-score cut points are chosen so that the survey-weighted (`r cal$weight`) Normal, MCI, and Dementia shares of the Core algorithm match those of the HRS/HCAP Algorithm (`r cal$target_variable`) in HCAP 2016 (N = `r format(cal$n_sample, big.mark = ",")`). The self-rated memory rule and the Jorm IQCODE fallback are held fixed. The grid step is `r cal$grid_step` T-score points.
+
+Target shares: Normal `r pct(cal$target_shares[["1"]])`, MCI `r pct(cal$target_shares[["2"]])`, Dementia `r pct(cal$target_shares[["3"]])`.
+
+```{r}
+#| tbl-cap: "Calibrated, previous, and kappa-maximizing cut points"
+#| label: tbl-a7-070-cuts
+dplyr::bind_rows(
+  cal$chosen    |> dplyr::mutate(set = "Calibrated (prevalence matching)"),
+  cal$previous  |> dplyr::mutate(set = "Previous (37, 48)"),
+  cal$max_kappa |> dplyr::mutate(set = "Maximum 3-class kappa")
+) |>
+  dplyr::select(set, cut_severe, cut_moderate, share_normal, share_mci,
+                share_dementia, kappa_3class, kappa_binary) |>
+  gt::gt() |>
+  gt::fmt_percent(columns = dplyr::starts_with("share"), decimals = 1) |>
+  gt::fmt_number(columns = dplyr::starts_with("kappa"), decimals = 3) |>
+  gt::cols_label(set = "", cut_severe = "Severe cut", cut_moderate = "Moderate cut",
+                 share_normal = "Normal", share_mci = "MCI", share_dementia = "Dementia",
+                 kappa_3class = "Kappa (3-class, quadratic)", kappa_binary = "Kappa (dementia)")
+```
+
+```{r}
+#| fig-cap: "Weighted dementia share by severe cut point (left) and MCI share by moderate cut point at the calibrated severe cut (right). Dashed lines: HRS/HCAP Algorithm shares."
+#| label: fig-a7-070-curves
+#| fig-width: 9
+#| fig-height: 4
+curves <- dplyr::bind_rows(
+  cal$grid |>
+    dplyr::group_by(cut = cut_severe) |>
+    dplyr::summarise(share = dplyr::first(share_dementia), .groups = "drop") |>
+    dplyr::mutate(panel = "Dementia share by severe cut"),
+  cal$grid |>
+    dplyr::filter(cut_severe == cal$cuts[["severe"]]) |>
+    dplyr::transmute(cut = cut_moderate, share = share_mci,
+                     panel = "MCI share by moderate cut")
+)
+refs <- tibble::tibble(
+  panel  = c("Dementia share by severe cut", "MCI share by moderate cut"),
+  target = c(cal$target_shares[["3"]], cal$target_shares[["2"]]),
+  cut    = c(cal$cuts[["severe"]], cal$cuts[["moderate"]])
+)
+ggplot(curves, aes(cut, share)) +
+  geom_line() +
+  geom_hline(data = refs, aes(yintercept = target), linetype = "dashed") +
+  geom_vline(data = refs, aes(xintercept = cut), colour = "grey50") +
+  facet_wrap(~panel, scales = "free") +
+  scale_y_continuous("Weighted share", labels = scales::percent) +
+  xlab("Cut point (T score)")
+```

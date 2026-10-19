@@ -14,67 +14,14 @@ agreement_methods <- c(
 
 
 ####################################################
-weighted_kappa_from_tab <- function(tab) {
-  obs <- unclass(tab)
-  expected <- outer(rowSums(obs), colSums(obs)) / sum(obs)
-
-  agreement_weights <- outer(
-    seq_len(nrow(obs)),
-    seq_len(ncol(obs)),
-    function(i, j) 1 - ((i - j)^2 / (nrow(obs) - 1)^2)
-  )
-
-  po <- sum(agreement_weights * obs) / sum(obs)
-  pe <- sum(agreement_weights * expected) / sum(obs)
-  kappa_w <- (po - pe) / (1 - pe)
-
-  tibble::tibble(
-    observed_weighted_agreement = po,
-    expected_weighted_agreement = pe,
-    quadratic_weighted_kappa = kappa_w
-  )
-}
-
-binary_kappa_from_tab <- function(tab) {
-  obs <- unclass(tab)
-  expected <- outer(rowSums(obs), colSums(obs)) / sum(obs)
-
-  po <- sum(diag(obs)) / sum(obs)
-  pe <- sum(diag(expected)) / sum(obs)
-  kappa <- (po - pe) / (1 - pe)
-
-  tibble::tibble(
-    observed_agreement = po,
-    expected_agreement = pe,
-    kappa = kappa
-  )
-}
+# weighted_kappa_from_tab() and binary_kappa_from_tab() are defined in
+# R/A7_060-algorithm_functions.R.
+source(here::here("R", "A7_060-algorithm_functions.R"))
 
 ####################################################
-# Display of survey-weighted population counts
-#
-# Weighted counts from HCAP population weights are shown in thousands
-# (project reporting rule; see References/instructions.md). Entries that
-# would round below 1 (fewer than 1,000 persons) keep two significant
-# digits. Totals are summed in full units before display. The function
-# uses base R only, so the gt tables saved to A7_100_hcap_tables.rds
-# render in any session that reads them.
-format_weighted_thousands <- function(x) {
-  k <- x / 1000
-  vapply(k, function(v) {
-    if (is.na(v)) return("")
-    if (v == 0) return("0")
-    if (abs(signif(v, 2)) < 1) {
-      return(formatC(signif(v, 2), format = "fg", digits = 2, flag = "#"))
-    }
-    format(round(v), big.mark = ",", scientific = FALSE, trim = TRUE)
-  }, character(1))
-}
-
-weighted_thousands_note <- paste(
-  "Cell entries are survey-weighted population counts in thousands.",
-  "Entries for fewer than 1,000 persons show two significant digits."
-)
+# format_weighted_thousands() and weighted_thousands_note are defined in
+# R/A7_060-algorithm_functions.R (project reporting rule; see
+# References/instructions.md).
 
 # Consensus-panel weights are rescaled to sum to 100 (see consensus_wt),
 # so those tables show weighted percentages, not counts.

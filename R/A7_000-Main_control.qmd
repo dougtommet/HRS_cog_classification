@@ -38,8 +38,11 @@ source(here::here("R", "A7_050-mplus_model.R"))
 source(here::here("R", "A7_052-blom_factor_score.R"))
 source(here::here("R", "A7_053-covariates_to_long_format.R"))
 source(here::here("R", "A7_055-norm_factor_score.R"))
+source(here::here("R", "A7_060-algorithm_functions.R"))
+source(here::here("R", "A7_070-threshold_calibration.R"))
 source(here::here("R", "A7_075-implement_algorithm.R"))
 source(here::here("R", "A7_100-comparison_of_diagnoses.R"))
+source(here::here("R", "A7_090-function_check.R"))   # side analysis for the Appendix 1 endnote
 
 
 ```
@@ -51,6 +54,8 @@ source(here::here("R", "A7_100-comparison_of_diagnoses.R"))
 {{< include A7_053-covariates_to_long_format.qmd >}}
 
 {{< include A7_055-norm_factor_score.qmd >}}
+
+{{< include A7_070-threshold_calibration.qmd >}}
 
 {{< include A7_075-implement_algorithm.qmd >}}
 

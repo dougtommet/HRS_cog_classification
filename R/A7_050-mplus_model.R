@@ -278,6 +278,149 @@ hrs16_22_long <- foo_long %>%
 
 
 
+################################################
+# Summary values for reports (Appendix 1)
+
+read_out_count <- function(path, label) {
+  x <- readLines(path, warn = FALSE)
+  hit <- grep(label, x, value = TRUE)[1]
+  as.integer(stringr::str_extract(hit, "[0-9]+\\s*$"))
+}
+
+cfa_items <- c("vdori", "vdlfl1z", "vdlfl2", "vdlfl3",
+               "vdwddelz", "vdexf7z", "vdsevens", "vdcount")
+
+cfa_out_wlsmv <- here::here("mplus_output", "A7", "model_1", "model1.out")
+cfa_out_mlr   <- here::here("mplus_output", "A7", "model_1a", "model1a.out")
+cfa_wlsmv <- MplusAutomation::readModels(cfa_out_wlsmv, quiet = TRUE)
+cfa_mlr   <- MplusAutomation::readModels(cfa_out_mlr, quiet = TRUE)
+
+std_loadings <- function(m) {
+  m$parameters$stdyx.standardized %>%
+    filter(paramHeader == "F.BY") %>%
+    transmute(item = str_to_lower(param), est, se)
+}
+
+A7_050_cfa_summary <- list(
+  items = cfa_items,
+  n_obs = cfa_wlsmv$summaries$Observations,
+  n_strata   = read_out_count(cfa_out_wlsmv, "Number of strata"),
+  n_clusters = read_out_count(cfa_out_wlsmv, "Number of clusters"),
+  n_positive_weight = sum(hrs16_nolabs$HCAP16WGTR0 > 0),
+  n_positive_weight_any_item = hrs16_nolabs %>%
+    filter(HCAP16WGTR0 > 0) %>%
+    filter(if_any(all_of(cfa_items), ~ !is.na(.x))) %>%
+    nrow(),
+  fit_wlsmv = cfa_wlsmv$summaries %>%
+    select(any_of(c("ChiSqM_Value", "ChiSqM_DF", "ChiSqM_PValue",
+                    "RMSEA_Estimate", "RMSEA_90CI_LB", "RMSEA_90CI_UB",
+                    "CFI", "TLI", "SRMR"))),
+  # Proportion with each item present, among HRS-HCAP participants (weight > 0)
+  # with at least 1 item response: the cases that inform the estimates.
+  coverage_hcap = hrs16_nolabs %>%
+    filter(HCAP16WGTR0 > 0) %>%
+    filter(if_any(all_of(cfa_items), ~ !is.na(.x))) %>%
+    summarise(across(all_of(cfa_items), ~ mean(!is.na(.x)))) %>%
+    unlist(),
+  # Weighted (HCAP16WGTR) share in the highest observed category, categorical items.
+  top_share = sapply(c("vdori", "vdlfl2", "vdlfl3", "vdsevens", "vdcount"), function(v) {
+    d <- hrs16_nolabs %>% filter(HCAP16WGTR0 > 0, !is.na(.data[[v]]))
+    sum(d$HCAP16WGTR0[d[[v]] == max(d[[v]])]) / sum(d$HCAP16WGTR0)
+  }),
+  loadings_wlsmv = std_loadings(cfa_wlsmv),
+  loadings_mlr   = std_loadings(cfa_mlr),
+  item_coverage_by_wave = foo_long %>%
+    filter(inHRS == 1) %>%
+    group_by(wave) %>%
+    summarise(n = n(),
+              across(all_of(cfa_items), ~ sum(!is.na(.x))),
+              .groups = "drop"),
+  # Person-waves Mplus scored (at least 1 item response; all ages, 2016-2022).
+  n_person_waves_scored = read_out_count(
+    here::here("mplus_output", "A7", "model_1a_fixed_2016_2022", "model_1a_fixed.out"),
+    "Number of observations"
+  )
+)
+
+
+
+################################################
+# Appendix 1: item coverage by wave and EAP shrinkage (added 2026-10-18)
+# Population: Core respondents interviewed in the wave, aged 65+, with a
+# nonzero wave weight (xWGTR). Proxy interviews are included and have no tests.
+
+wave_info <- tibble::tribble(
+  ~L,  ~year, ~age_var, ~in_var,
+  "P", 2016L, "page",   "inHRS_16",
+  "Q", 2018L, "qage",   "inHRS_18",
+  "R", 2020L, "rage",   "inHRS_20",
+  "S", 2022L, "sage",   "inHRS_22"
+)
+coverage_items <- c(cfa_items, "vdwdimmz")   # immediate recall: not in the model
+
+wave_frame <- function(L, age_var, in_var) {
+  d <- hrs16_22_nolabs %>%
+    filter(.data[[in_var]] == 1) %>%
+    transmute(mplusid,
+              age = .data[[age_var]],
+              w   = .data[[paste0(L, "WGTR")]],
+              across(any_of(paste0("r", L, coverage_items)))) %>%
+    rename_with(~ sub("^r[PQRS]", "", .x), starts_with("r")) %>%
+    filter(!is.na(w), w > 0, !is.na(age), age >= 65)
+  for (it in coverage_items) if (!it %in% names(d)) d[[it]] <- NA_real_
+  d
+}
+
+item_coverage_65 <- purrr::pmap_dfr(wave_info, function(L, year, age_var, in_var) {
+  d <- wave_frame(L, age_var, in_var)
+  present <- lapply(coverage_items, function(it) !is.na(d[[it]]))
+  names(present) <- coverage_items
+  present[["any_item"]] <- Reduce(`|`, present)
+  tibble::tibble(
+    year = year,
+    item = names(present),
+    n_respondents = nrow(d),
+    n_present = vapply(present, sum, numeric(1)),
+    p_present_weighted = vapply(present, function(ok) sum(d$w[ok]) / sum(d$w), numeric(1))
+  )
+})
+
+# EAP factor scores (fixed 2016 model) by wave, same population.
+age_long <- purrr::pmap_dfr(wave_info, function(L, year, age_var, in_var) {
+  hrs16_22_nolabs %>% transmute(mplusid, wave = L, age = .data[[age_var]])
+})
+eap_65 <- hrs16_22_long %>%
+  left_join(age_long, by = c("mplusid", "wave")) %>%
+  filter(inHRS == 1, !is.na(weight), weight > 0, !is.na(age), age >= 65, !is.na(F)) %>%
+  select(wave, F, F_SE, weight)
+
+# Shrinkage comparison: waves with number series administered (2016, 2020)
+# versus 2018 (not administered). 2022 is left out (number series missing for
+# most face-to-face interviews).
+shrink_groups <- c(P = "2016 and 2020", R = "2016 and 2020", Q = "2018")
+eap_shrink <- eap_65 %>%
+  filter(wave %in% names(shrink_groups)) %>%
+  mutate(group = factor(shrink_groups[wave], levels = c("2016 and 2020", "2018")))
+
+eap_shrink_summary <- eap_shrink %>%
+  group_by(group) %>%
+  summarise(
+    n = n(),
+    min = min(F), q1 = quantile(F, 0.25), median = median(F),
+    q3 = quantile(F, 0.75), max = max(F),
+    sd = sd(F),
+    mean_psd = mean(F_SE),
+    mean_psd2 = mean(F_SE^2),
+    .groups = "drop"
+  ) %>%
+  mutate(var_eap = sd^2,
+         total = var_eap + mean_psd2)   # law of total variance: about 1 under the model
+
+A7_050_cfa_summary$item_coverage_65   <- item_coverage_65
+A7_050_cfa_summary$eap_shrink         <- eap_shrink
+A7_050_cfa_summary$eap_shrink_summary <- eap_shrink_summary
+saveRDS(A7_050_cfa_summary, here::here("R_objects", "A7_050_cfa_summary.rds"))
+
 saveRDS(hrs16_merged, here::here("R_objects", "A7_050_hrs16_merged.rds"))
 # saveRDS(hrs16_22_merged, here::here("R_objects", "A7_050_hrs16_22_merged.rds"))
 saveRDS(hrs16_22_long, here::here("R_objects", "A7_050_hrs16_22_long.rds"))

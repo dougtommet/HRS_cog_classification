@@ -162,3 +162,34 @@ saveRDS(hrs16_22_long,  here::here("R_objects", "A7_055_hrs16_22_long.rds"))
 
 saveRDS(foo_glm,        here::here("R_objects", "A7_055_foo_lm.rds"))
 
+# Summary values for reports (Appendix 1)
+q_fs <- readRDS(here::here("R_objects", "A7_052_hrs16_cog_norm.rds")) %>%
+  pull(PF) %>%
+  quantile(c(.05, .35, .65, .95), na.rm = TRUE)
+
+A7_055_norm_summary <- list(
+  r2 = r2,
+  pblom_sd = Pblom_sd,
+  resid_sd = Pblom_sd * sqrt(1 - r2),
+  n_norm = nrow(hrs16_cog_norm),
+  n_norm_with_score = sum(!is.na(hrs16_cog_norm$Pblom)),
+  n_hcap_excluded = sum(hrs16_merged$inHCAP == 1 & hrs16_merged$normexcld == 1, na.rm = TRUE),
+  n_terms = length(coef(foo_glm)) - 1,
+  coefficients = goo_glm,
+  factor_score_knots = q_fs,
+  age_knots = c(70, 78, 86, 94),
+  tf_by_group = hrs16_merged %>%
+    mutate(group = case_when(inHCAP == 0 ~ "Not in HCAP",
+                             normexcld == 1 ~ "HCAP, excluded from norms",
+                             normexcld == 0 ~ "HCAP, normative sample")) %>%
+    filter(!is.na(group)) %>%
+    group_by(group) %>%
+    summarise(n = sum(!is.na(TF)),
+              mean_tf = mean(TF, na.rm = TRUE),
+              sd_tf = sd(TF, na.rm = TRUE),
+              .groups = "drop")
+)
+
+saveRDS(A7_055_norm_summary, here::here("R_objects", "A7_055_norm_summary.rds"))
+
+
