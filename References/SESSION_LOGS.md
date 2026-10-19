@@ -1,5 +1,13 @@
 # Session Logs
 
+## 2026-10-19: AgentKit report archiving
+
+- Added `Reports/archive_reports.R` and `Reports/archive_reports_README.md` as a new AgentKit framework component.
+- The base-R script keeps the newest dated `.docx`, `.html`, `.pdf`, and `.pptx` report in each case-insensitive stub/tag/extension family, using filename date and optional time rather than modification time. Plain renders and tagged edits retain separate newest copies.
+- Older copies move into `Reports/Archive/`; HTML companion `_files` folders move with their reports. Archive name collisions receive numbered suffixes, with companion-folder links rewritten when needed. Undated files, unsupported formats, and Word lock files are left alone.
+- Defaults to the script's own folder; an optional folder argument selects another location. Failed moves are reported and produce a nonzero exit status. Adding the utility does not itself run archiving.
+- Validated with temporary fixtures: newest-copy selection, separate tagged edits, excluded files, companion assets, collision relinking, and repeat-run idempotence. Validation did not reorganize the project's reports.
+
 ---
 
 ## 2026-04-22
