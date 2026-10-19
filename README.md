@@ -61,7 +61,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis0_Driver.R`
 - Final rendered output:
   - `./Reports/A0_HRS_data_processing_[date].html`
-  - Most recent: no driver render committed yet. Pre-driver render (in `R/`): https://raw.githack.com/dougtommet/HRS_cog_classification/main/R/A0_000-Main_control.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A0_HRS_data_processing_2026-10-18.html
 - Data inputs:
   - Raw HRS/HCAP files, Langa-Weir, Hudomiet, and `normexcld.dta`, read from machine-specific Dropbox paths set in `./R/A0_002-folder_paths.R`
 - Main derived data products:
@@ -69,7 +69,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `./R_objects/A0_030_hrs16_22_merged.rds`
   - `./R_objects/A0_030_hcap16_merged.rds`
 - Date initiated: 2026-04-16
-- Date last updated: 2026-10-06
+- Date last updated: 2026-10-19
 
 ### Analysis A1: HRS Core actuarial algorithm derivation and validation (legacy)
 
@@ -109,12 +109,12 @@ Links under "Final rendered output" point to the most recent report committed to
   - `./Reports/MS_Main_[date].docx`, `MS_Tab_Fig_Apndx_[date].docx`, `MS_Appendix_1_[date].docx`, `MS_Appendix_2_[date].docx`, `MS_Appendix_3_[date].docx`
   - `./Reports/MS_Combined_[date].pdf`: the five DOCX files converted with LibreOffice and joined in reading order (manuscript, tables and figures, Appendices 1 to 3). Skipped with a warning if LibreOffice or the R package `qpdf` is missing.
   - Most recent:
-    - [Manuscript](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Main_2026-10-07.docx)
-    - [Tables and figures](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Tab_Fig_Apndx_2026-10-07.docx)
-    - [Appendix 1](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_1_2026-10-07.docx)
-    - [Appendix 2](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_2_2026-10-07.docx)
-    - [Appendix 3](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_3_2026-10-07.docx)
-    - [Combined PDF](https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/MS_Combined_2026-10-07.pdf)
+    - [Manuscript](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Main_2026-10-18.docx)
+    - [Tables and figures](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Tab_Fig_Apndx_2026-10-18.docx)
+    - [Appendix 1](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_1_2026-10-18.docx)
+    - [Appendix 2](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_2_2026-10-18.docx)
+    - [Appendix 3](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_3_2026-10-18.docx)
+    - [Combined PDF](https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/MS_Combined_2026-10-18.pdf)
 - Data inputs:
   - `./R_objects/A7_005_hrs16_merged.rds`, `./R_objects/A7_100_hcap_tables.rds` (Analysis A7)
   - `./R_objects/PMM_100.RDS`, `./mplus_output/pmm_103/`, `./mplus_output/pmm_103_jorm/` (Analysis A3)
@@ -122,7 +122,7 @@ Links under "Final rendered output" point to the most recent report committed to
 - Main derived data products:
   - `./Figures/MS_Main-Figure-2-PMM-Class-Probabilities.png`
 - Date initiated: 2026-03-24
-- Date last updated: 2026-10-07
+- Date last updated: 2026-10-19
 
 ### Analysis A2_2: Summary slide deck for Analysis A2
 
@@ -136,7 +136,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis2_2_Driver.R`
 - Final rendered output:
   - `./Reports/Slides_A2summary_[date].html`
-  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides_A2summary_2026-10-07.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides_A2summary_2026-10-17.html
 - Data inputs:
   - Analysis A2 inputs: `./R_objects/A7_100_hcap_tables.rds` (Analysis A7); `./R_objects/PMM_100.RDS`, `./mplus_output/pmm_103/`, `./mplus_output/pmm_103_jorm/` (Analysis A3)
   - Figures: `./Figures/HCAP-algorithm.png`, `./Figures/HRS-algorithm_2024-12-19.png`, `./Figures/Slides2603_results_class_probabilities.png` (written by Analysis A9); `./R/excalidraw/PMM-012-Preliminary_Model.excalidraw.svg`, `PMM-013-Approaches_to_constrained_regression.excalidraw.svg`, `PMM-103-PMM-no-latent.excalidraw.svg`
@@ -178,7 +178,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis3_2_Driver.R`
 - Final rendered output:
   - `./Reports/A3_2_PMM_scoring_[date].html`
-  - Most recent: no driver render committed yet.
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A3_2_PMM_scoring_2026-10-06.html
 - Data inputs:
   - `./R_objects/A0_030_hrs16_22_merged.rds` (Analysis A0)
   - `./R_objects/PMM_100.RDS`, `./mplus_output/pmm_103/pmm_hcap_103b.inp` and `.out`, `./mplus_output/pmm_103_jorm/pmm_hcap_103b_jorm.inp` and `.out` (Analysis A3)
@@ -263,7 +263,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis7_Driver.R`
 - Final rendered output:
   - `./Reports/A7_HRS_cog_classification_[date].html`
-  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A7_HRS_cog_classification_2026-10-07.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A7_HRS_cog_classification_2026-10-18.html
 - Data inputs:
   - `./R_objects/A0_030_hrs16_merged.rds`, `A0_030_hrs16_22_merged.rds`, `A0_030_hcap16_merged.rds` (Analysis A0)
 - Main derived data products:
@@ -271,7 +271,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `./mplus_output/A7/`
   - `./Data/Dx_for_LK-2026-06-11.csv` (shared export of person-wave `dx_v1` diagnoses, 2016–2022; filename is hard-coded in `A7_075`)
 - Date initiated: 2026-04-17
-- Date last updated: 2026-10-07
+- Date last updated: 2026-10-19
 
 ### Analysis A8: Summary slide deck for Analysis A7
 
@@ -284,7 +284,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis8_Driver.R`
 - Final rendered output:
   - `./Reports/Slides_A7summary_[date].html`
-  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides_A7summary_2026-10-07.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides_A7summary_2026-10-17.html
 - Data inputs:
   - `./R_objects/A7_100_hcap_tables.rds` (Analysis A7)
 - Main derived data products:
@@ -357,7 +357,7 @@ For most work in this repository, the expected pattern is:
 2. Let the driver call the project control file.
 3. Let the control file include the analysis-specific child QMD files or call the necessary R/Stata code.
 4. Look for final human-readable outputs in `Reports/` or `Figures/`.
-5. Stage the new outputs (`git add`), run `python3 tools/update_readme.py`, and commit the outputs, sources, and README together.
+5. Run `python3 tools/update_readme.py`, stage the intended outputs and archive moves (`git add`), and commit and push the outputs, sources, and updated documentation together.
 
 That pattern keeps the workflows easier to rebuild, document, and automate without changing the legacy source structure.
 
@@ -366,12 +366,13 @@ That pattern keeps the workflows easier to rebuild, document, and automate witho
 `tools/update_readme.py` refreshes the parts of the Project Overview that change when an analysis is rerun. Everything else in this README is hand-written and is not touched.
 
 - What it updates, for each `### Analysis A#:` section:
-  - "Most recent" links: the newest dated report tracked in git (committed or staged). HTML and PNG files link through raw.githack.com; DOCX files link through the Office Online viewer.
+  - "Most recent" links: the newest dated plain render actually present in each configured output folder, ordered by filename date and optional time. Archived reports and tagged copies such as `_edited` are excluded. HTML and PNG files link through raw.githack.com; DOCX files link through the Office Online viewer.
   - "Date last updated": the latest commit touching that analysis's source files, or today if any of them has uncommitted changes.
   - It then copies the Project Overview into `References/instructions.md` so the two stay identical.
 - Usage, from the project root:
   - `python3 tools/update_readme.py` rewrites both files in place.
   - `python3 tools/update_readme.py --check` changes nothing; it prints a diff and exits 1 if either file is stale.
+  - Both modes warn if a selected output is untracked or has unstaged changes. Warnings do not stage files or change the exit status; `--check` checks documentation freshness, not publication readiness.
 - Configuration: the `ANALYSES` table at the top of the script maps each analysis to its report filename patterns and source paths. Update it when you add an analysis or rename its outputs. The new analysis also needs its own `### Analysis A#:` section in this README, written by hand.
 - Limits:
   - Links point at `main` on GitHub, so they work only after the files are pushed.

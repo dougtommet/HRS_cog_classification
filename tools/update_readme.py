@@ -3,7 +3,8 @@
 
 For each analysis section (### Analysis A#: ...) in README.md this rewrites:
   - the "Most recent" link(s) under "Final rendered output", pointing at the
-    newest dated report that is tracked in git (committed or staged);
+    newest dated plain render present in the output folder, excluding archives
+    and tagged copies such as "_edited";
   - "Date last updated", from the latest commit touching the analysis's
     source files (today, if any of them has uncommitted changes).
 
@@ -15,6 +16,7 @@ Usage (from the project root):
   python3 tools/update_readme.py --check  # exit 1 if either file is stale
 
 Links assume the files will be pushed to BRANCH on GitHub. Standard library only.
+Warns when selected outputs are untracked or have unstaged changes.
 """
 
 import argparse
@@ -35,7 +37,7 @@ ROOT = Path(__file__).resolve().parent.parent
 README = ROOT / "README.md"
 INSTRUCTIONS = ROOT / "References" / "instructions.md"
 
-# outputs:  (label, glob) pairs; the newest tracked match of each glob is linked.
+# outputs:  (label, glob) pairs; the newest local plain render is linked.
 #           Labels are shown only when an analysis has more than one output.
 # fallback: the full "Most recent" line used when no output is tracked yet.
 # sources:  git pathspecs whose commits define "Date last updated".
@@ -105,6 +107,10 @@ GITHACK = f"https://raw.githack.com/{OWNER}/{REPO}/{BRANCH}/"
 RAW = f"https://raw.githubusercontent.com/{OWNER}/{REPO}/{BRANCH}/"
 OFFICE_VIEWER = "https://view.officeapps.live.com/op/view.aspx?src="
 DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
+REPORT_RE = re.compile(
+    r"_(\d{4}-\d{2}-\d{2})(?:_(\d{4}))?"
+    r"(?:_([A-Za-z][A-Za-z0-9-]*))?\.[^.]+$"
+)
 
 
 def git(*args):
@@ -125,21 +131,54 @@ def link(path):
     return GITHACK + path
 
 
-def newest(tracked, pattern):
-    """Newest tracked file matching pattern, by the last date in its name."""
-    matches = [f for f in tracked if fnmatch(f, pattern)]
+def local_outputs():
+    """Inventory configured output folders, without descending into archives."""
+    folders = {str(Path(pattern).parent) for cfg in ANALYSES.values()
+               for _, pattern in cfg["outputs"]}
+    return [p.relative_to(ROOT).as_posix() for folder in sorted(folders)
+            for p in (ROOT / folder).iterdir() if p.is_file()]
+
+
+def newest(files, pattern):
+    """Newest local plain render by filename date, then optional HHMM."""
+    matches = []
+    for f in files:
+        if not fnmatch(f, pattern):
+            continue
+        match = REPORT_RE.search(Path(f).name)
+        if match and match.group(3):
+            continue
+        matches.append(f)
     if not matches:
         return None
 
     def key(f):
+        match = REPORT_RE.search(Path(f).name)
+        if match:
+            return (match.group(1), match.group(2) or "", f)
         dates = DATE_RE.findall(Path(f).name)
-        return (dates[-1] if dates else "", f)
+        return (dates[-1] if dates else "", "", f)
 
     return max(matches, key=key)
 
 
-def most_recent_lines(cfg, tracked):
-    found = [(label, f) for label, pattern in cfg["outputs"] if (f := newest(tracked, pattern))]
+def warn_unstaged_outputs(files):
+    tracked = set(git("ls-files", "-z").rstrip("\0").split("\0"))
+    unstaged = set(git("diff", "--name-only", "-z").rstrip("\0").split("\0"))
+    selected = {f for cfg in ANALYSES.values() for _, pattern in cfg["outputs"]
+                if (f := newest(files, pattern))}
+    for path in sorted(selected):
+        if path not in tracked:
+            print(f"Warning: selected output is untracked: {path}. Stage, commit, "
+                  "and push it before using its GitHub link.", file=sys.stderr)
+        elif path in unstaged:
+            print(f"Warning: selected output has unstaged changes: {path}. Stage, "
+                  "commit, and push them to publish the current local version.",
+                  file=sys.stderr)
+
+
+def most_recent_lines(cfg, files):
+    found = [(label, f) for label, pattern in cfg["outputs"] if (f := newest(files, pattern))]
     if not found:
         fallback = cfg.get("fallback", "none committed yet.")
         return ["  - Most recent: " + fallback.format(githack=GITHACK)]
@@ -157,13 +196,13 @@ def last_updated(cfg):
     return git("log", "-1", "--format=%ad", "--date=short", "--", *cfg["sources"]).strip() or "unknown"
 
 
-def update_section(section, cfg, tracked):
+def update_section(section, cfg, files):
     lines = section.split("\n")
     out, i = [], 0
     while i < len(lines):
         line = lines[i]
         if line.startswith("  - Most recent"):
-            out.extend(most_recent_lines(cfg, tracked))
+            out.extend(most_recent_lines(cfg, files))
             i += 1
             while i < len(lines) and lines[i].startswith("    - "):
                 i += 1
@@ -175,12 +214,12 @@ def update_section(section, cfg, tracked):
     return "\n".join(out)
 
 
-def update_readme(text, tracked):
+def update_readme(text, files):
     parts = re.split(r"(?m)^(?=### Analysis A\d+(?:_\d+)?:)", text)
     for n, part in enumerate(parts):
         m = re.match(r"### Analysis (A\d+(?:_\d+)?):", part)
         if m and m.group(1) in ANALYSES:
-            parts[n] = update_section(part, ANALYSES[m.group(1)], tracked)
+            parts[n] = update_section(part, ANALYSES[m.group(1)], files)
     return "".join(parts)
 
 
@@ -200,10 +239,11 @@ def main():
     parser.add_argument("--check", action="store_true", help="report stale files without writing")
     args = parser.parse_args()
 
-    tracked = git("ls-files").splitlines()
+    files = local_outputs()
+    warn_unstaged_outputs(files)
     old_readme = README.read_text()
     old_instructions = INSTRUCTIONS.read_text()
-    new_readme = update_readme(old_readme, tracked)
+    new_readme = update_readme(old_readme, files)
     new_instructions = sync_instructions(new_readme, old_instructions)
 
     stale = []

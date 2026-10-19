@@ -52,7 +52,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis0_Driver.R`
 - Final rendered output:
   - `./Reports/A0_HRS_data_processing_[date].html`
-  - Most recent: no driver render committed yet. Pre-driver render (in `R/`): https://raw.githack.com/dougtommet/HRS_cog_classification/main/R/A0_000-Main_control.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A0_HRS_data_processing_2026-10-18.html
 - Data inputs:
   - Raw HRS/HCAP files, Langa-Weir, Hudomiet, and `normexcld.dta`, read from machine-specific Dropbox paths set in `./R/A0_002-folder_paths.R`
 - Main derived data products:
@@ -60,7 +60,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `./R_objects/A0_030_hrs16_22_merged.rds`
   - `./R_objects/A0_030_hcap16_merged.rds`
 - Date initiated: 2026-04-16
-- Date last updated: 2026-10-06
+- Date last updated: 2026-10-19
 
 ### Analysis A1: HRS Core actuarial algorithm derivation and validation (legacy)
 
@@ -100,12 +100,12 @@ Links under "Final rendered output" point to the most recent report committed to
   - `./Reports/MS_Main_[date].docx`, `MS_Tab_Fig_Apndx_[date].docx`, `MS_Appendix_1_[date].docx`, `MS_Appendix_2_[date].docx`, `MS_Appendix_3_[date].docx`
   - `./Reports/MS_Combined_[date].pdf`: the five DOCX files converted with LibreOffice and joined in reading order (manuscript, tables and figures, Appendices 1 to 3). Skipped with a warning if LibreOffice or the R package `qpdf` is missing.
   - Most recent:
-    - [Manuscript](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Main_2026-10-07.docx)
-    - [Tables and figures](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Tab_Fig_Apndx_2026-10-07.docx)
-    - [Appendix 1](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_1_2026-10-07.docx)
-    - [Appendix 2](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_2_2026-10-07.docx)
-    - [Appendix 3](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_3_2026-10-07.docx)
-    - [Combined PDF](https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/MS_Combined_2026-10-07.pdf)
+    - [Manuscript](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Main_2026-10-18.docx)
+    - [Tables and figures](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Tab_Fig_Apndx_2026-10-18.docx)
+    - [Appendix 1](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_1_2026-10-18.docx)
+    - [Appendix 2](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_2_2026-10-18.docx)
+    - [Appendix 3](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_3_2026-10-18.docx)
+    - [Combined PDF](https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/MS_Combined_2026-10-18.pdf)
 - Data inputs:
   - `./R_objects/A7_005_hrs16_merged.rds`, `./R_objects/A7_100_hcap_tables.rds` (Analysis A7)
   - `./R_objects/PMM_100.RDS`, `./mplus_output/pmm_103/`, `./mplus_output/pmm_103_jorm/` (Analysis A3)
@@ -113,7 +113,7 @@ Links under "Final rendered output" point to the most recent report committed to
 - Main derived data products:
   - `./Figures/MS_Main-Figure-2-PMM-Class-Probabilities.png`
 - Date initiated: 2026-03-24
-- Date last updated: 2026-10-07
+- Date last updated: 2026-10-19
 
 ### Analysis A2_2: Summary slide deck for Analysis A2
 
@@ -127,7 +127,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis2_2_Driver.R`
 - Final rendered output:
   - `./Reports/Slides_A2summary_[date].html`
-  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides_A2summary_2026-10-07.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides_A2summary_2026-10-17.html
 - Data inputs:
   - Analysis A2 inputs: `./R_objects/A7_100_hcap_tables.rds` (Analysis A7); `./R_objects/PMM_100.RDS`, `./mplus_output/pmm_103/`, `./mplus_output/pmm_103_jorm/` (Analysis A3)
   - Figures: `./Figures/HCAP-algorithm.png`, `./Figures/HRS-algorithm_2024-12-19.png`, `./Figures/Slides2603_results_class_probabilities.png` (written by Analysis A9); `./R/excalidraw/PMM-012-Preliminary_Model.excalidraw.svg`, `PMM-013-Approaches_to_constrained_regression.excalidraw.svg`, `PMM-103-PMM-no-latent.excalidraw.svg`
@@ -169,7 +169,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis3_2_Driver.R`
 - Final rendered output:
   - `./Reports/A3_2_PMM_scoring_[date].html`
-  - Most recent: no driver render committed yet.
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A3_2_PMM_scoring_2026-10-06.html
 - Data inputs:
   - `./R_objects/A0_030_hrs16_22_merged.rds` (Analysis A0)
   - `./R_objects/PMM_100.RDS`, `./mplus_output/pmm_103/pmm_hcap_103b.inp` and `.out`, `./mplus_output/pmm_103_jorm/pmm_hcap_103b_jorm.inp` and `.out` (Analysis A3)
@@ -254,7 +254,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis7_Driver.R`
 - Final rendered output:
   - `./Reports/A7_HRS_cog_classification_[date].html`
-  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A7_HRS_cog_classification_2026-10-07.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A7_HRS_cog_classification_2026-10-18.html
 - Data inputs:
   - `./R_objects/A0_030_hrs16_merged.rds`, `A0_030_hrs16_22_merged.rds`, `A0_030_hcap16_merged.rds` (Analysis A0)
 - Main derived data products:
@@ -262,7 +262,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `./mplus_output/A7/`
   - `./Data/Dx_for_LK-2026-06-11.csv` (shared export of person-wave `dx_v1` diagnoses, 2016–2022; filename is hard-coded in `A7_075`)
 - Date initiated: 2026-04-17
-- Date last updated: 2026-10-07
+- Date last updated: 2026-10-19
 
 ### Analysis A8: Summary slide deck for Analysis A7
 
@@ -275,7 +275,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis8_Driver.R`
 - Final rendered output:
   - `./Reports/Slides_A7summary_[date].html`
-  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides_A7summary_2026-10-07.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides_A7summary_2026-10-17.html
 - Data inputs:
   - `./R_objects/A7_100_hcap_tables.rds` (Analysis A7)
 - Main derived data products:
@@ -321,6 +321,13 @@ Links under "Final rendered output" point to the most recent report committed to
 
 ## Reporting Rules
 
+### Computed values in manuscripts and appendices
+
+- Every number reported in a manuscript, appendix, tables document, or slide deck (sample sizes, percentages, estimates, kappas, fit statistics, cut points) is computed at render time from saved results objects and inserted with inline R code (`` `r ...` ``) or generated tables and figures. Never type a result by hand into prose, a table, or a figure label.
+- If a needed value is not in a saved object, add it to the producing workflow (for example, an `R_objects/A7_*.rds` file) or to a results script in `R/MS_MAIN/` (`MS_010_results_objects.R` for the manuscript; `MS_020_appendix1_objects.R` for Appendix 1), then reference it. Do not hard-code it as a stopgap.
+- A results object read by a report must be written by the current code in the same run order. Do not read an `.rds` file that no script still writes.
+- Static diagrams with participant counts (for example, algorithm flow figures) must take their counts from saved objects, or be labelled as schematic with no counts.
+
 ### Survey-weighted population counts
 
 - Report survey-weighted population counts in thousands, not single persons. Survey weights scale a sample of a few thousand respondents up to the national population, so an exact figure such as 50,132,671 claims a precision the sample cannot support. Report that estimate as 50,133 (thousands), and report a subgroup of about 500,000 persons as 500.
@@ -329,7 +336,7 @@ Links under "Final rendered output" point to the most recent report committed to
 - Scale only at display. Compute totals, percentages, and agreement statistics (kappa) from the full-unit values, and sum totals before rounding.
 - Treat this rule as a presentation standard, not as a statement of sampling error. Rounding to thousands does not convey the uncertainty of an estimate. When a population count supports an inference, report its 95% confidence interval from the survey design (strata, clusters, and weights).
 - Apply the rule only to weights that sum to population totals (for example, `HCAP16WGTR`). Weights rescaled to sum to the sample size or to 100 (for example, the consensus-panel weights in `R/A7_100-comparison_of_diagnoses.R`) yield sample-scaled counts or percentages. Label those as such and do not convert them to thousands.
-- In Analysis A7, use `format_weighted_thousands()` and `weighted_thousands_note`, defined in `R/A7_100-comparison_of_diagnoses.R`.
+- In Analysis A7 and Appendix 1, use `format_weighted_thousands()` and `weighted_thousands_note`, defined in `R/A7_060-algorithm_functions.R`.
 
 ## Dependencies And Notes
 
@@ -339,7 +346,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - baplot
   - checkvar
   - kappaetc
-- This repository does not currently have a ./bibliography.bib file. Do not assume one exists.
+- `./bibliography.bib` (created 2026-10-17) holds the references for Appendix 1. Appendix 1 still lists references by hand; it does not yet use `bibliography:` in its YAML.
 
 ## Agent Response Format
 
