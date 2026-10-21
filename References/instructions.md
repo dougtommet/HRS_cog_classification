@@ -23,7 +23,7 @@ This repository contains twelve related but distinct analysis workflows. Existin
 |[Analysis A7](#analysis-a7-hrs-core-cognitive-classification-2016-derivation-20162022-application)|HRS Core cognitive classification (2016 derivation, 2016–2022 application)|Fits a survey-weighted CFA to HRS 2016 Core cognitive items, creates demographically adjusted T-scores normed in the HCAP normative sample, applies the fixed 2016 Core algorithm to 2016–2022 person-waves, and compares 2016 classifications with HRS/HCAP Algorithm, consensus, Langa-Weir, and Hudomiet classifications in HCAP.|
 |[Analysis A8](#analysis-a8-summary-slide-deck-for-analysis-a7)|Summary slide deck for Analysis A7|Presents the methods and results of Analysis A7 in a Revealjs slide deck.|
 |[Analysis A9](#analysis-a9-pmm-slide-deck-slides2603)|PMM slide deck (Slides2603)|Presents the PMM approach, covariate adjustment, probabilistic classification, margins, and comparator tables in a Revealjs slide deck.|
-|[Analysis A10](#analysis-a10-data-sharing-runs)|Data sharing runs|Logs the classification files shared with collaborators and confirms that the current Analysis A7 code reproduces the file Lindsay Kobayashi holds (sent 2026-07-10): inputs, assignment steps, the rationale for the cut points, and what the alternative (grid-optimum) cut points, not adopted, would have changed.|
+|[Analysis A10](#analysis-a10-data-sharing-runs)|Data sharing runs|Logs the classification files shared with collaborators and compares the file Lindsay Kobayashi holds (sent 2026-07-10) with its replacement from the current Analysis A7 code: input and rebuild checks, the change split into rounding and new cut points, and survey-weighted prevalence by wave.|
 
 ### Run order
 
@@ -247,7 +247,7 @@ Links under "Final rendered output" point to the most recent report committed to
 ### Analysis A7: HRS Core cognitive classification (2016 derivation, 2016–2022 application)
 
 - Purpose:
-  - Fits a survey-weighted CFA to HRS 2016 Core cognitive items, converts factor scores to demographically adjusted T-scores normed in the HCAP normative sample, and applies the Core algorithm (`dx_v1`: T-score cut points T < 37 and T < 48, self-rated memory, Jorm fallback). `A7_070` holds the cut points and a grid-search check of how closely they match the weighted Manly-Jones class shares (the grid optimum is reported, not used). The 2016 parameters are fixed and applied to 2016–2022 person-waves. Compares the 2016 classification with the HRS/HCAP Algorithm, consensus, Langa-Weir, and Hudomiet in HCAP.
+  - Fits a survey-weighted CFA to HRS 2016 Core cognitive items, converts factor scores to demographically adjusted T-scores normed in the HCAP normative sample, rounds them to integers (`TR`), and applies the Core algorithm (`dx_v1`: two integer cut points on `TR`, self-rated memory, Jorm fallback). `A7_070` selects the cut points by a rule fixed on 2026-10-21 before results (match the weighted Manly-Jones dementia and MCI shares within 0.5 and 1.0 points, then highest weighted dementia kappa) and reports a design-based bootstrap of how often the same pair is selected. The 2016 parameters are fixed and applied to 2016–2022 person-waves. Compares the 2016 classification with the HRS/HCAP Algorithm, consensus, Langa-Weir, and Hudomiet in HCAP.
 - Driver: `./Analysis7_Driver.R`
 - Control: `./R/A7_000-Main_control.qmd`
   - Source programs: `./R/A7_001-libraries.R`, `./R/A7_005-get_data.R`, `./R/A7_050-mplus_model.R` through `./R/A7_100-comparison_of_diagnoses.R`, each with a corresponding `.qmd` chapter file
@@ -261,7 +261,7 @@ Links under "Final rendered output" point to the most recent report committed to
 - Main derived data products:
   - `./R_objects/A7_*.rds` (including `A7_075_hrs16_22_long.rds` and `A7_100_hcap_tables.rds`)
   - `./mplus_output/A7/`
-  - `./Data/Dx_for_LK-rebuild.csv` (person-wave `dx_v1` classifications, 2016–2022, written by `A7_075`; rebuilds the file shared with Lindsay Kobayashi on 2026-07-10, checked in Analysis A10)
+  - `./Data/Dx_for_LK-[date].csv` and `./Data/Dx_for_LK-[date]_README.md` (person-wave `dx_v1` classifications, 2016–2022, and their README, written by `A7_075` and `A7_085`; the replacement for the file shared with Lindsay Kobayashi on 2026-07-10; both gitignored or untracked)
 - Side scripts (not run by the driver):
   - `Rscript R/A7_072-domain_quantile_check.R`: pre-specified test of the legacy A1_029 quantile rule for the cut points (failed, 2026-10-19)
   - `Rscript R/A7_080-compare_dx_exports.R <old.csv> <new.csv>`: compares 2 classification files
@@ -279,13 +279,13 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis8_Driver.R`
 - Final rendered output:
   - `./Reports/Slides_A7summary_[date].html`
-  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides_A7summary_2026-10-17.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides_A7summary_2026-10-21.html
 - Data inputs:
   - `./R_objects/A7_100_hcap_tables.rds` (Analysis A7)
 - Main derived data products:
   - None
 - Date initiated: 2026-04-22
-- Date last updated: 2026-04-22
+- Date last updated: 2026-10-21
 
 ### Analysis A9: PMM slide deck (Slides2603)
 
@@ -309,7 +309,7 @@ Links under "Final rendered output" point to the most recent report committed to
 ### Analysis A10: Data sharing runs
 
 - Purpose:
-  - Logs the person-wave classification files shared with collaborators and documents what each recipient holds. The first report confirms that the current Analysis A7 code reproduces the file Lindsay Kobayashi holds (`Dx_for_LK-2026-07-10.csv`, sent 2026-07-10): identity of inputs and classes, the steps that assign a class, the rationale for the cut points (T < 37 and T < 48), and what the grid-optimum cut points (considered 2026-10-17, not adopted) would have changed, including survey-weighted prevalence for ages 65 and older.
+  - Logs the person-wave classification files shared with collaborators and documents what each recipient holds. Compares the file Lindsay Kobayashi holds (`Dx_for_LK-2026-07-10.csv`, T < 37 and T < 48 on the unrounded T score) with its replacement (`Dx_for_LK-[A7 run date].csv`, integer cut points on the rounded T score selected by the pre-specified rule of 2026-10-21): identity of inputs, rebuild of both files from the written rule, the change split into rounding and new cut points, transitions by band and self-rated memory, and survey-weighted prevalence for ages 65 and older.
 - Driver: `./Analysis10_Driver.R`
 - Control: `./R/A10/A10_000-Main_control.qmd` (US Letter report using `./templates/letter.css`)
   - Source programs: `./R/A10/A10_001-libraries.R`, `A10_005-share_log.R` (share log; add a row for each new share), `A10_010-compare_shared_current.R`
@@ -317,11 +317,11 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis10_Driver.R`
 - Final rendered output:
   - `./Reports/A10_Data_sharing_[date].html`
-  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A10_Data_sharing_2026-10-19.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A10_Data_sharing_2026-10-21.html
 - Data inputs:
   - `./Data/Dx_for_LK-2026-07-10.csv` (the file as delivered; gitignored, saved from email)
   - `./R_objects/A7_075_hrs16_22_long.rds`, `A7_075_hrs16_hcap.rds`, `A7_070_threshold_calibration.rds`, `A7_005_hrs16_22_merged.rds` (Analysis A7)
-  - `./Data/Dx_for_LK-rebuild.csv` (optional; written by A7_075 and checked against the A7 object when present)
+  - `./Data/Dx_for_LK-[A7 run date].csv` (optional; written by A7_075, named in `A7_075_algorithm_summary.rds`, and checked against the A7 object when present)
 - Main derived data products:
   - `./R_objects/A10_010_comparison.rds`
 - Date initiated: 2026-10-19

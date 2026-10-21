@@ -110,20 +110,38 @@ a1_table_items <- a1_flextable(
 )
 
 # Table A3: weighted class shares, core algorithm and Manly-Jones -------------
-# Rich, 2026-10-20: the grid search is not reported in Appendix 1. The cut
-# points (37, 48) are stated without a selection rule. Shares come from A7_070
-# (algorithm = shares at the algorithm cuts; target_shares = Manly-Jones).
+# 2026-10-21: cut points selected by the pre-specified rule in A7_070 and
+# applied to the rounded T score (TR). Shares come from A7_070 (selected =
+# shares and kappas at the selected cuts; target_shares = Manly-Jones). The
+# 2026-10-20 domain-share paragraph was removed (Rich, 2026-10-21).
 a1_target <- a1_cal$target_shares
-a1_used   <- a1_cal$algorithm
+a1_used   <- a1_cal$selected
 
-# Step 3: where the cut points sit relative to the impaired-domain shares
-# (A7_070 $domain_quantiles; weighted shares and weighted T quantiles).
-a1_dq <- a1_cal$domain_quantiles
-a1_dq_rel <- function(cut, t) {
-  if (abs(cut - t) <= 1.5) "lies close to" else if (cut > t) "lies above" else "lies below"
+# Step 3: selection rule and result (A7_070).
+a1_spec  <- a1_cal$spec
+a1_pts   <- function(x) formatC(100 * x, format = "f", digits = 1)
+a1_n_eligible   <- nrow(a1_cal$eligible)
+a1_n_candidates <- nrow(a1_cal$candidates)
+a1_widen_text <- if (a1_cal$selection_stage == "as specified") {
+  paste0(a1_n_eligible, " of ", a1_n(a1_n_candidates), " pairs of thresholds were identified as candidates")
+} else {
+  paste0("no pair met the tolerances as specified, so the dementia tolerance was widened to ",
+         a1_pts(a1_cal$tol_dementia_used), " points and the MCI tolerance to ",
+         a1_pts(a1_cal$tol_mci_used), " points, at which ", a1_n_eligible, " of ",
+         a1_n(a1_n_candidates), " pairs of thresholds were identified as candidates")
 }
-a1_dq_sev_text <- a1_dq_rel(a1_cut_severe, a1_dq$t_2plus)
-a1_dq_mod_text <- a1_dq_rel(a1_cut_moderate, a1_dq$t_1plus)
+a1_boot <- a1_cal$bootstrap
+
+# Why the bootstrap rarely repeats the pair (Rich, 2026-10-21): average change
+# in weighted prevalence per 1-point step in each cut point, next to the
+# selected cuts, from the A7_070 candidate table.
+a1_step <- function(var, by, fixed_var, fixed_val, at) {
+  x <- a1_cal$candidates[a1_cal$candidates[[fixed_var]] == fixed_val, ]
+  v <- x[[var]][match(at + c(-1, 0, 1), x[[by]])]
+  mean(abs(diff(v)), na.rm = TRUE)
+}
+a1_step_dem <- a1_step("share_dementia", "cut_severe", "cut_moderate", a1_cut_moderate, a1_cut_severe)
+a1_step_mci <- a1_step("share_mci", "cut_moderate", "cut_severe", a1_cut_severe, a1_cut_moderate)
 
 a1_table_shares <- a1_flextable(
   tibble::tibble(
@@ -136,7 +154,7 @@ a1_table_shares <- a1_flextable(
   "Table A3. Weighted class prevalence of the core algorithm and the Manly-Jones algorithm, HRS-HCAP Wave 1",
   paste0(
     "HRS-HCAP Wave 1, N = ", a1_n(a1_cal$n_sample), ". Percentages are weighted (HCAP Wave 1 (2016) sampling weight). ",
-    "Core algorithm cut points: T < ", a1_cut(a1_cut_severe), " (severe) and T < ", a1_cut(a1_cut_moderate), " (moderate)."
+    "Core algorithm cut points: rounded T < ", a1_cut(a1_cut_severe), " (severe) and rounded T < ", a1_cut(a1_cut_moderate), " (moderate)."
   )
 )
 
@@ -150,8 +168,10 @@ a1_band_labels <- c(
   paste0(a1_cut(a1_cut_severe), " ≤ T < ", a1_cut(a1_cut_moderate)),
   paste0("T ≥ ", a1_cut(a1_cut_moderate))
 )
+# Bands use the rounded T score: floor(t + 0.5) < cut, i.e. t < cut - 0.5.
 a1_band <- function(t) {
-  factor(dplyr::case_when(t < a1_cut_severe ~ 1L, t < a1_cut_moderate ~ 2L, TRUE ~ 3L),
+  tr <- floor(t + 0.5)
+  factor(dplyr::case_when(tr < a1_cut_severe ~ 1L, tr < a1_cut_moderate ~ 2L, TRUE ~ 3L),
          levels = 1:3, labels = a1_band_labels)
 }
 a1_band_share <- tapply(a1_hcap$w, a1_band(a1_hcap$TF), sum) / sum(a1_hcap$w)
@@ -175,7 +195,7 @@ a1_tdensity_figure <- function() {
   p <- ggplot2::ggplot(dd, ggplot2::aes(x, y)) +
     ggplot2::geom_area(ggplot2::aes(fill = band), alpha = 0.55, position = "identity") +
     ggplot2::geom_line(colour = "grey20") +
-    ggplot2::geom_vline(xintercept = c(a1_cut_severe, a1_cut_moderate),
+    ggplot2::geom_vline(xintercept = c(a1_cut_severe, a1_cut_moderate) - 0.5,
                         colour = "grey20", linetype = "dashed")
   if (requireNamespace("ggrepel", quietly = TRUE)) {
     p <- p + ggrepel::geom_label_repel(

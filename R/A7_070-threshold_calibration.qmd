@@ -1,48 +1,88 @@
 ```{r}
 A7_070_threshold_calibration <- readRDS(here::here("R_objects", "A7_070_threshold_calibration.rds"))
-cal <- A7_070_threshold_calibration
-gp  <- cal$grid_position
-pct <- function(x) sprintf("%.1f%%", 100 * x)
-cut_txt <- function(x) ifelse(x %% 1 == 0, sprintf("%d", as.integer(x)), sprintf("%.1f", x))
+cal  <- A7_070_threshold_calibration
+spec <- cal$spec
+pct  <- function(x) sprintf("%.1f%%", 100 * x)
+pts  <- function(x) sprintf("%.1f", 100 * x)
 ```
 
-# Cut points and calibration check
+# Cut points: pre-specified selection
 
-The Core algorithm uses T < `r cut_txt(cal$cuts[["severe"]])` (severe) and T < `r cut_txt(cal$cuts[["moderate"]])` (moderate). These cut points were set in April 2026 so that the survey-weighted (`r cal$weight`) Normal, MCI, and Dementia shares of the Core algorithm approximate those of the HRS/HCAP Algorithm (`r cal$target_variable`) in HCAP 2016 (N = `r format(cal$n_sample, big.mark = ",")`). They are the cut points in the classification file shared on 2026-07-10.
+The Core algorithm uses TR < `r cal$cuts[["severe"]]` (severe) and TR < `r cal$cuts[["moderate"]]` (moderate), where TR = floor(TF + 0.5) is the T score rounded to an integer. These cut points were selected on 2026-10-21 by a rule written and agreed before any result was seen (header of `R/A7_070-threshold_calibration.R`). They replace T < `r cal$previous_cuts[["severe"]]` and T < `r cal$previous_cuts[["moderate"]]`, whose derivation was not documented.
 
-Target shares: Normal `r pct(cal$target_shares[["1"]])`, MCI `r pct(cal$target_shares[["2"]])`, Dementia `r pct(cal$target_shares[["3"]])`. At the algorithm cut points the Core shares are `r pct(cal$algorithm$share_normal)`, `r pct(cal$algorithm$share_mci)`, and `r pct(cal$algorithm$share_dementia)`.
+**Rule.** In HRS-HCAP Wave 1 participants with `r cal$weight` and a Manly-Jones classification (`r cal$target_variable`, n = `r format(cal$n_sample, big.mark = ",")`), every integer pair (severe `r min(spec$severe_range)` to `r max(spec$severe_range)`, moderate `r min(spec$moderate_range)` to `r max(spec$moderate_range)`, moderate above severe; `r nrow(cal$candidates)` pairs) was evaluated with the memory and IQCODE rules fixed. A pair is eligible if its weighted dementia share is within `r pts(spec$tol_dementia)` percentage points of the Manly-Jones share and its MCI share within `r pts(spec$tol_mci)` points. Among eligible pairs, the rule takes the highest weighted dementia kappa, then the highest weighted 3-class kappa (quadratic), then the smaller MCI difference, then the lower moderate cut. If no pair were eligible, the dementia tolerance would widen to 1.0 point (never more), and then the MCI tolerance would widen in steps of 0.5 points.
 
-As a check, a grid search (step `r cal$grid_step` T points, `r format(gp$n_pairs, big.mark = ",")` pairs, memory and IQCODE rules fixed) finds the pair whose shares are closest to the target (sum of squared differences). The grid optimum is T < `r cut_txt(cal$calibrated_cuts[["severe"]])` and T < `r cut_txt(cal$calibrated_cuts[["moderate"]])`. The algorithm cut points rank `r gp$rank` of `r format(gp$n_pairs, big.mark = ",")` pairs; their largest difference from a target share is `r sprintf("%.1f", 100 * gp$max_abs_share_diff_algorithm)` percentage points, against `r sprintf("%.1f", 100 * gp$max_abs_share_diff_calibrated)` at the grid optimum.
+**Result.** Selection stage: `r cal$selection_stage`. Tolerances used: dementia `r pts(cal$tol_dementia_used)` points, MCI `r pts(cal$tol_mci_used)` points. Eligible pairs: `r nrow(cal$eligible)`. Manly-Jones shares: Normal `r pct(cal$target_shares[["1"]])`, MCI `r pct(cal$target_shares[["2"]])`, Dementia `r pct(cal$target_shares[["3"]])`.
 
 ```{r}
-#| tbl-cap: "Algorithm, grid-optimum, and kappa-maximizing cut points (in-sample)"
+#| tbl-cap: "Eligible cut-point pairs, in order of selection (in-sample, weighted)"
+#| label: tbl-a7-070-eligible
+cal$eligible |>
+  dplyr::arrange(dplyr::desc(round(kappa_binary, 10)), dplyr::desc(round(kappa_3class, 10)),
+                 abs(diff_mci), cut_moderate) |>
+  dplyr::select(cut_severe, cut_moderate, share_normal, share_mci, share_dementia,
+                diff_mci, diff_dementia, kappa_binary, kappa_3class) |>
+  gt::gt() |>
+  gt::fmt_percent(columns = c(dplyr::starts_with("share"), dplyr::starts_with("diff")), decimals = 1) |>
+  gt::fmt_number(columns = dplyr::starts_with("kappa"), decimals = 3) |>
+  gt::cols_label(cut_severe = "Severe cut", cut_moderate = "Moderate cut",
+                 share_normal = "Normal", share_mci = "MCI", share_dementia = "Dementia",
+                 diff_mci = "MCI difference", diff_dementia = "Dementia difference",
+                 kappa_binary = "Kappa (dementia)", kappa_3class = "Kappa (3-class)")
+```
+
+```{r}
+#| tbl-cap: "Selected and previous cut points (in-sample, weighted)"
 #| label: tbl-a7-070-cuts
-dplyr::bind_rows(
-  cal$algorithm  |> dplyr::mutate(set = "Algorithm"),
-  cal$calibrated |> dplyr::mutate(set = "Grid optimum (prevalence matching)"),
-  cal$max_kappa  |> dplyr::mutate(set = "Maximum 3-class kappa")
-) |>
+cal$comparison |>
   dplyr::select(set, cut_severe, cut_moderate, share_normal, share_mci,
-                share_dementia, kappa_3class, kappa_binary) |>
+                share_dementia, kappa_binary, kappa_3class) |>
   gt::gt() |>
   gt::fmt_percent(columns = dplyr::starts_with("share"), decimals = 1) |>
   gt::fmt_number(columns = dplyr::starts_with("kappa"), decimals = 3) |>
   gt::cols_label(set = "", cut_severe = "Severe cut", cut_moderate = "Moderate cut",
                  share_normal = "Normal", share_mci = "MCI", share_dementia = "Dementia",
-                 kappa_3class = "Kappa (3-class, quadratic)", kappa_binary = "Kappa (dementia)")
+                 kappa_binary = "Kappa (dementia)", kappa_3class = "Kappa (3-class, quadratic)")
+```
+
+Agreement is in-sample: the cut points were selected in the same data, so the kappas are optimistic.
+
+```{r}
+#| results: asis
+if (is.null(cal$bootstrap)) {
+  cat("**Stability.** The bootstrap was skipped because the survey design variables were not found.\n")
+} else {
+  b <- cal$bootstrap
+  cat(sprintf("**Stability.** The full rule, including the Manly-Jones shares, was repeated in %d design-based bootstrap samples (%s; seed %d). The selected pair was chosen in %s of samples, and a pair within 1 T point of both selected cuts in %s. This describes how firm the cut points are; it did not affect the selection.\n",
+              b$n_boot, b$design, b$seed, pct(b$pct_same_pair), pct(b$pct_within_1)))
+  if (b$n_rule_not_met > 0) cat(sprintf("In %d samples no severe cut point brought the dementia share within 1.0 point, so the rule selected no pair.\n", b$n_rule_not_met))
+}
 ```
 
 ```{r}
-#| fig-cap: "Weighted dementia share by severe cut point (left) and MCI share by moderate cut point at the algorithm's severe cut (right). Dashed lines: HRS/HCAP Algorithm shares. Solid grey lines: algorithm cut points."
+#| tbl-cap: "Cut-point pairs selected in bootstrap samples"
+#| label: tbl-a7-070-boot
+if (!is.null(cal$bootstrap)) {
+  cal$bootstrap$pair_freq |>
+    dplyr::slice_head(n = 10) |>
+    gt::gt() |>
+    gt::fmt_percent(columns = pct, decimals = 1) |>
+    gt::cols_label(cut_severe = "Severe cut", cut_moderate = "Moderate cut",
+                   n = "Samples", pct = "Percent")
+}
+```
+
+```{r}
+#| fig-cap: "Weighted dementia share by severe cut (left) and MCI share by moderate cut at the selected severe cut (right), on TR. Dashed lines: Manly-Jones shares; shaded bands: eligibility tolerances used. Solid grey lines: selected cut points."
 #| label: fig-a7-070-curves
 #| fig-width: 9
 #| fig-height: 4
 curves <- dplyr::bind_rows(
-  cal$grid |>
+  cal$candidates |>
     dplyr::group_by(cut = cut_severe) |>
-    dplyr::summarise(share = dplyr::first(share_dementia), .groups = "drop") |>
+    dplyr::summarise(share = mean(share_dementia), .groups = "drop") |>
     dplyr::mutate(panel = "Dementia share by severe cut"),
-  cal$grid |>
+  cal$candidates |>
     dplyr::filter(cut_severe == cal$cuts[["severe"]]) |>
     dplyr::transmute(cut = cut_moderate, share = share_mci,
                      panel = "MCI share by moderate cut")
@@ -50,13 +90,18 @@ curves <- dplyr::bind_rows(
 refs <- tibble::tibble(
   panel  = c("Dementia share by severe cut", "MCI share by moderate cut"),
   target = c(cal$target_shares[["3"]], cal$target_shares[["2"]]),
+  tol    = c(cal$tol_dementia_used, cal$tol_mci_used),
   cut    = c(cal$cuts[["severe"]], cal$cuts[["moderate"]])
 )
 ggplot(curves, aes(cut, share)) +
+  geom_rect(data = refs, inherit.aes = FALSE,
+            aes(xmin = -Inf, xmax = Inf, ymin = target - tol, ymax = target + tol),
+            fill = "grey85") +
   geom_line() +
+  geom_point(size = 0.8) +
   geom_hline(data = refs, aes(yintercept = target), linetype = "dashed") +
   geom_vline(data = refs, aes(xintercept = cut), colour = "grey50") +
   facet_wrap(~panel, scales = "free") +
   scale_y_continuous("Weighted share", labels = scales::percent) +
-  xlab("Cut point (T score)")
+  xlab("Cut point (TR, integer T score)")
 ```

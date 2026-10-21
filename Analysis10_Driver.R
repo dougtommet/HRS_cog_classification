@@ -2,7 +2,7 @@
 
 # Analysis A10: data sharing runs. Compares the core algorithm file shared with
 # Lindsay Kobayashi (Data/Dx_for_LK-2026-07-10.csv, gitignored) with the
-# classification the current code produces.
+# replacement written by the current code (Data/Dx_for_LK-<A7 run date>.csv).
 # Requires Analyses A0 and A7 (R_objects/A7_075_*.rds, A7_070_threshold_calibration.rds).
 
 setwd(here::here())

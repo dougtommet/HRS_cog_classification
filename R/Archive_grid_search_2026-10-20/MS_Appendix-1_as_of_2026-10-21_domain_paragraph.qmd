@@ -1,0 +1,236 @@
+---
+title: "Adaptation of the Manly-Jones algorithm to the HRS core survey data"
+date: today
+format: docx
+fig-dpi: 300
+bibliography: ../../bibliography.bib
+csl: ../../templates/apa.csl
+editor: source
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+#| include: false
+source(here::here("R", "MS_MAIN", "A1_001-libraries.R"))
+source(here::here("R", "MS_MAIN", "MS_020_appendix1_objects.R"))
+
+fl  <- a1_flow
+fit <- a1_fit
+ag  <- a1_agree
+tf  <- a1_norm$tf_by_group
+a1_cov <- a1_cfa$coverage_hcap
+cov_p <- function(y, it) a1_cfa$item_coverage_65$p_present_weighted[a1_cfa$item_coverage_65$year == y & a1_cfa$item_coverage_65$item == it]
+min_other_p <- with(a1_cfa$item_coverage_65, min(p_present_weighted[!item %in% c("vdexf7z", "vdwdimmz", "any_item")]))
+tf_mean <- function(g) a1_dec(tf$mean_tf[tf$group == g], 0)
+tf_sd   <- function(g) a1_dec(tf$sd_tf[tf$group == g], 0)
+cmp <- function(a, b, tol = 0.02) {
+  if (abs(a - b) < tol) "about the same as" else if (a > b) "higher than" else "lower than"
+}
+w <- function(y, v) a1_waves[[v]][a1_waves$year == y]
+```
+
+## Introduction
+
+The @Manly2022 algorithm classifies participants as having normal cognition, mild cognitive impairment (MCI), or dementia from 5 cognitive performance domain scores estimated from an hour-long neuropsychological battery, together with an informant interview on cognitive and functional change, and a survey participant's self-reported memory problem [@Manly2022]. Of those indicators, only self-reported memory problems are available in the core interview. The HRS core interview includes a brief battery of scored cognitive items (`r length(a1_cfa$items)` used here), 1 self-rated memory item, and an informant questionnaire that is only administered when no cognitive performance data is available [@Crimmins2011; @Ofstedal2005]. The core cognitive measures are too few to score separate domains defined in HCAP. The absence of informant reports on daily function when a respondent participates in the cognitive testing is an important additional difference in available information for cognitive classification.
+
+To address these differences, we developed a new classification algorithm using the HRS core data, the "core algorithm", that follows the logic of the Manly-Jones algorithm but uses core data only. The core algorithm has 4 steps (Figure A1):
+
+\(1\) a single cognitive performance score is estimated from the core items;
+
+\(2\) the cognitive performance score is normed against the HRS-HCAP robust normative sample and expressed as a demographically adjusted T score;
+
+\(3\) 2 T-score cut points divide the T score into 3 bands that stand in for the number of impaired domains; and
+
+\(4\) decision rules combine the T-score band with self-rated memory change, or use the informant questionnaire when no cognitive tests were completed.
+
+The core algorithm is defined using the HRS-HCAP 2016 sample. We use that sample's normative reference group to define participants' expected cognitive performance based on their age, sex, race, ethnicity, and years of completed education [@Manly2022]. We also use the HRS-HCAP 2016 sample and algorithm to set thresholds to calibrate the core model. Cognitive scoring statistical and psychometric procedures are adapted from @Manly2022. Scoring parameters and norms were estimated once using core data in the HRS-HCAP Wave 1 sample. These estimates and the cut points were then held fixed and used for the classification of participants in the 2016, 2018, 2020, and 2022 core interviews. A change in a participant's classification across waves will reflect changes in that participant's (or their informant's) responses and/or age, but the scoring model does not change. The same item thresholds, norms, and cut points convert a 2022 response pattern exactly as they would convert the same pattern observed in 2016.
+
+```{r a1-figure-1}
+#| fig-cap: "Figure A1. Core algorithm decision structure. T: demographically adjusted T score (Step 2); τ~1~ and τ~2~: severe and moderate T-score cut points (Step 3). IQCODE: Informant Questionnaire on Cognitive Decline in the Elderly. Self-rated concerns is a rating of memory worse than 2 years ago, and the \"yes\" arm includes don't know, refused, and not ascertained."
+#| out-width: 6.5in
+knitr::include_graphics(here::here("Figures", "HRS-Core-Algorithm-2026-10-18.png"))
+```
+
+## Data
+
+The analytic sample is the `r a1_n(a1_alg$hcap_n)` HRS-HCAP Wave 1 (2016) participants, followed in the HRS core interviews of 2016, 2018, 2020, and 2022. The core algorithm uses 4 kinds of core data:
+
+\(1\) the `r length(a1_cfa$items)` cognitive items in Table A1;
+
+\(2\) self-rated memory compared with 2 years ago (HRS item D102: better, about the same, or worse);
+
+\(3\) the 16-item informant questionnaire [IQCODE\; @Jorm1994], scored as the mean item rating from 1 (much improved) to 5 (much worse) and collected in proxy interviews in the core interview (2-year lookback); and
+
+\(4\) age, sex, race and ethnicity (non-Hispanic Black, Hispanic), and years of schooling.
+
+We judge the adequacy of the core algorithm by comparing it to the @Manly2022 HRS-HCAP classification algorithm as obtained in the Wave 1 sample. Because the @Manly2022 algorithm is used to calibrate the core algorithm, the agreement statistics we obtain are optimistic estimates of their agreement if the algorithms, as developed, were applied in an independent sample. We also compare to a separately derived HRS core classification algorithm referred to as the Langa-Weir classification, which was derived independent of HCAP data and methods [@Crimmins2011].
+
+## Approach: Step 1. A single cognitive score from the core battery
+
+The core cognitive performance data are used to generate a unidimensional model of general cognitive performance and generate a composite measure of functioning for participants. We begin this with a single-factor confirmatory factor analysis (CFA) model. This model uses a mix of binary, ordinal, and continuous indicators modeled as caused by a single general latent variable. The model was fit to HRS 2016 respondents aged 65 and older (N = `r a1_n(a1_cfa$n_obs)`) with the complex sample design and the HRS-HCAP Wave 1 weights. The use of HRS-HCAP Wave 1 weights means that those respondents not in the HRS-HCAP sample are included in the analysis with a weight of 0, so the estimates describe the population that HRS-HCAP represents (`r a1_n(a1_cfa$n_positive_weight_any_item)` of the `r a1_n(a1_alg$hcap_n)` HRS-HCAP participants with at least 1 HRS core item response). We evaluate model fit in the pairwise complete sample with the weighted least squares mean and variance adjusted (WLSMV) estimator fit using Mplus software (version 9, Muthén & Muthén, Los Angeles, CA). Then, item parameters were estimated by maximum likelihood with robust standard errors (MLR) and a probit link (for binary and ordinal items), which uses every available item response regardless of item missingness. The WLSMV approach is consistent with the missing completely at random assumption, whereas the MLR approach is consistent with the less restrictive missing at random assumption. In subsequent factor score estimation runs, all parameters were fixed at the HCAP Wave 1 maximum likelihood estimates. Expected a posteriori (EAP) factor scores [the means of the posterior distribution of ability implied by the model parameters and assumptions about the distribution of ability\; @Bock1982] were estimated from a model with every parameter fixed and included all core person-wave respondents from 2016 to 2022 with at least 1 item response (`r a1_n(a1_cfa$n_person_waves_scored)` person-waves, all ages).
+
+## Results: Step 1. A single cognitive score from the core battery
+
+The single-factor model fit well (RMSEA = `r a1_dec(fit$RMSEA_Estimate, 3)`, 90% CI `r a1_dec(fit$RMSEA_90CI_LB, 3)` to `r a1_dec(fit$RMSEA_90CI_UB, 3)`; CFI = `r a1_dec(fit$CFI, 3)`; TLI = `r a1_dec(fit$TLI, 3)`; SRMR = `r a1_dec(fit$SRMR, 3)`)^[RMSEA, root mean square error of approximation, estimates model misfit per degree of freedom in the population and does not compare the model with a baseline model. Lower values indicate better fit; values below 0.05 indicate close fit [@Hu1999; @Steiger1990]. CFI, comparative fit index, and TLI, Tucker-Lewis index, compare the fitted model with a baseline model in which the items are uncorrelated. Higher values indicate better fit; values of 0.95 or above indicate satisfactory fit [@Bentler1990; @Hu1999; @Tucker1973]. The TLI adds a penalty for model complexity. SRMR, standardized root mean square residual, is the average difference between the observed and model-implied correlations. Lower values indicate better fit; values of 0.08 or below indicate satisfactory fit [@Asparouhov2018; @Hu1999].] by the conventional guides. Standardized loadings in the MLR model ranged from `r a1_dec(a1_loading_range[1])` to `r a1_dec(a1_loading_range[2])` (Table A1), and that range indicates that no single item dominates the factor. As with our analysis of the HCAP battery, immediate word recall was not included in the model because it adds little information beyond delayed recall in the HCAP Wave 1 sample [@Jones2024]. Table A1 provides loadings from the MLR and WLSMV models. Loadings from the two estimators were similar for most items. The lower WLSMV loading for number series, the item with the most missing data (`r a1_pct(1 - a1_cov[["vdexf7z"]], 0)`% of HRS-HCAP participants with any core item response, against at most `r a1_pct(1 - min(a1_cov[names(a1_cov) != "vdexf7z"]), 0)`% for any other item), likely reflects how each estimator handles missing data. The higher WLSMV loading for object naming cannot be explained by missing data, which was nearly complete for that item. Instead, the difference may be related to the item's skewed response distribution (`r a1_pct(a1_cfa$top_share[["vdlfl2"]], 0)`% of HRS-HCAP participants named both objects correctly, weighted).
+
+```{r a1-table-1}
+a1_table_items
+```
+
+## Approach: Step 2. Demographic norms
+
+The Manly-Jones algorithm defines impairment as performance more than 1.5 standard deviations below the level expected for a person's age, sex, race, ethnicity, and education in a robust normative sample [@Manly2022]. Although we use different thresholds to define impairment (discussed below), we norm the single general cognitive domain score the same way we normed specific domain scores in @Manly2022.
+
+The HCAP 2016 robust normative sample (n = `r a1_n(a1_norm$n_norm)`) is used to define expected cognitive performance levels. The robust normative sample is the subset of HRS-HCAP Wave 1 participants who can reasonably be assumed free of dementia or cognitive impairment, selected without reference to HCAP test scores as those who were followed up at the 2018 HRS core interview and had no reported or diagnosed stroke, Parkinson's disease, Alzheimer's disease or other dementia, cognitive impairment, or functional decline at HCAP baseline or follow-up. Their test performance defines the level expected for a person of a given age, sex, race, ethnicity, and education in the absence of a likely neurological condition [@Manly2022].
+
+First, factor scores in the normative sample were converted to normal scores with the @Blom1958 rank transformation. Because this transformation is sample dependent, we derive a linking equation between Blom transformed scores and estimated factor scores using linear regression with a restricted cubic spline for the factor score [knots at the 5th, 35th, 65th, and 95th percentiles\; @Harrell2015]. The resulting regression model can be used to convert any factor score, including scores from people outside the normative sample and from later waves, to the normalized metric.
+
+Second, the normalized score was regressed, with survey weights, on age (restricted cubic spline with knots at `r paste(a1_norm$age_knots, collapse = ", ")` years, centered at 70), sex, non-Hispanic Black race, Hispanic ethnicity, and years of schooling (centered at 12), together with their 2-way interactions (`r a1_norm$n_terms` terms). This demographic equation is used to estimate the expected score according to demographic characteristics.
+
+Third, the sociodemographically adjusted cognitive performance score (T score) was computed as 50 + 10 × (observed − expected) / SEE, where SEE, the standard error of the estimate from the demographic regression in the normative sample, is the standard deviation of the normalized score multiplied by √(1 − R^2^). A T score of 40 therefore means performance 1 SEE below the level expected for a person of the same age, sex, race, ethnicity, and education. The same SEE is used regardless of demographic group, so a given T score marks the same distance below expectation for every participant.
+
+## Results: Step 2. Demographic norms
+
+The demographic equation explained `r a1_pct(a1_norm$r2, 0)`% of the variance in the normalized score in the normative sample. The standard deviation of the normalized score was `r a1_dec(a1_norm$pblom_sd, 3)`, and therefore the SEE was `r a1_dec(a1_norm$resid_sd, 3)` normalized-score units. In HRS-HCAP Wave 1, the unweighted mean (SD) T score was `r tf_mean("HCAP, normative sample")` (`r tf_sd("HCAP, normative sample")`) in the normative sample^[@Manly2022 used the unweighted normative sample in this scale calibration step. An alternative would have been to use the sampling weights in the normative reference subpopulation group to set the mean (50) and standard deviation (10) on the rescaled cognitive performance measure. We use the convention established in @Manly2022.] and `r tf_mean("HCAP, excluded from norms")` (`r tf_sd("HCAP, excluded from norms")`) among participants excluded from the normative reference sample.
+
+## Approach: Step 3. Cut points
+
+In the Manly-Jones algorithm, dementia requires at least 2 impaired domains and an informant report of functional impairment, and MCI requires at least 1 impaired domain with informant-reported concern or self-reported memory worsening [@Manly2022].
+
+No point on a single T score corresponds to 2 or more domains more than 1.5 standard deviations below expectation. With 5 domains, there are 10 different ways to satisfy exactly 2 domains impaired, and each would be associated with a different cut score on the single domain. We used 2 cut points on the T score (T representing the single domain cognitive performance measure, adjusted for sociodemographics and rescaled to a T distribution (M 50 SD 10) in the unweighted normative reference group): a severe cut point (τ~1~) at T < `r a1_cut(a1_cut_severe)` and a moderate cut point (τ~2~) at T < `r a1_cut(a1_cut_moderate)`. The 2 cut points stand in for the count of impaired domains: T below τ~1~ corresponds to impairment in 2 or more domains, and T from τ~1~ to below τ~2~ corresponds to impairment in 1 domain.
+
+The severe cut point `r a1_dq_sev_text` the T score below which the weighted share of HRS-HCAP Wave 1 participants equals the share with 2 or more impaired domains by the Manly-Jones algorithm (`r a1_pct(a1_dq$share_2plus, 0)`%; T ≈ `r a1_dec(a1_dq$t_2plus, 0)`; n = `r a1_n(a1_dq$n)`). The moderate cut point `r a1_dq_mod_text` the T score that matches the share with 1 or more impaired domains (`r a1_pct(a1_dq$share_1plus, 0)`%; T ≈ `r a1_dec(a1_dq$t_1plus, 0)`). A higher moderate cut point is needed because the core rules classify participants below τ~2~ who do not report memory worsening as normal (Step 4), which lowers the MCI classification rate of the core algorithm relative to the HRS-HCAP algorithm.
+
+## Results: Step 3. Cut points
+
+Figure A2 shows the weighted distribution of T scores among HRS-HCAP Wave 1 participants with core cognitive tests, with the 2 cut points and the weighted share of participants in each T-score band.
+
+```{r a1-figure-2}
+#| fig-cap: !expr paste0("Figure A2. Weighted distribution of demographically adjusted T scores among HRS-HCAP Wave 1 participants with core cognitive tests (n = ", a1_n(a1_n_density), "), with the cut points (dashed lines). Band labels give the weighted share of these participants in each T-score band.")
+#| fig-width: 6.5
+#| fig-height: 3.6
+a1_tdensity_figure()
+```
+
+## Step 4. Classification rules
+
+The core interview has no informant report for respondents who participated in the cognitive assessment (Figure A1; Table A2). The core interview asks every self-respondent about limitations in activities of daily living (ADL) and instrumental activities of daily living (IADL), and these self-reports could stand in for the informant report of functional impairment that separates dementia from MCI in the Manly-Jones algorithm. We did not use them because the level and kind of impairments captured by the core interview ADL and IADL limitations are fundamentally different from those captured by informant IQCODE and Blessed Part I reports in HCAP. Few participants report any limitation, even among those the Manly-Jones algorithm classifies as having dementia. Among HRS-HCAP Wave 1 participants with a core T score and dementia by the Manly-Jones algorithm, `r a1_pct(a1_fn_none_mj("Dementia"))`% (weighted) reported no ADL or IADL limitation. The Appendix Endnote addresses this point more fully.
+
+Self-rated memory worsening, an item the Manly-Jones algorithm already includes, is the second criterion at both levels and stands in for the informant report. Participants without core cognitive tests (mostly proxy interviews) were classified from the IQCODE with the Manly-Jones informant thresholds (`r a1_iq(a1_jorm_severe)` or higher for dementia; above `r a1_iq(a1_jorm_mild)` for MCI). Missing self-rated memory was singly imputed by chained equations [@vanBuuren2011]`r if (isTRUE(a1_alg$hcap_d102_imputed == 0)) "; no Wave 1 participant with a T score was missing self-rated memory" else paste0("; ", a1_n(a1_alg$hcap_d102_imputed), " Wave 1 participants with a T score")`, and "don't know," refused, and not ascertained responses (`r a1_n(a1_alg$hcap_d102_dk_rf_na)` participants) were counted as "worse", which assigns these participants to the more impaired class.
+
+```{r a1-table-2}
+a1_table_rules
+```
+
+With these rules, the weighted prevalence estimates of the core algorithm in HRS-HCAP Wave 1 were `r a1_pct(a1_used$share_normal)`% normal, `r a1_pct(a1_used$share_mci)`% MCI, and `r a1_pct(a1_used$share_dementia)`% dementia, compared with `r a1_pct(a1_target[["1"]])`%, `r a1_pct(a1_target[["2"]])`%, and `r a1_pct(a1_target[["3"]])`% for the Manly-Jones algorithm estimated with EAP factor scores (Table A3).
+
+```{r a1-table-3}
+a1_table_shares
+```
+
+## Agreement with the Manly-Jones algorithm in HRS-HCAP Wave 1
+
+We next examine the agreement of the core algorithm with the Manly-Jones classification and compare it with the agreement of the Langa-Weir classification, a widely used classification of cognitive status from HRS core data [@Crimmins2011]. For self-respondents, Langa-Weir sums immediate and delayed word recall (0 to 20), serial 7 subtraction (0 to 5), and backward counting (0 to 2) into a 27-point score, and classifies scores of 0 to 6 as dementia, 7 to 11 as cognitive impairment without dementia (CIND), and 12 to 27 as normal. For proxy interviews, it combines the proxy's report of the respondent's memory, limitations in instrumental activities of daily living, and the interviewer's assessment of cognitive impairment into an 11-point score, with 6 or more classified as dementia and 3 to 5 as CIND [cognitive impairment, not demented\; @Crimmins2011, pp. i164, i166]. The Langa-Weir cut points were chosen so that the HRS distribution of cognitive states matches the distribution estimated in the Aging, Demographics, and Memory Study (ADAMS). The Langa-Weir score is not adjusted for demographic characteristics. We treat CIND as equivalent to MCI for this comparison.
+
+Agreement of the core algorithm with the Manly-Jones algorithm for 3-class Normal/MCI/Dementia classification was `r cmp(ag$kappa_core, ag$kappa_lw)` the agreement of Langa-Weir; for dementia versus not, it was `r cmp(ag$kappa_core_bin, ag$kappa_lw_bin)` that of Langa-Weir (Table A4). The quadratic weighted kappa [@Cohen1968] for the 3 classes was `r a1_dec(ag$kappa_core)` for the core algorithm and `r a1_dec(ag$kappa_lw)` for Langa-Weir; for dementia versus not, kappa was `r a1_dec(ag$kappa_core_bin)` and `r a1_dec(ag$kappa_lw_bin)`. Of the weighted population the Manly-Jones algorithm classified as having dementia, the core algorithm classified `r a1_pct(ag$capture_core, 0)`% as having dementia and Langa-Weir classified `r a1_pct(ag$capture_lw, 0)`%. Of those the core algorithm classified as having dementia, `r a1_pct(ag$ppv_core, 0)`% had dementia by the Manly-Jones algorithm (Langa-Weir: `r a1_pct(ag$ppv_lw, 0)`%). Agreement between the core algorithm and Langa-Weir was `r a1_dec(ag$kappa_core_lw)` (3 classes, weighted kappa) and `r a1_dec(ag$kappa_core_lw_bin)` (dementia, kappa). Table A5 gives the weighted cross-classifications. Each kappa compares 2 classifications that both contain error, so these values describe agreement and not accuracy.
+
+```{r a1-table-4}
+a1_table_kappa
+```
+
+```{=openxml}
+<w:p/>
+```
+
+```{r a1-table-5}
+a1_table_agreement
+```
+
+## Application to the 2018, 2020, and 2022 core interviews
+
+The fixed model, norms, and cut points were applied to every core interview of HRS-HCAP Wave 1 participants from 2016 to 2022 (Table A6). The number of classified person-waves fell from `r a1_n(w(2016, "classified"))` in 2016 to `r a1_n(w(2022, "classified"))` in 2022 as participants died or left the study, and the share classified from the IQCODE alone was `r a1_pct(w(2016, "iqcode") / w(2016, "classified"))`% in 2016 and `r a1_pct(w(2022, "iqcode") / w(2022, "classified"))`% in 2022.
+
+```{r a1-table-6}
+a1_table_waves
+```
+
+### Missing Number Series
+
+Number series was not administered in the 2018 core interview (`r if (a1_numser_2018 == 0) "no 2018 respondent has a score" else paste(a1_n(a1_numser_2018), "2018 respondents have a score")`), so 2018 EAP scores are based on 7 items. With less information, an EAP score is pulled further toward the population mean [@Bock1982], which raises the scores of low performers and may classify fewer participants as impaired in 2018 than the same performance would produce in other waves. We did not re-norm the 7-item score because the 7 items are in common with the 2016 core items and factor scores are estimated with fixed parameter estimates, therefore the factor score estimates are on the same scale (fixed parameter calibration).
+
+Figure A3 and Table A7 compare EAP scores of core respondents aged 65 or older in 2018 (when number series was not administered) with those in 2016 and 2020 (combined, when number series was administered). The mean posterior standard deviation of the EAP score (the uncertainty in one participant's score given that participant's item responses, averaged over participants) was `r a1_dec(a1_ss("2018", "mean_psd"))` in 2018 and `r a1_dec(a1_ss("2016 and 2020", "mean_psd"))` in 2016 and 2020, and the standard deviation of the EAP scores (the spread of the score estimates across participants) was `r a1_dec(a1_ss("2018", "sd"))` and `r a1_dec(a1_ss("2016 and 2020", "sd"))`. The lower quartile was `r a1_dec(a1_ss("2018", "q1"))` in 2018 and `r a1_dec(a1_ss("2016 and 2020", "q1"))` in 2016 and 2020. The effect on the spread of scores was small; the standard deviation of the 2018 EAP scores was about `r a1_pct(1 - a1_ss("2018", "sd") / a1_ss("2016 and 2020", "sd"), 0)`% smaller than in 2016 and 2020 (Table A7). Nevertheless, a small shift for the population can still change the classification of individuals whose scores lie near a cut point. Because shrinkage moves low scores toward the mean, a participant whose T score would fall just below τ~1~ with number series may fall just above it without it, and be classified with MCI rather than dementia.
+
+```{r a1-figure-3}
+#| fig-cap: "Figure A3. Distribution of EAP factor scores among core respondents aged 65 or older with a nonzero wave weight, in waves with number series (2016 and 2020) and without it (2018). Scores come from the fixed 2016 model."
+#| fig-width: 6.5
+#| fig-height: 3.2
+a1_shrink_figure()
+```
+
+```{r a1-table-7}
+a1_table_shrink
+```
+
+Table A8 lists the number of core respondents aged 65 or older with a score on each test, by wave. Number series was present for `r a1_pct(cov_p(2016, "vdexf7z"), 0)`% (weighted) of respondents in 2016, `r a1_pct(cov_p(2020, "vdexf7z"), 0)`% in 2020, and `r a1_pct(cov_p(2022, "vdexf7z"), 0)`% in 2022, and absent in 2018; the other tests were present for at least `r a1_pct(min_other_p, 0)`% of respondents in every wave.
+
+```{r a1-table-8}
+a1_table_coverage
+```
+
+## Limitations
+
+Limitations of our approach are worth mentioning.
+
+First, the cut points may have been chosen with reference to the HRS-HCAP Wave 1 sample, in which agreement is also evaluated, so the agreement in Table A4 may be optimistic. The comparison of core-based and HRS-HCAP-based classifications among Wave 2 re-interviewees (eTables 7 and 8) is the out-of-sample check available in these data.
+
+Second, self-rated memory replaces informant report, and `r if (fl$d2 / fl$b2 > 0.5) "most" else "many"` participants with low T scores did not report memory worsening; the core algorithm likely under-classifies dementia relative to the Manly-Jones algorithm, which is consistent with the lower core-based dementia incidence among re-interviewees in eTable 8.
+
+Third, the 2018 scores rest on 7 items (above). The pattern of missingness for number series is difficult to discern from the data and the HRS concordance web tool.
+
+Fourth, the norms do not account for interview mode, which varies across respondents and waves; a mode difference in test scores would shift T scores in the waves where the mode mix differs from 2016. Other potentially important considerations, such as language of administration, are not incorporated into the scoring and standardizing steps.
+
+Fifth, the IQCODE in the core interview asks about change over 2 years, whereas the HRS-HCAP informant interview asks about change over 10 years, so the Manly-Jones IQCODE thresholds may not carry the same meaning in core proxy interviews.
+
+Finally, both the core algorithm and the Manly-Jones algorithm rely on applying strict cut points to continuous cognitive, functional, and informant report measures. This practice of attempting to elicit qualitative clinical states from quantitative scales introduces well-documented classification instability, particularly for individuals whose scores fall near diagnostic thresholds [@Streiner2002; @Altman2006]. Because continuous cognitive instruments inherently possess standard measurement error, small and clinically negligible fluctuations in test performance can shift an individual across an arbitrary boundary. As a result, observations that are quantitatively almost indistinguishable are operationalized as qualitatively distinct diagnostic categories, substantially inflating misclassification rates and generating spurious diagnostic changes across repeated assessments.
+
+## Endnote. Why the core algorithm does not use functional limitations
+
+In the Manly-Jones algorithm, an informant report of functional impairment separates dementia from MCI [@Manly2022], and the core interview asks every self-respondent about limitations in activities of daily living (ADL) and instrumental activities of daily living (IADL). We planned to use these self-reports in place of the informant report and to set their thresholds by prevalence matching within each level of cognitive impairment. We set the plan aside for 3 reasons, which we document here with the current data. The first and third reasons are summarized in Step 4. Limitations were counted on the `r a1_fn$n_limit_items` ADL and IADL items asked in every core wave from 2016 to 2022 (Table A9 note), so that the count would mean the same thing in every wave.
+
+First, few participants report any limitation, even among those the Manly-Jones algorithm classifies as having dementia. Among HRS-HCAP Wave 1 participants with a core T score, the weighted share reporting no ADL or IADL limitation was `r a1_pct(a1_fn_none_mj("Dementia"))`% for those with dementia by the Manly-Jones algorithm, `r a1_pct(a1_fn_none_mj("MCI"))`% for MCI, and `r a1_pct(a1_fn_none_mj("Normal"))`% for normal cognition; below the severe T cut point, `r a1_pct(a1_fn_none_band)`% reported none (Table A9). By definition, every participant the Manly-Jones algorithm classifies as having dementia has an informant report of functional impairment, yet `r a1_pct(a1_fn_none_mj("Dementia"))`% of them report no limitation in the core interview. The lowest possible threshold, 1 or more limitations, misses at least that share, and no threshold on the limitation count can do better.
+
+Second, including function `r a1_fn_effect_text`, and never enough to justify the apparent difference in measured construct. We examined 2 alternative rules, all at the core algorithm's cut points (T < `r a1_cut(a1_cut_severe)` and T < `r a1_cut(a1_cut_moderate)`), so that the rules differ only in the second criterion: function at the severe level and function or memory at the moderate level, the closest analog of the Manly-Jones rules; and function or memory at both levels (Table A10). In the full sample, the 3-class kappa was `r a1_dec(a1_fn_var("memory", "kappa_3class"))` with the memory rule, `r a1_dec(a1_fn_var("function", "kappa_3class"))` with the function rule, and `r a1_dec(a1_fn_var("function_or_memory", "kappa_3class"))` with function or memory; the dementia kappa was `r a1_dec(a1_fn_var("memory", "kappa_binary"))`, `r a1_dec(a1_fn_var("function", "kappa_binary"))`, and `r a1_dec(a1_fn_var("function_or_memory", "kappa_binary"))`. Because the cut points are held fixed, the rules also produce different class prevalence (Table A10). To describe how much these differences vary across samples, we computed agreement in each of `r a1_fn$n_split` random halves of the sample (Table A11). Relative to the memory rule, the mean difference in 3-class kappa across halves was `r a1_shd_text("function", "kappa_3class")` for the function rule and `r a1_shd_text("function_or_memory", "kappa_3class")` for function or memory (2.5th to 97.5th percentile across halves), and the function rule had the higher kappa in `r a1_pct(a1_shd("function", "kappa_3class", "p_higher"), 0)`% of halves. For dementia, the mean differences were `r a1_shd_text("function", "kappa_binary")` and `r a1_shd_text("function_or_memory", "kappa_binary")`. `r a1_fn_conclusion_text`
+
+Third, the core items do not say why a limitation is present and do not specifically ask about change the way the IQCODE and Blessed Part I measures do in HRS-HCAP, and they rely on self-report in the core, whereas in HRS-HCAP a knowledgeable informant provides the assessment of change (unspecified time frame in the Blessed, a 10-year lookback in the IQCODE).
+
+```{r a1-table-9}
+a1_table_floor
+```
+
+```{=openxml}
+<w:p/>
+```
+
+```{r a1-table-10}
+a1_table_variants
+```
+
+```{=openxml}
+<w:p/>
+```
+
+```{r a1-table-11}
+a1_table_split
+```
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+## References
+
+::: {#refs}
+:::

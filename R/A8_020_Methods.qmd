@@ -21,6 +21,34 @@ $$TF = 50 + 10 \times \frac{\text{Pblom} - \text{Eblom}}{\text{SEE}}$$
 normative HCAP sample.
 </div>
 
+## Cut Points: Pre-specified Selection
+
+```{r a8-cuts}
+#| include: false
+a8_cal <- readRDS(here::here("R_objects", "A7_070_threshold_calibration.rds"))
+a8_sel <- a8_cal$selected
+a8_pct <- function(x) sprintf("%.1f%%", 100 * x)
+a8_pts <- function(x) sprintf("%.1f", 100 * x)
+```
+
+<div style="font-size: 0.6em; line-height: 1.3;">
+Rule fixed on 2026-10-21, before any result was seen (`R/A7_070`):
+
+- **Score:** T rounded to an integer, TR = floor(TF + 0.5); integer cut points
+- **Candidates:** every pair, severe `r min(a8_cal$spec$severe_range)`–`r max(a8_cal$spec$severe_range)`, moderate `r min(a8_cal$spec$moderate_range)`–`r max(a8_cal$spec$moderate_range)`; memory and IQCODE rules fixed
+- **Eligible:** weighted dementia share within `r a8_pts(a8_cal$spec$tol_dementia)` points and MCI share within `r a8_pts(a8_cal$spec$tol_mci)` points of Manly-Jones (HRS-HCAP Wave 1, n = `r format(a8_cal$n_sample, big.mark = ",")`)
+- **Choose:** highest weighted dementia kappa; ties to highest 3-class kappa
+
+**Result:** TR < `r a8_cal$cuts[["severe"]]` (severe) and TR < `r a8_cal$cuts[["moderate"]]` (moderate); `r nrow(a8_cal$eligible)` eligible pairs (stage: `r a8_cal$selection_stage`)
+
+| | Normal | MCI | Dementia | Kappa (dementia) | Kappa (3-class) |
+|:--|--:|--:|--:|--:|--:|
+| Manly-Jones | `r a8_pct(a8_cal$target_shares[["1"]])` | `r a8_pct(a8_cal$target_shares[["2"]])` | `r a8_pct(a8_cal$target_shares[["3"]])` | | |
+| Core, selected | `r a8_pct(a8_sel$share_normal)` | `r a8_pct(a8_sel$share_mci)` | `r a8_pct(a8_sel$share_dementia)` | `r sprintf("%.3f", a8_sel$kappa_binary)` | `r sprintf("%.3f", a8_sel$kappa_3class)` |
+
+`r if (!is.null(a8_cal$bootstrap)) paste0("Bootstrap (", a8_cal$bootstrap$n_boot, " design-based samples): same pair selected in ", a8_pct(a8_cal$bootstrap$pct_same_pair), ". ") else ""`Kappas are in-sample. Previous cut points (T < 37, T < 48) had no documented derivation.
+</div>
+
 ## Algorithm Flow Diagram
 
 ```{r}

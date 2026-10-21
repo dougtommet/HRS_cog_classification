@@ -1,12 +1,15 @@
-# A10_010: check that the current code reproduces the classification file the
-# recipient holds, and describe the alternative cut points that were
-# considered and not adopted.
+# A10_010: compare the classification file the recipient holds (the July
+# 2026 file) with the replacement written by the current code, and show what
+# each change did.
 #
-# Shared file:  Data/<a10_shared_file> (A10_005), read as delivered.
-# Current:      R_objects/A7_075_hrs16_22_long.rds (Analysis A7), classified
-#               with the algorithm cut points (A7_070 $cuts, 37 and 48).
-# Alternative:  the same inputs classified with the A7_070 grid optimum
-#               ($calibrated_cuts), considered on 2026-10-17 and not adopted.
+# Shared file:  Data/<a10_shared_file> (A10_005), read as delivered. Classes
+#               from TF < 37 and TF < 48 (unrounded T score).
+# New:          R_objects/A7_075_hrs16_22_long.rds (Analysis A7): classes from
+#               TR < new cuts, TR = floor(TF + 0.5), cut points selected by the
+#               pre-specified rule of 2026-10-21 (A7_070). The same rows are
+#               written to Data/<a10_new_file> by A7_075.
+# Steps:        rounding (TF < old cuts to TR < old cuts), then the new cut
+#               points (TR < old cuts to TR < new cuts).
 # Writes:       R_objects/A10_010_comparison.rds
 #
 # Requires Analyses A0 and A7 to have been run.
@@ -16,8 +19,8 @@ source(here::here("R", "A7_060-algorithm_functions.R"))
 d102_worse    <- c(-8, 3, 8, 9)
 d102_notworse <- c(1, 2)
 
-shared_path  <- here::here("Data", a10_shared_file)
-current_path <- here::here("Data", a10_current_file)
+shared_path <- here::here("Data", a10_shared_file)
+new_path    <- here::here("Data", a10_new_file)
 if (!file.exists(shared_path)) {
   stop("Shared file not found: ", shared_path,
        ". Save the delivered file there (it is gitignored).", call. = FALSE)
@@ -28,14 +31,14 @@ long   <- readRDS(here::here("R_objects", "A7_075_hrs16_22_long.rds"))
 merged <- readRDS(here::here("R_objects", "A7_005_hrs16_22_merged.rds"))
 hcap   <- readRDS(here::here("R_objects", "A7_075_hrs16_hcap.rds"))
 
-cuts_old <- cal$cuts             # algorithm cut points (shared file, current code)
-cuts_new <- cal$calibrated_cuts  # alternative: grid optimum, not adopted
+cuts_old <- cal$previous_cuts   # July file, on TF
+cuts_new <- cal$cuts            # new file, on TR
 
 # Person-level variables: design, age by wave, raw 2016 D102 -------------------
 person <- merged %>%
   transmute(id, SECU = num(SECU), STRATUM = num(STRATUM),
             P = num(page), Q = num(qage), R = num(rage), S = num(sage),
-            PD102_raw = num(PD102)) 
+            PD102_raw = num(PD102))
 
 ages <- person %>%
   select(id, P, Q, R, S) %>%
@@ -43,12 +46,12 @@ ages <- person %>%
 
 hcap_ids <- hcap %>% distinct(id) %>% mutate(hcap_cohort = 1L)
 
-# Current classification --------------------------------------------------------
+# New classification (current code) -------------------------------------------
 current <- long %>%
   filter(inHRS == 1) %>%
   transmute(id, key = hhidpn_key(HHID, PN), wave,
             TF_now = num(TF), jorm_now = num(jorm), D102_now = num(D102),
-            dx_cur = num(dx_v1), weight = num(weight), from_current = TRUE) %>%
+            dx_new = num(dx_v1), weight = num(weight), from_current = TRUE) %>%
   left_join(ages, by = c("id", "wave")) %>%
   left_join(person %>% select(id, SECU, STRATUM, PD102_raw), by = "id") %>%
   left_join(hcap_ids, by = "id") %>%
@@ -100,9 +103,9 @@ inputs <- list(
 )
 
 # Reconstruction: apply the written rule to each file's own inputs --------------
-classify_inputs <- function(TF, jorm, D102, cuts) {
-  tibble(TF = TF, jorm = jorm, D102 = D102) %>%
-    classify_core(cuts[["severe"]], cuts[["moderate"]]) %>%
+classify_inputs <- function(TF, jorm, D102, cuts, score) {
+  tibble(TF = TF, TR = floor(TF + 0.5), jorm = jorm, D102 = D102) %>%
+    classify_core(cuts[["severe"]], cuts[["moderate"]], score = score) %>%
     pull(dx_v1) %>%
     num()
 }
@@ -110,55 +113,55 @@ n_differ <- function(a, b) sum(!same_value(a, b))
 
 both <- both %>%
   mutate(
-    dx_old_rebuilt = classify_inputs(TF_old, jorm_old, D102_old, cuts_old),
-    dx_cur_rebuilt = classify_inputs(TF_now, jorm_now, D102_now, cuts_old),
-    dx_alt         = classify_inputs(TF_now, jorm_now, D102_now, cuts_new)
+    dx_old_rebuilt = classify_inputs(TF_old, jorm_old, D102_old, cuts_old, "TF"),
+    dx_round       = classify_inputs(TF_now, jorm_now, D102_now, cuts_old, "TR"),
+    dx_new_rebuilt = classify_inputs(TF_now, jorm_now, D102_now, cuts_new, "TR")
   )
 
 rebuild <- list(
-  old_mismatch      = n_differ(both$dx_old, both$dx_old_rebuilt),
-  cur_mismatch      = n_differ(both$dx_cur, both$dx_cur_rebuilt),
-  shared_vs_current = n_differ(both$dx_old, both$dx_cur)
+  old_mismatch = n_differ(both$dx_old, both$dx_old_rebuilt),
+  new_mismatch = n_differ(both$dx_new, both$dx_new_rebuilt)
 )
 
-# Current export on disk, if present: does it match the A7 object? -------------
-current_file <- if (file.exists(current_path)) {
-  cf <- read_dx_file(current_path) %>% select(key, wave, dx_file = dx_v1)
-  chk <- current %>% select(key, wave, dx_cur) %>% full_join(cf, by = c("key", "wave"))
-  list(exists = TRUE, n = nrow(cf), mismatch = n_differ(chk$dx_cur, chk$dx_file),
-       mtime = format(file.info(current_path)$mtime, "%Y-%m-%d"))
+# New export on disk, if present: does it match the A7 object? -----------------
+new_file <- if (file.exists(new_path)) {
+  nf <- read_dx_file(new_path) %>% select(key, wave, dx_file = dx_v1)
+  chk <- current %>% select(key, wave, dx_new) %>% full_join(nf, by = c("key", "wave"))
+  list(exists = TRUE, n = nrow(nf), mismatch = n_differ(chk$dx_new, chk$dx_file),
+       mtime = format(file.info(new_path)$mtime, "%Y-%m-%d"))
 } else list(exists = FALSE)
 
-# Differences in assignment: shared file versus the alternative cut points -----
+# Differences in assignment: July file versus new file ------------------------
 both <- both %>%
   mutate(
-    changed = !same_value(dx_old, dx_alt),
+    changed       = !same_value(dx_old, dx_new),
+    changed_round = !same_value(dx_old, dx_round),
+    changed_cuts  = !same_value(dx_round, dx_new),
     complaint = case_when(D102_now %in% d102_worse    ~ "Reported worse memory",
                           D102_now %in% d102_notworse ~ "No reported worsening",
                           TRUE                        ~ "D102 missing"),
-    cog_old = case_when(TF_now < cuts_old[["severe"]] ~ 2, TF_now < cuts_old[["moderate"]] ~ 1,
-                        !is.na(TF_now) ~ 0),
-    cog_new = case_when(TF_now < cuts_new[["severe"]] ~ 2, TF_now < cuts_new[["moderate"]] ~ 1,
-                        !is.na(TF_now) ~ 0),
     age65 = !is.na(age) & age >= 65
   )
 
-band_text <- function(a, b) paste0("T from ", fmt_cut(min(a, b)), " to under ", fmt_cut(max(a, b)))
+# Old rule: TF < c_old. New rule: TR < c_new, i.e. TF < c_new - 0.5. The class
+# can differ only for TF between the two.
+band_lo <- function(co, cn) min(co, cn - 0.5)
+band_hi <- function(co, cn) max(co, cn - 0.5)
+band_text <- function(co, cn) paste0("T from ", fmt_cut(band_lo(co, cn)), " to under ", fmt_cut(band_hi(co, cn)))
 severe_band   <- band_text(cuts_old[["severe"]],   cuts_new[["severe"]])
 moderate_band <- band_text(cuts_old[["moderate"]], cuts_new[["moderate"]])
+in_band <- function(tf, co, cn) tf >= band_lo(co, cn) & tf < band_hi(co, cn)
 
 both <- both %>%
   mutate(band = case_when(
-    is.na(TF_now)                                     ~ "No T score",
-    TF_now >= min(cuts_old[["severe"]], cuts_new[["severe"]]) &
-      TF_now <  max(cuts_old[["severe"]], cuts_new[["severe"]])     ~ severe_band,
-    TF_now >= min(cuts_old[["moderate"]], cuts_new[["moderate"]]) &
-      TF_now <  max(cuts_old[["moderate"]], cuts_new[["moderate"]]) ~ moderate_band,
-    TRUE                                              ~ "Outside both bands"))
+    is.na(TF_now) ~ "No T score",
+    in_band(TF_now, cuts_old[["severe"]],   cuts_new[["severe"]])   ~ severe_band,
+    in_band(TF_now, cuts_old[["moderate"]], cuts_new[["moderate"]]) ~ moderate_band,
+    TRUE ~ "Outside both bands"))
 
 crosstab <- both %>%
-  count(Shared = dx_factor(dx_old), Alternative = dx_factor(dx_alt)) %>%
-  pivot_wider(names_from = Alternative, values_from = n, values_fill = 0)
+  count(Shared = dx_factor(dx_old), New = dx_factor(dx_new)) %>%
+  pivot_wider(names_from = New, values_from = n, values_fill = 0)
 
 change_by <- function(d) {
   d %>%
@@ -172,23 +175,29 @@ changes <- list(
   hcap  = change_by(both %>% filter(hcap_cohort == 1L)),
   n_changed = sum(both$changed),
   pct_changed = mean(both$changed),
+  n_changed_round = sum(both$changed_round),
+  n_changed_cuts = sum(both$changed_cuts),
   n_changed_under65 = sum(both$changed & !both$age65)
+)
+
+steps <- tibble::tibble(
+  Step = c("1. Rounding: TF < old cuts to TR < old cuts",
+           "2. New cut points: TR < old cuts to TR < new cuts",
+           "Both steps: July file to new file"),
+  `Person-waves changed` = c(changes$n_changed_round, changes$n_changed_cuts, changes$n_changed),
+  `% of person-waves` = fmt_pct(c(changes$n_changed_round, changes$n_changed_cuts, changes$n_changed) / nrow(both))
 )
 
 transitions <- both %>%
   filter(changed) %>%
-  mutate(Change = paste(dx_factor(dx_old), "to", dx_factor(dx_alt))) %>%
+  mutate(Change = paste(dx_factor(dx_old), "to", dx_factor(dx_new))) %>%
   count(Change, name = "n")
-n_trans <- function(from, to) {
-  x <- transitions$n[transitions$Change == paste(from, "to", to)]
-  if (length(x) == 0) 0L else x
-}
 
 mechanism <- both %>%
   filter(!is.na(TF_now), band != "Outside both bands") %>%
   mutate(Change = if_else(changed,
-                          paste(dx_factor(dx_old), "to", dx_factor(dx_alt)),
-                          paste("No change,", dx_factor(dx_alt)))) %>%
+                          paste(dx_factor(dx_old), "to", dx_factor(dx_new)),
+                          paste("No change,", dx_factor(dx_new)))) %>%
   count(`T band` = band, `Self-rated memory` = complaint, Change, name = "Person-waves")
 
 n_changed_outside_bands <- sum(both$changed & both$band %in% c("Outside both bands", "No T score"))
@@ -196,7 +205,7 @@ n_changed_outside_bands <- sum(both$changed & both$band %in% c("Outside both ban
 # Weighted prevalence, ages 65 and older ----------------------------------------
 # Wave respondent weights (xWGTR). Respondents with weight 0 or missing (for
 # example, nursing home residents in the HRS respondent weights) are excluded.
-prev_sample <- both %>% filter(!is.na(dx_old), !is.na(dx_alt))
+prev_sample <- both %>% filter(!is.na(dx_old), !is.na(dx_new))
 
 weight_excluded <- prev_sample %>%
   filter(age65) %>%
@@ -209,7 +218,7 @@ prev_wave <- function(w) {
     filter(wave == w, !is.na(weight), weight > 0, !is.na(SECU), !is.na(STRATUM))
   for (k in 1:3) {
     d[[paste0("old", k)]] <- as.numeric(d$dx_old == k)
-    d[[paste0("new", k)]] <- as.numeric(d$dx_alt == k)
+    d[[paste0("new", k)]] <- as.numeric(d$dx_new == k)
     d[[paste0("dif", k)]] <- d[[paste0("new", k)]] - d[[paste0("old", k)]]
   }
   des <- svydesign(ids = ~SECU, strata = ~STRATUM, weights = ~weight,
@@ -227,7 +236,7 @@ prev_wave <- function(w) {
       year = wave_year[[w]], class = dx_labels[k],
       n = nrow(d65),
       wn_old = sum(d65$weight[d65$dx_old == k]),
-      wn_new = sum(d65$weight[d65$dx_alt == k]),
+      wn_new = sum(d65$weight[d65$dx_new == k]),
       p_old = as.numeric(p_old), lo_old = ci_o[1], hi_old = ci_o[2],
       p_new = as.numeric(p_new), lo_new = ci_n[1], hi_new = ci_n[2],
       d = as.numeric(coef(dif)), lo_d = ci_d[1], hi_d = ci_d[2]
@@ -254,15 +263,16 @@ shared_steps <- list(
 )
 
 A10_010_comparison <- list(
-  files = list(shared = a10_shared_file, current = a10_current_file,
+  files = list(shared = a10_shared_file, new = a10_new_file,
                shared_mtime = format(file.info(shared_path)$mtime, "%Y-%m-%d")),
   cuts_old = cuts_old, cuts_new = cuts_new,
   jorm_cuts = cal$jorm_cuts,
-  calibration = cal[c("target_shares", "algorithm", "calibrated", "max_kappa",
-                      "grid_position", "grid_step", "n_sample", "weight",
+  calibration = cal[c("target_shares", "comparison", "selected", "eligible",
+                      "tol_dementia_used", "tol_mci_used", "selection_stage",
+                      "spec", "candidates", "bootstrap", "n_sample", "weight",
                       "target_variable", "date")],
-  rows = rows, inputs = inputs, rebuild = rebuild, current_file = current_file,
-  crosstab = crosstab, changes = changes, transitions = transitions,
+  rows = rows, inputs = inputs, rebuild = rebuild, new_file = new_file,
+  crosstab = crosstab, changes = changes, steps = steps, transitions = transitions,
   mechanism = mechanism, severe_band = severe_band, moderate_band = moderate_band,
   n_changed_outside_bands = n_changed_outside_bands,
   weight_excluded = weight_excluded, prevalence = prevalence,

@@ -11,3 +11,11 @@ Saved so the grid search can be restored after Rich talks to Doug Tommet about h
 | `MS_Appendix-1_2026-10-20_rules_first_with_grid.qmd` | Appendix 1 after the first 2026-10-20 reorganization (rules in Step 3, cut points by prevalence matching in Step 4, grid as a check). |
 
 Grid results last rendered (2026-10-19): closest-share pair T < 38.5 and T < 46.5 (69.6/21.2/9.1% vs Manly-Jones 69.4/21.4/9.2%); 37/48 ranked 54 of 2,250 pairs, largest share difference 1.6 points; highest 3-class kappa 0.52 at T < 36 and T < 42.5. See References/SESSION_LOGS.md, 2026-10-17 to 2026-10-20.
+
+## Added 2026-10-21 (before the pre-specified cut-point rule replaced 37/48)
+
+| File | What it is |
+|:--|:--|
+| `A7_070-threshold_calibration_as_of_2026-10-21.R` | A7_070 with the 2026-10-21 domain-quantile fix, still using 37/48 and the 0.5-step grid as a check. |
+| `A10_010-compare_shared_current_as_of_2026-10-21.R`, `A10_000-Main_control_as_of_2026-10-21.qmd` | A10 as it confirmed that the code reproduced the July file and described the grid optimum as the alternative not adopted. |
+| `MS_020_appendix1_objects_as_of_2026-10-21.R`, `MS_Appendix-1_as_of_2026-10-21_domain_paragraph.qmd` | Appendix 1 with the Step 3 domain-share paragraph (where 37/48 sit relative to the 2+ and 1+ impaired-domain shares). |

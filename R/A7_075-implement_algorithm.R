@@ -1,6 +1,7 @@
 # Analysis A7: apply the Core algorithm (dx_v1).
 #
-# Cut points come from A7_070 (the algorithm cut points, T < 37 and T < 48).
+# Cut points come from A7_070 (selected by the pre-specified rule of
+# 2026-10-21) and are applied to TR, the T score rounded to an integer.
 # Writes every object that later scripts and reports read, including
 # A7_075_hrs16_hcap.rds (read by A7_100 and the A7 report).
 
@@ -9,6 +10,10 @@ source(here::here("R", "A7_060-algorithm_functions.R"))
 A7_070_threshold_calibration <- readRDS(here::here("R_objects", "A7_070_threshold_calibration.rds"))
 cut_severe   <- A7_070_threshold_calibration$cuts[["severe"]]
 cut_moderate <- A7_070_threshold_calibration$cuts[["moderate"]]
+
+# Person-wave export for Lindsay Kobayashi (written at the end of this script).
+dx_export_file     <- paste0("Dx_for_LK-", Sys.Date(), ".csv")
+dx_export_previous <- "Dx_for_LK-2026-07-10.csv"   # the file she holds
 
 # Using the n=3496 sample
 hrs16_merged  <- readRDS(here::here("R_objects", "A7_055_hrs16_merged.rds"))
@@ -60,6 +65,9 @@ hcap_cohort_wave_counts <- hcap_cohort_waves %>%
 
 A7_075_algorithm_summary <- list(
   cuts = c(severe = cut_severe, moderate = cut_moderate),
+  score = "TR",
+  export_file = dx_export_file,
+  export_previous = dx_export_previous,
   jorm_cuts = A7_070_threshold_calibration$jorm_cuts,
   hcap_flow = hcap_flow_diagram_values,
   hcap_n = nrow(hrs16_hcap),
@@ -82,13 +90,14 @@ saveRDS(hrs16_flow_diagram_values, here::here("R_objects", "A7_075_hrs16_flow_di
 saveRDS(A7_075_algorithm_summary,  here::here("R_objects", "A7_075_algorithm_summary.rds"))
 
 # Person-wave export for the incidence analysis (Kobayashi et al.).
-# The file shared on 2026-07-10 (Data/Dx_for_LK-2026-07-10.csv, gitignored)
-# stands. This rebuild is written so that Analysis A10 can confirm that the
-# current code reproduces it; it is not a new share. Record any new share in
-# R/A10/A10_005-share_log.R.
-dx_export_file <- "Dx_for_LK-rebuild.csv"
-
+# Replaces the file shared on 2026-07-10 (decision 2026-10-21: cut points
+# selected by the A7_070 rule, classification on TR). Same columns as the
+# July file; TF stays unrounded and the README explains TR. The file is
+# named with the run date; record it in R/A10/A10_005-share_log.R when sent.
+# A7_085 writes Data/<file>_README.md and compares with the July file.
 dx_export <- hrs16_22_long %>%
   filter(inHRS == 1) %>%
   select(HHID, PN, wave, TF, jorm, D102, dx_v1)
 write_csv(dx_export, here::here("Data", dx_export_file))
+
+source(here::here("R", "A7_085-export_readme.R"))

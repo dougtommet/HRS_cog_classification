@@ -13,7 +13,7 @@
 #         T-score band. Limitations are counted on the 9 items available in
 #         every wave 2016-2022 (map use, G040, is omitted; it is not in 2022).
 # Part 2: 3 rule variants, all at the core algorithm's cut points (A7_070
-#         $cuts, T < 37 and T < 48): memory (the core algorithm), function
+#         $cuts, applied to TR, the rounded T score): memory (the core algorithm), function
 #         (Manly-Jones analog), and function or memory. Class shares and
 #         agreement with the Manly-Jones algorithm. Decision (Rich,
 #         2026-10-19): hold the cut points fixed for every rule, rather than
@@ -24,6 +24,7 @@
 #         differences; it is not an out-of-sample check.
 
 source(here::here("R", "A7_060-algorithm_functions.R"))
+# 2026-10-21: the algorithm classifies on TR (rounded T); TF replaced by TR.
 
 A7_070_threshold_calibration <- readRDS(here::here("R_objects", "A7_070_threshold_calibration.rds"))
 cuts <- A7_070_threshold_calibration$cuts
@@ -61,7 +62,7 @@ limit_group <- function(x) {
 }
 floor_by <- function(d, by) {
   d %>%
-    filter(!is.na(TF)) %>%
+    filter(!is.na(TR)) %>%
     mutate(limits = limit_group(n_limit)) %>%
     group_by(group = {{ by }}) %>%
     summarise(
@@ -77,8 +78,8 @@ floor_by_mj <- floor_by(
   fc %>% mutate(mj = factor(target, 1:3, c("Normal", "MCI", "Dementia"))), mj
 )
 floor_by_band <- floor_by(
-  fc %>% mutate(band = factor(case_when(TF < cuts[["severe"]] ~ 1L,
-                                        TF < cuts[["moderate"]] ~ 2L,
+  fc %>% mutate(band = factor(case_when(TR < cuts[["severe"]] ~ 1L,
+                                        TR < cuts[["moderate"]] ~ 2L,
                                         TRUE ~ 3L),
                               1:3, c(paste0("T < ", cuts[["severe"]]),
                                      paste0(cuts[["severe"]], " to < ", cuts[["moderate"]]),
@@ -110,9 +111,9 @@ variant_dx <- function(d, cut_severe, cut_moderate, variant) {
     d$cog_threshold == 1 & mod ~ 2L,
     d$cog_threshold == 1       ~ 1L,
     d$cog_threshold == 0       ~ 1L,
-    is.na(d$TF) & d$jorm_threshold == 2 ~ 3L,
-    is.na(d$TF) & d$jorm_threshold == 1 ~ 2L,
-    is.na(d$TF) & d$jorm_threshold == 0 ~ 1L
+    is.na(d$TR) & d$jorm_threshold == 2 ~ 3L,
+    is.na(d$TR) & d$jorm_threshold == 1 ~ 2L,
+    is.na(d$TR) & d$jorm_threshold == 0 ~ 1L
   )
 }
 
@@ -146,7 +147,7 @@ if (!isTRUE(all.equal(mem_dx, as.integer(haven::zap_labels(fc$dx_v1)))))
 # Part 3: repeated random halves --------------------------------------------------
 fc$iq_dx <- {
   j <- algorithm_thresholds(fc, cuts[["severe"]], cuts[["moderate"]])$jorm_threshold
-  ifelse(is.na(fc$TF), j + 1L, NA_integer_)
+  ifelse(is.na(fc$TR), j + 1L, NA_integer_)
 }
 variant_flags <- function(d, variant) {
   list(
@@ -159,9 +160,9 @@ variant_flags <- function(d, variant) {
 fast_dx <- function(d, variant, cs, cm) {
   f <- variant_flags(d, variant)
   dx <- d$iq_dx
-  has_t <- !is.na(d$TF)
-  dx[has_t] <- ifelse(d$TF[has_t] < cs, ifelse(f$sev[has_t], 3L, 2L),
-                      ifelse(d$TF[has_t] < cm, ifelse(f$mod[has_t], 2L, 1L), 1L))
+  has_t <- !is.na(d$TR)
+  dx[has_t] <- ifelse(d$TR[has_t] < cs, ifelse(f$sev[has_t], 3L, 2L),
+                      ifelse(d$TR[has_t] < cm, ifelse(f$mod[has_t], 2L, 1L), 1L))
   dx
 }
 fast_agree <- function(d, dx) {
@@ -217,7 +218,7 @@ split_diff <- split_half %>%
 
 A7_090_function_check <- list(
   n = nrow(fc),
-  n_with_T = sum(!is.na(fc$TF)),
+  n_with_T = sum(!is.na(fc$TR)),
   target_shares = target_shares,
   floor_by_mj = floor_by_mj,
   floor_by_band = floor_by_band,

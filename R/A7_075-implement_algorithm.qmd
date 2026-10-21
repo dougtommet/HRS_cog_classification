@@ -14,7 +14,7 @@ cut_moderate <- A7_075_algorithm_summary$cuts[["moderate"]]
 
 
 
-This section descrbes a rule-based classification algorithm applied to the HCAP subsample to assign each respondent to one of three cognitive status categories: **Normal**, **MCI**, or **Dementia**. The algorithm combines a T-scaled cognitive performance score (`TF`), a self-reported memory change item (`D102`, single-imputed when missing), and an informant-rated cognitive change score (`jorm`). A flow diagram counting function is also defined to document how many respondents pass through each decision node.
+This section descrbes a rule-based classification algorithm applied to the HCAP subsample to assign each respondent to one of three cognitive status categories: **Normal**, **MCI**, or **Dementia**. The algorithm combines a T-scaled cognitive performance score rounded to an integer (`TR` = floor(`TF` + 0.5)), a self-reported memory change item (`D102`, single-imputed when missing), and an informant-rated cognitive change score (`jorm`). A flow diagram counting function is also defined to document how many respondents pass through each decision node.
 Both `algorithm_thresholds` and `v1_algorithm` are saved as function objects, allowing identical classification logic to be applied to future datasets without modifying code.
 
 
@@ -31,11 +31,11 @@ Two intermediate threshold variables are computed before the final diagnosis is 
 
 | Condition | `cog_threshold` | Interpretation |
 |---|---|---|
-| TF < `r cut_severe` | 2 | Substantial impairment |
-| TF < `r cut_moderate` (and ≥ `r cut_severe`) | 1 | Mild impairment |
-| TF ≥ `r cut_moderate` | 0 | Normal range |
+| TR < `r cut_severe` | 2 | Substantial impairment |
+| TR < `r cut_moderate` (and ≥ `r cut_severe`) | 1 | Mild impairment |
+| TR ≥ `r cut_moderate` | 0 | Normal range |
 
-Cut points are fixed at the values set in April 2026 to approximate the weighted HRS/HCAP (Manly-Jones) class shares in HRS-HCAP Wave 1 (A7_070); the threshold calibration section reports a grid search under the same criterion as a check.
+Cut points were selected on 2026-10-21 by a pre-specified rule (A7_070): integer cut points whose weighted dementia and MCI shares in HRS-HCAP Wave 1 match the Manly-Jones shares within set tolerances, choosing among them the highest weighted dementia kappa. The previous section reports the rule and the result.
 
 
 #### `jorm_threshold` — Informant-Rated Cognitive Change Category

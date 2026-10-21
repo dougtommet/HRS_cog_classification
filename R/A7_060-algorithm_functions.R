@@ -8,16 +8,20 @@
 #   1 = better, 2 = about the same, 3 = worse, 8 = don't know, 9 = refused,
 #   -8 = not ascertained. Codes 3, 8, 9, and -8 count as reported worsening.
 
+# score: the T score compared with the cut points. The algorithm uses TR,
+# the T score rounded to an integer (A7_055; decision 2026-10-21). TF, the
+# unrounded score, is used only to reproduce the July 2026 file (A10).
 algorithm_thresholds <- function(df, cut_severe, cut_moderate,
-                                 jorm_severe = 3.4, jorm_mild = 3.0) {
+                                 jorm_severe = 3.4, jorm_mild = 3.0,
+                                 score = "TR") {
   stopifnot(is.numeric(cut_severe), is.numeric(cut_moderate),
-            cut_severe < cut_moderate)
+            cut_severe < cut_moderate, score %in% names(df))
   df %>%
     mutate(
       cog_threshold = case_when(
-        TF < cut_severe   ~ 2,
-        TF < cut_moderate ~ 1,
-        !is.na(TF)        ~ 0
+        .data[[score]] < cut_severe   ~ 2,
+        .data[[score]] < cut_moderate ~ 1,
+        !is.na(.data[[score]])        ~ 0
       ),
       jorm_threshold = case_when(
         jorm >= jorm_severe                  ~ 2,
@@ -37,9 +41,9 @@ v1_algorithm <- function(df,
       cog_threshold == 1 & D102 %in% d102_worse    ~ 2,
       cog_threshold == 1 & D102 %in% d102_notworse ~ 1,
       cog_threshold == 0                           ~ 1,
-      is.na(TF) & jorm_threshold == 2              ~ 3,
-      is.na(TF) & jorm_threshold == 1              ~ 2,
-      is.na(TF) & jorm_threshold == 0              ~ 1
+      is.na(cog_threshold) & jorm_threshold == 2   ~ 3,
+      is.na(cog_threshold) & jorm_threshold == 1   ~ 2,
+      is.na(cog_threshold) & jorm_threshold == 0   ~ 1
     ))
 
   df %>%
@@ -47,9 +51,10 @@ v1_algorithm <- function(df,
     labelled::set_value_labels(dx_v1 = c("Normal" = 1, "MCI" = 2, "Dementia" = 3))
 }
 
-classify_core <- function(df, cut_severe, cut_moderate) {
+classify_core <- function(df, cut_severe, cut_moderate, score = "TR") {
   df %>%
-    algorithm_thresholds(cut_severe = cut_severe, cut_moderate = cut_moderate) %>%
+    algorithm_thresholds(cut_severe = cut_severe, cut_moderate = cut_moderate,
+                         score = score) %>%
     v1_algorithm()
 }
 
@@ -60,15 +65,15 @@ v1_flow_diagram <- function(df,
   n_if <- function(cond) sum(cond, na.rm = TRUE)
   with(df, list(
     a1 = nrow(df),
-    b1 = n_if(is.na(TF)),
+    b1 = n_if(is.na(cog_threshold)),
     b2 = n_if(cog_threshold == 2),
     b3 = n_if(cog_threshold %in% c(0, 1)),
     b4 = n_if(cog_threshold == 1),
     b5 = n_if(cog_threshold == 0),
-    c1 = n_if(is.na(TF) & jorm_threshold == 2),
-    c2 = n_if(is.na(TF) & jorm_threshold %in% c(0, 1)),
-    c3 = n_if(is.na(TF) & jorm_threshold == 1),
-    c4 = n_if(is.na(TF) & jorm_threshold == 0),
+    c1 = n_if(is.na(cog_threshold) & jorm_threshold == 2),
+    c2 = n_if(is.na(cog_threshold) & jorm_threshold %in% c(0, 1)),
+    c3 = n_if(is.na(cog_threshold) & jorm_threshold == 1),
+    c4 = n_if(is.na(cog_threshold) & jorm_threshold == 0),
     d1 = n_if(cog_threshold == 2 & D102 %in% d102_worse),
     d2 = n_if(cog_threshold == 2 & D102 %in% d102_notworse),
     d3 = n_if(cog_threshold == 1 & D102 %in% d102_worse),

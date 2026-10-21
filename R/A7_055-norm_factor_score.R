@@ -138,6 +138,11 @@ hrs16_cog_norm <- hrs16_cog_norm %>%
   )
 hrs16_cog_norm <- hrs16_cog_norm %>%
   labelled::set_variable_labels(TF = "T-scaled F residual")
+# TR: T score rounded to an integer (floor(TF + 0.5), so .5 rounds up).
+# The algorithm classifies on TR (Rich, 2026-10-21; see A7_070).
+hrs16_cog_norm <- hrs16_cog_norm %>%
+  mutate(TR = floor(TF + 0.5)) %>%
+  labelled::set_variable_labels(TR = "T score rounded to integer")
 
 hrs16_merged <- hrs16_merged %>%
   mutate(
@@ -145,6 +150,11 @@ hrs16_merged <- hrs16_merged %>%
   )
 hrs16_merged <- hrs16_merged %>%
   labelled::set_variable_labels(TF = "T-scaled F residual")
+# TR: T score rounded to an integer (floor(TF + 0.5), so .5 rounds up).
+# The algorithm classifies on TR (Rich, 2026-10-21; see A7_070).
+hrs16_merged <- hrs16_merged %>%
+  mutate(TR = floor(TF + 0.5)) %>%
+  labelled::set_variable_labels(TR = "T score rounded to integer")
 
 hrs16_22_long <- hrs16_22_long %>%
   mutate(
@@ -152,6 +162,11 @@ hrs16_22_long <- hrs16_22_long %>%
   )
 hrs16_22_long <- hrs16_22_long %>%
   labelled::set_variable_labels(TF = "T-scaled F residual")
+# TR: T score rounded to an integer (floor(TF + 0.5), so .5 rounds up).
+# The algorithm classifies on TR (Rich, 2026-10-21; see A7_070).
+hrs16_22_long <- hrs16_22_long %>%
+  mutate(TR = floor(TF + 0.5)) %>%
+  labelled::set_variable_labels(TR = "T score rounded to integer")
 
 # gen T`y'= 50+10*((P`y'_blom-E`y'_blom)/(`sd_P`y'_blom'*sqrt(1-`r2`y''))) // SEE
 # reg f_blom (c.spage1 c.spage2 c.spage3)##(c.female c.black c.hisp c.schlyrs) c.female#(c.black c.hisp c.schlyrs) c.schlyrs#(c.black c.hisp) [fw=hcap16wgt] if normexcld==0

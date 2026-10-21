@@ -1,6 +1,6 @@
 ---
 title: "Analysis A10: Data sharing runs"
-subtitle: "The core algorithm file shared with Lindsay Kobayashi"
+subtitle: "Replacing the core algorithm file shared with Lindsay Kobayashi"
 author: "Richard N. Jones and Douglas Tommet"
 date: '`r Sys.Date()`'
 format:
@@ -30,48 +30,47 @@ source(here::here("R", "A10", "A10_010-compare_shared_current.R"))
 
 a10 <- readRDS(here::here("R_objects", "A10_010_comparison.rds"))
 
-co  <- a10$cuts_old   # algorithm cut points
-cn  <- a10$cuts_new   # alternative (grid optimum)
+co  <- a10$cuts_old   # July file, on TF
+cn  <- a10$cuts_new   # new file, on TR
 cal <- a10$calibration
-gp  <- cal$grid_position
+cmp <- cal$comparison
+r_sel  <- cmp[cmp$set == "Selected cut points (TR)", ]
+r_prTF <- cmp[cmp$set == "Previous cut points (TF, July 2026 file)", ]
+r_prTR <- cmp[cmp$set == "Previous cut points (TR)", ]
 ss  <- a10$shared_steps
 chg <- a10$changes
+pts <- function(x) formatC(100 * x, format = "f", digits = 1)
 
 n_trans <- function(from, to) {
   x <- a10$transitions$n[a10$transitions$Change == paste(from, "to", to)]
   if (length(x) == 0) 0L else x
-}
-n_mech <- function(band, complaint, change) {
-  x <- a10$mechanism$`Person-waves`[a10$mechanism$`T band` == band &
-                                      a10$mechanism$`Self-rated memory` == complaint &
-                                      a10$mechanism$Change == change]
-  if (length(x) == 0) 0L else sum(x)
 }
 
 inputs_identical <- a10$rows$n_only_shared == 0 && a10$rows$n_only_current == 0 &&
   a10$inputs$tf_missing_mismatch == 0 && a10$inputs$tf_max_abs_diff < 1e-8 &&
   a10$inputs$d102_mismatch == 0 && a10$inputs$jorm_missing_mismatch == 0 &&
   isTRUE(a10$inputs$jorm_max_abs_diff < 1e-8)
-reproduces <- inputs_identical && a10$rebuild$old_mismatch == 0 &&
-  a10$rebuild$cur_mismatch == 0 && a10$rebuild$shared_vs_current == 0
+rules_hold <- inputs_identical && a10$rebuild$old_mismatch == 0 &&
+  a10$rebuild$new_mismatch == 0
 
 pv <- a10$prevalence
 pv_get <- function(y, k, what) pv[[what]][pv$year == y & pv$class == k]
 ci_txt <- function(p, lo, hi) paste0(fmt_pct(p), "% (", fmt_pct(lo), " to ", fmt_pct(hi), ")")
 pp_txt <- function(d, lo, hi) paste0(fmt_pct(d), " (", fmt_pct(lo), " to ", fmt_pct(hi), ")")
 first_year <- min(pv$year)
-n_other <- chg$n_changed - n_trans("Normal", "MCI") - n_trans("MCI", "Normal") - n_trans("MCI", "Dementia")
+n_other <- chg$n_changed - n_trans("Normal", "MCI") - n_trans("MCI", "Normal") -
+  n_trans("MCI", "Dementia") - n_trans("Dementia", "MCI")
 ```
 
 # Purpose
 
-This report records the core algorithm classification file that was sent to Lindsay Kobayashi (LK) for the HRS-HCAP dementia incidence analysis, confirms that the current code reproduces it, and documents the procedure and the rationale for its cut points. It also describes an alternative pair of cut points that was considered in October 2026 and not adopted. Analysis A10 is the place to record later data shares (`R/A10/A10_005-share_log.R`).
+This report records the core algorithm classification files prepared for Lindsay Kobayashi (LK) for the HRS-HCAP dementia incidence analysis. On 2026-10-21, Rich Jones, Doug Tommet, and LK agreed to replace the July 2026 file. The new file selects its cut points by a rule written before any result was seen. This report shows what the replacement changes and why. Analysis A10 is the place to record data shares (`R/A10/A10_005-share_log.R`).
 
 # Summary
 
-`r if (reproduces) paste0("The current code reproduces the file LK holds (", a10$files$shared, ") for all ", fmt_n(a10$rows$n_current), " person-waves: the inputs to classification (T score, self-rated memory, and IQCODE) are identical, and every class matches.") else "The current code does not reproduce the file LK holds for every person-wave; the checks below locate the differences."` The file stands, and no replacement will be sent.
+The July file (`r a10$files$shared`) classifies a person-wave with an unrounded T score below `r fmt_cut(co[["severe"]])` as severely impaired and below `r fmt_cut(co[["moderate"]])` as moderately impaired. No record shows how those cut points were chosen. The new file (`r a10$files$new`) rounds the T score to an integer (TR) and uses TR < `r cn[["severe"]]` and TR < `r cn[["moderate"]]`. These cut points come from a pre-specified rule: match the weighted Manly-Jones dementia and MCI shares in HRS-HCAP Wave 1 within set tolerances, then take the pair with the best dementia agreement. Everything else in the algorithm is unchanged.
 
-The file classifies a person-wave with a T score below `r fmt_cut(co[["severe"]])` as severely impaired and below `r fmt_cut(co[["moderate"]])` as moderately impaired. These cut points were set in April 2026 so that the weighted Normal, MCI, and Dementia shares of the core algorithm in HRS-HCAP Wave 1 approximate those of the Manly-Jones algorithm (Manly et al., 2022): `r fmt_pct(cal$algorithm$share_normal)`%, `r fmt_pct(cal$algorithm$share_mci)`%, and `r fmt_pct(cal$algorithm$share_dementia)`%, against `r fmt_pct(cal$target_shares[["1"]])`%, `r fmt_pct(cal$target_shares[["2"]])`%, and `r fmt_pct(cal$target_shares[["3"]])`%. A grid search under the same criterion finds the closest pair at T < `r fmt_cut(cn[["severe"]])` and T < `r fmt_cut(cn[["moderate"]])`. That pair moves no share by more than `r fmt_pct(max(abs(c(cal$calibrated$share_normal - cal$algorithm$share_normal, cal$calibrated$share_mci - cal$algorithm$share_mci, cal$calibrated$share_dementia - cal$algorithm$share_dementia))))` percentage points and gives a 3-class kappa of `r fmt_k(cal$calibrated$kappa_3class)` against `r fmt_k(cal$algorithm$kappa_3class)` for the cut points in use, so it was not adopted.
+In HRS-HCAP Wave 1, the new file's weighted shares are `r fmt_pct(r_sel$share_normal)`% Normal, `r fmt_pct(r_sel$share_mci)`% MCI, and `r fmt_pct(r_sel$share_dementia)`% Dementia, against Manly-Jones shares of `r fmt_pct(cal$target_shares[["1"]])`%, `r fmt_pct(cal$target_shares[["2"]])`%, and `r fmt_pct(cal$target_shares[["3"]])`%. The July file gave `r fmt_pct(r_prTF$share_normal)`%, `r fmt_pct(r_prTF$share_mci)`%, and `r fmt_pct(r_prTF$share_dementia)`%. Across all person-waves 2016 to 2022, `r fmt_n(chg$n_changed)` (`r fmt_pct(chg$pct_changed)`%) change class.
 
 # What was shared
 
@@ -84,93 +83,98 @@ a10_share_log %>%
   knitr::kable(caption = "Classification files prepared for LK (email thread \"HRS Algorithmic Dx\").")
 ```
 
-LK received 2 files. The first (2026-06-11) left person-waves without a class when self-rated memory (HRS item D102, memory compared with 2 years ago) was missing, because the algorithm had no rule for that case. RNJ asked for D102 to be imputed, following the single-imputation approach used in Manly et al. (2022), and DT sent the second file (2026-07-10) with D102 imputed. This report assumes the July file is the one used in the incidence analysis. The copy checked here (`Data/`, file date `r a10$files$shared_mtime`) was saved from that email; git holds neither file, because data files are excluded from the repository. A third file with different cut points was prepared on 2026-10-17 and withdrawn before it was sent.
+LK received 2 files. The first (2026-06-11) left person-waves without a class when self-rated memory (HRS item D102, memory compared with 2 years ago) was missing. RNJ asked for D102 to be imputed, following the single-imputation approach used in Manly et al. (2022), and DT sent the second file (2026-07-10) with D102 imputed. This report assumes the July file is the one used in the incidence analysis. The copy checked here (`Data/`, file date `r a10$files$shared_mtime`) was saved from that email. A file prepared on 2026-10-17 with grid-search cut points was withdrawn before it was sent. The new file replaces the July file once it is sent; update its row in the share log then.
 
-# How the shared file assigns a class
+# How a class is assigned
 
-A person-wave with a T score is classified from 2 cut points and self-rated memory. Call the severe cut point $\tau_1$ and the moderate cut point $\tau_2$. A T score below $\tau_1$ gives Dementia when memory is reported as worse and MCI otherwise; a T score from $\tau_1$ to below $\tau_2$ gives MCI when memory is reported as worse and Normal otherwise; and a T score at or above $\tau_2$ gives Normal whatever the memory report. A person-wave without a T score (most often a proxy interview) is classified from the informant IQCODE alone.
+A person-wave with a T score is classified from 2 cut points and self-rated memory. Call the severe cut point $\tau_1$ and the moderate cut point $\tau_2$. A score below $\tau_1$ gives Dementia when memory is reported as worse and MCI otherwise. A score from $\tau_1$ to below $\tau_2$ gives MCI when memory is reported as worse and Normal otherwise. A score at or above $\tau_2$ gives Normal whatever the memory report. A person-wave without a T score (most often a proxy interview) is classified from the informant IQCODE alone.
 
 ```{r}
 #| label: tbl-procedure
 tibble::tribble(
-  ~Step, ~`Shared file and current code`, ~Source,
-  "Rows", "HRS Core respondents interviewed 2016 to 2022, all ages", "A7_075",
-  "Cognitive score", "8 Core cognitive items; factor model fitted to HRS 2016, item parameters fixed for 2016 to 2022", "A7_050",
-  "T score", "Factor score adjusted for age, sex, race and ethnicity, and schooling; mean 50, SD 10 in the HRS-HCAP robust normative sample", "A7_052, A7_055",
-  "Self-rated memory (D102)", "Singly imputed when missing", "A0_019",
-  "D102 codes counted as reported worsening", "Worse, don't know, refused, not ascertained (3, 8, 9, -8)", "A7_060",
-  "Severe cut point, tau1", paste0("T < ", fmt_cut(co[["severe"]])), "A7_070",
-  "Moderate cut point, tau2", paste0("T < ", fmt_cut(co[["moderate"]])), "A7_070",
-  "How the cut points were set", "Chosen in April 2026 to approximate the weighted Manly-Jones class shares in HRS-HCAP Wave 1", "A7_070; April report",
-  "No T score", paste0("IQCODE ", a10$jorm_cuts[["severe"]], " or higher: Dementia; above ", formatC(a10$jorm_cuts[["mild"]], format = "f", digits = 1), ": MCI; otherwise Normal"), "A7_060",
-  "Unclassified", "No T score and no IQCODE, or D102 missing when T is below tau2", "A7_060",
-  "ADL and IADL items", "Not in the rule; predictors in the D102 imputation only", "A0_019"
+  ~Step, ~`July file`, ~`New file`, ~Source,
+  "Rows", "HRS Core respondents interviewed 2016 to 2022, all ages", "Same", "A7_075",
+  "Cognitive score", "8 Core cognitive items; factor model fitted to HRS 2016, item parameters fixed for 2016 to 2022", "Same", "A7_050",
+  "T score", "Factor score adjusted for age, sex, race and ethnicity, and schooling; mean 50, SD 10 in the HRS-HCAP robust normative sample", "Same", "A7_052, A7_055",
+  "Score compared with the cut points", "TF, unrounded", "TR = floor(TF + 0.5), integer", "A7_055, A7_060",
+  "Self-rated memory (D102)", "Singly imputed when missing", "Same", "A0_019",
+  "D102 codes counted as reported worsening", "Worse, don't know, refused, not ascertained (3, 8, 9, -8)", "Same", "A7_060",
+  "Severe cut point, tau1", paste0("TF < ", fmt_cut(co[["severe"]])), paste0("TR < ", cn[["severe"]]), "A7_070",
+  "Moderate cut point, tau2", paste0("TF < ", fmt_cut(co[["moderate"]])), paste0("TR < ", cn[["moderate"]]), "A7_070",
+  "How the cut points were set", "Not documented (April 2026)", "Pre-specified rule, 2026-10-21", "A7_070",
+  "No T score", paste0("IQCODE ", a10$jorm_cuts[["severe"]], " or higher: Dementia; above ", formatC(a10$jorm_cuts[["mild"]], format = "f", digits = 1), ": MCI; otherwise Normal"), "Same", "A7_060",
+  "Unclassified", "No T score and no IQCODE, or D102 missing when T is below tau2", "Same", "A7_060",
+  "ADL and IADL items", "Not in the rule; predictors in the D102 imputation only", "Same", "A0_019"
 ) %>%
-  knitr::kable(caption = "Steps in assigning a class.")
+  knitr::kable(caption = "Steps in assigning a class, July file and new file.")
 ```
 
-Activities of daily living (ADL) and instrumental activities of daily living (IADL) do not enter the rule. Functional items reach the classification only as predictors in the imputation of D102.
-
-# Evidence that the current code reproduces the shared file
+# Checks
 
 ```{r}
 #| label: tbl-checks
 tibble::tribble(
   ~Check, ~Result,
-  "Person-waves in the shared file only", fmt_n(a10$rows$n_only_shared),
-  "Person-waves in the current classification only", fmt_n(a10$rows$n_only_current),
-  "Largest absolute difference in T score", fmt_sci(a10$inputs$tf_max_abs_diff),
+  "Person-waves in the July file only", fmt_n(a10$rows$n_only_shared),
+  "Person-waves in the new classification only", fmt_n(a10$rows$n_only_current),
+  "Largest absolute difference in T score (TF)", fmt_sci(a10$inputs$tf_max_abs_diff),
   "T score missing in one version only", fmt_n(a10$inputs$tf_missing_mismatch),
   "D102 differs", fmt_n(a10$inputs$d102_mismatch),
   "IQCODE missing in one version only", fmt_n(a10$inputs$jorm_missing_mismatch),
   "Largest absolute difference in IQCODE", fmt_sci(a10$inputs$jorm_max_abs_diff),
-  "Classes that differ, shared file versus current code", fmt_n(a10$rebuild$shared_vs_current),
-  paste0("Shared file rebuilt from its own inputs with T < ", fmt_cut(co[["severe"]]), " and T < ", fmt_cut(co[["moderate"]]), ": classes that differ"), fmt_n(a10$rebuild$old_mismatch),
-  "Current classification rebuilt from the written rule: classes that differ", fmt_n(a10$rebuild$cur_mismatch),
-  "Current rebuild file (Data/) versus the A7 object: classes that differ",
-    if (isTRUE(a10$current_file$exists)) fmt_n(a10$current_file$mismatch) else "File not found"
+  paste0("July file rebuilt from its own inputs with TF < ", fmt_cut(co[["severe"]]), " and TF < ", fmt_cut(co[["moderate"]]), ": classes that differ"), fmt_n(a10$rebuild$old_mismatch),
+  paste0("New classification rebuilt with TR < ", cn[["severe"]], " and TR < ", cn[["moderate"]], ": classes that differ"), fmt_n(a10$rebuild$new_mismatch),
+  "New file (Data/) versus the A7 object: classes that differ",
+    if (isTRUE(a10$new_file$exists)) fmt_n(a10$new_file$mismatch) else "File not found"
 ) %>%
   knitr::kable(caption = "Identity and reconstruction checks, all person-waves.")
 ```
 
-The checks fall in 2 groups. The first compares the inputs: both versions hold the same `r fmt_n(a10$rows$n_current)` person-waves, the T scores differ by no more than `r fmt_sci(a10$inputs$tf_max_abs_diff)` T units (rounding in how the numbers were written to the file), and D102 and the IQCODE match. The second applies the written rule (`R/A7_060-algorithm_functions.R`) to each version's own inputs. `r if (reproduces) "Every class matches, so the shared file can be rebuilt exactly from the current code." else "Not every class matches; the counts in @tbl-checks locate the differences."`
+The first checks compare the inputs to classification. Both versions hold the same `r fmt_n(a10$rows$n_current)` person-waves, the T scores differ by no more than `r fmt_sci(a10$inputs$tf_max_abs_diff)` T units (rounding in how the numbers were written to the file), and D102 and the IQCODE match. The rebuild checks apply the written rule (`R/A7_060-algorithm_functions.R`) to each version. `r if (rules_hold) "Every class matches, so the two files differ only in rounding and cut points." else "Not every check passes; the counts in @tbl-checks locate the differences."`
 
-# Rationale for the cut points
+# The cut points
 
-The cut points `r fmt_cut(co[["severe"]])` and `r fmt_cut(co[["moderate"]])` first appear in the A7 code committed on 2026-04-17. No code in the repository derives them. The report rendered from that commit (`Reports/A7_000-Main_control_2026-04-17.html`) sets the weighted class shares of the core algorithm in HRS-HCAP Wave 1 beside those of the Manly-Jones algorithm, which is consistent with cut points chosen by inspection to approximate the Manly-Jones class shares. The core algorithm is an adaptation of the Manly-Jones algorithm to the HRS Core, for waves and respondents without an HCAP assessment, so matching its class shares in the participants who have both keeps population estimates from Core data comparable to estimates from HRS-HCAP data.
+The July cut points (`r fmt_cut(co[["severe"]])` and `r fmt_cut(co[["moderate"]])`) first appear in the A7 code committed on 2026-04-17. No code derives them, and DT did not recall how they were chosen. Two rules tested in October 2026 with criteria written before the results (`R/A7_072-domain_quantile_check.R`, `R/A7_073-normative_domain_quantile_check.R`) did not reproduce them.
 
-Two alternatives were examined in October 2026. The first, the rule used for the legacy A1 algorithm (cut the T score at the quantiles that match the shares of HRS-HCAP Wave 1 participants with 2 or more and with 1 or more impaired cognitive domains), was tested with a rule written before the results were seen (`R/A7_072-domain_quantile_check.R`). It gave cut points near 36 and 43.5 on both the current and the April T scores, so it does not account for 37 and 48. The second is a grid search over pairs of cut points (step `r cal$grid_step` T units, `r fmt_n(gp$n_pairs)` pairs, `R/A7_070-threshold_calibration.R`), with the memory and IQCODE rules held fixed, which finds the pair whose weighted (`r cal$weight`) shares come closest to the Manly-Jones shares (`r cal$target_variable`, n = `r fmt_n(cal$n_sample)`).
+The new cut points come from a rule fixed on 2026-10-21, before any result was seen (header of `R/A7_070-threshold_calibration.R`). The T score is rounded to an integer, and every integer pair (severe `r min(cal$spec$severe_range)` to `r max(cal$spec$severe_range)`, moderate `r min(cal$spec$moderate_range)` to `r max(cal$spec$moderate_range)`) is evaluated in HRS-HCAP Wave 1 (n = `r fmt_n(cal$n_sample)`, weighted by `r cal$weight`) with the memory and IQCODE rules fixed. A pair is eligible if its dementia share is within `r pts(cal$spec$tol_dementia)` percentage points of the Manly-Jones share and its MCI share within `r pts(cal$spec$tol_mci)` points. Among eligible pairs, the rule takes the highest dementia kappa, then the highest 3-class kappa. `r if (cal$selection_stage == "as specified") paste0(fmt_n(nrow(cal$eligible)), " pairs met the tolerances as specified.") else paste0("No pair met the tolerances as specified, so the pre-specified widening was used (", cal$selection_stage, "; dementia ", pts(cal$tol_dementia_used), " points, MCI ", pts(cal$tol_mci_used), " points); ", fmt_n(nrow(cal$eligible)), " pairs were then eligible.")`
 
 ```{r}
 #| label: tbl-calibration
 tibble::tibble(
-  Classification = c("Manly-Jones algorithm (target)",
-                     paste0("Core, cut points in use (", fmt_cut(co[["severe"]]), ", ", fmt_cut(co[["moderate"]]), ")"),
-                     paste0("Core, grid optimum (", fmt_cut(cn[["severe"]]), ", ", fmt_cut(cn[["moderate"]]), ")"),
-                     paste0("Core, highest kappa in grid (", fmt_cut(cal$max_kappa$cut_severe), ", ", fmt_cut(cal$max_kappa$cut_moderate), ")")),
-  `Normal, %`   = fmt_pct(c(cal$target_shares[["1"]], cal$algorithm$share_normal,   cal$calibrated$share_normal,   cal$max_kappa$share_normal)),
-  `MCI, %`      = fmt_pct(c(cal$target_shares[["2"]], cal$algorithm$share_mci,      cal$calibrated$share_mci,      cal$max_kappa$share_mci)),
-  `Dementia, %` = fmt_pct(c(cal$target_shares[["3"]], cal$algorithm$share_dementia, cal$calibrated$share_dementia, cal$max_kappa$share_dementia)),
-  `Kappa, 3-class` = c("", fmt_k(cal$algorithm$kappa_3class), fmt_k(cal$calibrated$kappa_3class), fmt_k(cal$max_kappa$kappa_3class)),
-  `Kappa, dementia` = c("", fmt_k(cal$algorithm$kappa_binary), fmt_k(cal$calibrated$kappa_binary), fmt_k(cal$max_kappa$kappa_binary))
+  Classification = c("Manly-Jones algorithm (reference)",
+                     paste0("July file: TF < ", fmt_cut(co[["severe"]]), ", TF < ", fmt_cut(co[["moderate"]])),
+                     paste0("Rounding only: TR < ", fmt_cut(co[["severe"]]), ", TR < ", fmt_cut(co[["moderate"]])),
+                     paste0("New file: TR < ", cn[["severe"]], ", TR < ", cn[["moderate"]])),
+  `Normal, %`   = fmt_pct(c(cal$target_shares[["1"]], r_prTF$share_normal, r_prTR$share_normal, r_sel$share_normal)),
+  `MCI, %`      = fmt_pct(c(cal$target_shares[["2"]], r_prTF$share_mci, r_prTR$share_mci, r_sel$share_mci)),
+  `Dementia, %` = fmt_pct(c(cal$target_shares[["3"]], r_prTF$share_dementia, r_prTR$share_dementia, r_sel$share_dementia)),
+  `Kappa, dementia` = c("", fmt_k(r_prTF$kappa_binary), fmt_k(r_prTR$kappa_binary), fmt_k(r_sel$kappa_binary)),
+  `Kappa, 3-class`  = c("", fmt_k(r_prTF$kappa_3class), fmt_k(r_prTR$kappa_3class), fmt_k(r_sel$kappa_3class))
 ) %>%
-  knitr::kable(caption = paste0("Weighted (", cal$weight, ") class shares in HRS-HCAP Wave 1 and agreement with the Manly-Jones algorithm. The 3-class kappa uses quadratic weights. All kappas are in-sample."))
+  knitr::kable(caption = paste0("Weighted (", cal$weight, ") class shares in HRS-HCAP Wave 1 and agreement with the Manly-Jones algorithm. The 3-class kappa uses quadratic weights. All kappas are in-sample; for the new file the cut points were selected in the same data."))
 ```
 
-The cut points in use rank `r gp$rank` of `r fmt_n(gp$n_pairs)` pairs on the grid. Their largest difference from a Manly-Jones share is `r fmt_pct(gp$max_abs_share_diff_algorithm)` percentage points, against `r fmt_pct(gp$max_abs_share_diff_calibrated)` at the grid optimum, and their agreement with the Manly-Jones algorithm is `r if (cal$algorithm$kappa_3class >= cal$calibrated$kappa_3class) "slightly higher" else "slightly lower"` (3-class kappa `r fmt_k(cal$algorithm$kappa_3class)` against `r fmt_k(cal$calibrated$kappa_3class)`). The grid optimum would change the classification of person-waves LK has already analyzed for a small gain in matching the class shares, so the cut points in use were kept (RNJ, 2026-10-19).
+`r if (is.null(cal$bootstrap)) "" else paste0("In ", cal$bootstrap$n_boot, " design-based bootstrap samples, the rule selected the same pair in ", fmt_pct(cal$bootstrap$pct_same_pair), "% and a pair within 1 T point of both cuts in ", fmt_pct(cal$bootstrap$pct_within_1), "% (A7 report). The bootstrap describes stability only; it did not affect the selection.")`
 
-# The alternative that was not adopted
+# What the replacement changes
 
-This section shows what the grid optimum (T < `r fmt_cut(cn[["severe"]])` and T < `r fmt_cut(cn[["moderate"]])`) would have changed, applied to the same inputs as the shared file.
+The change has 2 steps: rounding the T score, then moving the cut points. @tbl-steps counts the person-waves each step changes.
 
-`r fmt_n(chg$n_changed)` person-waves (`r fmt_pct(chg$pct_changed)`%) would change class: `r fmt_n(n_trans("Normal", "MCI"))` from Normal to MCI, `r fmt_n(n_trans("MCI", "Normal"))` from MCI to Normal, and `r fmt_n(n_trans("MCI", "Dementia"))` from MCI to Dementia. `r if (n_other == 0) "No person-wave would move between Normal and Dementia or from Dementia to MCI." else paste0(fmt_n(n_other), " person-waves would make other changes (see @tbl-crosstab).")`
+```{r}
+#| label: tbl-steps
+a10$steps %>%
+  mutate(`Person-waves changed` = fmt_n(`Person-waves changed`)) %>%
+  knitr::kable(caption = "Person-waves that change class at each step, all ages, 2016 to 2022 (unweighted). A person-wave can change at one step and change back at the other.")
+```
+
+`r fmt_n(chg$n_changed)` person-waves (`r fmt_pct(chg$pct_changed)`%) change class from the July file to the new file: `r fmt_n(n_trans("Normal", "MCI"))` from Normal to MCI, `r fmt_n(n_trans("MCI", "Normal"))` from MCI to Normal, `r fmt_n(n_trans("MCI", "Dementia"))` from MCI to Dementia, and `r fmt_n(n_trans("Dementia", "MCI"))` from Dementia to MCI. `r if (n_other == 0) "No person-wave moves between Normal and Dementia." else paste0(fmt_n(n_other), " person-waves make other changes (see @tbl-crosstab).")`
 
 ```{r}
 #| label: tbl-crosstab
 a10$crosstab %>%
-  rename(`Shared file (rows) by alternative (columns)` = Shared) %>%
+  rename(`July file (rows) by new file (columns)` = Shared) %>%
   mutate(across(where(is.numeric), fmt_n)) %>%
-  knitr::kable(caption = "Person-waves by class in the shared file and under the alternative cut points, all ages, 2016 to 2022 (unweighted counts).")
+  knitr::kable(caption = "Person-waves by class in the July file and the new file, all ages, 2016 to 2022 (unweighted counts).")
 ```
 
 ```{r}
@@ -182,47 +186,29 @@ changes_tab <- a10$changes$all %>%
   left_join(a10$changes$hcap %>% select(Year, `HRS-HCAP Wave 1, n` = `Person-waves`,
                                         `HRS-HCAP Wave 1, changed` = Changed, `HRS-HCAP Wave 1, %` = `% changed`), by = "Year") %>%
   mutate(across(where(is.numeric) & !Year, fmt_n))
-knitr::kable(changes_tab, caption = "Person-waves that would change class under the alternative, by year and sample (unweighted).")
+knitr::kable(changes_tab, caption = "Person-waves that change class, July file to new file, by year and sample (unweighted).")
 ```
 
-```{r}
-#| label: mechanism-text
-up_sev   <- cn[["severe"]]   > co[["severe"]]
-dn_mod   <- cn[["moderate"]] < co[["moderate"]]
-worse    <- "Reported worse memory"
-notworse <- "No reported worsening"
-mech_sev <- if (up_sev) {
-  paste0("In the band ", a10$severe_band, ", a person-wave that is moderately impaired in the shared file would be severely impaired. With a memory complaint it would move from MCI to Dementia (",
-         fmt_n(n_mech(a10$severe_band, worse, "MCI to Dementia")), " person-waves); without one, from Normal to MCI (",
-         fmt_n(n_mech(a10$severe_band, notworse, "Normal to MCI")), ").")
-} else paste0("In the band ", a10$severe_band, ", a person-wave that is severely impaired in the shared file would be moderately impaired.")
-mech_mod <- if (dn_mod) {
-  paste0("In the band ", a10$moderate_band, ", a person-wave that is moderately impaired in the shared file would be unimpaired. With a memory complaint it would move from MCI to Normal (",
-         fmt_n(n_mech(a10$moderate_band, worse, "MCI to Normal")), "); without one it is Normal in both (",
-         fmt_n(n_mech(a10$moderate_band, notworse, "No change, Normal")), "), because the memory report decides the class only below the moderate cut point.")
-} else paste0("In the band ", a10$moderate_band, ", a person-wave that is unimpaired in the shared file would be moderately impaired.")
-```
-
-`r if (a10$n_changed_outside_bands == 0) "Every person-wave that would change has a T score in 1 of 2 bands, the ranges between the 2 pairs of cut points." else paste0(fmt_n(a10$n_changed_outside_bands), " person-waves that would change have a T score outside the 2 bands, which a change in cut points alone cannot produce.")` `r mech_sev` `r mech_mod`
+The July rule compares TF with a cut point c; the new rule compares TR with a cut point c', which is the same as comparing TF with c' minus 0.5. A class can change only when TF lies between the two. `r if (a10$n_changed_outside_bands == 0) "Every person-wave that changes has a T score in 1 of these 2 bands." else paste0(fmt_n(a10$n_changed_outside_bands), " person-waves that change have a T score outside the 2 bands, which rounding and the cut points alone cannot produce.")` The memory report decides the direction of change, as @tbl-mechanism shows.
 
 ```{r}
 #| label: tbl-mechanism
 a10$mechanism %>%
   arrange(`T band`, `Self-rated memory`, Change) %>%
   mutate(`Person-waves` = fmt_n(`Person-waves`)) %>%
-  knitr::kable(caption = "Person-waves with a T score between the 2 pairs of cut points, by self-rated memory and change in class under the alternative (all ages, 2016 to 2022).")
+  knitr::kable(caption = "Person-waves with a T score between the July and new cut points, by self-rated memory and change in class (all ages, 2016 to 2022).")
 ```
 
 ```{r}
 #| label: tbl-prevalence
 pv %>%
   transmute(Year = year, Class = class,
-            `Shared file, % (95% CI)` = ci_txt(p_old, lo_old, hi_old),
-            `Alternative, % (95% CI)` = ci_txt(p_new, lo_new, hi_new),
+            `July file, % (95% CI)` = ci_txt(p_old, lo_old, hi_old),
+            `New file, % (95% CI)` = ci_txt(p_new, lo_new, hi_new),
             `Difference, points (95% CI)` = pp_txt(d, lo_d, hi_d),
-            `Shared file, weighted N (× 1,000)` = format_weighted_thousands(wn_old),
-            `Alternative, weighted N (× 1,000)` = format_weighted_thousands(wn_new)) %>%
-  knitr::kable(caption = paste("Survey-weighted prevalence of each class among HRS Core respondents 65 and older, by wave, in the shared file and under the alternative cut points. Weights are the wave respondent weights; 95% confidence intervals use the HRS strata and sampling error computation units (logit intervals for prevalence, linearized intervals for the difference, which is estimated within the same respondents).",
+            `July file, weighted N (× 1,000)` = format_weighted_thousands(wn_old),
+            `New file, weighted N (× 1,000)` = format_weighted_thousands(wn_new)) %>%
+  knitr::kable(caption = paste("Survey-weighted prevalence of each class among HRS Core respondents 65 and older, by wave, in the July file and the new file. Weights are the wave respondent weights; 95% confidence intervals use the HRS strata and sampling error computation units (logit intervals for prevalence, linearized intervals for the difference, which is estimated within the same respondents).",
                                weighted_thousands_note))
 ```
 
@@ -233,11 +219,11 @@ a10$weight_excluded %>%
   knitr::kable(caption = "Classified person-waves 65 and older, and those excluded from the weighted estimates because the respondent weight is 0 or missing.")
 ```
 
-Among respondents 65 and older in `r first_year`, weighted dementia prevalence is `r ci_txt(pv_get(first_year, "Dementia", "p_old"), pv_get(first_year, "Dementia", "lo_old"), pv_get(first_year, "Dementia", "hi_old"))` in the shared file and would be `r ci_txt(pv_get(first_year, "Dementia", "p_new"), pv_get(first_year, "Dementia", "lo_new"), pv_get(first_year, "Dementia", "hi_new"))` under the alternative. Respondents with a respondent weight of 0 or missing (in the HRS, most often nursing home residents) do not contribute to these estimates, although they carry a class in the file.
+Among respondents 65 and older in `r first_year`, weighted dementia prevalence is `r ci_txt(pv_get(first_year, "Dementia", "p_old"), pv_get(first_year, "Dementia", "lo_old"), pv_get(first_year, "Dementia", "hi_old"))` in the July file and `r ci_txt(pv_get(first_year, "Dementia", "p_new"), pv_get(first_year, "Dementia", "lo_new"), pv_get(first_year, "Dementia", "hi_new"))` in the new file. Respondents with a respondent weight of 0 or missing (in the HRS, most often nursing home residents) do not contribute to these estimates, although they carry a class in the file.
 
 # Assignment steps worth noting
 
-These steps belong to the shared file and the current code alike. They are listed because they decide how a class is assigned.
+These steps are the same in the July file and the new file. They are listed because they decide how a class is assigned. Counts of unclassified person-waves refer to the July file.
 
 Self-rated memory is singly imputed with the R package mice (Analysis A0, `R/A0_019-impute_self_concerns.R`), separately for each wave, with 1 imputation (seed 2) and the package default method for a numeric variable, predictive mean matching. Predictive mean matching copies an observed value from a respondent with similar predicted values, so an imputed D102 can be any observed code, including don't know (8), refused (9), and not ascertained (-8), which the rule counts as reported worsening. The predictors are the demographic terms (xP1 to xP7 and their interactions, with the matching terms in later waves), the Core cognitive items, the 16 IQCODE items, HRS items D554 to D556, and 10 functional items from HRS section G (G014, G021, G023, G030, G040, G041, G044, G047, G050, G059), read in `R/A0_012-recode_iadl.R`. In `r first_year`, `r fmt_n(ss$d102_imputed_2016)` of `r fmt_n(ss$n_2016)` person-waves have an imputed D102; `r fmt_n(ss$d102_imputed_2016_complaint)` of these imputed values count as reported worsening, `r fmt_n(ss$d102_imputed_2016_dk_rf_na)` of them as don't know, refused, or not ascertained. (The raw D102 is kept for 2016 only, so the count of imputed values in later waves is not available.) After imputation, `r fmt_n(ss$d102_missing_after_imputation)` person-waves still have D102 missing.
 
@@ -245,7 +231,7 @@ Responses of don't know, refused, or not ascertained count as reported worsening
 
 # Files and code
 
-The report is rebuilt with `Rscript Analysis10_Driver.R` after Analyses A0 and A7. It reads `Data/`r a10$files$shared`` (the file as delivered, kept outside git), `Data/`r a10$files$current`` (written by A7_075, optional), `R_objects/A7_075_hrs16_22_long.rds`, `R_objects/A7_070_threshold_calibration.rds`, `R_objects/A7_075_hrs16_hcap.rds`, and `R_objects/A7_005_hrs16_22_merged.rds`, and it writes `R_objects/A10_010_comparison.rds`. The share log is `R/A10/A10_005-share_log.R`; for a new share, add a row there.
+The report is rebuilt with `Rscript Analysis10_Driver.R` after Analyses A0 and A7. It reads `Data/`r a10$files$shared`` (the file as delivered, kept outside git), `Data/`r a10$files$new`` (written by A7_075, optional), `R_objects/A7_075_algorithm_summary.rds`, `R_objects/A7_075_hrs16_22_long.rds`, `R_objects/A7_070_threshold_calibration.rds`, `R_objects/A7_075_hrs16_hcap.rds`, and `R_objects/A7_005_hrs16_22_merged.rds`, and it writes `R_objects/A10_010_comparison.rds`. The share log is `R/A10/A10_005-share_log.R`; for a new share, add a row there.
 
 # References
 

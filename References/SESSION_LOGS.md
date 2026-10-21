@@ -508,3 +508,68 @@ Open items (carried and new):
 - Optional: T by Manly-Jones class (Dementia vs Normal separation) to support the Meehl & Yonce point.
 - Optional: a "Figures" section in the Reporting Rules (theme, size, dpi, palette, captions).
 - From 10-20: `MS_Main_Control.qmd` line 51 "calibrated to HRS/HCAP"; whether the A10 share log should record the appendix sent to Lindsay on 10-20.
+
+## 2026-10-21 (late morning): pre-specified cut-point selection replaces 37/48
+
+### Confirmed facts
+- Doug Tommet did not recall how T < 37 and T < 48 were chosen. Lindsay Kobayashi agreed to a redo with a documented, rigorous rule and a new data share.
+- Before this change, the T score was not rounded anywhere; `A7_060` compared unrounded `TF` with the cut points.
+- In `v1_algorithm`, the dementia class depends only on the severe cut (plus the IQCODE route), so all pairs that share a severe cut have the same dementia kappa.
+
+### Decisions (Rich, 2026-10-21; rule fixed before any result)
+- Score: TR = floor(TF + 0.5), used for selection and for classification in every wave and in the share. Integer cut points only.
+- Fixed: D102 memory gate, IQCODE cuts 3.0/3.4, the CFA model, and the norms.
+- Sample and reference: HRS-HCAP Wave 1 with HCAP16WGTR and Manly-Jones `vs1hcapdxeap`.
+- Candidates: severe 25 to 50, moderate 30 to 60, moderate above severe.
+- Eligible: weighted dementia share within 0.5 percentage points of Manly-Jones, MCI share within 1.0 point.
+- Widening: if none, widen dementia to 1.0 (MCI at 1.0); then return dementia to the smallest tolerance (0.5 or 1.0) with any dementia match and widen MCI by 0.5. The dementia tolerance never exceeds 1.0 point (Rich, 2026-10-21, replacing a 3.0 cap Claude had proposed). If no severe cut gives a dementia share within 1.0 point, A7_070 stops.
+- Selection: highest weighted dementia kappa; then higher weighted 3-class kappa; then smaller MCI difference; then lower moderate cut.
+- Stability: design-based bootstrap (SECU within STRATUM, Rao-Wu n_h - 1, 500 replicates, seed 20261021), description only.
+- Share: same columns as the July file (TF unrounded), new dated name, README in `Data/` (untracked is fine), a share-log row, and an A10 old-versus-new comparison. Step 3 domain-share paragraph removed from Appendix 1 (`domain_quantiles` object kept).
+- Scope: A7, A10, A2, A8. A2_2 not updated.
+
+### Code changes (not run; Rich runs locally)
+- `A7_055`: adds TR to the norm, merged, and long objects.
+- `A7_060`: `algorithm_thresholds()` and `classify_core()` take `score` (default "TR"); missing-T routing uses `is.na(cog_threshold)`.
+- `A7_070`: rewritten with the pre-specification header, a collapsed fast evaluator with plain-number kappas (stops if it disagrees with `classify_core()` or the A7_060 kappa functions), selection, comparison of the selected cuts with 37/48 on TR and on TF, bootstrap, and `domain_quantiles`. New elements: `cuts`, `score`, `selected`, `eligible`, `tol_dementia_used`, `tol_mci_used`, `selection_stage`, `spec`, `candidates`, `previous_cuts`, `comparison`, `bootstrap`. Removed: `algorithm`, `calibrated`, `calibrated_cuts`, `grid`, `grid_position`, `max_kappa`, `grid_step`.
+- `A7_075`: writes `Data/Dx_for_LK-<run date>.csv` (July layout) and sources the restored `A7_085-export_readme.R`, which writes `Data/Dx_for_LK-<run date>_README.md` (cut points, rule, rationale, shares and kappas, bootstrap, changes versus the July file). `export_file` saved in `A7_075_algorithm_summary`. The rebuild file is no longer written.
+- `A7_090`: uses TR. A7 chapters `A7_070.qmd` and `A7_075.qmd` rewritten for the rule.
+- `A10_005`: new row for the new file ("Not yet sent"); July row marked "to be replaced". `A10_010` and `A10_000` rewritten: July versus new, with checks, a 2-step split (rounding, then cuts), bands on TF where the rules can differ, and prevalence for ages 65 and older.
+- `MS_020` and Appendix 1: overview step 3, Step 3 approach (rule, rationale) and results (eligible pairs, selected cuts, kappas, bootstrap), Figure A2 bands on the rounded score (dashed lines at cut - 0.5), Table A3 note, Limitation 1 ("were selected ... is optimistic").
+- A8: new slide "Cut Points: Pre-specified Selection" in `A8_020_Methods.qmd`.
+- Old versions archived in `R/Archive_grid_search_2026-10-20/` (README updated). README.md and instructions.md updated (A7 and A10).
+- Checks done here: every edited R file, chunk, and inline expression parses (R 4 in the cloud workspace, code files only). `A7_070` and `A7_085` ran end to end on simulated data (no project data): selection, both checks, widening, bootstrap (about 0.3 s per replicate), and README text.
+
+### Problems found
+- Claude printed 4 rows of `Data/Dx_for_LK-rebuild.csv` while checking the column layout, against the rule that Claude never opens data files. Reported to Rich at once; not used.
+- `A8`'s algorithm flow figure is a static PNG from April 2026 with April counts (`Figures/HRS-Core-Diagnostic-Algorithm-With-Ns-HRS-Sample-2026-04-22.png`). Not changed.
+
+### Rebuild
+- `Rscript Analysis0_Driver.R` is not needed. Run `Rscript Analysis7_Driver.R`, then `Rscript Analysis10_Driver.R`, `Rscript Analysis2_Driver.R`, `Rscript Analysis8_Driver.R`. A7 now writes the new share and README.
+
+### Open questions
+- Review the selected cut points, the tolerance stage, and the bootstrap in the A7 report before sending the file.
+- Bootstrap replicates in which no severe cut reaches the 1.0-point dementia cap are recorded as "rule not met" and count as not selecting the same pair (A7_070 `bootstrap$n_rule_not_met`). In the full sample the same condition stops A7.
+- When the file is sent, update its row in `A10_005` (date, sender, status).
+- Review the rationale text in the README and Appendix 1 Step 3 (written by Claude).
+- A8 static flow figure (April counts); A2_2 is stale until rerun.
+
+## 2026-10-21 (12:30): tracked changes from MS_Appendix_1_2026-10-21-1228_edited.docx
+
+- Found by tracked-change extraction and by a paragraph compare against the 12:09 render (`MS_Appendix_1_2026-10-21.docx`). No changes were made outside track changes, and the docx has no comments and no tracked changes in footnotes or endnotes.
+- Carried into `MS_Appendix-1-Core-Algorithm.qmd`, Step 3 approach: "by a rule written before any result was seen" changed to "with the following procedure:"; "A pair was eligible" changed to "A threshold pair was a candidate for selection"; "had been eligible" changed to "had been identified as a candidate"; "(and no further)" now in parentheses.
+- Step 3 results: "band" changed to "range" (moderate: "range of the T score"); "class prevalence estimates"; "of the bootstrap samples" added twice. The generated sentence in `MS_020` (`a1_widen_text`) now reads "N of 575 pairs of thresholds were identified as candidates" (both branches).
+- Endnote: the ordinal openers "First,", "Second,", and "Third," deleted from the 3 reason paragraphs.
+- The pre-edit QMD was archived as `R/Archive_grid_search_2026-10-20/MS_Appendix-1_before_1228_edits.qmd`. Both files parse. Not rendered. Rebuild: `Rscript Analysis2_Driver.R`.
+- Results from Rich's run, as shown in the render: 5 of 575 pairs were eligible; selected TR < 39 and TR < 48; weighted dementia kappa 0.34, 3-class kappa 0.50; the bootstrap selected the same pair in 8% of samples and a pair within 1 point of both cuts in 50%.
+
+### Open questions
+- "Among eligible pairs" in Step 3 still uses the old term; Rich changed the other two uses to "candidate".
+- With the ordinals gone, 3 references to the reasons by number remain: the endnote opener ("We set the plan aside for 3 reasons ... The first and third reasons are summarized in Step 4") and `MS_020` `a1_fn_conclusion_text` ("rests on the third reason" or "apart from the third reason").
+- The bootstrap shows the selected pair is unstable (8% same pair). Decide whether the appendix and the README for Lindsay should say so more directly.
+
+## 2026-10-21 (14:30): note on why the bootstrap rarely repeats the cut points
+
+- Discussed a bootstrap stratified on Manly-Jones class (fixed margins). Claude's rough estimate: the standard error of the dementia gap falls from about 0.5 to 0.4 points, a small gain, because most of the instability comes from whole-point steps compared with 0.5- and 1.0-point limits. Decision (Rich): no new bootstrap; add an explanatory note instead.
+- Added a paragraph after the Step 3 results in Appendix 1 (`MS_020`: `a1_step`, `a1_step_dem`, `a1_step_mci`, computed from `A7_070$candidates` next to the selected cuts) and the same note in the README for Lindsay (`A7_085`: `step_near`, `replicate_text`).
+- Rebuild: Appendix 1 needs only `Rscript Analysis2_Driver.R`; the README text appears after the next `Rscript Analysis7_Driver.R`.
