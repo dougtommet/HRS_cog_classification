@@ -61,7 +61,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `./R_objects/A0_030_hrs16_22_merged.rds`
   - `./R_objects/A0_030_hcap16_merged.rds`
 - Date initiated: 2026-04-16
-- Date last updated: 2026-10-19
+- Date last updated: 2026-10-21
 
 ### Analysis A1: HRS Core actuarial algorithm derivation and validation (legacy)
 
@@ -101,12 +101,12 @@ Links under "Final rendered output" point to the most recent report committed to
   - `./Reports/MS_Main_[date].docx`, `MS_Tab_Fig_Apndx_[date].docx`, `MS_Appendix_1_[date].docx`, `MS_Appendix_2_[date].docx`, `MS_Appendix_3_[date].docx`
   - `./Reports/MS_Combined_[date].pdf`: the five DOCX files converted with LibreOffice and joined in reading order (manuscript, tables and figures, Appendices 1 to 3). Skipped with a warning if LibreOffice or the R package `qpdf` is missing.
   - Most recent:
-    - [Manuscript](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Main_2026-10-18.docx)
-    - [Tables and figures](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Tab_Fig_Apndx_2026-10-18.docx)
-    - [Appendix 1](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_1_2026-10-18.docx)
-    - [Appendix 2](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_2_2026-10-18.docx)
-    - [Appendix 3](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_3_2026-10-18.docx)
-    - [Combined PDF](https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/MS_Combined_2026-10-18.pdf)
+    - [Manuscript](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Main_2026-10-21.docx)
+    - [Tables and figures](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Tab_Fig_Apndx_2026-10-21.docx)
+    - [Appendix 1](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_1_2026-10-21.docx)
+    - [Appendix 2](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_2_2026-10-21.docx)
+    - [Appendix 3](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fdougtommet%2FHRS_cog_classification%2Fmain%2FReports%2FMS_Appendix_3_2026-10-21.docx)
+    - [Combined PDF](https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/MS_Combined_2026-10-21.pdf)
 - Data inputs:
   - `./R_objects/A7_005_hrs16_merged.rds`, `./R_objects/A7_100_hcap_tables.rds` (Analysis A7)
   - `./R_objects/PMM_100.RDS`, `./mplus_output/pmm_103/`, `./mplus_output/pmm_103_jorm/` (Analysis A3)
@@ -114,7 +114,7 @@ Links under "Final rendered output" point to the most recent report committed to
 - Main derived data products:
   - `./Figures/MS_Main-Figure-2-PMM-Class-Probabilities.png`
 - Date initiated: 2026-03-24
-- Date last updated: 2026-10-19
+- Date last updated: 2026-10-21
 
 ### Analysis A2_2: Summary slide deck for Analysis A2
 
@@ -255,7 +255,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis7_Driver.R`
 - Final rendered output:
   - `./Reports/A7_HRS_cog_classification_[date].html`
-  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A7_HRS_cog_classification_2026-10-19.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A7_HRS_cog_classification_2026-10-21.html
 - Data inputs:
   - `./R_objects/A0_030_hrs16_merged.rds`, `A0_030_hrs16_22_merged.rds`, `A0_030_hcap16_merged.rds` (Analysis A0)
 - Main derived data products:
@@ -266,7 +266,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript R/A7_072-domain_quantile_check.R`: pre-specified test of the legacy A1_029 quantile rule for the cut points (failed, 2026-10-19)
   - `Rscript R/A7_080-compare_dx_exports.R <old.csv> <new.csv>`: compares 2 classification files
 - Date initiated: 2026-04-17
-- Date last updated: 2026-10-19
+- Date last updated: 2026-10-21
 
 ### Analysis A8: Summary slide deck for Analysis A7
 
@@ -325,7 +325,7 @@ Links under "Final rendered output" point to the most recent report committed to
 - Main derived data products:
   - `./R_objects/A10_010_comparison.rds`
 - Date initiated: 2026-10-19
-- Date last updated: 2026-10-19
+- Date last updated: 2026-10-21
 
 ## Workflow Rules
 
