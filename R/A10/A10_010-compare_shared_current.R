@@ -1,9 +1,12 @@
-# A10_010: compare the classification file the recipient holds with the
-# classification the current code produces.
+# A10_010: check that the current code reproduces the classification file the
+# recipient holds, and describe the alternative cut points that were
+# considered and not adopted.
 #
 # Shared file:  Data/<a10_shared_file> (A10_005), read as delivered.
-# Current:      R_objects/A7_075_hrs16_22_long.rds (Analysis A7), the object
-#               A7_075 writes to the current export.
+# Current:      R_objects/A7_075_hrs16_22_long.rds (Analysis A7), classified
+#               with the algorithm cut points (A7_070 $cuts, 37 and 48).
+# Alternative:  the same inputs classified with the A7_070 grid optimum
+#               ($calibrated_cuts), considered on 2026-10-17 and not adopted.
 # Writes:       R_objects/A10_010_comparison.rds
 #
 # Requires Analyses A0 and A7 to have been run.
@@ -25,8 +28,8 @@ long   <- readRDS(here::here("R_objects", "A7_075_hrs16_22_long.rds"))
 merged <- readRDS(here::here("R_objects", "A7_005_hrs16_22_merged.rds"))
 hcap   <- readRDS(here::here("R_objects", "A7_075_hrs16_hcap.rds"))
 
-cuts_old <- cal$previous_cuts   # cut points in the shared file
-cuts_new <- cal$cuts            # cut points the current code selects
+cuts_old <- cal$cuts             # algorithm cut points (shared file, current code)
+cuts_new <- cal$calibrated_cuts  # alternative: grid optimum, not adopted
 
 # Person-level variables: design, age by wave, raw 2016 D102 -------------------
 person <- merged %>%
@@ -45,7 +48,7 @@ current <- long %>%
   filter(inHRS == 1) %>%
   transmute(id, key = hhidpn_key(HHID, PN), wave,
             TF_now = num(TF), jorm_now = num(jorm), D102_now = num(D102),
-            dx_now = num(dx_v1), weight = num(weight), from_current = TRUE) %>%
+            dx_cur = num(dx_v1), weight = num(weight), from_current = TRUE) %>%
   left_join(ages, by = c("id", "wave")) %>%
   left_join(person %>% select(id, SECU, STRATUM, PD102_raw), by = "id") %>%
   left_join(hcap_ids, by = "id") %>%
@@ -108,28 +111,28 @@ n_differ <- function(a, b) sum(!same_value(a, b))
 both <- both %>%
   mutate(
     dx_old_rebuilt = classify_inputs(TF_old, jorm_old, D102_old, cuts_old),
-    dx_now_rebuilt = classify_inputs(TF_now, jorm_now, D102_now, cuts_new),
-    dx_old_inputs_new_cuts = classify_inputs(TF_old, jorm_old, D102_old, cuts_new)
+    dx_cur_rebuilt = classify_inputs(TF_now, jorm_now, D102_now, cuts_old),
+    dx_alt         = classify_inputs(TF_now, jorm_now, D102_now, cuts_new)
   )
 
 rebuild <- list(
-  old_mismatch           = n_differ(both$dx_old, both$dx_old_rebuilt),
-  now_mismatch           = n_differ(both$dx_now, both$dx_now_rebuilt),
-  old_inputs_new_cuts_vs_now = n_differ(both$dx_old_inputs_new_cuts, both$dx_now)
+  old_mismatch      = n_differ(both$dx_old, both$dx_old_rebuilt),
+  cur_mismatch      = n_differ(both$dx_cur, both$dx_cur_rebuilt),
+  shared_vs_current = n_differ(both$dx_old, both$dx_cur)
 )
 
 # Current export on disk, if present: does it match the A7 object? -------------
 current_file <- if (file.exists(current_path)) {
   cf <- read_dx_file(current_path) %>% select(key, wave, dx_file = dx_v1)
-  chk <- current %>% select(key, wave, dx_now) %>% full_join(cf, by = c("key", "wave"))
-  list(exists = TRUE, n = nrow(cf), mismatch = n_differ(chk$dx_now, chk$dx_file),
+  chk <- current %>% select(key, wave, dx_cur) %>% full_join(cf, by = c("key", "wave"))
+  list(exists = TRUE, n = nrow(cf), mismatch = n_differ(chk$dx_cur, chk$dx_file),
        mtime = format(file.info(current_path)$mtime, "%Y-%m-%d"))
 } else list(exists = FALSE)
 
-# Differences in assignment -----------------------------------------------------
+# Differences in assignment: shared file versus the alternative cut points -----
 both <- both %>%
   mutate(
-    changed = !same_value(dx_old, dx_now),
+    changed = !same_value(dx_old, dx_alt),
     complaint = case_when(D102_now %in% d102_worse    ~ "Reported worse memory",
                           D102_now %in% d102_notworse ~ "No reported worsening",
                           TRUE                        ~ "D102 missing"),
@@ -154,8 +157,8 @@ both <- both %>%
     TRUE                                              ~ "Outside both bands"))
 
 crosstab <- both %>%
-  count(Shared = dx_factor(dx_old), Current = dx_factor(dx_now)) %>%
-  pivot_wider(names_from = Current, values_from = n, values_fill = 0)
+  count(Shared = dx_factor(dx_old), Alternative = dx_factor(dx_alt)) %>%
+  pivot_wider(names_from = Alternative, values_from = n, values_fill = 0)
 
 change_by <- function(d) {
   d %>%
@@ -174,7 +177,7 @@ changes <- list(
 
 transitions <- both %>%
   filter(changed) %>%
-  mutate(Change = paste(dx_factor(dx_old), "to", dx_factor(dx_now))) %>%
+  mutate(Change = paste(dx_factor(dx_old), "to", dx_factor(dx_alt))) %>%
   count(Change, name = "n")
 n_trans <- function(from, to) {
   x <- transitions$n[transitions$Change == paste(from, "to", to)]
@@ -184,8 +187,8 @@ n_trans <- function(from, to) {
 mechanism <- both %>%
   filter(!is.na(TF_now), band != "Outside both bands") %>%
   mutate(Change = if_else(changed,
-                          paste(dx_factor(dx_old), "to", dx_factor(dx_now)),
-                          paste("No change,", dx_factor(dx_now)))) %>%
+                          paste(dx_factor(dx_old), "to", dx_factor(dx_alt)),
+                          paste("No change,", dx_factor(dx_alt)))) %>%
   count(`T band` = band, `Self-rated memory` = complaint, Change, name = "Person-waves")
 
 n_changed_outside_bands <- sum(both$changed & both$band %in% c("Outside both bands", "No T score"))
@@ -193,7 +196,7 @@ n_changed_outside_bands <- sum(both$changed & both$band %in% c("Outside both ban
 # Weighted prevalence, ages 65 and older ----------------------------------------
 # Wave respondent weights (xWGTR). Respondents with weight 0 or missing (for
 # example, nursing home residents in the HRS respondent weights) are excluded.
-prev_sample <- both %>% filter(!is.na(dx_old), !is.na(dx_now))
+prev_sample <- both %>% filter(!is.na(dx_old), !is.na(dx_alt))
 
 weight_excluded <- prev_sample %>%
   filter(age65) %>%
@@ -206,7 +209,7 @@ prev_wave <- function(w) {
     filter(wave == w, !is.na(weight), weight > 0, !is.na(SECU), !is.na(STRATUM))
   for (k in 1:3) {
     d[[paste0("old", k)]] <- as.numeric(d$dx_old == k)
-    d[[paste0("new", k)]] <- as.numeric(d$dx_now == k)
+    d[[paste0("new", k)]] <- as.numeric(d$dx_alt == k)
     d[[paste0("dif", k)]] <- d[[paste0("new", k)]] - d[[paste0("old", k)]]
   }
   des <- svydesign(ids = ~SECU, strata = ~STRATUM, weights = ~weight,
@@ -224,7 +227,7 @@ prev_wave <- function(w) {
       year = wave_year[[w]], class = dx_labels[k],
       n = nrow(d65),
       wn_old = sum(d65$weight[d65$dx_old == k]),
-      wn_new = sum(d65$weight[d65$dx_now == k]),
+      wn_new = sum(d65$weight[d65$dx_alt == k]),
       p_old = as.numeric(p_old), lo_old = ci_o[1], hi_old = ci_o[2],
       p_new = as.numeric(p_new), lo_new = ci_n[1], hi_new = ci_n[2],
       d = as.numeric(coef(dif)), lo_d = ci_d[1], hi_d = ci_d[2]
@@ -233,7 +236,7 @@ prev_wave <- function(w) {
 }
 prevalence <- purrr::map_dfr(names(wave_year), prev_wave)
 
-# Steps shared by both files ----------------------------------------------------
+# Assignment steps in the shared file ----------------------------------------------------
 p16 <- both %>% filter(wave == "P")
 shared_steps <- list(
   d102_missing_after_imputation = sum(is.na(both$D102_now)),
@@ -242,11 +245,11 @@ shared_steps <- list(
   d102_imputed_2016 = sum(is.na(p16$PD102_raw) & !is.na(p16$D102_now)),
   d102_imputed_2016_complaint = sum(is.na(p16$PD102_raw) & p16$D102_now %in% d102_worse),
   d102_imputed_2016_dk_rf_na  = sum(is.na(p16$PD102_raw) & p16$D102_now %in% c(-8, 8, 9)),
-  n_unclassified = sum(is.na(both$dx_now)),
-  n_unclassified_no_tf_no_jorm = sum(is.na(both$dx_now) & is.na(both$TF_now) & is.na(both$jorm_now)),
-  n_unclassified_tf_no_d102 = sum(is.na(both$dx_now) & !is.na(both$TF_now)),
+  n_unclassified = sum(is.na(both$dx_old)),
+  n_unclassified_no_tf_no_jorm = sum(is.na(both$dx_old) & is.na(both$TF_now) & is.na(both$jorm_now)),
+  n_unclassified_tf_no_d102 = sum(is.na(both$dx_old) & !is.na(both$TF_now)),
   n_under65 = sum(!both$age65),
-  n_under65_classified = sum(!both$age65 & !is.na(both$dx_now)),
+  n_under65_classified = sum(!both$age65 & !is.na(both$dx_old)),
   n_age_missing = sum(is.na(both$age))
 )
 
@@ -255,8 +258,9 @@ A10_010_comparison <- list(
                shared_mtime = format(file.info(shared_path)$mtime, "%Y-%m-%d")),
   cuts_old = cuts_old, cuts_new = cuts_new,
   jorm_cuts = cal$jorm_cuts,
-  calibration = cal[c("target_shares", "chosen", "previous", "max_kappa",
-                      "grid_step", "n_sample", "weight", "target_variable", "date")],
+  calibration = cal[c("target_shares", "algorithm", "calibrated", "max_kappa",
+                      "grid_position", "grid_step", "n_sample", "weight",
+                      "target_variable", "date")],
   rows = rows, inputs = inputs, rebuild = rebuild, current_file = current_file,
   crosstab = crosstab, changes = changes, transitions = transitions,
   mechanism = mechanism, severe_band = severe_band, moderate_band = moderate_band,

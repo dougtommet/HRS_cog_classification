@@ -35,7 +35,7 @@ Two intermediate threshold variables are computed before the final diagnosis is 
 | TF < `r cut_moderate` (and ≥ `r cut_severe`) | 1 | Mild impairment |
 | TF ≥ `r cut_moderate` | 0 | Normal range |
 
-Cut points are set in A7_070 (prevalence matching to the HRS/HCAP Algorithm); see the threshold calibration section.
+Cut points are fixed at the values set in April 2026 to approximate the weighted HRS/HCAP (Manly-Jones) class shares in HRS-HCAP Wave 1 (A7_070); the threshold calibration section reports a grid search under the same criterion as a check.
 
 
 #### `jorm_threshold` — Informant-Rated Cognitive Change Category

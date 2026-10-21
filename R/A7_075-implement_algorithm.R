@@ -1,6 +1,6 @@
 # Analysis A7: apply the Core algorithm (dx_v1).
 #
-# Cut points come from A7_070 (prevalence matching to the HRS/HCAP Algorithm).
+# Cut points come from A7_070 (the algorithm cut points, T < 37 and T < 48).
 # Writes every object that later scripts and reports read, including
 # A7_075_hrs16_hcap.rds (read by A7_100 and the A7 report).
 
@@ -82,15 +82,13 @@ saveRDS(hrs16_flow_diagram_values, here::here("R_objects", "A7_075_hrs16_flow_di
 saveRDS(A7_075_algorithm_summary,  here::here("R_objects", "A7_075_algorithm_summary.rds"))
 
 # Person-wave export for the incidence analysis (Kobayashi et al.).
-# File names are hard-coded so an export already shared is never overwritten.
-# For a new export, add a new name here and set dx_export_previous to the
-# last file shared; A7_085 writes a README comparing the two.
-dx_export_file     <- "Dx_for_LK-2026-10-17.csv"
-dx_export_previous <- "Dx_for_LK-2026-06-11.csv"   # content written 2026-10-07 (cut points 37, 48)
+# The file shared on 2026-07-10 (Data/Dx_for_LK-2026-07-10.csv, gitignored)
+# stands. This rebuild is written so that Analysis A10 can confirm that the
+# current code reproduces it; it is not a new share. Record any new share in
+# R/A10/A10_005-share_log.R.
+dx_export_file <- "Dx_for_LK-rebuild.csv"
 
 dx_export <- hrs16_22_long %>%
   filter(inHRS == 1) %>%
   select(HHID, PN, wave, TF, jorm, D102, dx_v1)
 write_csv(dx_export, here::here("Data", dx_export_file))
-
-source(here::here("R", "A7_085-export_readme.R"))

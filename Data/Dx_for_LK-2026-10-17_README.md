@@ -1,6 +1,6 @@
 # Dx_for_LK-2026-10-17.csv
 
-Person-wave core algorithm classifications (`dx_v1`) for HRS core respondents, 2016-2022, written by `R/A7_075-implement_algorithm.R` (Analysis A7) on 2026-10-18. This README is written by `R/A7_085-export_readme.R` in the same run.
+Person-wave core algorithm classifications (`dx_v1`) for HRS core respondents, 2016-2022, written by `R/A7_075-implement_algorithm.R` (Analysis A7) on 2026-10-19. This README is written by `R/A7_085-export_readme.R` in the same run.
 
 ## Columns
 

@@ -44,7 +44,7 @@ Variables are selected from each wave's Section D file covering the major cognit
 | `xD157–xD158` | President/vice-president naming |
 | `xD142–xD146` | Serial 7s subtraction |
 | `xD196`, `xD198` | Additional cognitive items |
-| `xNSSCORE` | Nurse/proxy cognitive summary score (2016, 2020, 2022 only) |
+| `xNSSCORE` | Number series score (2016, 2020, 2022 only; not in the 2018 Core file) |
 
 
 For the 2016 wave (`hrs16_cog`), normative exclusion flags from `normexcld` are joined by `HHID`/`PN` to identify respondents who should be excluded from normative cognitive scoring. The 2018 wave data requires renaming of lowercase identifiers (`hhid`, `pn`, `qsubhh`) to match the uppercase convention used across waves.

@@ -7,7 +7,7 @@ Read and follow:
 
 ## Project Overview
 
-This repository contains eleven related but distinct analysis workflows. Existing source files remain in place. The authoritative automation entrypoints are the root-level drivers listed below. Source file naming follows an `A#_` prefix convention (e.g., `A0_`, `A1_`, `A7_`) that groups files by workflow.
+This repository contains twelve related but distinct analysis workflows. Existing source files remain in place. The authoritative automation entrypoints are the root-level drivers listed below. Source file naming follows an `A#_` prefix convention (e.g., `A0_`, `A1_`, `A7_`) that groups files by workflow.
 
 |Analysis|Title|Purpose|
 |:-------|:--------------------|:--------------------------------------------------------------------------------|
@@ -23,6 +23,7 @@ This repository contains eleven related but distinct analysis workflows. Existin
 |[Analysis A7](#analysis-a7-hrs-core-cognitive-classification-2016-derivation-20162022-application)|HRS Core cognitive classification (2016 derivation, 2016–2022 application)|Fits a survey-weighted CFA to HRS 2016 Core cognitive items, creates demographically adjusted T-scores normed in the HCAP normative sample, applies the fixed 2016 Core algorithm to 2016–2022 person-waves, and compares 2016 classifications with HRS/HCAP Algorithm, consensus, Langa-Weir, and Hudomiet classifications in HCAP.|
 |[Analysis A8](#analysis-a8-summary-slide-deck-for-analysis-a7)|Summary slide deck for Analysis A7|Presents the methods and results of Analysis A7 in a Revealjs slide deck.|
 |[Analysis A9](#analysis-a9-pmm-slide-deck-slides2603)|PMM slide deck (Slides2603)|Presents the PMM approach, covariate adjustment, probabilistic classification, margins, and comparator tables in a Revealjs slide deck.|
+|[Analysis A10](#analysis-a10-data-sharing-runs)|Data sharing runs|Logs the classification files shared with collaborators and confirms that the current Analysis A7 code reproduces the file Lindsay Kobayashi holds (sent 2026-07-10): inputs, assignment steps, the rationale for the cut points, and what the alternative (grid-optimum) cut points, not adopted, would have changed.|
 
 ### Run order
 
@@ -37,7 +38,7 @@ Workflows depend on derived data written by earlier workflows. Rebuild upstream 
 3. **Manuscript:** A2 last. It reads A7 results (`R_objects/A7_*.rds`) and re-sources the PMM comparison and margins scripts, which read the A3 Mplus outputs.
    - A2_2 (summary slides for A2) reads the same inputs as A2 and `Figures/Slides2603_results_class_probabilities.png` from A9 (Slides2603).
 
-A4 (Stata) reads `R_objects/025_hrs16_cog.dta` from A1. A6 is ad hoc debugging.
+A4 (Stata) reads `R_objects/025_hrs16_cog.dta` from A1. A6 is ad hoc debugging. A10 runs after A0 and A7 and reads the shared file `Data/Dx_for_LK-2026-07-10.csv`, which is gitignored and must be saved locally.
 
 Links under "Final rendered output" point to the most recent report committed to `main`, served through raw.githack.com. They only work after the report is pushed, and they must be updated by hand when a newer report is committed. DOCX links open in Microsoft's Office Online viewer, which fetches the file from raw.githubusercontent.com (this works only while the repository is public).
 
@@ -52,7 +53,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis0_Driver.R`
 - Final rendered output:
   - `./Reports/A0_HRS_data_processing_[date].html`
-  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A0_HRS_data_processing_2026-10-18.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A0_HRS_data_processing_2026-10-19.html
 - Data inputs:
   - Raw HRS/HCAP files, Langa-Weir, Hudomiet, and `normexcld.dta`, read from machine-specific Dropbox paths set in `./R/A0_002-folder_paths.R`
 - Main derived data products:
@@ -246,7 +247,7 @@ Links under "Final rendered output" point to the most recent report committed to
 ### Analysis A7: HRS Core cognitive classification (2016 derivation, 2016–2022 application)
 
 - Purpose:
-  - Fits a survey-weighted CFA to HRS 2016 Core cognitive items, converts factor scores to demographically adjusted T-scores normed in the HCAP normative sample, and applies the Core algorithm (`dx_v1`: T-score cut points, self-rated memory, Jorm fallback). The 2016 parameters are fixed and applied to 2016–2022 person-waves. Compares the 2016 classification with the HRS/HCAP Algorithm, consensus, Langa-Weir, and Hudomiet in HCAP.
+  - Fits a survey-weighted CFA to HRS 2016 Core cognitive items, converts factor scores to demographically adjusted T-scores normed in the HCAP normative sample, and applies the Core algorithm (`dx_v1`: T-score cut points T < 37 and T < 48, self-rated memory, Jorm fallback). `A7_070` holds the cut points and a grid-search check of how closely they match the weighted Manly-Jones class shares (the grid optimum is reported, not used). The 2016 parameters are fixed and applied to 2016–2022 person-waves. Compares the 2016 classification with the HRS/HCAP Algorithm, consensus, Langa-Weir, and Hudomiet in HCAP.
 - Driver: `./Analysis7_Driver.R`
 - Control: `./R/A7_000-Main_control.qmd`
   - Source programs: `./R/A7_001-libraries.R`, `./R/A7_005-get_data.R`, `./R/A7_050-mplus_model.R` through `./R/A7_100-comparison_of_diagnoses.R`, each with a corresponding `.qmd` chapter file
@@ -254,13 +255,16 @@ Links under "Final rendered output" point to the most recent report committed to
   - `Rscript Analysis7_Driver.R`
 - Final rendered output:
   - `./Reports/A7_HRS_cog_classification_[date].html`
-  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A7_HRS_cog_classification_2026-10-18.html
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A7_HRS_cog_classification_2026-10-19.html
 - Data inputs:
   - `./R_objects/A0_030_hrs16_merged.rds`, `A0_030_hrs16_22_merged.rds`, `A0_030_hcap16_merged.rds` (Analysis A0)
 - Main derived data products:
   - `./R_objects/A7_*.rds` (including `A7_075_hrs16_22_long.rds` and `A7_100_hcap_tables.rds`)
   - `./mplus_output/A7/`
-  - `./Data/Dx_for_LK-2026-06-11.csv` (shared export of person-wave `dx_v1` diagnoses, 2016–2022; filename is hard-coded in `A7_075`)
+  - `./Data/Dx_for_LK-rebuild.csv` (person-wave `dx_v1` classifications, 2016–2022, written by `A7_075`; rebuilds the file shared with Lindsay Kobayashi on 2026-07-10, checked in Analysis A10)
+- Side scripts (not run by the driver):
+  - `Rscript R/A7_072-domain_quantile_check.R`: pre-specified test of the legacy A1_029 quantile rule for the cut points (failed, 2026-10-19)
+  - `Rscript R/A7_080-compare_dx_exports.R <old.csv> <new.csv>`: compares 2 classification files
 - Date initiated: 2026-04-17
 - Date last updated: 2026-10-19
 
@@ -301,6 +305,27 @@ Links under "Final rendered output" point to the most recent report committed to
   - None
 - Date initiated: 2026-03-24
 - Date last updated: 2026-09-23
+
+### Analysis A10: Data sharing runs
+
+- Purpose:
+  - Logs the person-wave classification files shared with collaborators and documents what each recipient holds. The first report confirms that the current Analysis A7 code reproduces the file Lindsay Kobayashi holds (`Dx_for_LK-2026-07-10.csv`, sent 2026-07-10): identity of inputs and classes, the steps that assign a class, the rationale for the cut points (T < 37 and T < 48), and what the grid-optimum cut points (considered 2026-10-17, not adopted) would have changed, including survey-weighted prevalence for ages 65 and older.
+- Driver: `./Analysis10_Driver.R`
+- Control: `./R/A10/A10_000-Main_control.qmd` (US Letter report using `./templates/letter.css`)
+  - Source programs: `./R/A10/A10_001-libraries.R`, `A10_005-share_log.R` (share log; add a row for each new share), `A10_010-compare_shared_current.R`
+- Rebuild command:
+  - `Rscript Analysis10_Driver.R`
+- Final rendered output:
+  - `./Reports/A10_Data_sharing_[date].html`
+  - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/A10_Data_sharing_2026-10-19.html
+- Data inputs:
+  - `./Data/Dx_for_LK-2026-07-10.csv` (the file as delivered; gitignored, saved from email)
+  - `./R_objects/A7_075_hrs16_22_long.rds`, `A7_075_hrs16_hcap.rds`, `A7_070_threshold_calibration.rds`, `A7_005_hrs16_22_merged.rds` (Analysis A7)
+  - `./Data/Dx_for_LK-rebuild.csv` (optional; written by A7_075 and checked against the A7 object when present)
+- Main derived data products:
+  - `./R_objects/A10_010_comparison.rds`
+- Date initiated: 2026-10-19
+- Date last updated: 2026-10-19
 
 ## Workflow Rules
 
@@ -346,7 +371,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - baplot
   - checkvar
   - kappaetc
-- `./bibliography.bib` (created 2026-10-17) holds the references for Appendix 1. Appendix 1 still lists references by hand; it does not yet use `bibliography:` in its YAML.
+- `./bibliography.bib` (created 2026-10-17) holds the references for Appendix 1, which cites them with `[@Key]` and formats them with `./templates/apa.csl` (APA 7th edition, from the Citation Style Language repository; added 2026-10-21). Citations inside flextable notes are not processed by Pandoc: write those by hand, and make sure the same source is also cited in the text so it appears in the reference list.
 
 ## Agent Response Format
 

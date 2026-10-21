@@ -1,0 +1,25 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Debug Analysis1 driver",
+			"type": "shell",
+			"command": "Rscript",
+			"args": [
+				"Analysis1_Driver.R"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Debug Analysis2 driver",
+			"type": "shell",
+			"command": "Rscript",
+			"args": [
+				"Analysis2_Driver.R"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}

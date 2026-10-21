@@ -54,7 +54,7 @@ tracker_merged <- tracker_merged %>%
     female, black, hisp, SCHLYRS, HISPANIC, RACE,
 
     rPvdori, rPvdlfl1z, rPvdlfl2, rPvdlfl3, rPvdwdimmz, rPvdwddelz, rPvdexf7z, rPvdsevens, rPvdcount,
-    rPiadl_imp, rPjorm, PD102_imp, rPD554, rPD555, rPD556,
+    rPiadl_imp, rPjorm, PD102_imp, PD102, rPD554, rPD555, rPD556, # PD102: raw, for imputation counts (A7_075)
     rQvdori, rQvdlfl1z, rQvdlfl2, rQvdlfl3, rQvdwdimmz, rQvdwddelz,            rQvdsevens, rQvdcount,
     rQiadl_imp, rQjorm, QD102_imp, rQD554, rQD555, rQD556,
     rRvdori, rRvdlfl1z, rRvdlfl2, rRvdlfl3, rRvdwdimmz, rRvdwddelz, rRvdexf7z, rRvdsevens, rRvdcount,

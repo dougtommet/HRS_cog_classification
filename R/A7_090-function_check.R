@@ -12,12 +12,16 @@
 # Part 1: share with any ADL/IADL limitation, by Manly-Jones class and by core
 #         T-score band. Limitations are counted on the 9 items available in
 #         every wave 2016-2022 (map use, G040, is omitted; it is not in 2022).
-# Part 2: 3 rule variants, each with its own prevalence-matched cut points:
-#         memory (the core algorithm), function (Manly-Jones analog), and
-#         function or memory. Agreement with the Manly-Jones algorithm.
-# Part 3: repeated split-half check of Part 2. Cut points are selected by
-#         prevalence matching in a random half (split within Manly-Jones
-#         class) and agreement is computed in the other half.
+# Part 2: 3 rule variants, all at the core algorithm's cut points (A7_070
+#         $cuts, T < 37 and T < 48): memory (the core algorithm), function
+#         (Manly-Jones analog), and function or memory. Class shares and
+#         agreement with the Manly-Jones algorithm. Decision (Rich,
+#         2026-10-19): hold the cut points fixed for every rule, rather than
+#         giving each rule its own prevalence-matched cut points.
+# Part 3: variation of Part 2 across 200 random halves of the sample (drawn
+#         within Manly-Jones class), at the same fixed cut points. With no cut
+#         points selected, this describes sampling variation of the paired
+#         differences; it is not an out-of-sample check.
 
 source(here::here("R", "A7_060-algorithm_functions.R"))
 
@@ -129,25 +133,17 @@ evaluate_variant <- function(variant, cut_severe, cut_moderate) {
   )
 }
 
-grid <- A7_070_threshold_calibration$grid %>% distinct(cut_severe, cut_moderate)
-
 variant_results <- purrr::map_dfr(variants$variant, function(v) {
-  purrr::pmap_dfr(grid, function(cut_severe, cut_moderate) evaluate_variant(v, cut_severe, cut_moderate)) %>%
-    arrange(loss, desc(kappa_3class)) %>%
-    slice(1)
+  evaluate_variant(v, cuts[["severe"]], cuts[["moderate"]])
 }) %>%
   left_join(variants, by = "variant")
 
-# Check: the memory variant must reproduce the A7_070 selection.
-if (!isTRUE(all.equal(
-  unname(unlist(variant_results[variant_results$variant == "memory", c("cut_severe", "cut_moderate")])),
-  unname(cuts)
-))) warning("A7_090: memory variant did not reproduce the A7_070 cut points; check variant_dx().")
+# Check: the memory variant must reproduce the core algorithm (A7_075).
+mem_dx <- variant_dx(fc, cuts[["severe"]], cuts[["moderate"]], "memory")
+if (!isTRUE(all.equal(mem_dx, as.integer(haven::zap_labels(fc$dx_v1)))))
+  warning("A7_090: memory variant does not reproduce dx_v1; check variant_dx().")
 
-# Part 3: repeated split-half ---------------------------------------------------
-# Fast versions of the Part 2 calibration. Shares on the whole grid come from
-# weighted cumulative sums; kappa is computed only to break exact ties, as in
-# A7_070.
+# Part 3: repeated random halves --------------------------------------------------
 fc$iq_dx <- {
   j <- algorithm_thresholds(fc, cuts[["severe"]], cuts[["moderate"]])$jorm_threshold
   ifelse(is.na(fc$TF), j + 1L, NA_integer_)
@@ -177,38 +173,12 @@ fast_agree <- function(d, dx) {
     kappa_binary = binary_kappa_from_tab(tab2)$kappa,
     capture      = tab3[3, 3] / sum(tab3[3, ]))
 }
-fast_calibrate <- function(d, variant, grid) {
-  f <- variant_flags(d, variant)
-  has_t <- !is.na(d$TF)
-  tf <- d$TF[has_t]; w <- d$HCAP16WGTR[has_t]
-  s <- f$sev[has_t]; m <- f$mod[has_t]
-  iq_ok <- !has_t & !is.na(d$iq_dx)
-  iqw <- vapply(1:3, function(k) sum(d$HCAP16WGTR[iq_ok & d$iq_dx == k]), numeric(1))
-  us <- sort(unique(c(grid$cut_severe, grid$cut_moderate)))
-  cumw <- function(flag) vapply(us, function(cc) sum(w[tf < cc & flag]), numeric(1))
-  Fs <- cumw(s); Fns <- cumw(!s); Fm <- cumw(m)
-  is_ <- match(grid$cut_severe, us); im <- match(grid$cut_moderate, us)
-  W   <- sum(w) + sum(iqw)
-  dem <- (Fs[is_] + iqw[3]) / W
-  mci <- (Fns[is_] + Fm[im] - Fm[is_] + iqw[2]) / W
-  tgt <- weighted_shares(d$target, d$HCAP16WGTR)
-  loss <- (1 - dem - mci - tgt[["1"]])^2 + (mci - tgt[["2"]])^2 + (dem - tgt[["3"]])^2
-  cand <- which(loss - min(loss) < 1e-12)
-  if (length(cand) > 1) {
-    k <- vapply(cand, function(i) fast_agree(d, fast_dx(d, variant, grid$cut_severe[i],
-                                                        grid$cut_moderate[i]))[["kappa_3class"]],
-                numeric(1))
-    cand <- cand[which.max(k)]
-  }
-  c(cut_severe = grid$cut_severe[cand], cut_moderate = grid$cut_moderate[cand])
-}
-
-# Check: on the full sample the fast calibration must reproduce Part 2.
+# Check: on the full sample the fast classification must reproduce Part 2.
 for (v in variants$variant) {
-  fast_cuts <- fast_calibrate(fc, v, grid)
-  slow_cuts <- unlist(variant_results[variant_results$variant == v, c("cut_severe", "cut_moderate")])
-  if (!isTRUE(all.equal(unname(fast_cuts), unname(slow_cuts)))) {
-    warning("A7_090: fast calibration differs from Part 2 for variant ", v, ".")
+  k_fast <- fast_agree(fc, fast_dx(fc, v, cuts[["severe"]], cuts[["moderate"]]))[["kappa_3class"]]
+  k_slow <- variant_results$kappa_3class[variant_results$variant == v]
+  if (!isTRUE(all.equal(unname(k_fast), unname(k_slow)))) {
+    warning("A7_090: fast classification differs from Part 2 for variant ", v, ".")
   }
 }
 
@@ -217,13 +187,11 @@ set.seed(20261018)
 split_half <- purrr::map_dfr(seq_len(n_split), function(r) {
   train <- unlist(lapply(split(seq_len(nrow(fc)), fc$target),
                          function(ix) ix[sample.int(length(ix), floor(length(ix) / 2))]))
-  d_train <- fc[train, ]
   d_test  <- fc[-train, ]
   purrr::map_dfr(variants$variant, function(v) {
-    cc <- fast_calibrate(d_train, v, grid)
-    a  <- fast_agree(d_test, fast_dx(d_test, v, cc[["cut_severe"]], cc[["cut_moderate"]]))
+    a  <- fast_agree(d_test, fast_dx(d_test, v, cuts[["severe"]], cuts[["moderate"]]))
     tibble::tibble(split = r, variant = v,
-                   cut_severe = cc[["cut_severe"]], cut_moderate = cc[["cut_moderate"]],
+                   cut_severe = cuts[["severe"]], cut_moderate = cuts[["moderate"]],
                    kappa_3class = a[["kappa_3class"]], kappa_binary = a[["kappa_binary"]],
                    capture = a[["capture"]])
   })
@@ -261,8 +229,10 @@ A7_090_function_check <- list(
   split_half = split_half,
   split_summary = split_summary,
   split_diff = split_diff,
+  cuts = cuts,
   note = paste("ADL/IADL: count of limitations on the 9 items available in every wave",
-               "(G040 omitted); missing counted as none in Parts 2 and 3."),
+               "(G040 omitted); missing counted as none in Parts 2 and 3.",
+               "All rules at the core algorithm cut points."),
   date = Sys.Date()
 )
 saveRDS(A7_090_function_check, here::here("R_objects", "A7_090_function_check.rds"))

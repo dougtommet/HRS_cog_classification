@@ -101,6 +101,11 @@ ANALYSES = {
         "outputs": [("Slides", "Reports/Slides2603_*.html")],
         "sources": ["R/Slides2603_*.R", "R/Slides2603_*.qmd", "Slides2603_Driver.R"],
     },
+    "A10": {
+        "outputs": [("Report", "Reports/A10_Data_sharing_*.html")],
+        "fallback": "no driver render committed yet.",
+        "sources": ["R/A10/*.R", "R/A10/*.qmd", "Analysis10_Driver.R"],
+    },
 }
 
 GITHACK = f"https://raw.githack.com/{OWNER}/{REPO}/{BRANCH}/"

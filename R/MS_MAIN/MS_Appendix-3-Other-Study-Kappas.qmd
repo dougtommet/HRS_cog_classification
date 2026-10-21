@@ -2,6 +2,7 @@
 title: "Appendix 3: Comparisons with other study classifications"
 date: today
 format: docx
+fig-dpi: 300
 editor: source
 execute:
   echo: false

@@ -1,23 +1,26 @@
-
 ```{r}
 A7_070_threshold_calibration <- readRDS(here::here("R_objects", "A7_070_threshold_calibration.rds"))
 cal <- A7_070_threshold_calibration
+gp  <- cal$grid_position
 pct <- function(x) sprintf("%.1f%%", 100 * x)
+cut_txt <- function(x) ifelse(x %% 1 == 0, sprintf("%d", as.integer(x)), sprintf("%.1f", x))
 ```
 
-# Threshold calibration
+# Cut points and calibration check
 
-The Core algorithm T-score cut points are chosen so that the survey-weighted (`r cal$weight`) Normal, MCI, and Dementia shares of the Core algorithm match those of the HRS/HCAP Algorithm (`r cal$target_variable`) in HCAP 2016 (N = `r format(cal$n_sample, big.mark = ",")`). The self-rated memory rule and the Jorm IQCODE fallback are held fixed. The grid step is `r cal$grid_step` T-score points.
+The Core algorithm uses T < `r cut_txt(cal$cuts[["severe"]])` (severe) and T < `r cut_txt(cal$cuts[["moderate"]])` (moderate). These cut points were set in April 2026 so that the survey-weighted (`r cal$weight`) Normal, MCI, and Dementia shares of the Core algorithm approximate those of the HRS/HCAP Algorithm (`r cal$target_variable`) in HCAP 2016 (N = `r format(cal$n_sample, big.mark = ",")`). They are the cut points in the classification file shared on 2026-07-10.
 
-Target shares: Normal `r pct(cal$target_shares[["1"]])`, MCI `r pct(cal$target_shares[["2"]])`, Dementia `r pct(cal$target_shares[["3"]])`.
+Target shares: Normal `r pct(cal$target_shares[["1"]])`, MCI `r pct(cal$target_shares[["2"]])`, Dementia `r pct(cal$target_shares[["3"]])`. At the algorithm cut points the Core shares are `r pct(cal$algorithm$share_normal)`, `r pct(cal$algorithm$share_mci)`, and `r pct(cal$algorithm$share_dementia)`.
+
+As a check, a grid search (step `r cal$grid_step` T points, `r format(gp$n_pairs, big.mark = ",")` pairs, memory and IQCODE rules fixed) finds the pair whose shares are closest to the target (sum of squared differences). The grid optimum is T < `r cut_txt(cal$calibrated_cuts[["severe"]])` and T < `r cut_txt(cal$calibrated_cuts[["moderate"]])`. The algorithm cut points rank `r gp$rank` of `r format(gp$n_pairs, big.mark = ",")` pairs; their largest difference from a target share is `r sprintf("%.1f", 100 * gp$max_abs_share_diff_algorithm)` percentage points, against `r sprintf("%.1f", 100 * gp$max_abs_share_diff_calibrated)` at the grid optimum.
 
 ```{r}
-#| tbl-cap: "Calibrated, previous, and kappa-maximizing cut points"
+#| tbl-cap: "Algorithm, grid-optimum, and kappa-maximizing cut points (in-sample)"
 #| label: tbl-a7-070-cuts
 dplyr::bind_rows(
-  cal$chosen    |> dplyr::mutate(set = "Calibrated (prevalence matching)"),
-  cal$previous  |> dplyr::mutate(set = "Previous (37, 48)"),
-  cal$max_kappa |> dplyr::mutate(set = "Maximum 3-class kappa")
+  cal$algorithm  |> dplyr::mutate(set = "Algorithm"),
+  cal$calibrated |> dplyr::mutate(set = "Grid optimum (prevalence matching)"),
+  cal$max_kappa  |> dplyr::mutate(set = "Maximum 3-class kappa")
 ) |>
   dplyr::select(set, cut_severe, cut_moderate, share_normal, share_mci,
                 share_dementia, kappa_3class, kappa_binary) |>
@@ -30,7 +33,7 @@ dplyr::bind_rows(
 ```
 
 ```{r}
-#| fig-cap: "Weighted dementia share by severe cut point (left) and MCI share by moderate cut point at the calibrated severe cut (right). Dashed lines: HRS/HCAP Algorithm shares."
+#| fig-cap: "Weighted dementia share by severe cut point (left) and MCI share by moderate cut point at the algorithm's severe cut (right). Dashed lines: HRS/HCAP Algorithm shares. Solid grey lines: algorithm cut points."
 #| label: fig-a7-070-curves
 #| fig-width: 9
 #| fig-height: 4
