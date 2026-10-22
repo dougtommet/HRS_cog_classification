@@ -49,7 +49,7 @@ analysis2_class_margins <- dplyr::bind_rows(
     hcap_w,
     analysis2_a7$labels$class
   ) |>
-    dplyr::mutate(method = "HRS/HCAP Algorithm"),
+    dplyr::mutate(method = "Manly-Jones algorithm"),
   analysis2_weighted_margin(
     analysis2_a7$data$hcap_sample,
     hrs,
@@ -118,21 +118,31 @@ analysis2_pmm_prior_text <- function(model_path) {
   )
 }
 
+# Model outputs are named in R/PMM_090_model_registry.R (sourced by PMM_110).
 analysis2_pmm_priors <- c(
-  cognition = analysis2_pmm_prior_text(
-    here::here("mplus_output", "pmm_103", "pmm_hcap_103b.out")
-  ),
-  jorm = analysis2_pmm_prior_text(
-    here::here("mplus_output", "pmm_103_jorm", "pmm_hcap_103b_jorm.out")
-  )
+  cognition = analysis2_pmm_prior_text(pmm_models$cognition$scoring_out),
+  jorm = analysis2_pmm_prior_text(pmm_models$informant$scoring_out)
 )
+
+# PMM model samples and design counts (2026-10-22)
+analysis2_pmm_n <- c(
+  cognition = suppressWarnings(MplusAutomation::readModels(pmm_models$cognition$calibration_out))[["summaries"]][["Observations"]],
+  informant = suppressWarnings(MplusAutomation::readModels(pmm_models$informant$calibration_out))[["summaries"]][["Observations"]]
+)
+analysis2_pmm_n_cov_terms <- length(unique(stringr::str_match_all(
+  readRDS(here::here("R_objects", "PMM_100_mplus_mod_norms.RDS")), " on (x[0-9x]+) @"
+)[[1]][, 2]))
+
+# Why no MCI probability exceeds one half (R/PMM_114_mci_ceiling.R)
+source(here::here("R", "PMM_114_mci_ceiling.R"))
+analysis2_pmm_mci <- pmm_mci
 
 analysis2_class_margin_display <- analysis2_class_margins |>
   dplyr::mutate(
     method = factor(
       method,
       levels = c(
-        "HRS/HCAP Algorithm", "Core algorithm", "PMM", "Langa-Weir", "Hudomiet"
+        "Manly-Jones algorithm", "Core algorithm", "PMM", "Langa-Weir", "Hudomiet"
       )
     )
   ) |>
@@ -197,7 +207,7 @@ analysis2_class_margin_table <- flextable::flextable(analysis2_class_margin_disp
     width = 0.775
   ) |>
   flextable::add_footer_lines(
-    "Note. N values are unweighted HRS/HCAP participant counts. Percentages use HCAP16WGTR; PMM counts and percentages use the non-replicated combined cognition/Jorm model sample."
+    "Note. N values are unweighted HRS/HCAP participant counts. Percentages use HCAP16WGTR; PMM counts and percentages use the most likely class from the combined cognition and informant models (non-replicated)."
   ) |>
   flextable::add_footer_lines(
     "References. Manly, J. J., Jones, R. N., Langa, K. M., Ryan, L. H., Levine, D. A., McCammon, R., Heeringa, S. G., & Weir, D. (2022). Estimating the prevalence of dementia and mild cognitive impairment in the US: The 2016 Health and Retirement Study Harmonized Cognitive Assessment Protocol Project. JAMA Neurology, 79(12), 1242-1249. https://doi.org/10.1001/jamaneurol.2022.3543"
@@ -254,19 +264,19 @@ analysis2_pmm_hudomiet_binary_kappa <- binary_kappa_from_tab(
 
 analysis2_agreement <- tibble::tribble(
   ~classification_1, ~classification_2, ~three_class_kappa, ~binary_kappa,
-  "Core Algorithm", "HRS/HCAP Algorithm", analysis2_a7$summary$algorithmic_hrs_kappa, analysis2_a7$summary$algorithmic_hrs_binary_kappa,
-  "PMM", "HRS/HCAP Algorithm", analysis2_pmm$summary$algorithmic_combined_kappa, analysis2_pmm$summary$algorithmic_combined_binary_kappa,
-  "Langa-Weir", "HRS/HCAP Algorithm", analysis2_a7$summary$algorithmic_lw_kappa, analysis2_a7$summary$algorithmic_lw_binary_kappa,
-  "Hudomiet", "HRS/HCAP Algorithm", analysis2_a7$summary$algorithmic_hudomiet_kappa, analysis2_a7$summary$algorithmic_hudomiet_binary_kappa,
-  "HCAP Consensus", "HRS/HCAP Algorithm", analysis2_a7$summary$algorithmic_consensus_kappa, analysis2_a7$summary$algorithmic_consensus_binary_kappa,
-  "Core Algorithm", "Langa-Weir", analysis2_a7$summary$lw_hrs_kappa, analysis2_a7$summary$lw_hrs_binary_kappa,
+  "Core algorithm", "Manly-Jones algorithm", analysis2_a7$summary$algorithmic_hrs_kappa, analysis2_a7$summary$algorithmic_hrs_binary_kappa,
+  "PMM", "Manly-Jones algorithm", analysis2_pmm$summary$algorithmic_combined_kappa, analysis2_pmm$summary$algorithmic_combined_binary_kappa,
+  "Langa-Weir", "Manly-Jones algorithm", analysis2_a7$summary$algorithmic_lw_kappa, analysis2_a7$summary$algorithmic_lw_binary_kappa,
+  "Hudomiet", "Manly-Jones algorithm", analysis2_a7$summary$algorithmic_hudomiet_kappa, analysis2_a7$summary$algorithmic_hudomiet_binary_kappa,
+  "HCAP Consensus", "Manly-Jones algorithm", analysis2_a7$summary$algorithmic_consensus_kappa, analysis2_a7$summary$algorithmic_consensus_binary_kappa,
+  "Core algorithm", "Langa-Weir", analysis2_a7$summary$lw_hrs_kappa, analysis2_a7$summary$lw_hrs_binary_kappa,
   "PMM", "Langa-Weir", analysis2_pmm$summary$lw_combined_kappa, analysis2_pmm$summary$lw_combined_binary_kappa,
   "Hudomiet", "Langa-Weir", analysis2_a7$summary$lw_hudomiet_kappa, analysis2_a7$summary$lw_hudomiet_binary_kappa,
   "HCAP Consensus", "Langa-Weir", analysis2_a7$summary$lw_consensus_kappa, analysis2_a7$summary$lw_consensus_binary_kappa,
-  "Core Algorithm", "Hudomiet", analysis2_a7$summary$hrs_hudomiet_kappa, analysis2_a7$summary$hrs_hudomiet_binary_kappa,
+  "Core algorithm", "Hudomiet", analysis2_a7$summary$hrs_hudomiet_kappa, analysis2_a7$summary$hrs_hudomiet_binary_kappa,
   "PMM", "Hudomiet", analysis2_pmm_hudomiet_kappa, analysis2_pmm_hudomiet_binary_kappa,
   "HCAP Consensus", "Hudomiet", analysis2_a7$summary$consensus_hudomiet_kappa, analysis2_a7$summary$consensus_hudomiet_binary_kappa,
-  "Core Algorithm", "HCAP Consensus", analysis2_a7$summary$consensus_hrs_kappa, analysis2_a7$summary$consensus_hrs_binary_kappa,
+  "Core algorithm", "HCAP Consensus", analysis2_a7$summary$consensus_hrs_kappa, analysis2_a7$summary$consensus_hrs_binary_kappa,
   "PMM", "HCAP Consensus", analysis2_pmm$summary$consensus_combined_kappa, analysis2_pmm$summary$consensus_combined_binary_kappa
 ) |>
   dplyr::mutate(
@@ -316,9 +326,18 @@ analysis2_agreement_table <- analysis2_flextable(
   )
 )
 
+# Display labels for the A7 matrix (the saved A7 object keeps its own labels)
+analysis2_method_labels <- c(
+  "Algorithmic diagnosis" = "Manly-Jones algorithm",
+  "HRS classification model" = "Core algorithm"
+)
+analysis2_relabel <- function(x) dplyr::recode(x, !!!analysis2_method_labels)
+
 analysis2_a7_agreement_matrix <- analysis2_a7$matrices$three_class |>
   as.data.frame.matrix() |>
   tibble::rownames_to_column("method") |>
+  dplyr::mutate(method = analysis2_relabel(method)) |>
+  dplyr::rename_with(analysis2_relabel) |>
   dplyr::mutate(dplyr::across(where(is.numeric), ~ round(.x, 3)))
 
 analysis2_a7_agreement_matrix_table <- analysis2_flextable(
@@ -335,8 +354,8 @@ analysis2_pmm_probability_figure <- analysis2_pmm_margins$figure +
   ggplot2::labs(
     title = "PMM class probabilities in HRS/HCAP",
     caption = paste(
-      "Source: R/PMM_112_Margins.R; Mplus outputs pmm_103 and pmm_103_jorm.",
-      "Each facet uses HRS/HCAP participant-level combined-model probabilities."
+      "Source: R/PMM_112_Margins.R; model outputs named in R/PMM_090_model_registry.R.",
+      "Each facet uses HRS/HCAP participant-level PMM probabilities."
     )
   )
 

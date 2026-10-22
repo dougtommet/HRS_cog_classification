@@ -22,6 +22,8 @@ Jak, A. J., Bondi, M. W., Delano-Wood, L., Wierenga, C., Corey-Bloom, J., Salmon
 
 Jones, R. N., Manly, J. J., Langa, K. M., Ryan, L. H., Levine, D. A., McCammon, R., & Weir, D. (2024). Factor structure of the Harmonized Cognitive Assessment Protocol neuropsychological battery in the Health and Retirement Study. Journal of the International Neuropsychological Society, 30(1), 47-55. https://doi.org/10.1017/S135561772300019X 
 
+Jorm, A. F. (1994). A short form of the Informant Questionnaire on Cognitive Decline in the Elderly (IQCODE): Development and cross-validation. Psychological Medicine, 24(1), 145-153. https://doi.org/10.1017/S003329170002691X 
+
 Langa, K. M., Ryan, L. H., McCammon, R. J., Jones, R. N., Manly, J. J., Levine, D. A., Sonnega, A., Farron, M., & Weir, D. R. (2020). The Health and Retirement Study Harmonized Cognitive Assessment Protocol Project: Study Design and Methods. Neuroepidemiology, 54(1), 64-74. https://doi.org/10.1159/000503004 
 
 Langa, K. M., Weir, D. R., Kabeto, M., & Sonnega, A. (2023). Langa-Weir Classification of Cognitive Function (1995-2000). https://hrsdata.isr.umich.edu/sites/default/files/documentation/data-descriptions/1695907706/Data_Description_Langa_Weir_Classifications2020_V2.pdf
@@ -29,6 +31,8 @@ Langa, K. M., Weir, D. R., Kabeto, M., & Sonnega, A. (2023). Langa-Weir Classifi
 Manly, J. J., Jones, R. N., Langa, K. M., Ryan, L. H., Levine, D. A., McCammon, R., Heeringa, S. G., & Weir, D. (2022). Estimating the Prevalence of Dementia and Mild Cognitive Impairment in the US: The 2016 Health and Retirement Study Harmonized Cognitive Assessment Protocol Project. JAMA Neurol, 79(12), 1242-1249. https://doi.org/10.1001/jamaneurol.2022.3543 
 
 Meehl, P. E. (1954). Clinical versus statistical prediction: A theoretical analysis and a review of the evidence. University of Minnesota Press. https://doi.org/https://doi.org/10.1037/11281-000 
+
+Muthén, B. O. (2002). Beyond SEM: General latent variable modeling. Behaviormetrika, 29(1), 81-117. 
 
 Wu, Q., Tchetgen, E. J. T., Osypuk, T. L., White, K., Mujahid, M., & Glymour, M. M. (2013). Combining direct and proxy assessments to reduce attrition bias in a longitudinal study. Alzheimer Disease and Associated Disorders, 27(3), 207-212. 
 

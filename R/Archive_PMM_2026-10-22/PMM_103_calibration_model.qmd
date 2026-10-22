@@ -115,8 +115,9 @@ cprob_103b_jorm <- normalize_mplus_savedata(pmm_103b_jorm[["savedata"]]) %>%
   select(id, stratum, secu_mplus, hcap16wg_jorm,
          cprob1_jorm, cprob2_jorm, cprob3_jorm, c_jorm)
 
+# The cognition model sample and the Jorm (informant-only) sample do not overlap
 cprob_103b <- cprob_103b %>%
-  left_join(cprob_103b_jorm, by = c("id" = "id",
+  full_join(cprob_103b_jorm, by = c("id" = "id",
                                     "stratum" = "stratum",
                                     "secu_mplus" = "secu_mplus")
   )
@@ -403,19 +404,14 @@ foo %>%
 
 ```
 
-```{r}
-#| tbl-cap: "Comparison of class membership between the cognition model and Jorm model"
-foo %>%
-  filter(!is.na(c)) %>%
-  gtsummary::tbl_cross(c, c_jorm)
-```
+The cognition model and the Jorm model are applied to different participants (the Jorm model applies to those without cognitive test data), so there is no cross-tabulation of the two.
 
 **Combined model**
 
 ```{r}
 #| tbl-cap: "Most likely class membership (combined model) vs algorithmic diagnosis, no sample weights"
 foo %>%
-  filter(!is.na(c)) %>%
+  filter(!is.na(c_dt)) %>%
   gtsummary::tbl_cross(vs1hcapdxeap, c_dt)
 ```
 
@@ -424,7 +420,7 @@ foo %>%
 #| tbl-cap: "Kappa: Most likely class membership (combined model) vs algorithmic diagnosis, no sample weights"
 
 foo %>%
-  filter(!is.na(c)) %>%
+  filter(!is.na(c_dt)) %>%
   select(vs1hcapdxeap, c_dt) %>%
   table() %>%
   psych::cohen.kappa() %>%
@@ -435,7 +431,7 @@ foo %>%
 ```{r}
 #| tbl-cap: "Most likely class membership (combined model) vs algorithmic diagnosis, no sample weights"
 foo %>%
-  filter(!is.na(c)) %>%
+  filter(!is.na(c_dt)) %>%
   gtsummary::tbl_cross(vs1hcapdxeap2_f, c_dt2_f)
 ```
 
@@ -444,7 +440,7 @@ foo %>%
 #| tbl-cap: "Kappa: Most likely class membership (combined model) vs algorithmic diagnosis, no sample weights"
 
 foo %>%
-  filter(!is.na(c)) %>%
+  filter(!is.na(c_dt)) %>%
   select(vs1hcapdxeap2, c_dt2) %>%
   table() %>%
   psych::cohen.kappa() %>%

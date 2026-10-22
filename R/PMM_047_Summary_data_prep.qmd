@@ -48,16 +48,14 @@ make_var_summary_table <- function(data, vars, caption = "Variable labels and su
 make_var_summary_table(
   data = PMM_45 |> dplyr::filter(age65up == 1),
   vars = c("vdori", "vdlfl1z", "vdlfl2", "vdlfl3", 
-           "vdwdimmz", "vdwddelz", "vdexf7z", "vdsevens", "vdcount"),
+           "vdwddelz", "vdexf7z", "vdsevens", "vdcount"),
   caption = "Cognitive variables and labels in age 65+ sample"
 )
 ```
 
 Missing data are tolerable in the dependent variables, for the kind of analysis we are planning. 
 
-### Functional variables, self-report, and informant variables
-
-I'm think that, in the spirit of completing a predictive modeling task, we can leave the functional variables as individual indicators, rather than making a sum score.
+### Self-report and informant variables
 
 ```{r}
 #| echo: false
@@ -67,8 +65,8 @@ I'm think that, in the spirit of completing a predictive modeling task, we can l
 
 make_var_summary_table(
   data = PMM_45 |> dplyr::filter(age65up == 1),
-  vars = c("nPG014", "nPG021", "nPG023", "nPG030", "nPG040", "nPG041", "nPG044", "nPG047", "nPG050", "nPG059", "PD102", "jorm"),
-  caption = "Functional, self-report, and informant variables in age 65+ sample"
+  vars = c("PD102", "jorm"),
+  caption = "Self-report and informant variables in age 65+ sample"
 )
 ```
 

@@ -1,0 +1,28 @@
+<!-- PMM_103_informant_model.qmd: informant model (Jorm IQCODE). Added 2026-10-22; uses objects from PMM_102_calibration_model.qmd. -->
+
+## Informant model
+
+The informant model has 1 indicator, the Jorm IQCODE (Jorm, 1994), treated as continuous. Its mean differs by class, and its variance is equal across classes. The IQCODE is not adjusted for sociodemographic characteristics.
+
+```{r}
+pmm_inf_cal <- suppressWarnings(MplusAutomation::readModels(pmm_models$informant$calibration_out))
+```
+
+```{r}
+#| tbl-cap: "Informant model: sample and fit (known-class calibration)"
+pmm_fit_row(pmm_inf_cal, pmm_models$informant$label) |>
+  gt::gt() |>
+  gt::fmt_number(columns = c(Loglikelihood, BIC), decimals = 1) |>
+  gt::fmt_number(columns = N, decimals = 0)
+```
+
+```{r}
+#| tbl-cap: "Informant model: Jorm IQCODE mean and variance by class, estimate (SE)"
+pmm_par_by_class(pmm_inf_cal[["parameters"]][["unstandardized"]], "^Means$|^Intercepts$|^Variances$") |>
+  gt::gt()
+```
+
+```{r}
+#| fig-cap: "Informant model: class probabilities by HRS/HCAP Algorithm class (unweighted)"
+pmm_cprob_plot(pmm_read_cprob(pmm_models$informant$scoring_out))
+```

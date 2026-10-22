@@ -205,3 +205,22 @@ weighted_class_logits <- function(data, class_var, weight_var, fixed_class = "c"
   str_c("[ ", str_c(fixed_class, "#", seq_len(k - 1), " @ ",
                     format(logits, digits = 8), collapse = " "), " ];")
 }
+
+
+# Indicators of the cognition model (PMM_102 and PMM_103), 2026-10-22.
+# Mplus drops participants with every indicator missing (the participants who
+# did not complete cognitive testing), so the cognition model's class priors are
+# computed on participants with at least 1 of these observed.
+pmm_cog_indicators <- c("vdori", "vdlfl1z", "vdlfl2", "vdlfl3", "vdwddelz",
+                        "vdexf7z", "vdsevens", "vdcount", "PD102")
+
+# Stops if the number of participants used for the priors differs from the
+# number of observations Mplus analyzed.
+check_prior_sample <- function(prior_data, mod, label) {
+  n_mplus <- mod[["summaries"]][["Observations"]]
+  if (is.null(n_mplus) || nrow(prior_data) != n_mplus) {
+    stop(label, ": priors computed on ", nrow(prior_data),
+         " participants, but Mplus analyzed ", n_mplus, ".")
+  }
+  invisible(TRUE)
+}

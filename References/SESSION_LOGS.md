@@ -1,5 +1,83 @@
 # Session Logs
 
+## 2026-10-22 (afternoon): general-factor PMM carried through A3, A3_2, A9, A2, A2_2; terminology
+
+Decisions are recorded in the new `References/decisions.md` (D-2026-10-22-1 to -9).
+
+### Confirmed facts
+- PMM_102 identification fix (`[gcp@0]` in Normal): loglikelihood -9169.844 (was -9169.849), 40 parameters (was 41), condition number 2.6E-6 (was 2E-10); GCP means MCI -1.393 (SE 0.092), Dementia -3.037 (SE 0.173); GCP variances 1, 1.507, 2.313. Standardized loadings 0.26 to 0.51 and rise from Normal to Dementia.
+- No participant has an MCI probability above about 0.5. With the fitted GCP class distributions and priors, the largest possible MCI posterior is about 0.60 if GCP were known exactly (0.54 with equal priors) and about 0.47 with the measurement error implied by within-class omega of about 0.50 (Normal class). MCI is the most likely class for 276 participants, mean probabilities 0.29/0.46/0.26. Now computed in `R/PMM_114_mci_ceiling.R`.
+- PMM_106 cross-validation (n = 3,283, pooled held-out, survey-weighted): current 3-class kappa 0.322, dementia 0.256, log score -0.622; change 1: 0.359, 0.303, -0.634. Shares from probabilities match the Manly-Jones shares (72.2/20.5/7.3 vs 72.0/20.7/7.3); most likely class 88.0/8.2/3.7.
+- Manuscript kappas (PMM_110) use probability allocation (100 replicates); class shares (PMM_112) use the most likely class.
+
+### Code and text changes
+- A3: `PMM_090_model_registry.R` (new); informant model moved to `PMM_103_informant_model.R`; `PMM_102_calibration_model.qmd` rebuilt (parameters with SEs, probability plots joined by id, MCI section); `PMM_103_informant_model.qmd` (new); PMM_110 and PMM_112 read the registry; `PMM_114_mci_ceiling.R` (new). Text: PMM_100 results introduction rewritten (2 models, rationale "did not include", calibration and scoring, priors, probability allocation); PMM_011 approach (Figure 1 = `PMM-103-PMM-with-latent`; no ADL; 8 x 24 coefficients computed; ML "consistent"; duplicate `fig-fig3` label fixed); abstract (no cross-validation claims; Step 3 "Scoring"); PMM_025 and PMM_040 chapters removed; references add Jorm (1994) and Muthen (2002) (DOI not verified, omitted).
+- A3_2: registry paths; no ADL/IADL or vdwdimmz inputs; informant run without categorical/INTEGRATION; person-waves with no model input left unscored; new `R_objects/A3_2_020_routing.rds`; report text updated.
+- A9 (Slides2603): rewritten as a current deck; all values computed (A7_075, A7_100, PMM_110, PMM_112, PMM_114); results figure now covers all HRS/HCAP participants (combined probabilities).
+- A2: MS_010 reads the registry, PMM Ns, covariate count, MCI ceiling; Methods PMM section rewritten (outline fragments); Results and Discussion MCI items; Appendix 2 without functional items; Figure 1 of the tables document now the current schematic with computed cut points in the caption.
+- A2_2: core algorithm slide uses the current schematic with computed cut points; PMM model slide uses Figure 1; preliminary-model slide archived; "five of the eight" tests.
+- Terminology applied in A2, A2_2, PMM_110, PMM_112 (display relabel of the saved A7 matrix in MS_010).
+- README, `References/instructions.md` (terminology rules; registry, archive, and dropped-indicator workflow rules), `References/decisions.md` (new). `tools/update_readme.py` run; `--check` passes.
+- Rich's debugging: placeholder rows for categories missing from a held-out fold in PMM_106; left/full joins in PMM_103 chapter, PMM_110, PMM_112 (morning).
+
+### Problems found
+- A wrong-anchor insertion briefly split the Jones et al. (2024) entry in PMM_888; repaired and checked against the snapshot.
+- Static figures with typed counts: A2 tables Figure 1 (April 2026 counts, old cut points) replaced. A8's flow figure (April counts) is still static (not in today's scope).
+
+### Open questions
+- Rerun and review: A3, A3_2, A9, A2, A2_2 after the last edits (A9 before A2_2).
+- Commit and push today's renders; the README links point to untracked files until then.
+- A2 appendix figure `figa1.excalidraw.svg` (HRS 2016 subsamples, legacy A1 derivation n = 2,993) may be stale; not reviewed.
+- A8 static algorithm flow figure (April counts).
+- Manuscript reference list does not exist yet; it will need Muthen (2002) and Jones et al. (2024).
+- Deferred analyses: class-specific residual variances; cross-validated agreement for both methods; ADL/IADL sensitivity model.
+
+---
+
+## 2026-10-22 (morning): PMM inputs matched to the core algorithm; general-factor model chosen
+
+### Confirmed facts
+- Snapshot before any change: `_snapshots/2026-10-22_pre_noADL/` (git HEAD 3041d2b; code, R_objects, mplus_output, figures, and latest reports for A3, A3_2, A2, A2_2; README has the restore command). Local only; git ignores `_snapshots/`.
+- With ADL/IADL removed, the 213 HCAP participants without cognitive testing have no cognition-model indicator, and Mplus drops them. Cognition model N = 3,283; informant (Jorm) model N = 213; no overlap.
+- PMM_103 (no factor) fixes all within-class residual covariances at 0, including the 3 continuous scores (explicit `@0` statements override the norms-model values, standardized 0.17 to 0.22 in the robust norms group). Ordinal items are independent within class by Mplus default.
+- PMM_102 (general factor, gcp) was not identified: gcp mean free in all 3 known classes with intercepts and thresholds equal across classes. Fixed by `[gcp@0]` in the Normal class: loglikelihood unchanged (-9169.84), parameters 41 to 40, condition number 2E-10 to 2.6E-6, gcp means MCI -1.39 (SE 0.09), Dementia -3.04 (SE 0.17); gcp variances 1.0, 1.5, 2.3. The pre-ADL PMM_102 had the same problem.
+- In PMM_102 all measurement parameters (loadings, intercepts, thresholds, residual variances) are equal across classes; only gcp mean and variance and the PD102 thresholds differ by class.
+- Manuscript PMM kappas (PMM_110) use probability allocation (100 replicates per person); the class shares in Table 2 (PMM_112) use the most likely class. Most-likely-class assignment undercalls MCI.
+- After removing ADL/IADL and vdwdimmz (PMM_103, A2 render 2026-10-22): PMM vs HRS/HCAP Algorithm 3-class kappa 0.509 to 0.450, dementia kappa 0.429 to 0.377 (core algorithm 0.501, 0.337). PMM vs consensus 0.486 to 0.161 (n about 50).
+
+### Decisions (Rich)
+- The PMM uses the same inputs as the core algorithm: no ADL/IADL items (nPG014-nPG059) and no immediate word recall (vdwdimmz) in PMM_100 (norms), PMM_102, and PMM_103. Report text says these were "not included" (not "removed").
+- Informant model: Jorm IQCODE as the only indicator (one-indicator known-class mixture).
+- Outputs overwrite `pmm_102/`, `pmm_103/`, `pmm_103_jorm/`; the snapshot is the undo.
+- PMM_102 scoring run fixes class logits at weighted shares, as PMM_103 does. Class priors for both cognition models are computed on the participants with at least 1 cognition-model indicator (`inhcap_cog`, n = 3,283); `check_prior_sample()` stops if this differs from the Mplus N.
+- ADL/IADL and vdwdimmz dropped from the PMM_047 descriptives tables.
+- The general-factor model (PMM_102) is the primary PMM, unless it develops convergence problems (Rich, 10:38). Reasons: BIC 18,672 vs 19,655 with 21 fewer parameters; within-class independence in PMM_103 is contradicted by the norms data.
+- Change 1 (item intercepts and thresholds free by class, gcp mean 0 in every class) tested by 10-fold cross-validation with a rule fixed before results: adopt if CV 3-class kappa gain >= 0.02 and dementia kappa and log score not lower. Result: 3-class +0.037, dementia +0.046, log score -0.013 (worse in 8 of 10 folds). Not adopted. Tweaking the single-factor model is closed.
+- Set aside: class-specific residual variances; reporting cross-validated agreement in the manuscript; ADL/IADL sensitivity model.
+
+### Code changes
+- `PMM_100_norming_npb.R`, `PMM_102_calibration_model.R`, `PMM_103_calibration_model.R`: ADL/IADL and vdwdimmz removed; Jorm model IQCODE only (no ALGORITHM=INTEGRATION); `[gcp@0]` in class 1 of PMM_102; priors on `inhcap_cog`.
+- `PMM_101_mplus_function.R`: `pmm_cog_indicators`, `check_prior_sample()`.
+- `PMM_000` abstract Step 2 and Step 3 reworded (two models, no counts in YAML).
+- Rich's debugging: `full_join` of cognition and Jorm probabilities in `PMM_103_calibration_model.qmd`, `PMM_110`, `PMM_112`; placeholder rows for categories missing from a held-out fold in `PMM_106`.
+- New side scripts (not in any driver): `R/PMM_105_residual_covariance_models.R` (no-factor model with continuous-score covariances; not run) and `R/PMM_106_cross_validation.R` (run 2026-10-22; `R_objects/PMM_106_cross_validation.RDS`, `Reports/PMM_106_cross_validation_2026-10-22.csv`, `Reports/PMM_106_console_2026-10-22.txt`).
+
+### Cross-validation results (PMM_106, n = 3,283, survey-weighted, pooled held-out folds)
+- Current (PMM_102): 3-class kappa 0.322, dementia 0.256, log score -0.622; shares from probabilities 72.2/20.5/7.3 (reference 72.0/20.7/7.3); most likely class 88.0/8.2/3.7.
+- Change 1: 0.359, 0.303, -0.634; 71.8/20.4/7.8; most likely class 85.1/9.6/5.3.
+- Not comparable with the manuscript kappa (0.450): different sample (no informant-model participants), exact probability allocation, and PMM_103.
+
+### Problems found
+- Claude did not check which participants had at least 1 observed indicator before dropping 10 items; the 213-person split broke the left joins.
+- Claude checked training folds but not held-out folds for missing categories in PMM_106.
+
+### Open questions
+- PMM_102 vs PMM_103 agreement on the same sample and measures (not yet computed).
+- Refactor A3 and downstream (A3_2, A2, A2_2, A9, A6, README/instructions) to the general-factor model. A3_2 and Slides2603 not yet updated; do not run them.
+- Model figure `PMM-103-PMM-no-latent.excalidraw.svg` (Rich, uncommitted edits).
+
+---
+
 ## 2026-10-19: AgentKit report archiving
 
 - Added `Reports/archive_reports.R` and `Reports/archive_reports_README.md` as a new AgentKit framework component.

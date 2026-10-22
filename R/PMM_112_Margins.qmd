@@ -1,22 +1,22 @@
-## Combined-Model Classification Margins
+## PMM classification margins
 
 ```{r}
 source(here::here("R", "PMM_112_Margins.R"))
 ```
 
 ```{r}
-#| fig-cap: "Histograms of combined-model class probabilities in the HRS/HCAP sample"
+#| fig-cap: "Histograms of PMM class probabilities in the HRS/HCAP sample"
 #| fig-width: 10
 #| fig-height: 4
 PMM_112$figure
 ```
 
 ```{r}
-#| tbl-cap: "Most likely combined-model class membership in the HRS/HCAP sample (N = 3496)"
+#| tbl-cap: !expr paste0("Most likely PMM class membership in the HRS/HCAP sample (N = ", format(nrow(PMM_112$data$margins_sample), big.mark = ","), ")")
 PMM_112$table
 ```
 
 ```{r}
-#| tbl-cap: "Langa-Weir class membership in the HRS/HCAP sample (N = 3496)"
+#| tbl-cap: !expr paste0("Langa-Weir class membership in the HRS/HCAP sample (N = ", format(nrow(PMM_112$data$margins_sample), big.mark = ","), ")")
 PMM_112$langa_weir_table
 ```

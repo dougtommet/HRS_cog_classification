@@ -1,0 +1,2447 @@
+Mplus VERSION 9 (Mac)
+MUTHEN & MUTHEN
+10/22/2026  11:14 AM
+
+INPUT INSTRUCTIONS
+
+  TITLE:
+  x1-x3: age splines
+    x4: female
+    x5: black
+    x6: hispanic
+    x7: school years
+  DATA:
+  FILE = "score_b079ad14cda86d9eb9e3083867bb3263.dat";
+  VARIABLE:
+  NAMES = id vdori vdlfl1z vdlfl2 vdlfl3 vdwddelz vdexf7z vdsevens vdcount x1 x2 x3 x4
+       x5 x6 x7 x1x4 x1x5 x1x6 x1x7 x2x4 x2x5 x2x6 x2x7 x3x4 x3x5 x3x6 x3x7 x4x5 x4x6
+       x4x7 x5x7 x6x7 PD102;
+   MISSING=.;
+   categorical = vdori vdlfl2 vdlfl3 vdsevens vdcount PD102;
+  idvariable = id;
+  classes = c (3);
+  ANALYSIS:
+  estimator = mlr;
+  ALGORITHM=INTEGRATION;
+  starts = 0;
+  processors = 12;
+  TYPE = mixture;
+  MODEL:
+  %OVERALL%
+   [ c#1 @ 2.2786705 c#2 @ 1.0319460 ];
+   vdori on x1 @ -0.07577;
+   vdori on x2 @ 0.39087;
+   vdori on x3 @ -1.64662;
+   vdori on x4 @ 0.76033;
+   vdori on x5 @ -0.03052;
+   vdori on x6 @ -0.204;
+   vdori on x7 @ 0.14628;
+   vdori on x1x4 @ 0.00741;
+   vdori on x1x5 @ 0.13772;
+   vdori on x1x6 @ 0.08192;
+   vdori on x1x7 @ -0.00996;
+   vdori on x2x4 @ -0.27294;
+   vdori on x2x5 @ -1.06735;
+   vdori on x2x6 @ -1.06488;
+   vdori on x2x7 @ 0.02926;
+   vdori on x3x4 @ 1.1322;
+   vdori on x3x5 @ 4.98186;
+   vdori on x3x6 @ 9.34042;
+   vdori on x3x7 @ -0.09049;
+   vdori on x4x5 @ 1.01366;
+   vdori on x4x6 @ -0.10614;
+   vdori on x4x7 @ -0.05426;
+   vdori on x5x7 @ -0.01297;
+   vdori on x6x7 @ -0.08127;
+   vdlfl1z on x1 @ -0.00588;
+   vdlfl1z on x2 @ 0.01561;
+   vdlfl1z on x3 @ -0.04161;
+   vdlfl1z on x4 @ 0.00118;
+   vdlfl1z on x5 @ -0.02776;
+   vdlfl1z on x6 @ -0.03255;
+   vdlfl1z on x7 @ 0.00902;
+   vdlfl1z on x1x4 @ 0.00324;
+   vdlfl1z on x1x5 @ 0.00114;
+   vdlfl1z on x1x6 @ 0.00262;
+   vdlfl1z on x1x7 @ 0.00068;
+   vdlfl1z on x2x4 @ -0.01514;
+   vdlfl1z on x2x5 @ 0.00164;
+   vdlfl1z on x2x6 @ -0.00214;
+   vdlfl1z on x2x7 @ -0.00408;
+   vdlfl1z on x3x4 @ 0.04738;
+   vdlfl1z on x3x5 @ -0.0222;
+   vdlfl1z on x3x6 @ -0.04808;
+   vdlfl1z on x3x7 @ 0.01431;
+   vdlfl1z on x4x5 @ -0.0099;
+   vdlfl1z on x4x6 @ 0.0219;
+   vdlfl1z on x4x7 @ 0.00273;
+   vdlfl1z on x5x7 @ -0.00192;
+   vdlfl1z on x6x7 @ -0.00428;
+   vdlfl2 on x1 @ -0.06891;
+   vdlfl2 on x2 @ -0.54444;
+   vdlfl2 on x3 @ 3.34408;
+   vdlfl2 on x4 @ -0.78296;
+   vdlfl2 on x5 @ -1.33212;
+   vdlfl2 on x6 @ -0.65768;
+   vdlfl2 on x7 @ 0.20568;
+   vdlfl2 on x1x4 @ -0.10094;
+   vdlfl2 on x1x5 @ 0.30866;
+   vdlfl2 on x1x6 @ 0.48712;
+   vdlfl2 on x1x7 @ 0.03102;
+   vdlfl2 on x2x4 @ 1.71355;
+   vdlfl2 on x2x5 @ -2.12852;
+   vdlfl2 on x2x6 @ -3.44743;
+   vdlfl2 on x2x7 @ -0.22588;
+   vdlfl2 on x3x4 @ -7.02607;
+   vdlfl2 on x3x5 @ 10.39535;
+   vdlfl2 on x3x6 @ 14.01562;
+   vdlfl2 on x3x7 @ 1.29551;
+   vdlfl2 on x4x5 @ -0.66766;
+   vdlfl2 on x4x6 @ 1.0128;
+   vdlfl2 on x4x7 @ -0.01821;
+   vdlfl2 on x5x7 @ 0.31556;
+   vdlfl2 on x6x7 @ 0.12677;
+   vdlfl3 on x1 @ -0.07963;
+   vdlfl3 on x2 @ 0.28982;
+   vdlfl3 on x3 @ -1.42361;
+   vdlfl3 on x4 @ -0.27192;
+   vdlfl3 on x5 @ -0.92143;
+   vdlfl3 on x6 @ -1.13182;
+   vdlfl3 on x7 @ 0.06457;
+   vdlfl3 on x1x4 @ 0.13961;
+   vdlfl3 on x1x5 @ 0.05532;
+   vdlfl3 on x1x6 @ -0.02109;
+   vdlfl3 on x1x7 @ -0.00015;
+   vdlfl3 on x2x4 @ -0.81005;
+   vdlfl3 on x2x5 @ -0.10642;
+   vdlfl3 on x2x6 @ 0.46564;
+   vdlfl3 on x2x7 @ 0.02551;
+   vdlfl3 on x3x4 @ 4.15654;
+   vdlfl3 on x3x5 @ 0.19483;
+   vdlfl3 on x3x6 @ -2.93524;
+   vdlfl3 on x3x7 @ -0.18483;
+   vdlfl3 on x4x5 @ 0.03168;
+   vdlfl3 on x4x6 @ 0.33396;
+   vdlfl3 on x4x7 @ 0.11012;
+   vdlfl3 on x5x7 @ 0.20389;
+   vdlfl3 on x6x7 @ 0.09777;
+   vdwddelz on x1 @ -0.00575;
+   vdwddelz on x2 @ 0.00753;
+   vdwddelz on x3 @ -0.0664;
+   vdwddelz on x4 @ 0.06074;
+   vdwddelz on x5 @ -0.08568;
+   vdwddelz on x6 @ 0.00633;
+   vdwddelz on x7 @ 0.02084;
+   vdwddelz on x1x4 @ 0.00769;
+   vdwddelz on x1x5 @ 0.00486;
+   vdwddelz on x1x6 @ -0.00805;
+   vdwddelz on x1x7 @ -0.00038;
+   vdwddelz on x2x4 @ -0.03761;
+   vdwddelz on x2x5 @ -0.04983;
+   vdwddelz on x2x6 @ 0.00619;
+   vdwddelz on x2x7 @ -5e-04;
+   vdwddelz on x3x4 @ 0.16873;
+   vdwddelz on x3x5 @ 0.23583;
+   vdwddelz on x3x6 @ 0.04749;
+   vdwddelz on x3x7 @ -0.00171;
+   vdwddelz on x4x5 @ 0.01172;
+   vdwddelz on x4x6 @ -0.02782;
+   vdwddelz on x4x7 @ 0.00289;
+   vdwddelz on x5x7 @ -0.00617;
+   vdwddelz on x6x7 @ -0.01278;
+   vdexf7z on x1 @ -0.003;
+   vdexf7z on x2 @ -0.01032;
+   vdexf7z on x3 @ 0.06604;
+   vdexf7z on x4 @ -0.03005;
+   vdexf7z on x5 @ -0.19101;
+   vdexf7z on x6 @ -0.11448;
+   vdexf7z on x7 @ 0.02637;
+   vdexf7z on x1x4 @ -0.00213;
+   vdexf7z on x1x5 @ 3e-05;
+   vdexf7z on x1x6 @ 0.00747;
+   vdexf7z on x1x7 @ 0;
+   vdexf7z on x2x4 @ 0.01641;
+   vdexf7z on x2x5 @ -0.00421;
+   vdexf7z on x2x6 @ -0.05405;
+   vdexf7z on x2x7 @ -0.00055;
+   vdexf7z on x3x4 @ -0.08691;
+   vdexf7z on x3x5 @ 0.05906;
+   vdexf7z on x3x6 @ 0.28258;
+   vdexf7z on x3x7 @ 0.0039;
+   vdexf7z on x4x5 @ 0.06247;
+   vdexf7z on x4x6 @ -3e-04;
+   vdexf7z on x4x7 @ -0.00248;
+   vdexf7z on x5x7 @ 0.01046;
+   vdexf7z on x6x7 @ -0.00611;
+   vdsevens on x1 @ -0.05427;
+   vdsevens on x2 @ -0.00687;
+   vdsevens on x3 @ 0.53066;
+   vdsevens on x4 @ -0.67969;
+   vdsevens on x5 @ -1.81474;
+   vdsevens on x6 @ -0.46003;
+   vdsevens on x7 @ 0.1658;
+   vdsevens on x1x4 @ 0.01226;
+   vdsevens on x1x5 @ 0.07585;
+   vdsevens on x1x6 @ 0.19839;
+   vdsevens on x1x7 @ 0.01148;
+   vdsevens on x2x4 @ 0.11088;
+   vdsevens on x2x5 @ -0.5275;
+   vdsevens on x2x6 @ -1.10884;
+   vdsevens on x2x7 @ -0.04247;
+   vdsevens on x3x4 @ -0.88452;
+   vdsevens on x3x5 @ 1.56373;
+   vdsevens on x3x6 @ 6.66169;
+   vdsevens on x3x7 @ 0.16223;
+   vdsevens on x4x5 @ 0.60637;
+   vdsevens on x4x6 @ -0.56344;
+   vdsevens on x4x7 @ 0.01066;
+   vdsevens on x5x7 @ 0.15896;
+   vdsevens on x6x7 @ -0.07309;
+   vdcount on x1 @ -0.05817;
+   vdcount on x2 @ -0.09183;
+   vdcount on x3 @ 0.42448;
+   vdcount on x4 @ -0.34935;
+   vdcount on x5 @ -0.89147;
+   vdcount on x6 @ 1.84413;
+   vdcount on x7 @ 0.22145;
+   vdcount on x1x4 @ 0.21317;
+   vdcount on x1x5 @ -0.156;
+   vdcount on x1x6 @ 0.05448;
+   vdcount on x1x7 @ 0.01183;
+   vdcount on x2x4 @ -0.9239;
+   vdcount on x2x5 @ 1.13758;
+   vdcount on x2x6 @ 0.28176;
+   vdcount on x2x7 @ -0.01086;
+   vdcount on x3x4 @ 3.66699;
+   vdcount on x3x5 @ -5.2572;
+   vdcount on x3x6 @ -3.89815;
+   vdcount on x3x7 @ -0.18348;
+   vdcount on x4x5 @ -0.04162;
+   vdcount on x4x6 @ -2.15391;
+   vdcount on x4x7 @ -0.11826;
+   vdcount on x5x7 @ -0.00288;
+   vdcount on x6x7 @ 0.08216;
+   vdwddelz with vdlfl1z @ 0.00226;
+   vdexf7z with vdlfl1z @ 0.00157;
+   vdexf7z with vdwddelz @ 0.00503;
+   gcp by vdori @ 0.425;
+   gcp by vdlfl1z @ 0.019;
+   gcp by vdlfl2 @ 7.948;
+   gcp by vdlfl3 @ 0.701;
+   gcp by vdwddelz @ 0.05;
+   gcp by vdexf7z @ 0.048;
+   gcp by vdsevens @ 0.637;
+   gcp by vdcount @ 0.598;
+   vdwddelz with vdlfl1z @ 0;
+   vdwddelz with vdexf7z @ 0;
+   vdexf7z with vdlfl1z @ 0;
+   [ gcp @ 0] ;
+   vdlfl1z @ 0.005 ;
+   vdwddelz @ 0.029 ;
+   vdexf7z @ 0.018 ;
+   %c#1%
+
+   [ vdlfl1z @ 0.186] ;
+   [ vdwddelz @ 0.452] ;
+   [ vdexf7z @ 0.636] ;
+   [ vdori$1 @ -8.073] ;
+   [ vdori$2 @ -6.03] ;
+   [ vdori$3 @ -3.971] ;
+   [ vdori$4 @ -1.682] ;
+   [ vdlfl2$1 @ -25.384] ;
+   [ vdlfl2$2 @ -15.268] ;
+   [ vdlfl3$1 @ -5.139] ;
+   [ vdlfl3$2 @ -1.297] ;
+   [ vdsevens$1 @ -3.474] ;
+   [ vdsevens$2 @ -2.211] ;
+   [ vdsevens$3 @ -1.664] ;
+   [ vdsevens$4 @ -0.819] ;
+   [ vdsevens$5 @ 0.201] ;
+   [ vdcount$1 @ -3.648] ;
+   [ pd102$1 @ -4.094] ;
+   [ pd102$2 @ 1.16] ;
+   gcp @ 1 ;
+   %c#2%
+
+   [ vdlfl1z @ 0.155] ;
+   [ vdwddelz @ 0.336] ;
+   [ vdexf7z @ 0.548] ;
+   [ vdori$1 @ -4.955] ;
+   [ vdori$2 @ -4.13] ;
+   [ vdori$3 @ -3.085] ;
+   [ vdori$4 @ -0.87] ;
+   [ vdlfl2$1 @ -20.364] ;
+   [ vdlfl2$2 @ -11.798] ;
+   [ vdlfl3$1 @ -4.506] ;
+   [ vdlfl3$2 @ -0.347] ;
+   [ vdsevens$1 @ -2.274] ;
+   [ vdsevens$2 @ -1.151] ;
+   [ vdsevens$3 @ -0.474] ;
+   [ vdsevens$4 @ 0.142] ;
+   [ vdsevens$5 @ 1.148] ;
+   [ vdcount$1 @ -3.023] ;
+   [ pd102$1 @ -3.983] ;
+   [ pd102$2 @ 0.724] ;
+   gcp @ 1.315 ;
+   %c#3%
+
+   [ vdlfl1z @ 0.115] ;
+   [ vdwddelz @ 0.231] ;
+   [ vdexf7z @ 0.447] ;
+   [ vdori$1 @ -2.69] ;
+   [ vdori$2 @ -1.802] ;
+   [ vdori$3 @ -1.089] ;
+   [ vdori$4 @ 0.164] ;
+   [ vdlfl2$1 @ -23.316] ;
+   [ vdlfl2$2 @ -5.81] ;
+   [ vdlfl3$1 @ -2.278] ;
+   [ vdlfl3$2 @ 0.581] ;
+   [ vdsevens$1 @ -1.532] ;
+   [ vdsevens$2 @ -0.253] ;
+   [ vdsevens$3 @ 0.582] ;
+   [ vdsevens$4 @ 1.104] ;
+   [ vdsevens$5 @ 1.806] ;
+   [ vdcount$1 @ -2.426] ;
+   [ pd102$1 @ -3.116] ;
+   [ pd102$2 @ 0.631] ;
+   gcp @ 2.424 ;
+
+  SAVEDATA:
+  SAVE = CPROBABILITIES; file = cprob.dat;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+
+x1-x3: age splines
+x4: female
+x5: black
+x6: hispanic
+x7: school years
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         330
+
+Number of dependent variables                                    9
+Number of independent variables                                 24
+Number of continuous latent variables                            1
+Number of categorical latent variables                           1
+
+Observed dependent variables
+
+  Continuous
+   VDLFL1Z     VDWDDELZ    VDEXF7Z
+
+  Binary and ordered categorical (ordinal)
+   VDORI       VDLFL2      VDLFL3      VDSEVENS    VDCOUNT     PD102
+
+Observed independent variables
+   X1          X2          X3          X4          X5          X6
+   X7          X1X4        X1X5        X1X6        X1X7        X2X4
+   X2X5        X2X6        X2X7        X3X4        X3X5        X3X6
+   X3X7        X4X5        X4X6        X4X7        X5X7        X6X7
+
+Continuous latent variables
+   GCP
+
+Categorical latent variables
+   C
+
+Variables with special functions
+
+  ID variable           ID
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent Variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            1
+  Adaptive quadrature                                           ON
+Link                                                         LOGIT
+Cholesky                                                       OFF
+
+Input data file(s)
+  score_b079ad14cda86d9eb9e3083867bb3263.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             8
+     Number of y missing data patterns           6
+     Number of u missing data patterns           3
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              VDORI         VDLFL2        VDLFL3        VDSEVENS      VDCOUNT
+              ________      ________      ________      ________      ________
+ VDORI          0.994
+ VDLFL2         0.994         0.994
+ VDLFL3         0.994         0.994         0.994
+ VDSEVENS       0.994         0.994         0.994         1.000
+ VDCOUNT        0.991         0.991         0.991         0.997         0.997
+ PD102          0.994         0.994         0.994         1.000         0.997
+ VDLFL1Z        0.982         0.982         0.982         0.982         0.982
+ VDWDDELZ       0.988         0.988         0.988         0.994         0.991
+ VDEXF7Z        0.845         0.845         0.845         0.852         0.852
+ X1             0.994         0.994         0.994         1.000         0.997
+ X2             0.994         0.994         0.994         1.000         0.997
+ X3             0.994         0.994         0.994         1.000         0.997
+ X4             0.994         0.994         0.994         1.000         0.997
+ X5             0.994         0.994         0.994         1.000         0.997
+ X6             0.994         0.994         0.994         1.000         0.997
+ X7             0.994         0.994         0.994         1.000         0.997
+ X1X4           0.994         0.994         0.994         1.000         0.997
+ X1X5           0.994         0.994         0.994         1.000         0.997
+ X1X6           0.994         0.994         0.994         1.000         0.997
+ X1X7           0.994         0.994         0.994         1.000         0.997
+ X2X4           0.994         0.994         0.994         1.000         0.997
+ X2X5           0.994         0.994         0.994         1.000         0.997
+ X2X6           0.994         0.994         0.994         1.000         0.997
+ X2X7           0.994         0.994         0.994         1.000         0.997
+ X3X4           0.994         0.994         0.994         1.000         0.997
+ X3X5           0.994         0.994         0.994         1.000         0.997
+ X3X6           0.994         0.994         0.994         1.000         0.997
+ X3X7           0.994         0.994         0.994         1.000         0.997
+ X4X5           0.994         0.994         0.994         1.000         0.997
+ X4X6           0.994         0.994         0.994         1.000         0.997
+ X4X7           0.994         0.994         0.994         1.000         0.997
+ X5X7           0.994         0.994         0.994         1.000         0.997
+ X6X7           0.994         0.994         0.994         1.000         0.997
+
+
+           Covariance Coverage
+              PD102         VDLFL1Z       VDWDDELZ      VDEXF7Z       X1
+              ________      ________      ________      ________      ________
+ PD102          1.000
+ VDLFL1Z        0.982         0.982
+ VDWDDELZ       0.994         0.979         0.994
+ VDEXF7Z        0.852         0.839         0.845         0.852
+ X1             1.000         0.982         0.994         0.852         1.000
+ X2             1.000         0.982         0.994         0.852         1.000
+ X3             1.000         0.982         0.994         0.852         1.000
+ X4             1.000         0.982         0.994         0.852         1.000
+ X5             1.000         0.982         0.994         0.852         1.000
+ X6             1.000         0.982         0.994         0.852         1.000
+ X7             1.000         0.982         0.994         0.852         1.000
+ X1X4           1.000         0.982         0.994         0.852         1.000
+ X1X5           1.000         0.982         0.994         0.852         1.000
+ X1X6           1.000         0.982         0.994         0.852         1.000
+ X1X7           1.000         0.982         0.994         0.852         1.000
+ X2X4           1.000         0.982         0.994         0.852         1.000
+ X2X5           1.000         0.982         0.994         0.852         1.000
+ X2X6           1.000         0.982         0.994         0.852         1.000
+ X2X7           1.000         0.982         0.994         0.852         1.000
+ X3X4           1.000         0.982         0.994         0.852         1.000
+ X3X5           1.000         0.982         0.994         0.852         1.000
+ X3X6           1.000         0.982         0.994         0.852         1.000
+ X3X7           1.000         0.982         0.994         0.852         1.000
+ X4X5           1.000         0.982         0.994         0.852         1.000
+ X4X6           1.000         0.982         0.994         0.852         1.000
+ X4X7           1.000         0.982         0.994         0.852         1.000
+ X5X7           1.000         0.982         0.994         0.852         1.000
+ X6X7           1.000         0.982         0.994         0.852         1.000
+
+
+           Covariance Coverage
+              X2            X3            X4            X5            X6
+              ________      ________      ________      ________      ________
+ X2             1.000
+ X3             1.000         1.000
+ X4             1.000         1.000         1.000
+ X5             1.000         1.000         1.000         1.000
+ X6             1.000         1.000         1.000         1.000         1.000
+ X7             1.000         1.000         1.000         1.000         1.000
+ X1X4           1.000         1.000         1.000         1.000         1.000
+ X1X5           1.000         1.000         1.000         1.000         1.000
+ X1X6           1.000         1.000         1.000         1.000         1.000
+ X1X7           1.000         1.000         1.000         1.000         1.000
+ X2X4           1.000         1.000         1.000         1.000         1.000
+ X2X5           1.000         1.000         1.000         1.000         1.000
+ X2X6           1.000         1.000         1.000         1.000         1.000
+ X2X7           1.000         1.000         1.000         1.000         1.000
+ X3X4           1.000         1.000         1.000         1.000         1.000
+ X3X5           1.000         1.000         1.000         1.000         1.000
+ X3X6           1.000         1.000         1.000         1.000         1.000
+ X3X7           1.000         1.000         1.000         1.000         1.000
+ X4X5           1.000         1.000         1.000         1.000         1.000
+ X4X6           1.000         1.000         1.000         1.000         1.000
+ X4X7           1.000         1.000         1.000         1.000         1.000
+ X5X7           1.000         1.000         1.000         1.000         1.000
+ X6X7           1.000         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              X7            X1X4          X1X5          X1X6          X1X7
+              ________      ________      ________      ________      ________
+ X7             1.000
+ X1X4           1.000         1.000
+ X1X5           1.000         1.000         1.000
+ X1X6           1.000         1.000         1.000         1.000
+ X1X7           1.000         1.000         1.000         1.000         1.000
+ X2X4           1.000         1.000         1.000         1.000         1.000
+ X2X5           1.000         1.000         1.000         1.000         1.000
+ X2X6           1.000         1.000         1.000         1.000         1.000
+ X2X7           1.000         1.000         1.000         1.000         1.000
+ X3X4           1.000         1.000         1.000         1.000         1.000
+ X3X5           1.000         1.000         1.000         1.000         1.000
+ X3X6           1.000         1.000         1.000         1.000         1.000
+ X3X7           1.000         1.000         1.000         1.000         1.000
+ X4X5           1.000         1.000         1.000         1.000         1.000
+ X4X6           1.000         1.000         1.000         1.000         1.000
+ X4X7           1.000         1.000         1.000         1.000         1.000
+ X5X7           1.000         1.000         1.000         1.000         1.000
+ X6X7           1.000         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              X2X4          X2X5          X2X6          X2X7          X3X4
+              ________      ________      ________      ________      ________
+ X2X4           1.000
+ X2X5           1.000         1.000
+ X2X6           1.000         1.000         1.000
+ X2X7           1.000         1.000         1.000         1.000
+ X3X4           1.000         1.000         1.000         1.000         1.000
+ X3X5           1.000         1.000         1.000         1.000         1.000
+ X3X6           1.000         1.000         1.000         1.000         1.000
+ X3X7           1.000         1.000         1.000         1.000         1.000
+ X4X5           1.000         1.000         1.000         1.000         1.000
+ X4X6           1.000         1.000         1.000         1.000         1.000
+ X4X7           1.000         1.000         1.000         1.000         1.000
+ X5X7           1.000         1.000         1.000         1.000         1.000
+ X6X7           1.000         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              X3X5          X3X6          X3X7          X4X5          X4X6
+              ________      ________      ________      ________      ________
+ X3X5           1.000
+ X3X6           1.000         1.000
+ X3X7           1.000         1.000         1.000
+ X4X5           1.000         1.000         1.000         1.000
+ X4X6           1.000         1.000         1.000         1.000         1.000
+ X4X7           1.000         1.000         1.000         1.000         1.000
+ X5X7           1.000         1.000         1.000         1.000         1.000
+ X6X7           1.000         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              X4X7          X5X7          X6X7
+              ________      ________      ________
+ X4X7           1.000
+ X5X7           1.000         1.000
+ X6X7           1.000         1.000         1.000
+
+
+     PROPORTION OF DATA PRESENT FOR U
+
+
+           Covariance Coverage
+              VDORI         VDLFL2        VDLFL3        VDSEVENS      VDCOUNT
+              ________      ________      ________      ________      ________
+ VDORI          0.994
+ VDLFL2         0.994         0.994
+ VDLFL3         0.994         0.994         0.994
+ VDSEVENS       0.994         0.994         0.994         1.000
+ VDCOUNT        0.991         0.991         0.991         0.997         0.997
+ PD102          0.994         0.994         0.994         1.000         0.997
+
+
+           Covariance Coverage
+              PD102
+              ________
+ PD102          1.000
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              VDLFL1Z       VDWDDELZ      VDEXF7Z       X1            X2
+              ________      ________      ________      ________      ________
+ VDLFL1Z        0.982
+ VDWDDELZ       0.979         0.994
+ VDEXF7Z        0.839         0.845         0.852
+ X1             0.982         0.994         0.852         1.000
+ X2             0.982         0.994         0.852         1.000         1.000
+ X3             0.982         0.994         0.852         1.000         1.000
+ X4             0.982         0.994         0.852         1.000         1.000
+ X5             0.982         0.994         0.852         1.000         1.000
+ X6             0.982         0.994         0.852         1.000         1.000
+ X7             0.982         0.994         0.852         1.000         1.000
+ X1X4           0.982         0.994         0.852         1.000         1.000
+ X1X5           0.982         0.994         0.852         1.000         1.000
+ X1X6           0.982         0.994         0.852         1.000         1.000
+ X1X7           0.982         0.994         0.852         1.000         1.000
+ X2X4           0.982         0.994         0.852         1.000         1.000
+ X2X5           0.982         0.994         0.852         1.000         1.000
+ X2X6           0.982         0.994         0.852         1.000         1.000
+ X2X7           0.982         0.994         0.852         1.000         1.000
+ X3X4           0.982         0.994         0.852         1.000         1.000
+ X3X5           0.982         0.994         0.852         1.000         1.000
+ X3X6           0.982         0.994         0.852         1.000         1.000
+ X3X7           0.982         0.994         0.852         1.000         1.000
+ X4X5           0.982         0.994         0.852         1.000         1.000
+ X4X6           0.982         0.994         0.852         1.000         1.000
+ X4X7           0.982         0.994         0.852         1.000         1.000
+ X5X7           0.982         0.994         0.852         1.000         1.000
+ X6X7           0.982         0.994         0.852         1.000         1.000
+
+
+           Covariance Coverage
+              X3            X4            X5            X6            X7
+              ________      ________      ________      ________      ________
+ X3             1.000
+ X4             1.000         1.000
+ X5             1.000         1.000         1.000
+ X6             1.000         1.000         1.000         1.000
+ X7             1.000         1.000         1.000         1.000         1.000
+ X1X4           1.000         1.000         1.000         1.000         1.000
+ X1X5           1.000         1.000         1.000         1.000         1.000
+ X1X6           1.000         1.000         1.000         1.000         1.000
+ X1X7           1.000         1.000         1.000         1.000         1.000
+ X2X4           1.000         1.000         1.000         1.000         1.000
+ X2X5           1.000         1.000         1.000         1.000         1.000
+ X2X6           1.000         1.000         1.000         1.000         1.000
+ X2X7           1.000         1.000         1.000         1.000         1.000
+ X3X4           1.000         1.000         1.000         1.000         1.000
+ X3X5           1.000         1.000         1.000         1.000         1.000
+ X3X6           1.000         1.000         1.000         1.000         1.000
+ X3X7           1.000         1.000         1.000         1.000         1.000
+ X4X5           1.000         1.000         1.000         1.000         1.000
+ X4X6           1.000         1.000         1.000         1.000         1.000
+ X4X7           1.000         1.000         1.000         1.000         1.000
+ X5X7           1.000         1.000         1.000         1.000         1.000
+ X6X7           1.000         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              X1X4          X1X5          X1X6          X1X7          X2X4
+              ________      ________      ________      ________      ________
+ X1X4           1.000
+ X1X5           1.000         1.000
+ X1X6           1.000         1.000         1.000
+ X1X7           1.000         1.000         1.000         1.000
+ X2X4           1.000         1.000         1.000         1.000         1.000
+ X2X5           1.000         1.000         1.000         1.000         1.000
+ X2X6           1.000         1.000         1.000         1.000         1.000
+ X2X7           1.000         1.000         1.000         1.000         1.000
+ X3X4           1.000         1.000         1.000         1.000         1.000
+ X3X5           1.000         1.000         1.000         1.000         1.000
+ X3X6           1.000         1.000         1.000         1.000         1.000
+ X3X7           1.000         1.000         1.000         1.000         1.000
+ X4X5           1.000         1.000         1.000         1.000         1.000
+ X4X6           1.000         1.000         1.000         1.000         1.000
+ X4X7           1.000         1.000         1.000         1.000         1.000
+ X5X7           1.000         1.000         1.000         1.000         1.000
+ X6X7           1.000         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              X2X5          X2X6          X2X7          X3X4          X3X5
+              ________      ________      ________      ________      ________
+ X2X5           1.000
+ X2X6           1.000         1.000
+ X2X7           1.000         1.000         1.000
+ X3X4           1.000         1.000         1.000         1.000
+ X3X5           1.000         1.000         1.000         1.000         1.000
+ X3X6           1.000         1.000         1.000         1.000         1.000
+ X3X7           1.000         1.000         1.000         1.000         1.000
+ X4X5           1.000         1.000         1.000         1.000         1.000
+ X4X6           1.000         1.000         1.000         1.000         1.000
+ X4X7           1.000         1.000         1.000         1.000         1.000
+ X5X7           1.000         1.000         1.000         1.000         1.000
+ X6X7           1.000         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              X3X6          X3X7          X4X5          X4X6          X4X7
+              ________      ________      ________      ________      ________
+ X3X6           1.000
+ X3X7           1.000         1.000
+ X4X5           1.000         1.000         1.000
+ X4X6           1.000         1.000         1.000         1.000
+ X4X7           1.000         1.000         1.000         1.000         1.000
+ X5X7           1.000         1.000         1.000         1.000         1.000
+ X6X7           1.000         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              X5X7          X6X7
+              ________      ________
+ X5X7           1.000
+ X6X7           1.000         1.000
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    VDORI
+      Category 1    0.027            9.000
+      Category 2    0.018            6.000
+      Category 3    0.040           13.000
+      Category 4    0.177           58.000
+      Category 5    0.738          242.000
+    VDLFL2
+      Category 1    0.009            3.000
+      Category 2    0.122           40.000
+      Category 3    0.869          285.000
+    VDLFL3
+      Category 1    0.030           10.000
+      Category 2    0.357          117.000
+      Category 3    0.613          201.000
+    VDSEVENS
+      Category 1    0.127           42.000
+      Category 2    0.142           47.000
+      Category 3    0.088           29.000
+      Category 4    0.118           39.000
+      Category 5    0.152           50.000
+      Category 6    0.373          123.000
+    VDCOUNT
+      Category 1    0.106           35.000
+      Category 2    0.894          294.000
+    PD102
+      Category 1    0.021            7.000
+      Category 2    0.718          237.000
+      Category 3    0.261           86.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     VDLFL1Z               0.162       0.271       0.000    1.23%       0.102      0.136      0.159
+             324.000       0.005      -0.217       0.398    0.31%       0.182      0.227
+     VDWDDELZ              0.395      -0.213       0.000   10.06%       0.200      0.400      0.400
+             328.000       0.045      -0.540       0.900    0.30%       0.500      0.600
+     VDEXF7Z               0.619      -1.020       0.000    1.42%       0.526      0.600      0.629
+             281.000       0.040       1.416       1.000    1.78%       0.686      0.731
+     X1                    5.715       0.417      -6.000    0.61%      -2.000      4.000      6.000
+             330.000      53.725      -0.370      28.000    0.30%       7.000     12.000
+     X2                    2.141       3.159       0.000   29.39%       0.000      0.111      0.375
+             330.000      18.992      11.104      29.333    0.30%       0.595      3.000
+     X3                    0.314       4.418       0.000   66.97%       0.000      0.000      0.000
+             330.000       1.008      21.554       8.000    0.30%       0.000      0.111
+     X4                    0.062      -0.500      -0.559   37.88%      -0.559      0.441      0.441
+             330.000       0.235      -1.750       0.441   62.12%       0.441      0.441
+     X5                    0.072       1.818      -0.092   83.64%      -0.092     -0.092     -0.092
+             330.000       0.137       1.307       0.908   16.36%      -0.092     -0.092
+     X6                    0.018       2.724      -0.079   90.30%      -0.079     -0.079     -0.079
+             330.000       0.088       5.420       0.921    9.70%      -0.079     -0.079
+     X7                    0.809      -1.032     -12.000    0.61%      -1.000      0.000      0.000
+             330.000       9.694       2.068       5.000   12.42%       2.000      4.000
+     X1X4                  3.776       1.125      -6.000    0.30%       0.000      0.000      0.000
+             330.000      44.259       0.520      25.000    0.30%       3.000      9.000
+     X1X5                  0.770       3.204      -5.000    1.21%       0.000      0.000      0.000
+             330.000      11.674      10.847      18.000    0.61%       0.000      0.000
+     X1X6                  0.467       4.709      -5.000    0.61%       0.000      0.000      0.000
+             330.000       7.322      26.860      23.000    0.30%       0.000      0.000
+     X1X7                  1.176      -0.839    -204.000    0.30%     -12.000      0.000      0.000
+             330.000    1000.030       8.866     140.000    0.30%       0.000     16.000
+     X2X4                  1.505       3.385       0.000   56.36%       0.000      0.000      0.000
+             330.000      13.984      12.054      23.333    0.30%       0.047      1.266
+     X2X5                  0.274       5.638       0.000   90.00%       0.000      0.000      0.000
+             330.000       1.589      34.171      10.083    0.61%       0.000      0.000
+     X2X6                  0.178      11.223       0.000   93.64%       0.000      0.000      0.000
+             330.000       1.692     147.672      19.337    0.30%       0.000      0.000
+     X2X7                  0.455       1.420    -102.292    0.30%       0.000      0.000      0.000
+             330.000     291.160      26.245     146.667    0.30%       0.000      1.085
+     X3X4                  0.227       4.579       0.000   77.58%       0.000      0.000      0.000
+             330.000       0.657      22.258       6.000    0.30%       0.000      0.002
+     X3X5                  0.027       7.996       0.000   94.55%       0.000      0.000      0.000
+             330.000       0.030      67.522       1.708    0.61%       0.000      0.000
+     X3X6                  0.024      15.731       0.000   97.27%       0.000      0.000      0.000
+             330.000       0.073     262.659       4.668    0.30%       0.000      0.000
+     X3X7                  0.089       4.444     -18.674    0.30%       0.000      0.000      0.000
+             330.000      13.160      54.443      40.000    0.30%       0.000      0.000
+     X4X5                  0.062       2.365      -0.056   88.18%      -0.056     -0.056     -0.056
+             330.000       0.104       3.596       0.944   11.82%      -0.056     -0.056
+     X4X6                  0.015       3.683      -0.046   93.94%      -0.046     -0.046     -0.046
+             330.000       0.057      11.565       0.954    6.06%      -0.046     -0.046
+     X4X7                  0.279      -1.034     -12.000    0.61%       0.000      0.000      0.000
+             330.000       6.128       4.481       5.000    5.45%       0.000      2.000
+     X5X7                  0.073      -1.737     -10.000    0.30%       0.000      0.000      0.000
+             330.000       1.273      27.449       5.000    0.61%       0.000      0.000
+     X6X7                 -0.282      -4.130     -12.000    0.61%       0.000      0.000      0.000
+             330.000       2.966      22.705       5.000    0.61%       0.000      0.000
+
+
+     VIF (VARIANCE INFLATION FACTOR) FOR EXPLORING MULTICOLLINEARITY OF INDEPENDENT VARIABLES
+
+     Variable        VIF       Variable        VIF       Variable        VIF
+
+     X1            21.056      X2           174.334      X3           126.556
+     X4             2.759      X5             4.523      X6             3.854
+     X7             5.531      X1X4          20.823      X1X5          10.738
+     X1X6           9.962      X1X7          17.304      X2X4         162.355
+     X2X5          43.997      X2X6          58.781      X2X7         115.233
+     X3X4         101.916      X3X5          18.522      X3X6          33.746
+     X3X7          72.636      X4X5           4.360      X4X6           4.479
+     X4X7           3.899      X5X7           1.915      X6X7           2.725
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+  ERROR OCCURRED IN THE BRANT WALD TEST FOR PROPORTIONAL ODDS FOR VDORI.
+
+  ERROR OCCURRED IN THE BRANT WALD TEST FOR PROPORTIONAL ODDS FOR VDLFL2.
+
+  ERROR OCCURRED IN THE BRANT WALD TEST FOR PROPORTIONAL ODDS FOR VDLFL3.
+
+  ERROR OCCURRED IN THE BRANT WALD TEST FOR PROPORTIONAL ODDS FOR VDSEVENS.
+
+  ERROR OCCURRED IN THE BRANT WALD TEST FOR PROPORTIONAL ODDS FOR PD102.
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                        0
+
+Loglikelihood
+
+          H0 Value                        -854.541
+
+Information Criteria
+
+          Akaike (AIC)                    1709.082
+          Bayesian (BIC)                  1709.082
+          Sample-Size Adjusted BIC        1709.082
+            (n* = (n + 2) / 24)
+
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THE ESTIMATED MODEL
+
+    Latent
+   Classes
+
+       1        237.43313          0.71949
+       2         68.24891          0.20681
+       3         24.31797          0.07369
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON ESTIMATED POSTERIOR PROBABILITIES
+
+    Latent
+   Classes
+
+       1        223.81267          0.67822
+       2         68.91684          0.20884
+       3         37.27048          0.11294
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THEIR MOST LIKELY LATENT CLASS MEMBERSHIP
+
+Class Counts and Proportions
+
+    Latent
+   Classes
+
+       1              264          0.80000
+       2               35          0.10606
+       3               31          0.09394
+
+
+CLASSIFICATION QUALITY
+
+     Entropy                         0.485
+
+
+Average Latent Class Probabilities for Most Likely Latent Class Membership (Row)
+by Latent Class (Column)
+
+           1        2        3
+
+    1   0.802    0.170    0.028
+    2   0.294    0.510    0.196
+    3   0.055    0.203    0.742
+
+
+Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+           1        2        3
+
+    1   0.946    0.046    0.008
+    2   0.650    0.259    0.091
+    3   0.199    0.184    0.617
+
+
+Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+              1        2        3
+
+    1      4.823    1.800    0.000
+    2      1.960    1.040    0.000
+    3     -1.130   -1.210    0.000
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ GCP      BY
+    VDORI              0.425      0.000    999.000    999.000
+    VDLFL1Z            0.019      0.000    999.000    999.000
+    VDLFL2             7.948      0.000    999.000    999.000
+    VDLFL3             0.701      0.000    999.000    999.000
+    VDWDDELZ           0.050      0.000    999.000    999.000
+    VDEXF7Z            0.048      0.000    999.000    999.000
+    VDSEVENS           0.637      0.000    999.000    999.000
+    VDCOUNT            0.598      0.000    999.000    999.000
+
+ VDORI      ON
+    X1                -0.076      0.000    999.000    999.000
+    X2                 0.391      0.000    999.000    999.000
+    X3                -1.647      0.000    999.000    999.000
+    X4                 0.760      0.000    999.000    999.000
+    X5                -0.031      0.000    999.000    999.000
+    X6                -0.204      0.000    999.000    999.000
+    X7                 0.146      0.000    999.000    999.000
+    X1X4               0.007      0.000    999.000    999.000
+    X1X5               0.138      0.000    999.000    999.000
+    X1X6               0.082      0.000    999.000    999.000
+    X1X7              -0.010      0.000    999.000    999.000
+    X2X4              -0.273      0.000    999.000    999.000
+    X2X5              -1.067      0.000    999.000    999.000
+    X2X6              -1.065      0.000    999.000    999.000
+    X2X7               0.029      0.000    999.000    999.000
+    X3X4               1.132      0.000    999.000    999.000
+    X3X5               4.982      0.000    999.000    999.000
+    X3X6               9.340      0.000    999.000    999.000
+    X3X7              -0.090      0.000    999.000    999.000
+    X4X5               1.014      0.000    999.000    999.000
+    X4X6              -0.106      0.000    999.000    999.000
+    X4X7              -0.054      0.000    999.000    999.000
+    X5X7              -0.013      0.000    999.000    999.000
+    X6X7              -0.081      0.000    999.000    999.000
+
+ VDLFL1Z    ON
+    X1                -0.006      0.000    999.000    999.000
+    X2                 0.016      0.000    999.000    999.000
+    X3                -0.042      0.000    999.000    999.000
+    X4                 0.001      0.000    999.000    999.000
+    X5                -0.028      0.000    999.000    999.000
+    X6                -0.033      0.000    999.000    999.000
+    X7                 0.009      0.000    999.000    999.000
+    X1X4               0.003      0.000    999.000    999.000
+    X1X5               0.001      0.000    999.000    999.000
+    X1X6               0.003      0.000    999.000    999.000
+    X1X7               0.001      0.000    999.000    999.000
+    X2X4              -0.015      0.000    999.000    999.000
+    X2X5               0.002      0.000    999.000    999.000
+    X2X6              -0.002      0.000    999.000    999.000
+    X2X7              -0.004      0.000    999.000    999.000
+    X3X4               0.047      0.000    999.000    999.000
+    X3X5              -0.022      0.000    999.000    999.000
+    X3X6              -0.048      0.000    999.000    999.000
+    X3X7               0.014      0.000    999.000    999.000
+    X4X5              -0.010      0.000    999.000    999.000
+    X4X6               0.022      0.000    999.000    999.000
+    X4X7               0.003      0.000    999.000    999.000
+    X5X7              -0.002      0.000    999.000    999.000
+    X6X7              -0.004      0.000    999.000    999.000
+
+ VDLFL2     ON
+    X1                -0.069      0.000    999.000    999.000
+    X2                -0.544      0.000    999.000    999.000
+    X3                 3.344      0.000    999.000    999.000
+    X4                -0.783      0.000    999.000    999.000
+    X5                -1.332      0.000    999.000    999.000
+    X6                -0.658      0.000    999.000    999.000
+    X7                 0.206      0.000    999.000    999.000
+    X1X4              -0.101      0.000    999.000    999.000
+    X1X5               0.309      0.000    999.000    999.000
+    X1X6               0.487      0.000    999.000    999.000
+    X1X7               0.031      0.000    999.000    999.000
+    X2X4               1.714      0.000    999.000    999.000
+    X2X5              -2.129      0.000    999.000    999.000
+    X2X6              -3.447      0.000    999.000    999.000
+    X2X7              -0.226      0.000    999.000    999.000
+    X3X4              -7.026      0.000    999.000    999.000
+    X3X5              10.395      0.000    999.000    999.000
+    X3X6              14.016      0.000    999.000    999.000
+    X3X7               1.296      0.000    999.000    999.000
+    X4X5              -0.668      0.000    999.000    999.000
+    X4X6               1.013      0.000    999.000    999.000
+    X4X7              -0.018      0.000    999.000    999.000
+    X5X7               0.316      0.000    999.000    999.000
+    X6X7               0.127      0.000    999.000    999.000
+
+ VDLFL3     ON
+    X1                -0.080      0.000    999.000    999.000
+    X2                 0.290      0.000    999.000    999.000
+    X3                -1.424      0.000    999.000    999.000
+    X4                -0.272      0.000    999.000    999.000
+    X5                -0.921      0.000    999.000    999.000
+    X6                -1.132      0.000    999.000    999.000
+    X7                 0.065      0.000    999.000    999.000
+    X1X4               0.140      0.000    999.000    999.000
+    X1X5               0.055      0.000    999.000    999.000
+    X1X6              -0.021      0.000    999.000    999.000
+    X1X7               0.000      0.000    999.000    999.000
+    X2X4              -0.810      0.000    999.000    999.000
+    X2X5              -0.106      0.000    999.000    999.000
+    X2X6               0.466      0.000    999.000    999.000
+    X2X7               0.026      0.000    999.000    999.000
+    X3X4               4.157      0.000    999.000    999.000
+    X3X5               0.195      0.000    999.000    999.000
+    X3X6              -2.935      0.000    999.000    999.000
+    X3X7              -0.185      0.000    999.000    999.000
+    X4X5               0.032      0.000    999.000    999.000
+    X4X6               0.334      0.000    999.000    999.000
+    X4X7               0.110      0.000    999.000    999.000
+    X5X7               0.204      0.000    999.000    999.000
+    X6X7               0.098      0.000    999.000    999.000
+
+ VDWDDELZ   ON
+    X1                -0.006      0.000    999.000    999.000
+    X2                 0.008      0.000    999.000    999.000
+    X3                -0.066      0.000    999.000    999.000
+    X4                 0.061      0.000    999.000    999.000
+    X5                -0.086      0.000    999.000    999.000
+    X6                 0.006      0.000    999.000    999.000
+    X7                 0.021      0.000    999.000    999.000
+    X1X4               0.008      0.000    999.000    999.000
+    X1X5               0.005      0.000    999.000    999.000
+    X1X6              -0.008      0.000    999.000    999.000
+    X1X7               0.000      0.000    999.000    999.000
+    X2X4              -0.038      0.000    999.000    999.000
+    X2X5              -0.050      0.000    999.000    999.000
+    X2X6               0.006      0.000    999.000    999.000
+    X2X7              -0.001      0.000    999.000    999.000
+    X3X4               0.169      0.000    999.000    999.000
+    X3X5               0.236      0.000    999.000    999.000
+    X3X6               0.047      0.000    999.000    999.000
+    X3X7              -0.002      0.000    999.000    999.000
+    X4X5               0.012      0.000    999.000    999.000
+    X4X6              -0.028      0.000    999.000    999.000
+    X4X7               0.003      0.000    999.000    999.000
+    X5X7              -0.006      0.000    999.000    999.000
+    X6X7              -0.013      0.000    999.000    999.000
+
+ VDEXF7Z    ON
+    X1                -0.003      0.000    999.000    999.000
+    X2                -0.010      0.000    999.000    999.000
+    X3                 0.066      0.000    999.000    999.000
+    X4                -0.030      0.000    999.000    999.000
+    X5                -0.191      0.000    999.000    999.000
+    X6                -0.114      0.000    999.000    999.000
+    X7                 0.026      0.000    999.000    999.000
+    X1X4              -0.002      0.000    999.000    999.000
+    X1X5               0.000      0.000    999.000    999.000
+    X1X6               0.007      0.000    999.000    999.000
+    X1X7               0.000      0.000    999.000    999.000
+    X2X4               0.016      0.000    999.000    999.000
+    X2X5              -0.004      0.000    999.000    999.000
+    X2X6              -0.054      0.000    999.000    999.000
+    X2X7              -0.001      0.000    999.000    999.000
+    X3X4              -0.087      0.000    999.000    999.000
+    X3X5               0.059      0.000    999.000    999.000
+    X3X6               0.283      0.000    999.000    999.000
+    X3X7               0.004      0.000    999.000    999.000
+    X4X5               0.062      0.000    999.000    999.000
+    X4X6               0.000      0.000    999.000    999.000
+    X4X7              -0.002      0.000    999.000    999.000
+    X5X7               0.010      0.000    999.000    999.000
+    X6X7              -0.006      0.000    999.000    999.000
+
+ VDSEVENS   ON
+    X1                -0.054      0.000    999.000    999.000
+    X2                -0.007      0.000    999.000    999.000
+    X3                 0.531      0.000    999.000    999.000
+    X4                -0.680      0.000    999.000    999.000
+    X5                -1.815      0.000    999.000    999.000
+    X6                -0.460      0.000    999.000    999.000
+    X7                 0.166      0.000    999.000    999.000
+    X1X4               0.012      0.000    999.000    999.000
+    X1X5               0.076      0.000    999.000    999.000
+    X1X6               0.198      0.000    999.000    999.000
+    X1X7               0.011      0.000    999.000    999.000
+    X2X4               0.111      0.000    999.000    999.000
+    X2X5              -0.527      0.000    999.000    999.000
+    X2X6              -1.109      0.000    999.000    999.000
+    X2X7              -0.042      0.000    999.000    999.000
+    X3X4              -0.885      0.000    999.000    999.000
+    X3X5               1.564      0.000    999.000    999.000
+    X3X6               6.662      0.000    999.000    999.000
+    X3X7               0.162      0.000    999.000    999.000
+    X4X5               0.606      0.000    999.000    999.000
+    X4X6              -0.563      0.000    999.000    999.000
+    X4X7               0.011      0.000    999.000    999.000
+    X5X7               0.159      0.000    999.000    999.000
+    X6X7              -0.073      0.000    999.000    999.000
+
+ VDCOUNT    ON
+    X1                -0.058      0.000    999.000    999.000
+    X2                -0.092      0.000    999.000    999.000
+    X3                 0.424      0.000    999.000    999.000
+    X4                -0.349      0.000    999.000    999.000
+    X5                -0.891      0.000    999.000    999.000
+    X6                 1.844      0.000    999.000    999.000
+    X7                 0.221      0.000    999.000    999.000
+    X1X4               0.213      0.000    999.000    999.000
+    X1X5              -0.156      0.000    999.000    999.000
+    X1X6               0.054      0.000    999.000    999.000
+    X1X7               0.012      0.000    999.000    999.000
+    X2X4              -0.924      0.000    999.000    999.000
+    X2X5               1.138      0.000    999.000    999.000
+    X2X6               0.282      0.000    999.000    999.000
+    X2X7              -0.011      0.000    999.000    999.000
+    X3X4               3.667      0.000    999.000    999.000
+    X3X5              -5.257      0.000    999.000    999.000
+    X3X6              -3.898      0.000    999.000    999.000
+    X3X7              -0.183      0.000    999.000    999.000
+    X4X5              -0.042      0.000    999.000    999.000
+    X4X6              -2.154      0.000    999.000    999.000
+    X4X7              -0.118      0.000    999.000    999.000
+    X5X7              -0.003      0.000    999.000    999.000
+    X6X7               0.082      0.000    999.000    999.000
+
+ VDWDDELZ WITH
+    VDLFL1Z            0.000      0.000    999.000    999.000
+    VDEXF7Z            0.000      0.000    999.000    999.000
+
+ VDEXF7Z  WITH
+    VDLFL1Z            0.000      0.000    999.000    999.000
+
+ Means
+    GCP                0.000      0.000    999.000    999.000
+
+ Intercepts
+    VDLFL1Z            0.186      0.000    999.000    999.000
+    VDWDDELZ           0.452      0.000    999.000    999.000
+    VDEXF7Z            0.636      0.000    999.000    999.000
+
+ Thresholds
+    VDORI$1           -8.073      0.000    999.000    999.000
+    VDORI$2           -6.030      0.000    999.000    999.000
+    VDORI$3           -3.971      0.000    999.000    999.000
+    VDORI$4           -1.682      0.000    999.000    999.000
+    VDLFL2$1         -25.384      0.000    999.000    999.000
+    VDLFL2$2         -15.268      0.000    999.000    999.000
+    VDLFL3$1          -5.139      0.000    999.000    999.000
+    VDLFL3$2          -1.297      0.000    999.000    999.000
+    VDSEVENS$1        -3.474      0.000    999.000    999.000
+    VDSEVENS$2        -2.211      0.000    999.000    999.000
+    VDSEVENS$3        -1.664      0.000    999.000    999.000
+    VDSEVENS$4        -0.819      0.000    999.000    999.000
+    VDSEVENS$5         0.201      0.000    999.000    999.000
+    VDCOUNT$1         -3.648      0.000    999.000    999.000
+    PD102$1           -4.094      0.000    999.000    999.000
+    PD102$2            1.160      0.000    999.000    999.000
+
+ Variances
+    GCP                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    VDLFL1Z            0.005      0.000    999.000    999.000
+    VDWDDELZ           0.029      0.000    999.000    999.000
+    VDEXF7Z            0.018      0.000    999.000    999.000
+
+Latent Class 2
+
+ GCP      BY
+    VDORI              0.425      0.000    999.000    999.000
+    VDLFL1Z            0.019      0.000    999.000    999.000
+    VDLFL2             7.948      0.000    999.000    999.000
+    VDLFL3             0.701      0.000    999.000    999.000
+    VDWDDELZ           0.050      0.000    999.000    999.000
+    VDEXF7Z            0.048      0.000    999.000    999.000
+    VDSEVENS           0.637      0.000    999.000    999.000
+    VDCOUNT            0.598      0.000    999.000    999.000
+
+ VDORI      ON
+    X1                -0.076      0.000    999.000    999.000
+    X2                 0.391      0.000    999.000    999.000
+    X3                -1.647      0.000    999.000    999.000
+    X4                 0.760      0.000    999.000    999.000
+    X5                -0.031      0.000    999.000    999.000
+    X6                -0.204      0.000    999.000    999.000
+    X7                 0.146      0.000    999.000    999.000
+    X1X4               0.007      0.000    999.000    999.000
+    X1X5               0.138      0.000    999.000    999.000
+    X1X6               0.082      0.000    999.000    999.000
+    X1X7              -0.010      0.000    999.000    999.000
+    X2X4              -0.273      0.000    999.000    999.000
+    X2X5              -1.067      0.000    999.000    999.000
+    X2X6              -1.065      0.000    999.000    999.000
+    X2X7               0.029      0.000    999.000    999.000
+    X3X4               1.132      0.000    999.000    999.000
+    X3X5               4.982      0.000    999.000    999.000
+    X3X6               9.340      0.000    999.000    999.000
+    X3X7              -0.090      0.000    999.000    999.000
+    X4X5               1.014      0.000    999.000    999.000
+    X4X6              -0.106      0.000    999.000    999.000
+    X4X7              -0.054      0.000    999.000    999.000
+    X5X7              -0.013      0.000    999.000    999.000
+    X6X7              -0.081      0.000    999.000    999.000
+
+ VDLFL1Z    ON
+    X1                -0.006      0.000    999.000    999.000
+    X2                 0.016      0.000    999.000    999.000
+    X3                -0.042      0.000    999.000    999.000
+    X4                 0.001      0.000    999.000    999.000
+    X5                -0.028      0.000    999.000    999.000
+    X6                -0.033      0.000    999.000    999.000
+    X7                 0.009      0.000    999.000    999.000
+    X1X4               0.003      0.000    999.000    999.000
+    X1X5               0.001      0.000    999.000    999.000
+    X1X6               0.003      0.000    999.000    999.000
+    X1X7               0.001      0.000    999.000    999.000
+    X2X4              -0.015      0.000    999.000    999.000
+    X2X5               0.002      0.000    999.000    999.000
+    X2X6              -0.002      0.000    999.000    999.000
+    X2X7              -0.004      0.000    999.000    999.000
+    X3X4               0.047      0.000    999.000    999.000
+    X3X5              -0.022      0.000    999.000    999.000
+    X3X6              -0.048      0.000    999.000    999.000
+    X3X7               0.014      0.000    999.000    999.000
+    X4X5              -0.010      0.000    999.000    999.000
+    X4X6               0.022      0.000    999.000    999.000
+    X4X7               0.003      0.000    999.000    999.000
+    X5X7              -0.002      0.000    999.000    999.000
+    X6X7              -0.004      0.000    999.000    999.000
+
+ VDLFL2     ON
+    X1                -0.069      0.000    999.000    999.000
+    X2                -0.544      0.000    999.000    999.000
+    X3                 3.344      0.000    999.000    999.000
+    X4                -0.783      0.000    999.000    999.000
+    X5                -1.332      0.000    999.000    999.000
+    X6                -0.658      0.000    999.000    999.000
+    X7                 0.206      0.000    999.000    999.000
+    X1X4              -0.101      0.000    999.000    999.000
+    X1X5               0.309      0.000    999.000    999.000
+    X1X6               0.487      0.000    999.000    999.000
+    X1X7               0.031      0.000    999.000    999.000
+    X2X4               1.714      0.000    999.000    999.000
+    X2X5              -2.129      0.000    999.000    999.000
+    X2X6              -3.447      0.000    999.000    999.000
+    X2X7              -0.226      0.000    999.000    999.000
+    X3X4              -7.026      0.000    999.000    999.000
+    X3X5              10.395      0.000    999.000    999.000
+    X3X6              14.016      0.000    999.000    999.000
+    X3X7               1.296      0.000    999.000    999.000
+    X4X5              -0.668      0.000    999.000    999.000
+    X4X6               1.013      0.000    999.000    999.000
+    X4X7              -0.018      0.000    999.000    999.000
+    X5X7               0.316      0.000    999.000    999.000
+    X6X7               0.127      0.000    999.000    999.000
+
+ VDLFL3     ON
+    X1                -0.080      0.000    999.000    999.000
+    X2                 0.290      0.000    999.000    999.000
+    X3                -1.424      0.000    999.000    999.000
+    X4                -0.272      0.000    999.000    999.000
+    X5                -0.921      0.000    999.000    999.000
+    X6                -1.132      0.000    999.000    999.000
+    X7                 0.065      0.000    999.000    999.000
+    X1X4               0.140      0.000    999.000    999.000
+    X1X5               0.055      0.000    999.000    999.000
+    X1X6              -0.021      0.000    999.000    999.000
+    X1X7               0.000      0.000    999.000    999.000
+    X2X4              -0.810      0.000    999.000    999.000
+    X2X5              -0.106      0.000    999.000    999.000
+    X2X6               0.466      0.000    999.000    999.000
+    X2X7               0.026      0.000    999.000    999.000
+    X3X4               4.157      0.000    999.000    999.000
+    X3X5               0.195      0.000    999.000    999.000
+    X3X6              -2.935      0.000    999.000    999.000
+    X3X7              -0.185      0.000    999.000    999.000
+    X4X5               0.032      0.000    999.000    999.000
+    X4X6               0.334      0.000    999.000    999.000
+    X4X7               0.110      0.000    999.000    999.000
+    X5X7               0.204      0.000    999.000    999.000
+    X6X7               0.098      0.000    999.000    999.000
+
+ VDWDDELZ   ON
+    X1                -0.006      0.000    999.000    999.000
+    X2                 0.008      0.000    999.000    999.000
+    X3                -0.066      0.000    999.000    999.000
+    X4                 0.061      0.000    999.000    999.000
+    X5                -0.086      0.000    999.000    999.000
+    X6                 0.006      0.000    999.000    999.000
+    X7                 0.021      0.000    999.000    999.000
+    X1X4               0.008      0.000    999.000    999.000
+    X1X5               0.005      0.000    999.000    999.000
+    X1X6              -0.008      0.000    999.000    999.000
+    X1X7               0.000      0.000    999.000    999.000
+    X2X4              -0.038      0.000    999.000    999.000
+    X2X5              -0.050      0.000    999.000    999.000
+    X2X6               0.006      0.000    999.000    999.000
+    X2X7              -0.001      0.000    999.000    999.000
+    X3X4               0.169      0.000    999.000    999.000
+    X3X5               0.236      0.000    999.000    999.000
+    X3X6               0.047      0.000    999.000    999.000
+    X3X7              -0.002      0.000    999.000    999.000
+    X4X5               0.012      0.000    999.000    999.000
+    X4X6              -0.028      0.000    999.000    999.000
+    X4X7               0.003      0.000    999.000    999.000
+    X5X7              -0.006      0.000    999.000    999.000
+    X6X7              -0.013      0.000    999.000    999.000
+
+ VDEXF7Z    ON
+    X1                -0.003      0.000    999.000    999.000
+    X2                -0.010      0.000    999.000    999.000
+    X3                 0.066      0.000    999.000    999.000
+    X4                -0.030      0.000    999.000    999.000
+    X5                -0.191      0.000    999.000    999.000
+    X6                -0.114      0.000    999.000    999.000
+    X7                 0.026      0.000    999.000    999.000
+    X1X4              -0.002      0.000    999.000    999.000
+    X1X5               0.000      0.000    999.000    999.000
+    X1X6               0.007      0.000    999.000    999.000
+    X1X7               0.000      0.000    999.000    999.000
+    X2X4               0.016      0.000    999.000    999.000
+    X2X5              -0.004      0.000    999.000    999.000
+    X2X6              -0.054      0.000    999.000    999.000
+    X2X7              -0.001      0.000    999.000    999.000
+    X3X4              -0.087      0.000    999.000    999.000
+    X3X5               0.059      0.000    999.000    999.000
+    X3X6               0.283      0.000    999.000    999.000
+    X3X7               0.004      0.000    999.000    999.000
+    X4X5               0.062      0.000    999.000    999.000
+    X4X6               0.000      0.000    999.000    999.000
+    X4X7              -0.002      0.000    999.000    999.000
+    X5X7               0.010      0.000    999.000    999.000
+    X6X7              -0.006      0.000    999.000    999.000
+
+ VDSEVENS   ON
+    X1                -0.054      0.000    999.000    999.000
+    X2                -0.007      0.000    999.000    999.000
+    X3                 0.531      0.000    999.000    999.000
+    X4                -0.680      0.000    999.000    999.000
+    X5                -1.815      0.000    999.000    999.000
+    X6                -0.460      0.000    999.000    999.000
+    X7                 0.166      0.000    999.000    999.000
+    X1X4               0.012      0.000    999.000    999.000
+    X1X5               0.076      0.000    999.000    999.000
+    X1X6               0.198      0.000    999.000    999.000
+    X1X7               0.011      0.000    999.000    999.000
+    X2X4               0.111      0.000    999.000    999.000
+    X2X5              -0.527      0.000    999.000    999.000
+    X2X6              -1.109      0.000    999.000    999.000
+    X2X7              -0.042      0.000    999.000    999.000
+    X3X4              -0.885      0.000    999.000    999.000
+    X3X5               1.564      0.000    999.000    999.000
+    X3X6               6.662      0.000    999.000    999.000
+    X3X7               0.162      0.000    999.000    999.000
+    X4X5               0.606      0.000    999.000    999.000
+    X4X6              -0.563      0.000    999.000    999.000
+    X4X7               0.011      0.000    999.000    999.000
+    X5X7               0.159      0.000    999.000    999.000
+    X6X7              -0.073      0.000    999.000    999.000
+
+ VDCOUNT    ON
+    X1                -0.058      0.000    999.000    999.000
+    X2                -0.092      0.000    999.000    999.000
+    X3                 0.424      0.000    999.000    999.000
+    X4                -0.349      0.000    999.000    999.000
+    X5                -0.891      0.000    999.000    999.000
+    X6                 1.844      0.000    999.000    999.000
+    X7                 0.221      0.000    999.000    999.000
+    X1X4               0.213      0.000    999.000    999.000
+    X1X5              -0.156      0.000    999.000    999.000
+    X1X6               0.054      0.000    999.000    999.000
+    X1X7               0.012      0.000    999.000    999.000
+    X2X4              -0.924      0.000    999.000    999.000
+    X2X5               1.138      0.000    999.000    999.000
+    X2X6               0.282      0.000    999.000    999.000
+    X2X7              -0.011      0.000    999.000    999.000
+    X3X4               3.667      0.000    999.000    999.000
+    X3X5              -5.257      0.000    999.000    999.000
+    X3X6              -3.898      0.000    999.000    999.000
+    X3X7              -0.183      0.000    999.000    999.000
+    X4X5              -0.042      0.000    999.000    999.000
+    X4X6              -2.154      0.000    999.000    999.000
+    X4X7              -0.118      0.000    999.000    999.000
+    X5X7              -0.003      0.000    999.000    999.000
+    X6X7               0.082      0.000    999.000    999.000
+
+ VDWDDELZ WITH
+    VDLFL1Z            0.000      0.000    999.000    999.000
+    VDEXF7Z            0.000      0.000    999.000    999.000
+
+ VDEXF7Z  WITH
+    VDLFL1Z            0.000      0.000    999.000    999.000
+
+ Means
+    GCP                0.000      0.000    999.000    999.000
+
+ Intercepts
+    VDLFL1Z            0.155      0.000    999.000    999.000
+    VDWDDELZ           0.336      0.000    999.000    999.000
+    VDEXF7Z            0.548      0.000    999.000    999.000
+
+ Thresholds
+    VDORI$1           -4.955      0.000    999.000    999.000
+    VDORI$2           -4.130      0.000    999.000    999.000
+    VDORI$3           -3.085      0.000    999.000    999.000
+    VDORI$4           -0.870      0.000    999.000    999.000
+    VDLFL2$1         -20.364      0.000    999.000    999.000
+    VDLFL2$2         -11.798      0.000    999.000    999.000
+    VDLFL3$1          -4.506      0.000    999.000    999.000
+    VDLFL3$2          -0.347      0.000    999.000    999.000
+    VDSEVENS$1        -2.274      0.000    999.000    999.000
+    VDSEVENS$2        -1.151      0.000    999.000    999.000
+    VDSEVENS$3        -0.474      0.000    999.000    999.000
+    VDSEVENS$4         0.142      0.000    999.000    999.000
+    VDSEVENS$5         1.148      0.000    999.000    999.000
+    VDCOUNT$1         -3.023      0.000    999.000    999.000
+    PD102$1           -3.983      0.000    999.000    999.000
+    PD102$2            0.724      0.000    999.000    999.000
+
+ Variances
+    GCP                1.315      0.000    999.000    999.000
+
+ Residual Variances
+    VDLFL1Z            0.005      0.000    999.000    999.000
+    VDWDDELZ           0.029      0.000    999.000    999.000
+    VDEXF7Z            0.018      0.000    999.000    999.000
+
+Latent Class 3
+
+ GCP      BY
+    VDORI              0.425      0.000    999.000    999.000
+    VDLFL1Z            0.019      0.000    999.000    999.000
+    VDLFL2             7.948      0.000    999.000    999.000
+    VDLFL3             0.701      0.000    999.000    999.000
+    VDWDDELZ           0.050      0.000    999.000    999.000
+    VDEXF7Z            0.048      0.000    999.000    999.000
+    VDSEVENS           0.637      0.000    999.000    999.000
+    VDCOUNT            0.598      0.000    999.000    999.000
+
+ VDORI      ON
+    X1                -0.076      0.000    999.000    999.000
+    X2                 0.391      0.000    999.000    999.000
+    X3                -1.647      0.000    999.000    999.000
+    X4                 0.760      0.000    999.000    999.000
+    X5                -0.031      0.000    999.000    999.000
+    X6                -0.204      0.000    999.000    999.000
+    X7                 0.146      0.000    999.000    999.000
+    X1X4               0.007      0.000    999.000    999.000
+    X1X5               0.138      0.000    999.000    999.000
+    X1X6               0.082      0.000    999.000    999.000
+    X1X7              -0.010      0.000    999.000    999.000
+    X2X4              -0.273      0.000    999.000    999.000
+    X2X5              -1.067      0.000    999.000    999.000
+    X2X6              -1.065      0.000    999.000    999.000
+    X2X7               0.029      0.000    999.000    999.000
+    X3X4               1.132      0.000    999.000    999.000
+    X3X5               4.982      0.000    999.000    999.000
+    X3X6               9.340      0.000    999.000    999.000
+    X3X7              -0.090      0.000    999.000    999.000
+    X4X5               1.014      0.000    999.000    999.000
+    X4X6              -0.106      0.000    999.000    999.000
+    X4X7              -0.054      0.000    999.000    999.000
+    X5X7              -0.013      0.000    999.000    999.000
+    X6X7              -0.081      0.000    999.000    999.000
+
+ VDLFL1Z    ON
+    X1                -0.006      0.000    999.000    999.000
+    X2                 0.016      0.000    999.000    999.000
+    X3                -0.042      0.000    999.000    999.000
+    X4                 0.001      0.000    999.000    999.000
+    X5                -0.028      0.000    999.000    999.000
+    X6                -0.033      0.000    999.000    999.000
+    X7                 0.009      0.000    999.000    999.000
+    X1X4               0.003      0.000    999.000    999.000
+    X1X5               0.001      0.000    999.000    999.000
+    X1X6               0.003      0.000    999.000    999.000
+    X1X7               0.001      0.000    999.000    999.000
+    X2X4              -0.015      0.000    999.000    999.000
+    X2X5               0.002      0.000    999.000    999.000
+    X2X6              -0.002      0.000    999.000    999.000
+    X2X7              -0.004      0.000    999.000    999.000
+    X3X4               0.047      0.000    999.000    999.000
+    X3X5              -0.022      0.000    999.000    999.000
+    X3X6              -0.048      0.000    999.000    999.000
+    X3X7               0.014      0.000    999.000    999.000
+    X4X5              -0.010      0.000    999.000    999.000
+    X4X6               0.022      0.000    999.000    999.000
+    X4X7               0.003      0.000    999.000    999.000
+    X5X7              -0.002      0.000    999.000    999.000
+    X6X7              -0.004      0.000    999.000    999.000
+
+ VDLFL2     ON
+    X1                -0.069      0.000    999.000    999.000
+    X2                -0.544      0.000    999.000    999.000
+    X3                 3.344      0.000    999.000    999.000
+    X4                -0.783      0.000    999.000    999.000
+    X5                -1.332      0.000    999.000    999.000
+    X6                -0.658      0.000    999.000    999.000
+    X7                 0.206      0.000    999.000    999.000
+    X1X4              -0.101      0.000    999.000    999.000
+    X1X5               0.309      0.000    999.000    999.000
+    X1X6               0.487      0.000    999.000    999.000
+    X1X7               0.031      0.000    999.000    999.000
+    X2X4               1.714      0.000    999.000    999.000
+    X2X5              -2.129      0.000    999.000    999.000
+    X2X6              -3.447      0.000    999.000    999.000
+    X2X7              -0.226      0.000    999.000    999.000
+    X3X4              -7.026      0.000    999.000    999.000
+    X3X5              10.395      0.000    999.000    999.000
+    X3X6              14.016      0.000    999.000    999.000
+    X3X7               1.296      0.000    999.000    999.000
+    X4X5              -0.668      0.000    999.000    999.000
+    X4X6               1.013      0.000    999.000    999.000
+    X4X7              -0.018      0.000    999.000    999.000
+    X5X7               0.316      0.000    999.000    999.000
+    X6X7               0.127      0.000    999.000    999.000
+
+ VDLFL3     ON
+    X1                -0.080      0.000    999.000    999.000
+    X2                 0.290      0.000    999.000    999.000
+    X3                -1.424      0.000    999.000    999.000
+    X4                -0.272      0.000    999.000    999.000
+    X5                -0.921      0.000    999.000    999.000
+    X6                -1.132      0.000    999.000    999.000
+    X7                 0.065      0.000    999.000    999.000
+    X1X4               0.140      0.000    999.000    999.000
+    X1X5               0.055      0.000    999.000    999.000
+    X1X6              -0.021      0.000    999.000    999.000
+    X1X7               0.000      0.000    999.000    999.000
+    X2X4              -0.810      0.000    999.000    999.000
+    X2X5              -0.106      0.000    999.000    999.000
+    X2X6               0.466      0.000    999.000    999.000
+    X2X7               0.026      0.000    999.000    999.000
+    X3X4               4.157      0.000    999.000    999.000
+    X3X5               0.195      0.000    999.000    999.000
+    X3X6              -2.935      0.000    999.000    999.000
+    X3X7              -0.185      0.000    999.000    999.000
+    X4X5               0.032      0.000    999.000    999.000
+    X4X6               0.334      0.000    999.000    999.000
+    X4X7               0.110      0.000    999.000    999.000
+    X5X7               0.204      0.000    999.000    999.000
+    X6X7               0.098      0.000    999.000    999.000
+
+ VDWDDELZ   ON
+    X1                -0.006      0.000    999.000    999.000
+    X2                 0.008      0.000    999.000    999.000
+    X3                -0.066      0.000    999.000    999.000
+    X4                 0.061      0.000    999.000    999.000
+    X5                -0.086      0.000    999.000    999.000
+    X6                 0.006      0.000    999.000    999.000
+    X7                 0.021      0.000    999.000    999.000
+    X1X4               0.008      0.000    999.000    999.000
+    X1X5               0.005      0.000    999.000    999.000
+    X1X6              -0.008      0.000    999.000    999.000
+    X1X7               0.000      0.000    999.000    999.000
+    X2X4              -0.038      0.000    999.000    999.000
+    X2X5              -0.050      0.000    999.000    999.000
+    X2X6               0.006      0.000    999.000    999.000
+    X2X7              -0.001      0.000    999.000    999.000
+    X3X4               0.169      0.000    999.000    999.000
+    X3X5               0.236      0.000    999.000    999.000
+    X3X6               0.047      0.000    999.000    999.000
+    X3X7              -0.002      0.000    999.000    999.000
+    X4X5               0.012      0.000    999.000    999.000
+    X4X6              -0.028      0.000    999.000    999.000
+    X4X7               0.003      0.000    999.000    999.000
+    X5X7              -0.006      0.000    999.000    999.000
+    X6X7              -0.013      0.000    999.000    999.000
+
+ VDEXF7Z    ON
+    X1                -0.003      0.000    999.000    999.000
+    X2                -0.010      0.000    999.000    999.000
+    X3                 0.066      0.000    999.000    999.000
+    X4                -0.030      0.000    999.000    999.000
+    X5                -0.191      0.000    999.000    999.000
+    X6                -0.114      0.000    999.000    999.000
+    X7                 0.026      0.000    999.000    999.000
+    X1X4              -0.002      0.000    999.000    999.000
+    X1X5               0.000      0.000    999.000    999.000
+    X1X6               0.007      0.000    999.000    999.000
+    X1X7               0.000      0.000    999.000    999.000
+    X2X4               0.016      0.000    999.000    999.000
+    X2X5              -0.004      0.000    999.000    999.000
+    X2X6              -0.054      0.000    999.000    999.000
+    X2X7              -0.001      0.000    999.000    999.000
+    X3X4              -0.087      0.000    999.000    999.000
+    X3X5               0.059      0.000    999.000    999.000
+    X3X6               0.283      0.000    999.000    999.000
+    X3X7               0.004      0.000    999.000    999.000
+    X4X5               0.062      0.000    999.000    999.000
+    X4X6               0.000      0.000    999.000    999.000
+    X4X7              -0.002      0.000    999.000    999.000
+    X5X7               0.010      0.000    999.000    999.000
+    X6X7              -0.006      0.000    999.000    999.000
+
+ VDSEVENS   ON
+    X1                -0.054      0.000    999.000    999.000
+    X2                -0.007      0.000    999.000    999.000
+    X3                 0.531      0.000    999.000    999.000
+    X4                -0.680      0.000    999.000    999.000
+    X5                -1.815      0.000    999.000    999.000
+    X6                -0.460      0.000    999.000    999.000
+    X7                 0.166      0.000    999.000    999.000
+    X1X4               0.012      0.000    999.000    999.000
+    X1X5               0.076      0.000    999.000    999.000
+    X1X6               0.198      0.000    999.000    999.000
+    X1X7               0.011      0.000    999.000    999.000
+    X2X4               0.111      0.000    999.000    999.000
+    X2X5              -0.527      0.000    999.000    999.000
+    X2X6              -1.109      0.000    999.000    999.000
+    X2X7              -0.042      0.000    999.000    999.000
+    X3X4              -0.885      0.000    999.000    999.000
+    X3X5               1.564      0.000    999.000    999.000
+    X3X6               6.662      0.000    999.000    999.000
+    X3X7               0.162      0.000    999.000    999.000
+    X4X5               0.606      0.000    999.000    999.000
+    X4X6              -0.563      0.000    999.000    999.000
+    X4X7               0.011      0.000    999.000    999.000
+    X5X7               0.159      0.000    999.000    999.000
+    X6X7              -0.073      0.000    999.000    999.000
+
+ VDCOUNT    ON
+    X1                -0.058      0.000    999.000    999.000
+    X2                -0.092      0.000    999.000    999.000
+    X3                 0.424      0.000    999.000    999.000
+    X4                -0.349      0.000    999.000    999.000
+    X5                -0.891      0.000    999.000    999.000
+    X6                 1.844      0.000    999.000    999.000
+    X7                 0.221      0.000    999.000    999.000
+    X1X4               0.213      0.000    999.000    999.000
+    X1X5              -0.156      0.000    999.000    999.000
+    X1X6               0.054      0.000    999.000    999.000
+    X1X7               0.012      0.000    999.000    999.000
+    X2X4              -0.924      0.000    999.000    999.000
+    X2X5               1.138      0.000    999.000    999.000
+    X2X6               0.282      0.000    999.000    999.000
+    X2X7              -0.011      0.000    999.000    999.000
+    X3X4               3.667      0.000    999.000    999.000
+    X3X5              -5.257      0.000    999.000    999.000
+    X3X6              -3.898      0.000    999.000    999.000
+    X3X7              -0.183      0.000    999.000    999.000
+    X4X5              -0.042      0.000    999.000    999.000
+    X4X6              -2.154      0.000    999.000    999.000
+    X4X7              -0.118      0.000    999.000    999.000
+    X5X7              -0.003      0.000    999.000    999.000
+    X6X7               0.082      0.000    999.000    999.000
+
+ VDWDDELZ WITH
+    VDLFL1Z            0.000      0.000    999.000    999.000
+    VDEXF7Z            0.000      0.000    999.000    999.000
+
+ VDEXF7Z  WITH
+    VDLFL1Z            0.000      0.000    999.000    999.000
+
+ Means
+    GCP                0.000      0.000    999.000    999.000
+
+ Intercepts
+    VDLFL1Z            0.115      0.000    999.000    999.000
+    VDWDDELZ           0.231      0.000    999.000    999.000
+    VDEXF7Z            0.447      0.000    999.000    999.000
+
+ Thresholds
+    VDORI$1           -2.690      0.000    999.000    999.000
+    VDORI$2           -1.802      0.000    999.000    999.000
+    VDORI$3           -1.089      0.000    999.000    999.000
+    VDORI$4            0.164      0.000    999.000    999.000
+    VDLFL2$1         -23.316      0.000    999.000    999.000
+    VDLFL2$2          -5.810      0.000    999.000    999.000
+    VDLFL3$1          -2.278      0.000    999.000    999.000
+    VDLFL3$2           0.581      0.000    999.000    999.000
+    VDSEVENS$1        -1.532      0.000    999.000    999.000
+    VDSEVENS$2        -0.253      0.000    999.000    999.000
+    VDSEVENS$3         0.582      0.000    999.000    999.000
+    VDSEVENS$4         1.104      0.000    999.000    999.000
+    VDSEVENS$5         1.806      0.000    999.000    999.000
+    VDCOUNT$1         -2.426      0.000    999.000    999.000
+    PD102$1           -3.116      0.000    999.000    999.000
+    PD102$2            0.631      0.000    999.000    999.000
+
+ Variances
+    GCP                2.424      0.000    999.000    999.000
+
+ Residual Variances
+    VDLFL1Z            0.005      0.000    999.000    999.000
+    VDWDDELZ           0.029      0.000    999.000    999.000
+    VDEXF7Z            0.018      0.000    999.000    999.000
+
+Categorical Latent Variables
+
+ Means
+    C#1                2.279      0.000    999.000    999.000
+    C#2                1.032      0.000    999.000    999.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.100E+01
+       (ratio of smallest to largest eigenvalue)
+
+
+LATENT CLASS INDICATOR MEANS AND PROBABILITIES FOR EACH LATENT CLASS
+
+     MEAN/PROBABILITY PROFILES FOR C
+                       Latent class
+                     1      2      3
+     VDORI
+       Category 1  0.000  0.012  0.121
+       Category 2  0.003  0.014  0.104
+       Category 3  0.023  0.039  0.119
+       Category 4  0.160  0.269  0.249
+       Category 5  0.814  0.666  0.406
+     VDLFL2
+       Category 1  0.001  0.017  0.034
+       Category 2  0.035  0.094  0.282
+       Category 3  0.964  0.889  0.684
+     VDLFL3
+       Category 1  0.017  0.036  0.178
+       Category 2  0.243  0.403  0.412
+       Category 3  0.741  0.561  0.409
+     VDSEVENS
+       Category 1  0.067  0.164  0.273
+       Category 2  0.095  0.155  0.215
+       Category 3  0.066  0.121  0.146
+       Category 4  0.133  0.117  0.082
+       Category 5  0.194  0.177  0.091
+       Category 6  0.445  0.267  0.192
+     VDCOUNT
+       Category 1  0.048  0.095  0.175
+       Category 2  0.952  0.905  0.825
+     PD102
+       Category 1  0.016  0.018  0.042
+       Category 2  0.745  0.655  0.610
+       Category 3  0.239  0.327  0.347
+     VDLFL1Z       0.182  0.146  0.101
+     VDWDDELZ      0.443  0.318  0.195
+     VDEXF7Z       0.629  0.531  0.421
+
+
+RESULTS IN PROBABILITY SCALE
+
+                    Estimate
+
+Latent Class 1
+
+ VDORI
+    Category 1         0.000
+    Category 2         0.003
+    Category 3         0.023
+    Category 4         0.160
+    Category 5         0.814
+ VDLFL2
+    Category 1         0.001
+    Category 2         0.035
+    Category 3         0.964
+ VDLFL3
+    Category 1         0.017
+    Category 2         0.243
+    Category 3         0.741
+ VDSEVENS
+    Category 1         0.067
+    Category 2         0.095
+    Category 3         0.066
+    Category 4         0.133
+    Category 5         0.194
+    Category 6         0.445
+ VDCOUNT
+    Category 1         0.048
+    Category 2         0.952
+ PD102
+    Category 1         0.016
+    Category 2         0.745
+    Category 3         0.239
+
+Latent Class 2
+
+ VDORI
+    Category 1         0.012
+    Category 2         0.014
+    Category 3         0.039
+    Category 4         0.269
+    Category 5         0.666
+ VDLFL2
+    Category 1         0.017
+    Category 2         0.094
+    Category 3         0.889
+ VDLFL3
+    Category 1         0.036
+    Category 2         0.403
+    Category 3         0.561
+ VDSEVENS
+    Category 1         0.164
+    Category 2         0.155
+    Category 3         0.121
+    Category 4         0.117
+    Category 5         0.177
+    Category 6         0.267
+ VDCOUNT
+    Category 1         0.095
+    Category 2         0.905
+ PD102
+    Category 1         0.018
+    Category 2         0.655
+    Category 3         0.327
+
+Latent Class 3
+
+ VDORI
+    Category 1         0.121
+    Category 2         0.104
+    Category 3         0.119
+    Category 4         0.249
+    Category 5         0.406
+ VDLFL2
+    Category 1         0.034
+    Category 2         0.282
+    Category 3         0.684
+ VDLFL3
+    Category 1         0.178
+    Category 2         0.412
+    Category 3         0.409
+ VDSEVENS
+    Category 1         0.273
+    Category 2         0.215
+    Category 3         0.146
+    Category 4         0.082
+    Category 5         0.091
+    Category 6         0.192
+ VDCOUNT
+    Category 1         0.175
+    Category 2         0.825
+ PD102
+    Category 1         0.042
+    Category 2         0.610
+    Category 3         0.347
+
+
+EQUALITY TESTS OF INTERCEPTS/THRESHOLDS ACROSS THE LATENT CLASSES
+
+                    Chi-Square     P-Value   Degrees of Freedom
+
+
+VDLFL1Z
+  Overall test     256100.013      0.000        2
+  Class 1 vs. 2   9610001.996      0.000        1
+  Class 1 vs. 3  50410003.301      0.000        1
+  Class 2 vs. 3  15999999.285      0.000        1
+
+VDWDDELZ
+  Overall test    2448099.697      0.000        2
+  Class 1 vs. 2  ************      0.000        1
+  Class 1 vs. 3  ************      0.000        1
+  Class 2 vs. 3  ************      0.000        1
+
+VDEXF7Z
+  Overall test    1794499.611      0.000        2
+  Class 1 vs. 2  77439999.161      0.000        1
+  Class 1 vs. 3  ************      0.000        1
+  Class 2 vs. 3  ************      0.000        1
+
+
+LATENT CLASS INDICATOR ODDS RATIOS FOR THE LATENT CLASSES
+
+                                                95% C.I.
+                    Estimate       S.E.  Lower 2.5% Upper 2.5%
+
+Latent Class 1 Compared to Latent Class 2
+
+ VDORI
+    Category > 1      22.601      0.000     22.601     22.601
+    Category > 2       6.686      0.000      6.686      6.686
+    Category > 3       2.425      0.000      2.425      2.425
+    Category > 4       2.252      0.000      2.252      2.252
+ VDLFL2
+    Category > 1     151.411      0.000    151.411    151.411
+    Category > 2      32.137      0.000     32.137     32.137
+ VDLFL3
+    Category > 1       1.883      0.000      1.883      1.883
+    Category > 2       2.586      0.000      2.586      2.586
+ VDSEVENS
+    Category > 1       3.320      0.000      3.320      3.320
+    Category > 2       2.886      0.000      2.886      2.886
+    Category > 3       3.287      0.000      3.287      3.287
+    Category > 4       2.614      0.000      2.614      2.614
+    Category > 5       2.578      0.000      2.578      2.578
+ VDCOUNT
+    Category > 1       1.868      0.000      1.868      1.868
+ PD102
+    Category > 1       1.117      0.000      1.117      1.117
+    Category > 2       0.647      0.000      0.647      0.647
+
+Latent Class 1 Compared to Latent Class 3
+
+ VDORI
+    Category > 1     217.674      0.000    217.674    217.674
+    Category > 2      68.580      0.000     68.580     68.580
+    Category > 3      17.850      0.000     17.850     17.850
+    Category > 4       6.334      0.000      6.334      6.334
+ VDLFL2
+    Category > 1       7.909      0.000      7.909      7.909
+    Category > 2   12810.240      0.000  12810.242  12810.242
+ VDLFL3
+    Category > 1      17.479      0.000     17.479     17.479
+    Category > 2       6.540      0.000      6.540      6.540
+ VDSEVENS
+    Category > 1       6.973      0.000      6.973      6.973
+    Category > 2       7.085      0.000      7.085      7.085
+    Category > 3       9.450      0.000      9.450      9.450
+    Category > 4       6.841      0.000      6.841      6.841
+    Category > 5       4.978      0.000      4.978      4.978
+ VDCOUNT
+    Category > 1       3.394      0.000      3.394      3.394
+ PD102
+    Category > 1       2.659      0.000      2.659      2.659
+    Category > 2       0.589      0.000      0.589      0.589
+
+Latent Class 2 Compared to Latent Class 3
+
+ VDORI
+    Category > 1       9.631      0.000      9.631      9.631
+    Category > 2      10.257      0.000     10.257     10.257
+    Category > 3       7.360      0.000      7.360      7.360
+    Category > 4       2.812      0.000      2.812      2.812
+ VDLFL2
+    Category > 1       0.052      0.000      0.052      0.052
+    Category > 2     398.617      0.000    398.617    398.617
+ VDLFL3
+    Category > 1       9.281      0.000      9.281      9.281
+    Category > 2       2.529      0.000      2.529      2.529
+ VDSEVENS
+    Category > 1       2.100      0.000      2.100      2.100
+    Category > 2       2.455      0.000      2.455      2.455
+    Category > 3       2.875      0.000      2.875      2.875
+    Category > 4       2.617      0.000      2.617      2.617
+    Category > 5       1.931      0.000      1.931      1.931
+ VDCOUNT
+    Category > 1       1.817      0.000      1.817      1.817
+ PD102
+    Category > 1       2.380      0.000      2.380      2.380
+    Category > 2       0.911      0.000      0.911      0.911
+
+
+LOGISTIC REGRESSION ODDS RATIO RESULTS FOR OBSERVED VARIABLES
+
+                                                95% C.I.
+                    Estimate       S.E.  Lower 2.5% Upper 2.5%
+
+Latent Class 1
+
+ VDORI      ON
+    X1                 0.927      0.000      0.927      0.927
+    X2                 1.478      0.000      1.478      1.478
+    X3                 0.193      0.000      0.193      0.193
+    X4                 2.139      0.000      2.139      2.139
+    X5                 0.970      0.000      0.970      0.970
+    X6                 0.815      0.000      0.815      0.815
+    X7                 1.158      0.000      1.158      1.158
+    X1X4               1.007      0.000      1.007      1.007
+    X1X5               1.148      0.000      1.148      1.148
+    X1X6               1.085      0.000      1.085      1.085
+    X1X7               0.990      0.000      0.990      0.990
+    X2X4               0.761      0.000      0.761      0.761
+    X2X5               0.344      0.000      0.344      0.344
+    X2X6               0.345      0.000      0.345      0.345
+    X2X7               1.030      0.000      1.030      1.030
+    X3X4               3.102      0.000      3.102      3.102
+    X3X5             145.745      0.000    145.745    145.745
+    X3X6           11389.188      0.000  11389.188  11389.188
+    X3X7               0.913      0.000      0.913      0.913
+    X4X5               2.756      0.000      2.756      2.756
+    X4X6               0.899      0.000      0.899      0.899
+    X4X7               0.947      0.000      0.947      0.947
+    X5X7               0.987      0.000      0.987      0.987
+    X6X7               0.922      0.000      0.922      0.922
+
+ VDLFL2     ON
+    X1                 0.933      0.000      0.933      0.933
+    X2                 0.580      0.000      0.580      0.580
+    X3                28.334      0.000     28.334     28.334
+    X4                 0.457      0.000      0.457      0.457
+    X5                 0.264      0.000      0.264      0.264
+    X6                 0.518      0.000      0.518      0.518
+    X7                 1.228      0.000      1.228      1.228
+    X1X4               0.904      0.000      0.904      0.904
+    X1X5               1.362      0.000      1.362      1.362
+    X1X6               1.628      0.000      1.628      1.628
+    X1X7               1.032      0.000      1.032      1.032
+    X2X4               5.549      0.000      5.549      5.549
+    X2X5               0.119      0.000      0.119      0.119
+    X2X6               0.032      0.000      0.032      0.032
+    X2X7               0.798      0.000      0.798      0.798
+    X3X4               0.001      0.000      0.001      0.001
+    X3X5           32707.197      0.000  32707.197  32707.197
+    X3X6           *********      0.000  *********  *********
+    X3X7               3.653      0.000      3.653      3.653
+    X4X5               0.513      0.000      0.513      0.513
+    X4X6               2.753      0.000      2.753      2.753
+    X4X7               0.982      0.000      0.982      0.982
+    X5X7               1.371      0.000      1.371      1.371
+    X6X7               1.135      0.000      1.135      1.135
+
+ VDLFL3     ON
+    X1                 0.923      0.000      0.923      0.923
+    X2                 1.336      0.000      1.336      1.336
+    X3                 0.241      0.000      0.241      0.241
+    X4                 0.762      0.000      0.762      0.762
+    X5                 0.398      0.000      0.398      0.398
+    X6                 0.322      0.000      0.322      0.322
+    X7                 1.067      0.000      1.067      1.067
+    X1X4               1.150      0.000      1.150      1.150
+    X1X5               1.057      0.000      1.057      1.057
+    X1X6               0.979      0.000      0.979      0.979
+    X1X7               1.000      0.000      1.000      1.000
+    X2X4               0.445      0.000      0.445      0.445
+    X2X5               0.899      0.000      0.899      0.899
+    X2X6               1.593      0.000      1.593      1.593
+    X2X7               1.026      0.000      1.026      1.026
+    X3X4              63.850      0.000     63.850     63.850
+    X3X5               1.215      0.000      1.215      1.215
+    X3X6               0.053      0.000      0.053      0.053
+    X3X7               0.831      0.000      0.831      0.831
+    X4X5               1.032      0.000      1.032      1.032
+    X4X6               1.396      0.000      1.396      1.396
+    X4X7               1.116      0.000      1.116      1.116
+    X5X7               1.226      0.000      1.226      1.226
+    X6X7               1.103      0.000      1.103      1.103
+
+ VDSEVENS   ON
+    X1                 0.947      0.000      0.947      0.947
+    X2                 0.993      0.000      0.993      0.993
+    X3                 1.700      0.000      1.700      1.700
+    X4                 0.507      0.000      0.507      0.507
+    X5                 0.163      0.000      0.163      0.163
+    X6                 0.631      0.000      0.631      0.631
+    X7                 1.180      0.000      1.180      1.180
+    X1X4               1.012      0.000      1.012      1.012
+    X1X5               1.079      0.000      1.079      1.079
+    X1X6               1.219      0.000      1.219      1.219
+    X1X7               1.012      0.000      1.012      1.012
+    X2X4               1.117      0.000      1.117      1.117
+    X2X5               0.590      0.000      0.590      0.590
+    X2X6               0.330      0.000      0.330      0.330
+    X2X7               0.958      0.000      0.958      0.958
+    X3X4               0.413      0.000      0.413      0.413
+    X3X5               4.777      0.000      4.777      4.777
+    X3X6             781.871      0.000    781.871    781.871
+    X3X7               1.176      0.000      1.176      1.176
+    X4X5               1.834      0.000      1.834      1.834
+    X4X6               0.569      0.000      0.569      0.569
+    X4X7               1.011      0.000      1.011      1.011
+    X5X7               1.172      0.000      1.172      1.172
+    X6X7               0.930      0.000      0.930      0.930
+
+ VDCOUNT    ON
+    X1                 0.943      0.000      0.943      0.943
+    X2                 0.912      0.000      0.912      0.912
+    X3                 1.529      0.000      1.529      1.529
+    X4                 0.705      0.000      0.705      0.705
+    X5                 0.410      0.000      0.410      0.410
+    X6                 6.323      0.000      6.323      6.323
+    X7                 1.248      0.000      1.248      1.248
+    X1X4               1.238      0.000      1.238      1.238
+    X1X5               0.856      0.000      0.856      0.856
+    X1X6               1.056      0.000      1.056      1.056
+    X1X7               1.012      0.000      1.012      1.012
+    X2X4               0.397      0.000      0.397      0.397
+    X2X5               3.119      0.000      3.119      3.119
+    X2X6               1.325      0.000      1.325      1.325
+    X2X7               0.989      0.000      0.989      0.989
+    X3X4              39.134      0.000     39.134     39.134
+    X3X5               0.005      0.000      0.005      0.005
+    X3X6               0.020      0.000      0.020      0.020
+    X3X7               0.832      0.000      0.832      0.832
+    X4X5               0.959      0.000      0.959      0.959
+    X4X6               0.116      0.000      0.116      0.116
+    X4X7               0.888      0.000      0.888      0.888
+    X5X7               0.997      0.000      0.997      0.997
+    X6X7               1.086      0.000      1.086      1.086
+
+Latent Class 2
+
+ VDORI      ON
+    X1                 0.927      0.000      0.927      0.927
+    X2                 1.478      0.000      1.478      1.478
+    X3                 0.193      0.000      0.193      0.193
+    X4                 2.139      0.000      2.139      2.139
+    X5                 0.970      0.000      0.970      0.970
+    X6                 0.815      0.000      0.815      0.815
+    X7                 1.158      0.000      1.158      1.158
+    X1X4               1.007      0.000      1.007      1.007
+    X1X5               1.148      0.000      1.148      1.148
+    X1X6               1.085      0.000      1.085      1.085
+    X1X7               0.990      0.000      0.990      0.990
+    X2X4               0.761      0.000      0.761      0.761
+    X2X5               0.344      0.000      0.344      0.344
+    X2X6               0.345      0.000      0.345      0.345
+    X2X7               1.030      0.000      1.030      1.030
+    X3X4               3.102      0.000      3.102      3.102
+    X3X5             145.745      0.000    145.745    145.745
+    X3X6           11389.188      0.000  11389.188  11389.188
+    X3X7               0.913      0.000      0.913      0.913
+    X4X5               2.756      0.000      2.756      2.756
+    X4X6               0.899      0.000      0.899      0.899
+    X4X7               0.947      0.000      0.947      0.947
+    X5X7               0.987      0.000      0.987      0.987
+    X6X7               0.922      0.000      0.922      0.922
+
+ VDLFL2     ON
+    X1                 0.933      0.000      0.933      0.933
+    X2                 0.580      0.000      0.580      0.580
+    X3                28.334      0.000     28.334     28.334
+    X4                 0.457      0.000      0.457      0.457
+    X5                 0.264      0.000      0.264      0.264
+    X6                 0.518      0.000      0.518      0.518
+    X7                 1.228      0.000      1.228      1.228
+    X1X4               0.904      0.000      0.904      0.904
+    X1X5               1.362      0.000      1.362      1.362
+    X1X6               1.628      0.000      1.628      1.628
+    X1X7               1.032      0.000      1.032      1.032
+    X2X4               5.549      0.000      5.549      5.549
+    X2X5               0.119      0.000      0.119      0.119
+    X2X6               0.032      0.000      0.032      0.032
+    X2X7               0.798      0.000      0.798      0.798
+    X3X4               0.001      0.000      0.001      0.001
+    X3X5           32707.197      0.000  32707.197  32707.197
+    X3X6           *********      0.000  *********  *********
+    X3X7               3.653      0.000      3.653      3.653
+    X4X5               0.513      0.000      0.513      0.513
+    X4X6               2.753      0.000      2.753      2.753
+    X4X7               0.982      0.000      0.982      0.982
+    X5X7               1.371      0.000      1.371      1.371
+    X6X7               1.135      0.000      1.135      1.135
+
+ VDLFL3     ON
+    X1                 0.923      0.000      0.923      0.923
+    X2                 1.336      0.000      1.336      1.336
+    X3                 0.241      0.000      0.241      0.241
+    X4                 0.762      0.000      0.762      0.762
+    X5                 0.398      0.000      0.398      0.398
+    X6                 0.322      0.000      0.322      0.322
+    X7                 1.067      0.000      1.067      1.067
+    X1X4               1.150      0.000      1.150      1.150
+    X1X5               1.057      0.000      1.057      1.057
+    X1X6               0.979      0.000      0.979      0.979
+    X1X7               1.000      0.000      1.000      1.000
+    X2X4               0.445      0.000      0.445      0.445
+    X2X5               0.899      0.000      0.899      0.899
+    X2X6               1.593      0.000      1.593      1.593
+    X2X7               1.026      0.000      1.026      1.026
+    X3X4              63.850      0.000     63.850     63.850
+    X3X5               1.215      0.000      1.215      1.215
+    X3X6               0.053      0.000      0.053      0.053
+    X3X7               0.831      0.000      0.831      0.831
+    X4X5               1.032      0.000      1.032      1.032
+    X4X6               1.396      0.000      1.396      1.396
+    X4X7               1.116      0.000      1.116      1.116
+    X5X7               1.226      0.000      1.226      1.226
+    X6X7               1.103      0.000      1.103      1.103
+
+ VDSEVENS   ON
+    X1                 0.947      0.000      0.947      0.947
+    X2                 0.993      0.000      0.993      0.993
+    X3                 1.700      0.000      1.700      1.700
+    X4                 0.507      0.000      0.507      0.507
+    X5                 0.163      0.000      0.163      0.163
+    X6                 0.631      0.000      0.631      0.631
+    X7                 1.180      0.000      1.180      1.180
+    X1X4               1.012      0.000      1.012      1.012
+    X1X5               1.079      0.000      1.079      1.079
+    X1X6               1.219      0.000      1.219      1.219
+    X1X7               1.012      0.000      1.012      1.012
+    X2X4               1.117      0.000      1.117      1.117
+    X2X5               0.590      0.000      0.590      0.590
+    X2X6               0.330      0.000      0.330      0.330
+    X2X7               0.958      0.000      0.958      0.958
+    X3X4               0.413      0.000      0.413      0.413
+    X3X5               4.777      0.000      4.777      4.777
+    X3X6             781.871      0.000    781.871    781.871
+    X3X7               1.176      0.000      1.176      1.176
+    X4X5               1.834      0.000      1.834      1.834
+    X4X6               0.569      0.000      0.569      0.569
+    X4X7               1.011      0.000      1.011      1.011
+    X5X7               1.172      0.000      1.172      1.172
+    X6X7               0.930      0.000      0.930      0.930
+
+ VDCOUNT    ON
+    X1                 0.943      0.000      0.943      0.943
+    X2                 0.912      0.000      0.912      0.912
+    X3                 1.529      0.000      1.529      1.529
+    X4                 0.705      0.000      0.705      0.705
+    X5                 0.410      0.000      0.410      0.410
+    X6                 6.323      0.000      6.323      6.323
+    X7                 1.248      0.000      1.248      1.248
+    X1X4               1.238      0.000      1.238      1.238
+    X1X5               0.856      0.000      0.856      0.856
+    X1X6               1.056      0.000      1.056      1.056
+    X1X7               1.012      0.000      1.012      1.012
+    X2X4               0.397      0.000      0.397      0.397
+    X2X5               3.119      0.000      3.119      3.119
+    X2X6               1.325      0.000      1.325      1.325
+    X2X7               0.989      0.000      0.989      0.989
+    X3X4              39.134      0.000     39.134     39.134
+    X3X5               0.005      0.000      0.005      0.005
+    X3X6               0.020      0.000      0.020      0.020
+    X3X7               0.832      0.000      0.832      0.832
+    X4X5               0.959      0.000      0.959      0.959
+    X4X6               0.116      0.000      0.116      0.116
+    X4X7               0.888      0.000      0.888      0.888
+    X5X7               0.997      0.000      0.997      0.997
+    X6X7               1.086      0.000      1.086      1.086
+
+Latent Class 3
+
+ VDORI      ON
+    X1                 0.927      0.000      0.927      0.927
+    X2                 1.478      0.000      1.478      1.478
+    X3                 0.193      0.000      0.193      0.193
+    X4                 2.139      0.000      2.139      2.139
+    X5                 0.970      0.000      0.970      0.970
+    X6                 0.815      0.000      0.815      0.815
+    X7                 1.158      0.000      1.158      1.158
+    X1X4               1.007      0.000      1.007      1.007
+    X1X5               1.148      0.000      1.148      1.148
+    X1X6               1.085      0.000      1.085      1.085
+    X1X7               0.990      0.000      0.990      0.990
+    X2X4               0.761      0.000      0.761      0.761
+    X2X5               0.344      0.000      0.344      0.344
+    X2X6               0.345      0.000      0.345      0.345
+    X2X7               1.030      0.000      1.030      1.030
+    X3X4               3.102      0.000      3.102      3.102
+    X3X5             145.745      0.000    145.745    145.745
+    X3X6           11389.188      0.000  11389.188  11389.188
+    X3X7               0.913      0.000      0.913      0.913
+    X4X5               2.756      0.000      2.756      2.756
+    X4X6               0.899      0.000      0.899      0.899
+    X4X7               0.947      0.000      0.947      0.947
+    X5X7               0.987      0.000      0.987      0.987
+    X6X7               0.922      0.000      0.922      0.922
+
+ VDLFL2     ON
+    X1                 0.933      0.000      0.933      0.933
+    X2                 0.580      0.000      0.580      0.580
+    X3                28.334      0.000     28.334     28.334
+    X4                 0.457      0.000      0.457      0.457
+    X5                 0.264      0.000      0.264      0.264
+    X6                 0.518      0.000      0.518      0.518
+    X7                 1.228      0.000      1.228      1.228
+    X1X4               0.904      0.000      0.904      0.904
+    X1X5               1.362      0.000      1.362      1.362
+    X1X6               1.628      0.000      1.628      1.628
+    X1X7               1.032      0.000      1.032      1.032
+    X2X4               5.549      0.000      5.549      5.549
+    X2X5               0.119      0.000      0.119      0.119
+    X2X6               0.032      0.000      0.032      0.032
+    X2X7               0.798      0.000      0.798      0.798
+    X3X4               0.001      0.000      0.001      0.001
+    X3X5           32707.197      0.000  32707.197  32707.197
+    X3X6           *********      0.000  *********  *********
+    X3X7               3.653      0.000      3.653      3.653
+    X4X5               0.513      0.000      0.513      0.513
+    X4X6               2.753      0.000      2.753      2.753
+    X4X7               0.982      0.000      0.982      0.982
+    X5X7               1.371      0.000      1.371      1.371
+    X6X7               1.135      0.000      1.135      1.135
+
+ VDLFL3     ON
+    X1                 0.923      0.000      0.923      0.923
+    X2                 1.336      0.000      1.336      1.336
+    X3                 0.241      0.000      0.241      0.241
+    X4                 0.762      0.000      0.762      0.762
+    X5                 0.398      0.000      0.398      0.398
+    X6                 0.322      0.000      0.322      0.322
+    X7                 1.067      0.000      1.067      1.067
+    X1X4               1.150      0.000      1.150      1.150
+    X1X5               1.057      0.000      1.057      1.057
+    X1X6               0.979      0.000      0.979      0.979
+    X1X7               1.000      0.000      1.000      1.000
+    X2X4               0.445      0.000      0.445      0.445
+    X2X5               0.899      0.000      0.899      0.899
+    X2X6               1.593      0.000      1.593      1.593
+    X2X7               1.026      0.000      1.026      1.026
+    X3X4              63.850      0.000     63.850     63.850
+    X3X5               1.215      0.000      1.215      1.215
+    X3X6               0.053      0.000      0.053      0.053
+    X3X7               0.831      0.000      0.831      0.831
+    X4X5               1.032      0.000      1.032      1.032
+    X4X6               1.396      0.000      1.396      1.396
+    X4X7               1.116      0.000      1.116      1.116
+    X5X7               1.226      0.000      1.226      1.226
+    X6X7               1.103      0.000      1.103      1.103
+
+ VDSEVENS   ON
+    X1                 0.947      0.000      0.947      0.947
+    X2                 0.993      0.000      0.993      0.993
+    X3                 1.700      0.000      1.700      1.700
+    X4                 0.507      0.000      0.507      0.507
+    X5                 0.163      0.000      0.163      0.163
+    X6                 0.631      0.000      0.631      0.631
+    X7                 1.180      0.000      1.180      1.180
+    X1X4               1.012      0.000      1.012      1.012
+    X1X5               1.079      0.000      1.079      1.079
+    X1X6               1.219      0.000      1.219      1.219
+    X1X7               1.012      0.000      1.012      1.012
+    X2X4               1.117      0.000      1.117      1.117
+    X2X5               0.590      0.000      0.590      0.590
+    X2X6               0.330      0.000      0.330      0.330
+    X2X7               0.958      0.000      0.958      0.958
+    X3X4               0.413      0.000      0.413      0.413
+    X3X5               4.777      0.000      4.777      4.777
+    X3X6             781.871      0.000    781.871    781.871
+    X3X7               1.176      0.000      1.176      1.176
+    X4X5               1.834      0.000      1.834      1.834
+    X4X6               0.569      0.000      0.569      0.569
+    X4X7               1.011      0.000      1.011      1.011
+    X5X7               1.172      0.000      1.172      1.172
+    X6X7               0.930      0.000      0.930      0.930
+
+ VDCOUNT    ON
+    X1                 0.943      0.000      0.943      0.943
+    X2                 0.912      0.000      0.912      0.912
+    X3                 1.529      0.000      1.529      1.529
+    X4                 0.705      0.000      0.705      0.705
+    X5                 0.410      0.000      0.410      0.410
+    X6                 6.323      0.000      6.323      6.323
+    X7                 1.248      0.000      1.248      1.248
+    X1X4               1.238      0.000      1.238      1.238
+    X1X5               0.856      0.000      0.856      0.856
+    X1X6               1.056      0.000      1.056      1.056
+    X1X7               1.012      0.000      1.012      1.012
+    X2X4               0.397      0.000      0.397      0.397
+    X2X5               3.119      0.000      3.119      3.119
+    X2X6               1.325      0.000      1.325      1.325
+    X2X7               0.989      0.000      0.989      0.989
+    X3X4              39.134      0.000     39.134     39.134
+    X3X5               0.005      0.000      0.005      0.005
+    X3X6               0.020      0.000      0.020      0.020
+    X3X7               0.832      0.000      0.832      0.832
+    X4X5               0.959      0.000      0.959      0.959
+    X4X6               0.116      0.000      0.116      0.116
+    X4X7               0.888      0.000      0.888      0.888
+    X5X7               0.997      0.000      0.997      0.997
+    X6X7               1.086      0.000      1.086      1.086
+
+Available post-processing tools
+
+  Conditional probabilities for the latent class indicators
+  Conditional probabilities for the latent class variable
+
+SAVEDATA INFORMATION
+
+
+  Save file
+    cprob.dat
+
+  Order and format of variables
+
+    VDORI          F10.3
+    VDLFL2         F10.3
+    VDLFL3         F10.3
+    VDSEVENS       F10.3
+    VDCOUNT        F10.3
+    PD102          F10.3
+    VDLFL1Z        F10.3
+    VDWDDELZ       F10.3
+    VDEXF7Z        F10.3
+    X1             F10.3
+    X2             F10.3
+    X3             F10.3
+    X4             F10.3
+    X5             F10.3
+    X6             F10.3
+    X7             F10.3
+    X1X4           F10.3
+    X1X5           F10.3
+    X1X6           F10.3
+    X1X7           F10.3
+    X2X4           F10.3
+    X2X5           F10.3
+    X2X6           F10.3
+    X2X7           F10.3
+    X3X4           F10.3
+    X3X5           F10.3
+    X3X6           F10.3
+    X3X7           F10.3
+    X4X5           F10.3
+    X4X6           F10.3
+    X4X7           F10.3
+    X5X7           F10.3
+    X6X7           F10.3
+    CPROB1         F10.3
+    CPROB2         F10.3
+    CPROB3         F10.3
+    MLCC           F10.3
+    ID             I10
+
+  Save file format
+    37F10.3 I10
+
+  Save file record length    10000
+
+  Save missing symbol        *
+
+
+     Beginning Time:  11:14:31
+        Ending Time:  11:14:31
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2025 Muthen & Muthen

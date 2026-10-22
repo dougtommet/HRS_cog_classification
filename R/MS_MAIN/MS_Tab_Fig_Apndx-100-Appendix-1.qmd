@@ -12,7 +12,7 @@
   - Cognitive impairment; function; self-reported concerns; JORM for non-completers
   - Normal, MCI, Dementia classifications
   - [Provenance: `R/A7_075-implement_algorithm.R`]
-- Relationship to HRS/HCAP Algorithm
+- Relationship to Manly-Jones algorithm
   - HCAP-derived learning target; Core-measure operationalization
   - [Provenance: `R/A7_100-comparison_of_diagnoses.R`]
 - Method details to document before prose drafting

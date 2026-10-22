@@ -1,0 +1,166 @@
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.2.1     ✔ readr     2.2.0
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+✔ purrr     1.2.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
+Attaching package: ‘kableExtra’
+
+The following object is masked from ‘package:dplyr’:
+
+    group_rows
+
+
+Attaching package: ‘janitor’
+
+The following objects are masked from ‘package:stats’:
+
+    chisq.test, fisher.test
+
+Loading required package: grid
+Loading required package: Matrix
+
+Attaching package: ‘Matrix’
+
+The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+Loading required package: survival
+
+Attaching package: ‘survey’
+
+The following object is masked from ‘package:graphics’:
+
+    dotchart
+
+
+Attaching package: ‘rlang’
+
+The following objects are masked from ‘package:purrr’:
+
+    flatten, flatten_chr, flatten_dbl, flatten_int, flatten_lgl,
+    flatten_raw, invoke, splice
+
+Fitting current: fold 1 of 10
+The file(s)
+ ‘cal_976af62672f8bf65821f0bfe538ce67b.dat’ 
+currently exist(s) and will be overwritten
+The file(s)
+ ‘score_6ad65faf68a6329f929df4d829e0f463.dat’ 
+currently exist(s) and will be overwritten
+Fitting current: fold 2 of 10
+The file(s)
+ ‘cal_7c49d68e74c5045244ff069eb0783620.dat’ 
+currently exist(s) and will be overwritten
+The file(s)
+ ‘score_c50d8ba9b82c365a66fcb033f5e79895.dat’ 
+currently exist(s) and will be overwritten
+Fitting current: fold 3 of 10
+The file(s)
+ ‘cal_7c49d68e74c5045244ff069eb0783620.dat’ 
+currently exist(s) and will be overwritten
+The file(s)
+ ‘score_b079ad14cda86d9eb9e3083867bb3263.dat’ 
+currently exist(s) and will be overwritten
+Fitting current: fold 4 of 10
+The file(s)
+ ‘cal_4339f2cbcc1c1dbdc1032ea727d38e63.dat’ 
+currently exist(s) and will be overwritten
+The file(s)
+ ‘score_d67ffa91717efc0d90efc900e43eff3b.dat’ 
+currently exist(s) and will be overwritten
+Fitting current: fold 5 of 10
+The file(s)
+ ‘cal_41acfff6096dbbc4d74fddf2de605a3f.dat’ 
+currently exist(s) and will be overwritten
+The file(s)
+ ‘score_813d345fcf71148923a0bb577146d14e.dat’ 
+currently exist(s) and will be overwritten
+Fitting current: fold 6 of 10
+The file(s)
+ ‘cal_41acfff6096dbbc4d74fddf2de605a3f.dat’ 
+currently exist(s) and will be overwritten
+Fitting current: fold 7 of 10
+Fitting current: fold 8 of 10
+Fitting current: fold 9 of 10
+Fitting current: fold 10 of 10
+Fitting current: full sample (in-sample)
+Fitting change1: fold 1 of 10
+Fitting change1: fold 2 of 10
+Fitting change1: fold 3 of 10
+Fitting change1: fold 4 of 10
+Fitting change1: fold 5 of 10
+Fitting change1: fold 6 of 10
+Fitting change1: fold 7 of 10
+Fitting change1: fold 8 of 10
+Fitting change1: fold 9 of 10
+Fitting change1: fold 10 of 10
+Fitting change1: full sample (in-sample)
+There were 50 or more warnings (use warnings() to see the first 50)
+
+Runs (calibration models):
+   variant       label n_train terminated_normally loglikelihood free_parameters      bic cal_not_terminated cal_not_pos_def cal_se_untrustworthy cal_not_replicated cal_not_identified
+1  current     fold_01    2953                TRUE     -8163.777              40 16647.18              FALSE           FALSE                FALSE              FALSE              FALSE
+2  current     fold_02    2953                TRUE     -8391.312              40 17102.25              FALSE           FALSE                FALSE              FALSE              FALSE
+3  current     fold_03    2953                TRUE     -8263.162              40 16845.95              FALSE           FALSE                FALSE              FALSE              FALSE
+4  current     fold_04    2954                TRUE     -8234.157              40 16787.95              FALSE           FALSE                FALSE              FALSE              FALSE
+5  current     fold_05    2955                TRUE     -8313.909              40 16947.47              FALSE           FALSE                FALSE              FALSE              FALSE
+6  current     fold_06    2955                TRUE     -8176.610              40 16672.87              FALSE           FALSE                FALSE              FALSE              FALSE
+7  current     fold_07    2956                TRUE     -8173.385              40 16666.43              FALSE           FALSE                FALSE              FALSE              FALSE
+8  current     fold_08    2956                TRUE     -8261.541              40 16842.75              FALSE           FALSE                FALSE              FALSE              FALSE
+9  current     fold_09    2956                TRUE     -8291.698              40 16903.06              FALSE           FALSE                FALSE              FALSE              FALSE
+10 current     fold_10    2956                TRUE     -8212.797              40 16745.26              FALSE           FALSE                FALSE              FALSE              FALSE
+11 current full_sample    3283                TRUE     -9169.847              40 18663.56              FALSE           FALSE                FALSE              FALSE              FALSE
+12 change1     fold_01    2953                TRUE     -8024.143              72 16623.61              FALSE           FALSE                FALSE              FALSE              FALSE
+13 change1     fold_02    2953                TRUE     -8246.234              72 17067.79              FALSE           FALSE                FALSE              FALSE              FALSE
+14 change1     fold_03    2953                TRUE     -8120.526              72 16816.37              FALSE           FALSE                FALSE              FALSE              FALSE
+15 change1     fold_04    2954                TRUE     -8085.472              72 16746.29              FALSE           FALSE                FALSE              FALSE              FALSE
+16 change1     fold_05    2955                TRUE     -8131.324              72 16838.02              FALSE           FALSE                 TRUE               TRUE              FALSE
+17 change1     fold_06    2955                TRUE     -8067.870              72 16711.11              FALSE           FALSE                FALSE              FALSE              FALSE
+18 change1     fold_07    2956                TRUE     -8021.552              72 16618.50              FALSE           FALSE                FALSE              FALSE              FALSE
+19 change1     fold_08    2956                TRUE     -8086.284              72 16747.96              FALSE           FALSE                FALSE              FALSE              FALSE
+20 change1     fold_09    2956                TRUE     -8129.370              72 16834.13              FALSE           FALSE                FALSE              FALSE              FALSE
+21 change1     fold_10    2956                TRUE     -8099.335              72 16774.06              FALSE           FALSE                FALSE              FALSE              FALSE
+22 change1 full_sample    3283                TRUE     -9012.023              72 18607.00              FALSE           FALSE                FALSE              FALSE              FALSE
+
+HRS/HCAP Algorithm weighted class shares in this sample (%):
+  algorithmic        w    pct
+1           1 33750496 72.027
+2           2  9689607 20.679
+3           3  3418224  7.295
+
+Summary (survey-weighted; kappas by probability allocation unless marked modal):
+                                   sample variant    n kappa_3class kappa_dementia log_score kappa_3class_modal kappa_dementia_modal pct_normal_prob pct_mci_prob pct_dementia_prob pct_normal_modal
+1 cross-validated (pooled held-out folds) change1 3283        0.359          0.303    -0.634              0.473                0.395          71.808       20.403             7.788           85.104
+2 cross-validated (pooled held-out folds) current 3283        0.322          0.256    -0.622              0.443                0.356          72.226       20.515             7.259           88.049
+3                 in-sample (full sample) change1 3283        0.368          0.318    -0.614              0.479                0.425          71.904       20.313             7.783           85.312
+4                 in-sample (full sample) current 3283        0.327          0.261    -0.617              0.444                0.356          72.165       20.522             7.315           87.833
+  pct_mci_modal pct_dementia_modal
+1         9.608              5.288
+2         8.227              3.724
+3         9.357              5.331
+4         8.402              3.765
+
+Per-fold differences, change1 minus current (description only):
+   fold diff_kappa_3class diff_kappa_dementia diff_log_score
+1     1             0.016               0.001         -0.035
+2     2             0.053               0.064         -0.006
+3     3             0.017               0.053         -0.029
+4     4             0.036               0.083         -0.016
+5     5             0.023              -0.015         -0.034
+6     6             0.051               0.097         -0.006
+7     7             0.034               0.019         -0.014
+8     8             0.029               0.022         -0.019
+9     9             0.070               0.092          0.021
+10   10             0.044               0.060          0.013
+
+Decision (rule fixed 2026-10-22):
+  diff_kappa_3class diff_kappa_dementia diff_log_score criterion_a criterion_b criterion_c adopt_change1
+1             0.037               0.046         -0.013        TRUE        TRUE       FALSE         FALSE
+Wrote /Users/rnj/DWork/GitHub/HRS_cog_classification/Reports/PMM_106_cross_validation_2026-10-22.csv

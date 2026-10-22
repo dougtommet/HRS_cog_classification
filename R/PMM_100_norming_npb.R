@@ -1,3 +1,5 @@
+# 2026-10-22: immediate word recall (vdwdimmz) is not used. The PMM uses the
+# same 8 cognitive items as the core algorithm CFA (A7_050).
 
 PMM_45 <- readRDS( here::here("R_objects", "PMM_045.RDS"))
 
@@ -47,12 +49,6 @@ mplus_mod = "vdori on  x1 x2 x3 x4 x5 x6 x7
   x3x4 x3x5 x3x6 x3x7
   x4x5 x4x6 x4x7 x5x7 x6x7;
 
-  vdwdimmz on  x1 x2 x3 x4 x5 x6 x7
-  x1x4 x1x5 x1x6 x1x7
-  x2x4 x2x5 x2x6 x2x7
-  x3x4 x3x5 x3x6 x3x7
-  x4x5 x4x6 x4x7 x5x7 x6x7;
-
   vdwddelz on  x1 x2 x3 x4 x5 x6 x7
   x1x4 x1x5 x1x6 x1x7
   x2x4 x2x5 x2x6 x2x7
@@ -89,7 +85,7 @@ mod1 <- MplusAutomation::mplusObject(
   OUTPUT = mplus_output,
   SAVEDATA = "H5RESULTS = norm_npb.h5;",
   usevariables = c("HCAP16WGTR", "STRATUM", "SECU_mplus",
-                   "vdori", "vdlfl1z", "vdlfl2", "vdlfl3", "vdwdimmz",
+                   "vdori", "vdlfl1z", "vdlfl2", "vdlfl3",
                    "vdwddelz", "vdexf7z", "vdsevens", "vdcount",
                    "x1",  "x2", "x3", "x4", "x5", "x6", "x7",
                    "x1x4", "x1x5", "x1x6", "x1x7",

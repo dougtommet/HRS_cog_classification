@@ -2,7 +2,8 @@
 
 # Analysis A3_2: score HRS Core 2016-2022 with the fixed HCAP16 PMM (Analysis A3).
 # Requires Analysis A0 (R_objects/A0_030_hrs16_22_merged.rds) and Analysis A3
-# (R_objects/PMM_100.RDS, mplus_output/pmm_103*/pmm_hcap_103b*.inp/.out).
+# (R_objects/PMM_100.RDS and the scoring inputs and outputs named in
+# R/PMM_090_model_registry.R).
 
 setwd(here::here())
 

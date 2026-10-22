@@ -1,12 +1,12 @@
 ## Contents
 
-- Review problem
+- Problem and goal
 
-- Review previous work
+- Previous work: the Core algorithm
 
-- Outline new work
+- The profile mixture model (PMM)
 
-- Results 
+- Results and comparison
 
 ## Problem/question/goal
 
@@ -14,12 +14,12 @@
 
 - End goal: Cognitive classification, and classification probabilities
 
-## Previous work
+## Previous work: the Core algorithm
 
-<div style="font-size: 0.7em; line-height: 1.2;">
-Previously we exported the "Manly-Jones" algorithm to the Core using a single domain of general cognitive performance to define cognitive impairment, ADLs and IADLS to define functional impairment. We applied cutpoints to cognition and functional measures to match the prevalence of cognitive impairment and functional impairment in the 2016 HCAP sample. 
+<div style="font-size: 0.6em; line-height: 1.2;">
+The Core algorithm (Analysis A7) exports the HRS/HCAP Algorithm (Manly et al., 2022) to the Core interview with a single domain of general cognitive performance. A factor score from the 8 Core cognitive tests is converted to a demographically adjusted T score, normed in the HCAP robust norms group and rounded to an integer. Two cut points on that score (`r a7_alg$cuts[["severe"]]` and `r a7_alg$cuts[["moderate"]]`) and a self-rated memory rule (D102) define Normal, MCI, and Dementia; respondents with no test score are classified from the Jorm IQCODE (cut points `r sprintf("%.1f", a7_alg$jorm_cuts[["mild"]])` and `r sprintf("%.1f", a7_alg$jorm_cuts[["severe"]])`). The cut points were selected by a rule fixed before any result was seen: match the weighted HRS/HCAP Algorithm dementia and MCI shares, then take the highest weighted dementia kappa.
 
-This approach achieved a **weighted kappa of 0.52** with respect to the HCAP algorithmic classification, and a weighted kappa of 0.33 with respect to the HCAP consensus classification (weighted here means some contribution to agreement is provided by off diagonal agreement, e.g., MCI vs. dementia; but these estimates also account for sampling weights; source: Reports/HRS_cognition_2025-07-22.html, comparison to HCAP algorithm and HCAP consensus sections). This was in a sub-sample of 2016 HCAP participants who had at least one non-missing cognitive measure (N = 2993).
+In HRS/HCAP, survey-weighted agreement of the Core algorithm with the HRS/HCAP Algorithm is $\kappa_w$ = `r f2(kappa_of("Core algorithm", "alg3"))` for Normal, MCI, and Dementia, and $\kappa$ = `r f2(kappa_of("Core algorithm", "alg2"))` for dementia versus no dementia.
 
-We wanted to do better, and we wanted a probabilistic information at the individual level about the classification.
+The Core algorithm gives each respondent a class. We wanted a probability of each class at the individual level.
 </div>

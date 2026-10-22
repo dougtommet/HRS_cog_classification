@@ -1,20 +1,21 @@
-## PMM: final model
+## PMM: model
 
 :::: {.columns}
 ::: {.column width="58%"}
-![](../excalidraw/PMM-103-PMM-no-latent.excalidraw.svg){width="100%"}
+![](../excalidraw/PMM-103-PMM-with-latent.excalidraw.svg){width="100%"}
 :::
 
 ::: {.column width="42%"}
-<div style="font-size: 0.45em; line-height: 1.2;">
-`cg` is the cognitive class (Normal, MCI, Dementia). In calibration it is fixed to the HRS/HCAP Algorithm class.
+<div style="font-size: 0.42em; line-height: 1.2;">
+`cg` is the cognitive class (Normal, MCI, Dementia). In calibration it is fixed to the Manly-Jones class.
 
-`K` holds the fixed coefficients from the robust norms group. They adjust the nine cognitive tests for demographics. They do not predict class.
+`GCP` is a general cognitive factor measured by the 8 core cognitive tests. Its mean and variance differ by class (Normal: mean 0, variance 1). The tests inform class only through GCP; their loadings, intercepts, and thresholds are equal across classes. Self-rated memory has class-specific thresholds.
 
-Two models: a cognition and function model for people with cognitive tests, and an informant model (Jorm IQCODE and ADL/IADL items) for people without them.
+`K` holds the fixed coefficients from the robust norms group: each test regressed on `r analysis2_pmm_n_cov_terms` sociodemographic terms (age, sex, race, ethnicity, education, and their interactions). They adjust the tests for demographics. They do not predict class.
 
-The final model has no latent cognition factor. Each test is a direct indicator of class, which gave better agreement with the HRS/HCAP Algorithm.
+Two models: a cognition model for the `r format(analysis2_pmm_n[["cognition"]], big.mark = ",")` participants with a test score or a self-rating of memory, and an informant model (Jorm IQCODE only) for the `r format(analysis2_pmm_n[["informant"]], big.mark = ",")` without them.
+
+GCP carries the correlation among the tests within each class. A model that treats the tests as independent counts the same evidence more than once.
 </div>
 :::
 ::::
-

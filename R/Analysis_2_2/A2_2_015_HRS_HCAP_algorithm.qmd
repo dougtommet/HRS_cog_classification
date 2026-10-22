@@ -1,4 +1,4 @@
-## HRS/HCAP Algorithm
+## Manly-Jones algorithm
 
 ![](../../Figures/HCAP-algorithm.png){fig-align="center" height="560"}
 

@@ -1,12 +1,14 @@
+source(here::here("R", "PMM_090_model_registry.R"))
+
 PMM_100 <- readRDS(here::here("R_objects", "PMM_100.RDS"))
 
 class_labels <- c("Normal", "MCI", "Dementia")
 binary_labels <- c("Non-demented", "Demented")
 agreement_methods <- c(
   "Consensus diagnosis",
-  "Algorithmic diagnosis",
+  "Manly-Jones algorithm",
   "Langa-Weir",
-  "Combined model"
+  "PMM"
 )
 
 normalize_mplus_savedata <- function(savedata) {
@@ -106,18 +108,18 @@ build_agreement_matrix <- function(kappas, metric_name) {
   )
 
   diag(agreement_matrix) <- 1
-  agreement_matrix["Consensus diagnosis", "Algorithmic diagnosis"] <- kappas$algorithmic_consensus[[metric_name]]
-  agreement_matrix["Algorithmic diagnosis", "Consensus diagnosis"] <- kappas$algorithmic_consensus[[metric_name]]
+  agreement_matrix["Consensus diagnosis", "Manly-Jones algorithm"] <- kappas$algorithmic_consensus[[metric_name]]
+  agreement_matrix["Manly-Jones algorithm", "Consensus diagnosis"] <- kappas$algorithmic_consensus[[metric_name]]
   agreement_matrix["Consensus diagnosis", "Langa-Weir"] <- kappas$lw_consensus[[metric_name]]
   agreement_matrix["Langa-Weir", "Consensus diagnosis"] <- kappas$lw_consensus[[metric_name]]
-  agreement_matrix["Consensus diagnosis", "Combined model"] <- kappas$consensus_combined[[metric_name]]
-  agreement_matrix["Combined model", "Consensus diagnosis"] <- kappas$consensus_combined[[metric_name]]
-  agreement_matrix["Algorithmic diagnosis", "Langa-Weir"] <- kappas$algorithmic_lw[[metric_name]]
-  agreement_matrix["Langa-Weir", "Algorithmic diagnosis"] <- kappas$algorithmic_lw[[metric_name]]
-  agreement_matrix["Algorithmic diagnosis", "Combined model"] <- kappas$algorithmic_combined[[metric_name]]
-  agreement_matrix["Combined model", "Algorithmic diagnosis"] <- kappas$algorithmic_combined[[metric_name]]
-  agreement_matrix["Langa-Weir", "Combined model"] <- kappas$lw_combined[[metric_name]]
-  agreement_matrix["Combined model", "Langa-Weir"] <- kappas$lw_combined[[metric_name]]
+  agreement_matrix["Consensus diagnosis", "PMM"] <- kappas$consensus_combined[[metric_name]]
+  agreement_matrix["PMM", "Consensus diagnosis"] <- kappas$consensus_combined[[metric_name]]
+  agreement_matrix["Manly-Jones algorithm", "Langa-Weir"] <- kappas$algorithmic_lw[[metric_name]]
+  agreement_matrix["Langa-Weir", "Manly-Jones algorithm"] <- kappas$algorithmic_lw[[metric_name]]
+  agreement_matrix["Manly-Jones algorithm", "PMM"] <- kappas$algorithmic_combined[[metric_name]]
+  agreement_matrix["PMM", "Manly-Jones algorithm"] <- kappas$algorithmic_combined[[metric_name]]
+  agreement_matrix["Langa-Weir", "PMM"] <- kappas$lw_combined[[metric_name]]
+  agreement_matrix["PMM", "Langa-Weir"] <- kappas$lw_combined[[metric_name]]
 
   agreement_matrix
 }
@@ -185,12 +187,12 @@ hcap_sample_binary <- make_binary_sample(hcap_sample)
 consensus_sample_binary <- make_binary_sample(consensus_sample)
 
 cognition_cprob <- read_mplus_savedata_quietly(
-  here::here("mplus_output", "pmm_103", "pmm_hcap_103b.out")
+  pmm_models$cognition$scoring_out
 ) |>
   dplyr::select(id, cprob1, cprob2, cprob3, c)
 
 jorm_cprob <- read_mplus_savedata_quietly(
-  here::here("mplus_output", "pmm_103_jorm", "pmm_hcap_103b_jorm.out")
+  pmm_models$informant$scoring_out
 ) |>
   dplyr::rename(
     cprob1_jorm = cprob1,
@@ -201,7 +203,7 @@ jorm_cprob <- read_mplus_savedata_quietly(
   dplyr::select(id, cprob1_jorm, cprob2_jorm, cprob3_jorm, c_jorm)
 
 combined_cprob <- cognition_cprob |>
-  dplyr::left_join(jorm_cprob, by = "id") |>
+  dplyr::full_join(jorm_cprob, by = "id") |>
   dplyr::mutate(
     c_combined = dplyr::case_when(
       !is.na(c_jorm) ~ c_jorm,
@@ -386,32 +388,32 @@ PMM_110 <- list(
     algorithmic_consensus = format_weighted_tab(
       tabs_3class$algorithmic_consensus,
       row_name = "algorithmic",
-      stubhead = "Algorithmic diagnosis",
+      stubhead = "Manly-Jones algorithm",
       spanner = "Consensus panel diagnosis"
     ),
     algorithmic_lw = format_weighted_tab(
       tabs_3class$algorithmic_lw,
       row_name = "algorithmic",
-      stubhead = "Algorithmic diagnosis",
+      stubhead = "Manly-Jones algorithm",
       spanner = "Langa-Weir diagnosis"
     ),
     consensus_combined = format_weighted_tab(
       tabs_3class$consensus_combined,
       row_name = "consensus",
       stubhead = "Consensus panel diagnosis",
-      spanner = "Combined model classification"
+      spanner = "PMM classification"
     ),
     algorithmic_combined = format_weighted_tab(
       tabs_3class$algorithmic_combined,
       row_name = "algorithmic",
-      stubhead = "Algorithmic diagnosis",
-      spanner = "Combined model classification"
+      stubhead = "Manly-Jones algorithm",
+      spanner = "PMM classification"
     ),
     lw_combined = format_weighted_tab(
       tabs_3class$lw_combined,
       row_name = "langa_weir",
       stubhead = "Langa-Weir classification",
-      spanner = "Combined model classification"
+      spanner = "PMM classification"
     ),
     agreement_matrix = agreement_matrix_table,
     lw_consensus_binary = format_binary_weighted_tab(
@@ -423,32 +425,32 @@ PMM_110 <- list(
     algorithmic_consensus_binary = format_binary_weighted_tab(
       tabs_binary$algorithmic_consensus,
       row_name = "algorithmic_binary",
-      stubhead = "Algorithmic diagnosis",
+      stubhead = "Manly-Jones algorithm",
       spanner = "Consensus panel diagnosis"
     ),
     algorithmic_lw_binary = format_binary_weighted_tab(
       tabs_binary$algorithmic_lw,
       row_name = "algorithmic_binary",
-      stubhead = "Algorithmic diagnosis",
+      stubhead = "Manly-Jones algorithm",
       spanner = "Langa-Weir diagnosis"
     ),
     consensus_combined_binary = format_binary_weighted_tab(
       tabs_binary$consensus_combined,
       row_name = "consensus_binary",
       stubhead = "Consensus panel diagnosis",
-      spanner = "Combined model classification"
+      spanner = "PMM classification"
     ),
     algorithmic_combined_binary = format_binary_weighted_tab(
       tabs_binary$algorithmic_combined,
       row_name = "algorithmic_binary",
-      stubhead = "Algorithmic diagnosis",
-      spanner = "Combined model classification"
+      stubhead = "Manly-Jones algorithm",
+      spanner = "PMM classification"
     ),
     lw_combined_binary = format_binary_weighted_tab(
       tabs_binary$lw_combined,
       row_name = "langa_weir_binary",
       stubhead = "Langa-Weir classification",
-      spanner = "Combined model classification"
+      spanner = "PMM classification"
     ),
     agreement_matrix_binary = agreement_matrix_binary_table
   ),
@@ -477,13 +479,13 @@ PMM_110 <- list(
       "This weighting differs from the weighting used for tables involving the consensus diagnosis."
     ),
     consensus_combined = paste(
-      "Note: This comparison uses the HRS/HCAP validation subsample and the combined-model classification.",
-      "Combined-model classifications are generated from the 100-replication sample implied by the combined-model class probabilities.",
+      "Note: This comparison uses the HRS/HCAP validation subsample and the PMM classification.",
+      "PMM classifications are generated from the 100-replication sample implied by the PMM class probabilities.",
       "The table weights are the consensus-sample weights HCAP16WGTR * samplingP^(-1), normalized within the consensus sample and divided by 100 across replications."
     ),
     hcap_combined = paste(
-      "Note: This comparison uses the HCAP sample and the combined-model classification.",
-      "Combined-model classifications are generated from the 100-replication sample implied by the combined-model class probabilities.",
+      "Note: This comparison uses the HCAP sample and the PMM classification.",
+      "PMM classifications are generated from the 100-replication sample implied by the PMM class probabilities.",
       "The table weights are the HCAP population weights HCAP16WGTR divided by 100 across replications.",
       "This is not the same weighting used for the Langa-Weir versus algorithmic comparison, which uses the non-replicated HCAP weights."
     ),
@@ -491,13 +493,13 @@ PMM_110 <- list(
       "Note: This matrix combines pairwise quadratic weighted kappas computed under different weighting schemes.",
       "Entries involving the consensus diagnosis use consensus-sample weights HCAP16WGTR * samplingP^(-1), normalized within the validation subsample.",
       "Entries not involving the consensus diagnosis use HCAP population weights HCAP16WGTR.",
-      "Entries involving the combined model are computed on the 100-replication sample and therefore use replicated consensus-sample or replicated HCAP weights as appropriate."
+      "Entries involving the PMM are computed on the 100-replication sample and therefore use replicated consensus-sample or replicated HCAP weights as appropriate."
     ),
     matrix_binary = paste(
       "Note: This matrix combines pairwise kappas for dementia versus non-dementia computed under different weighting schemes.",
       "Entries involving the consensus diagnosis use consensus-sample weights HCAP16WGTR * samplingP^(-1), normalized within the validation subsample.",
       "Entries not involving the consensus diagnosis use HCAP population weights HCAP16WGTR.",
-      "Entries involving the combined model are computed on the 100-replication sample and therefore use replicated consensus-sample or replicated HCAP weights as appropriate."
+      "Entries involving the PMM are computed on the 100-replication sample and therefore use replicated consensus-sample or replicated HCAP weights as appropriate."
     )
   ),
   labels = list(

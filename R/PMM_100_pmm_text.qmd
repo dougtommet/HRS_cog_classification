@@ -1,24 +1,27 @@
 
 # Profile mixture model results
 
-Several variations of the profile mixture model were tried. These variations were having the neuropsych items being combined into a GCP factor or being left as indidivual item.  The models all had three classes. 
+```{r}
+# Values for the text (2026-10-22), from the model samples defined in
+# PMM_102_calibration_model.R and PMM_103_informant_model.R.
+n_cog_model <- nrow(inhcap_cog)
+n_inf_model <- nrow(inhcap_jorm)
 
-The models used the neuropsych battery (robust norms adjusted), individual functional impairment indicators, subjective memory complaints, and informant scores (Jorm).  Because the Jorm was only given to those that skipped the cognitive battery, two different prediction models were created.  The first model used the neuropsych battery, functional impairment indicators and subjective memory complaints.  The second model used the function impairment indicators and the informant scores.  The results of the two models were combined to give a final prediction for each participant.  If a participant was given the Jorm, their final prediction would be from the Jorm model, otherwise it would be from the cognition model.
+weighted_shares <- function(d) {
+  w <- tapply(d$HCAP16WGTR, as.integer(haven::zap_labels(d$vs1hcapdxeap)), sum)
+  100 * w / sum(w)
+}
+fmt_shares <- function(p) sprintf("%.1f%%, %.1f%%, and %.1f%%", p[1], p[2], p[3])
+prior_cog <- weighted_shares(inhcap_cog)
+prior_inf <- weighted_shares(inhcap_jorm)
+```
 
-The modeling approach consisted of two steps.
+The profile mixture model (PMM) gives each HRS/HCAP participant a probability of membership in each of the 3 classes of the HRS/HCAP Algorithm (Normal, MCI, and Dementia; Manly et al., 2022). Two models are needed because the core interview follows 2 routes: participants who complete cognitive testing provide test scores and a self-rating of memory, and participants who do not complete testing may have an informant report (the Jorm IQCODE; Jorm, 1994) and no test scores. The *cognition model* applies to the `r format(n_cog_model, big.mark = ",")` participants with at least 1 cognitive test score or a self-rating of memory (@fig-pmm-model). Its indicators are the 8 cognitive tests of the core interview (orientation to date; animal naming; object naming; naming the President and Vice President; delayed word recall; number series; serial 7 subtraction; and backward counting from 20) and self-rated memory (`PD102`). The *informant model* applies to the `r n_inf_model` participants with no test score or self-rating who have an informant report, and its only indicator is the IQCODE. Each participant receives probabilities from 1 model.
 
-1.  The first step was a model that used a known class. This was fit in the HCAP sample. The known class is the algorithmic diagnosis.
+The PMM uses the same information as the core algorithm (Appendix 1 of the manuscript), so that differences in agreement with the HRS/HCAP Algorithm reflect the classification method and not access to different data. We did not include the core interview items on limitations in activities of daily living (ADL) and instrumental activities of daily living (IADL). These items do not say why a limitation is present, and a limitation with a physical cause would raise the probability of dementia; a participant with hip arthritis who reports difficulty dressing is one example. We also did not include immediate word recall, which adds little information beyond delayed recall (Jones et al., 2024) and is not part of the core algorithm.
 
-2.  The second step fit a model in the HRS sample with all the model parameters fixed to those from step 1 and class probabilities were estimated.
+Each model is fit in 2 steps. In the first step (calibration), a known-class mixture model is estimated in HRS/HCAP with class membership fixed at the HRS/HCAP Algorithm classification (`vs1hcapdxeap`); participants with known class membership are what Muthén (2002) calls training data. Estimation is by maximum likelihood with robust standard errors (MLR), using the HCAP sampling weight (`HCAP16WGTR`), strata, and clusters (the Mplus SUBPOPULATION option is not available with KNOWNCLASS). In the second step (scoring), every parameter is fixed at its calibration value, the known class is removed, and Mplus computes each participant's posterior probability of each class by Bayes' rule. The class proportions, which are the priors in Bayes' rule, are also fixed: at the survey-weighted shares of the HRS/HCAP Algorithm classes in each model's sample (cognition model `r fmt_shares(prior_cog)` for Normal, MCI, and Dementia; informant model `r fmt_shares(prior_inf)`). We compute them outside Mplus, because Mplus estimates known-class proportions from unweighted counts even when a weight is specified. This report scores the same HRS/HCAP participants used for calibration, so the agreement with the HRS/HCAP Algorithm reported here is in-sample and is likely optimistic. Analysis A3_2 applies the fixed scoring models to HRS core respondents age 65 and older interviewed from 2016 to 2022.
 
-In general, the models gave low probabilities for participants to be in class 2 (MCI). Very few participants had class 2 as their most likely class. 
- 
-Note: In Mplus, the subpopulation option isn't available with the knownclass option.
-
- 
 ### Class assignments
 
-The model gives estimated probabilities that a participant is in each of the three classes.  We created 100 replications of the data.  Then we set the class assignment in these replications to the probability of being in a class.  For example, if a participant had 90% probability of being in class 1, 1% in class 2, and 9% in class 3, then for 90 of the replications the participant was assigned to class 1, 1 time to class 2, and 9 times to class 3.
-
-
-
+The scoring step gives each participant 3 probabilities that sum to 1. A participant can also be assigned to the most likely class, but assignment discards the uncertainty the probabilities carry, and in this model it undercounts MCI (see "Why no participant has an MCI probability above one half"). For agreement statistics we use probability allocation instead. Each participant's record is replicated 100 times, and the replicates are assigned to classes in proportion to the probabilities, each with 1/100 of the participant's weight. A participant with probabilities of 0.90, 0.01, and 0.09 contributes 90 replicates to Normal, 1 to MCI, and 9 to Dementia. The kappas in the comparison tables use these replicates; the class shares in the margins tables use the most likely class.

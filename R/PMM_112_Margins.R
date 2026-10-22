@@ -1,3 +1,5 @@
+source(here::here("R", "PMM_090_model_registry.R"))
+
 PMM_100 <- readRDS(here::here("R_objects", "PMM_100.RDS"))
 
 class_labels <- c("Normal", "MCI", "Dementia")
@@ -35,12 +37,12 @@ add_margin_note <- function(table, note_text) {
 
 combined_probabilities <- {
   cognition_cprob <- read_mplus_savedata_quietly(
-    here::here("mplus_output", "pmm_103", "pmm_hcap_103b.out")
+    pmm_models$cognition$scoring_out
   ) |>
     dplyr::select(id, cprob1, cprob2, cprob3, c)
 
   jorm_cprob <- read_mplus_savedata_quietly(
-    here::here("mplus_output", "pmm_103_jorm", "pmm_hcap_103b_jorm.out")
+    pmm_models$informant$scoring_out
   ) |>
     dplyr::rename(
       cprob1_jorm = cprob1,
@@ -51,7 +53,7 @@ combined_probabilities <- {
     dplyr::select(id, cprob1_jorm, cprob2_jorm, cprob3_jorm, c_jorm)
 
   cognition_cprob |>
-    dplyr::left_join(jorm_cprob, by = "id") |>
+    dplyr::full_join(jorm_cprob, by = "id") |>
     dplyr::mutate(
       c_combined = dplyr::case_when(
         !is.na(c_jorm) ~ c_jorm,
@@ -126,7 +128,7 @@ margin_plot <- ggplot2::ggplot(
   ggplot2::scale_y_continuous(breaks = seq(0, 750, by = 250), expand = c(0, 0)) +
   ggplot2::coord_cartesian(ylim = c(0, 750)) +
   ggplot2::labs(
-    x = "Combined-model class probability",
+    x = "PMM class probability",
     y = "Count"
   ) +
   ggplot2::theme_minimal(base_size = 12) +
@@ -179,13 +181,13 @@ langa_weir_margin_table_data <- margins_sample |>
   )
 
 combined_margin_note <- paste(
-  "Note: N and weighted percentages are computed in the non-replicated HRS/HCAP sample (N = 3496).",
+  paste0("Note: N and weighted percentages are computed in the non-replicated HRS/HCAP sample (N = ", format(nrow(margins_sample), big.mark = ","), ")."),
   "Weighted percentages use HCAP16WGTR.",
-  "Combined-model probabilities and most likely class assignments use the cognition-model and Jorm-model combination rule."
+  "PMM probabilities and most likely class assignments use the cognition model, or the informant model when an IQCODE is present."
 )
 
 langa_weir_margin_note <- paste(
-  "Note: N and weighted percentages are computed in the non-replicated HRS/HCAP sample (N = 3496).",
+  paste0("Note: N and weighted percentages are computed in the non-replicated HRS/HCAP sample (N = ", format(nrow(margins_sample), big.mark = ","), ")."),
   "Weighted percentages use HCAP16WGTR.",
   "Langa-Weir classifications come from cogfunction2016; category 2 is labeled MCI here for consistency with the rest of the report."
 )

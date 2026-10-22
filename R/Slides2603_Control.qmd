@@ -48,9 +48,60 @@ invisible(
     suppressPackageStartupMessages({
       source(here::here("R", "A1_001-libraries.R"))
       source(here::here("R", "A1_002-folder_paths.R"))
+      # PMM results (Analysis A3) and Core algorithm results (Analysis A7), 2026-10-22
+      source(here::here("R", "PMM_090_model_registry.R"))
+      source(here::here("R", "PMM_110_Comparison_of_Consensus_Langa_Weir.R"))
+      source(here::here("R", "PMM_112_Margins.R"))
+      source(here::here("R", "PMM_114_mci_ceiling.R"))
     })
   )
 )
+
+a7_tables <- readRDS(here::here("R_objects", "A7_100_hcap_tables.rds"))
+a7_alg    <- readRDS(here::here("R_objects", "A7_075_algorithm_summary.rds"))
+mplus_mod_norms <- readRDS(here::here("R_objects", "PMM_100_mplus_mod_norms.RDS"))
+
+f2   <- function(x) sprintf("%.2f", x)
+f1   <- function(x) sprintf("%.1f", x)
+fn   <- function(x) format(x, big.mark = ",")
+class_names <- c("Normal", "MCI", "Dementia")
+
+# Model samples and design counts
+n_hcap   <- nrow(PMM_112$data$margins_sample)
+n_cog    <- suppressWarnings(MplusAutomation::readModels(pmm_models$cognition$calibration_out))[["summaries"]][["Observations"]]
+n_inf    <- suppressWarnings(MplusAutomation::readModels(pmm_models$informant$calibration_out))[["summaries"]][["Observations"]]
+n_cov_terms <- length(unique(stringr::str_match_all(mplus_mod_norms, " on (x[0-9x]+) @")[[1]][, 2]))
+n_consensus <- nrow(consensus_sample)
+
+# Survey-weighted class shares (%), all HRS/HCAP participants (HCAP16WGTR)
+ms <- PMM_112$data$margins_sample
+ref_shares <- PMM_100 |>
+  dplyr::filter(inHCAP == 1) |>
+  dplyr::group_by(k = as.integer(haven::zap_labels(vs1hcapdxeap))) |>
+  dplyr::summarise(w = sum(HCAP16WGTR), .groups = "drop") |>
+  dplyr::mutate(p = 100 * w / sum(w)) |>
+  dplyr::pull(p)
+pmm_prob_shares <- 100 * colSums(ms$hcap_weight * as.matrix(ms[, c("cprob1_combined", "cprob2_combined", "cprob3_combined")]), na.rm = TRUE) /
+  sum(ms$hcap_weight[!is.na(ms$cprob1_combined)])
+pmm_modal_shares <- PMM_112$data$margin_table_data$weighted_percent
+lw_shares <- PMM_112$data$langa_weir_margin_table_data$weighted_percent
+shares_text <- function(p) sprintf("%.1f%%, %.1f%%, and %.1f%%", p[1], p[2], p[3])
+
+# Survey-weighted agreement (HCAP weights; consensus-panel weights for consensus)
+agree <- tibble::tribble(
+  ~method, ~alg3, ~alg2, ~con3, ~con2,
+  "PMM",
+    PMM_110$summary$algorithmic_combined_kappa, PMM_110$summary$algorithmic_combined_binary_kappa,
+    PMM_110$summary$consensus_combined_kappa, PMM_110$summary$consensus_combined_binary_kappa,
+  "Core algorithm",
+    a7_tables$summary$algorithmic_hrs_kappa, a7_tables$summary$algorithmic_hrs_binary_kappa,
+    a7_tables$summary$consensus_hrs_kappa, a7_tables$summary$consensus_hrs_binary_kappa,
+  "Langa-Weir",
+    a7_tables$summary$algorithmic_lw_kappa, a7_tables$summary$algorithmic_lw_binary_kappa,
+    a7_tables$summary$lw_consensus_kappa, a7_tables$summary$lw_consensus_binary_kappa
+)
+kappa_of <- function(m, col) agree[[col]][agree$method == m]
+best_of  <- function(col) agree$method[which.max(agree[[col]])]
 ```
 
 {{< include Slides2603_010_Introduction.qmd >}}

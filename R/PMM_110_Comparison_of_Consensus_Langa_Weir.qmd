@@ -32,10 +32,10 @@ format_weighted_tab(
 
 The quadratic weighted kappa is `r round(PMM_110$summary$lw_consensus_kappa, 3)`.
 
-### Algorithmic diagnosis versus Consensus panel
+### Manly-Jones algorithm versus Consensus panel
 
 ```{r}
-#| tbl-cap: "Algorithmic diagnosis vs Consensus panel diagnosis, with consensus-panel sample weights"
+#| tbl-cap: "Manly-Jones algorithm vs Consensus panel diagnosis, with consensus-panel sample weights"
 PMM_110$tables$algorithmic_consensus
 ```
 
@@ -45,10 +45,10 @@ PMM_110$tables$algorithmic_consensus
 
 The quadratic weighted kappa is `r round(PMM_110$summary$algorithmic_consensus_kappa, 3)`.
 
-### Langa-Weir versus Algorithmic diagnosis
+### Langa-Weir versus Manly-Jones algorithm
 
 ```{r}
-#| tbl-cap: "Langa-Weir diagnosis vs Algorithmic diagnosis, with HCAP weights"
+#| tbl-cap: "Langa-Weir diagnosis vs Manly-Jones algorithm, with HCAP weights"
 PMM_110$tables$algorithmic_lw
 ```
 
@@ -58,10 +58,10 @@ PMM_110$tables$algorithmic_lw
 
 The quadratic weighted kappa is `r round(PMM_110$summary$algorithmic_lw_kappa, 3)`.
 
-### Consensus panel versus Combined model classification
+### Consensus panel versus PMM classification
 
 ```{r}
-#| tbl-cap: "Consensus panel diagnosis vs Combined model classification, with consensus-panel sample weights"
+#| tbl-cap: "Consensus panel diagnosis vs PMM classification, with consensus-panel sample weights"
 PMM_110$tables$consensus_combined
 ```
 
@@ -71,10 +71,10 @@ PMM_110$tables$consensus_combined
 
 The quadratic weighted kappa is `r round(PMM_110$summary$consensus_combined_kappa, 3)`.
 
-### Algorithmic diagnosis versus Combined model classification
+### Manly-Jones algorithm versus PMM classification
 
 ```{r}
-#| tbl-cap: "Algorithmic diagnosis vs Combined model classification, with HCAP weights"
+#| tbl-cap: "Manly-Jones algorithm vs PMM classification, with HCAP weights"
 PMM_110$tables$algorithmic_combined
 ```
 
@@ -84,10 +84,10 @@ PMM_110$tables$algorithmic_combined
 
 The quadratic weighted kappa is `r round(PMM_110$summary$algorithmic_combined_kappa, 3)`.
 
-### Langa-Weir versus Combined model classification
+### Langa-Weir versus PMM classification
 
 ```{r}
-#| tbl-cap: "Langa-Weir diagnosis vs Combined model classification, with HCAP weights"
+#| tbl-cap: "Langa-Weir diagnosis vs PMM classification, with HCAP weights"
 PMM_110$tables$lw_combined
 ```
 
@@ -125,10 +125,10 @@ PMM_110$tables$lw_consensus_binary
 
 The kappa is `r round(PMM_110$summary$lw_consensus_binary_kappa, 3)`.
 
-### Algorithmic diagnosis versus Consensus panel
+### Manly-Jones algorithm versus Consensus panel
 
 ```{r}
-#| tbl-cap: "Algorithmic dementia classification vs Consensus panel diagnosis, with consensus-panel sample weights"
+#| tbl-cap: "Manly-Jones algorithm dementia classification vs Consensus panel diagnosis, with consensus-panel sample weights"
 PMM_110$tables$algorithmic_consensus_binary
 ```
 
@@ -138,10 +138,10 @@ PMM_110$tables$algorithmic_consensus_binary
 
 The kappa is `r round(PMM_110$summary$algorithmic_consensus_binary_kappa, 3)`.
 
-### Langa-Weir versus Algorithmic diagnosis
+### Langa-Weir versus Manly-Jones algorithm
 
 ```{r}
-#| tbl-cap: "Langa-Weir dementia classification vs Algorithmic diagnosis, with HCAP weights"
+#| tbl-cap: "Langa-Weir dementia classification vs Manly-Jones algorithm, with HCAP weights"
 PMM_110$tables$algorithmic_lw_binary
 ```
 
@@ -151,10 +151,10 @@ PMM_110$tables$algorithmic_lw_binary
 
 The kappa is `r round(PMM_110$summary$algorithmic_lw_binary_kappa, 3)`.
 
-### Consensus panel versus Combined model classification
+### Consensus panel versus PMM classification
 
 ```{r}
-#| tbl-cap: "Consensus panel dementia classification vs Combined model classification, with consensus-panel sample weights"
+#| tbl-cap: "Consensus panel dementia classification vs PMM classification, with consensus-panel sample weights"
 PMM_110$tables$consensus_combined_binary
 ```
 
@@ -164,10 +164,10 @@ PMM_110$tables$consensus_combined_binary
 
 The kappa is `r round(PMM_110$summary$consensus_combined_binary_kappa, 3)`.
 
-### Algorithmic diagnosis versus Combined model classification
+### Manly-Jones algorithm versus PMM classification
 
 ```{r}
-#| tbl-cap: "Algorithmic dementia classification vs Combined model classification, with HCAP weights"
+#| tbl-cap: "Manly-Jones algorithm dementia classification vs PMM classification, with HCAP weights"
 PMM_110$tables$algorithmic_combined_binary
 ```
 
@@ -177,10 +177,10 @@ PMM_110$tables$algorithmic_combined_binary
 
 The kappa is `r round(PMM_110$summary$algorithmic_combined_binary_kappa, 3)`.
 
-### Langa-Weir versus Combined model classification
+### Langa-Weir versus PMM classification
 
 ```{r}
-#| tbl-cap: "Langa-Weir dementia classification vs Combined model classification, with HCAP weights"
+#| tbl-cap: "Langa-Weir dementia classification vs PMM classification, with HCAP weights"
 PMM_110$tables$lw_combined_binary
 ```
 

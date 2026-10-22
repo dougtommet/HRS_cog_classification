@@ -1,13 +1,13 @@
-## Agreement with the HRS/HCAP Algorithm
+## Agreement with the Manly-Jones algorithm
 
 ```{r}
 analysis2_agreement |>
   dplyr::filter(
-    classification_2 == "HRS/HCAP Algorithm",
-    classification_1 %in% c("Core Algorithm", "PMM")
+    classification_2 == "Manly-Jones algorithm",
+    classification_1 %in% c("Core algorithm", "PMM")
   ) |>
   dplyr::mutate(
-    classification_1 = dplyr::recode(classification_1, "Core Algorithm" = "Core algorithm"),
+    classification_1 = classification_1,
     n = c(
       "Core algorithm" = analysis2_n_compare[["core_algorithm"]],
       "PMM" = analysis2_n_compare[["pmm"]]
@@ -15,7 +15,7 @@ analysis2_agreement |>
   ) |>
   dplyr::select(classification_1, n, three_class_kappa, binary_kappa) |>
   gt::gt(rowname_col = "classification_1") |>
-  gt::tab_stubhead("Compared with HRS/HCAP Algorithm") |>
+  gt::tab_stubhead("Compared with Manly-Jones algorithm") |>
   gt::cols_label(
     n = "N",
     three_class_kappa = "Normal, MCI, Dementia (weighted kappa)",
@@ -34,6 +34,6 @@ analysis2_agreement |>
 ```
 
 <div style="font-size: 0.5em; line-height: 1.2;">
-HRS/HCAP 2016 participants. Kappa measures agreement beyond chance (0 = chance, 1 = perfect). The three-class kappa uses quadratic weights, so a Normal vs. MCI disagreement counts less than a Normal vs. Dementia disagreement. All kappas use HCAP population weights (HCAP16WGTR). Both the Core algorithm and the PMM are calibrated and scored in the same sample, so its agreement is an in-sample estimate.
+HRS/HCAP 2016 participants. Kappa measures agreement beyond chance (0 = chance, 1 = perfect). The three-class kappa uses quadratic weights, so a Normal vs. MCI disagreement counts less than a Normal vs. Dementia disagreement. All kappas use HCAP population weights (HCAP16WGTR). Both the core algorithm and the PMM are calibrated and scored in the same sample, so their agreement is an in-sample estimate.
 </div>
 

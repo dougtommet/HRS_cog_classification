@@ -3,6 +3,6 @@
 ![](../../Figures/Slides2603_results_class_probabilities.png){fig-align="center" height="520"}
 
 <div style="font-size: 0.5em; line-height: 1.2;">
-Each vertical bar is one HRS/HCAP participant, with the probabilities of Normal, MCI, and Dementia stacked. Participants are sorted by probability.
+Each vertical bar is one HRS/HCAP participant, with the probabilities of Normal, MCI, and Dementia stacked. Participants are sorted by probability. The largest MCI probability is `r sprintf("%.2f", analysis2_pmm_mci$max_p_mci)`: the core tests measure 1 dimension with error, so the model rarely puts a majority on the middle class (details in the PMM report).
 </div>
 

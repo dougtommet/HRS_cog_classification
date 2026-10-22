@@ -13,7 +13,7 @@ The regression coefficients describe expected test performance for a person free
 
 We save these coefficients and fix them in the PMM. 
 
-This step matches the norming step of the HRS/HCAP Algorithm.
+This step matches the norming step of the Manly-Jones algorithm.
 </div>
 :::
 ::::

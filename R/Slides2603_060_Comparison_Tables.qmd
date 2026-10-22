@@ -1,8 +1,6 @@
 ```{r}
 #| include: false
 
-source(here::here("R", "PMM_110_Comparison_of_Consensus_Langa_Weir.R"))
-
 style_slide_gt <- function(gt_tbl) {
   gt_tbl |>
     gt::cols_width(gt::everything() ~ gt::px(135)) |>

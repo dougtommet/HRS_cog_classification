@@ -36,7 +36,7 @@ w <- function(y, v) a1_waves[[v]][a1_waves$year == y]
 
 The @Manly2022 algorithm classifies participants as having normal cognition, mild cognitive impairment (MCI), or dementia from 5 cognitive performance domain scores estimated from an hour-long neuropsychological battery, together with an informant interview on cognitive and functional change, and a survey participant's self-reported memory problem [@Manly2022]. Of those indicators, only self-reported memory problems are available in the core interview. The HRS core interview includes a brief battery of scored cognitive items (`r length(a1_cfa$items)` used here), 1 self-rated memory item, and an informant questionnaire that is only administered when no cognitive performance data is available [@Crimmins2011; @Ofstedal2005]. The core cognitive measures are too few to score separate domains defined in HCAP. The absence of informant reports on daily function when a respondent participates in the cognitive testing is an important additional difference in available information for cognitive classification.
 
-To address these differences, we developed a new classification algorithm using the HRS core data, the "core algorithm", that follows the logic of the Manly-Jones algorithm but uses core data only. The core algorithm has 4 steps (Figure A1):
+To address these differences, we developed a new classification algorithm using the HRS core data, the "core algorithm", that follows the logic of the Manly-Jones (HCAP) algorithm but uses core data only. The core algorithm has 4 steps (Figure A1):
 
 \(1\) a single cognitive performance score is estimated from the core items;
 

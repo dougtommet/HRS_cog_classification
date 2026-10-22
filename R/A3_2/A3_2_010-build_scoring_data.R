@@ -3,8 +3,10 @@
 # Sample: respondents interviewed in the wave (A0 inHRS_xx == 1) and age 65+
 #         at that wave. No restriction on sampling weight.
 # Inputs: Analysis A0 wave-specific recodes. Each input is renamed to the
-#         variable name used in the Analysis A3 Mplus models (pmm_hcap_103b,
-#         pmm_hcap_103b_jorm), and coded to match PMM_031 to PMM_100.
+#         variable name used in the Analysis A3 scoring models (cognition and
+#         informant models; paths in R/PMM_090_model_registry.R), and coded to
+#         match PMM_031 to PMM_100. Since 2026-10-22 the models use no ADL/IADL
+#         items and no immediate word recall.
 # Covariates: built with the PMM_045 rules. Centering constants for x4, x5, x6,
 #         x4x5, and x4x6 are recovered from PMM_100.RDS so that they equal the
 #         HCAP16 survey-weighted means used in calibration. They are never
@@ -54,21 +56,10 @@ a3_2_inputs <- tribble(
   "vdlfl1z",  "r{L}vdlfl1z", "Animal naming (rescaled)",                     "cont",
   "vdlfl2",   "r{L}vdlfl2",  "Object naming (0-2)",                          "ord",
   "vdlfl3",   "r{L}vdlfl3",  "President/vice-president naming (0-2)",        "ord",
-  "vdwdimmz", "r{L}vdwdimmz","Immediate word recall (rescaled)",             "cont",
   "vdwddelz", "r{L}vdwddelz","Delayed word recall (rescaled)",               "cont",
   "vdexf7z",  "r{L}vdexf7z", "Number series (rescaled)",                     "cont",
   "vdsevens", "r{L}vdsevens","Serial sevens (0-5)",                          "ord",
   "vdcount",  "r{L}vdcount", "Backward counting from 20 (0/1)",              "bin",
-  "nPG014",   "r{L}G014",    "ADL: dressing",                                "bin",
-  "nPG021",   "r{L}G021",    "ADL: bathing",                                 "bin",
-  "nPG023",   "r{L}G023",    "ADL: eating",                                  "bin",
-  "nPG030",   "r{L}G030",    "ADL: using the toilet",                        "bin",
-  "nPG040",   "r{L}G040",    "IADL: using maps",                             "bin",
-  "nPG041",   "r{L}G041",    "IADL: preparing meals",                        "bin",
-  "nPG044",   "r{L}G044",    "IADL: grocery shopping",                       "bin",
-  "nPG047",   "r{L}G047",    "IADL: making phone calls",                     "bin",
-  "nPG050",   "r{L}G050",    "IADL: taking medications",                     "bin",
-  "nPG059",   "r{L}G059",    "IADL: managing money",                         "bin",
   "PD102",    "{L}D102",     "Memory compared to 2 years ago (1-3)",         "ord",
   "jorm",     "r{L}jorm",    "Jorm IQCODE (proxy informant)",                "cont"
 )

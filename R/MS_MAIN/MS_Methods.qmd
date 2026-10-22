@@ -4,8 +4,8 @@
 
 - Study sample: HRS/HCAP 2016 participants, N = `r format(nrow(analysis2_hcap), big.mark = ",")`
   - All HCAP participants; no Core cognitive-test requirement
-  - Participants without Core cognitive testing classified from informant data (Jorm IQCODE): Core algorithm Jorm fallback; PMM Jorm model
-  - Agreement-statistic samples: Core algorithm N = `r format(analysis2_n_compare[["core_algorithm"]], big.mark = ",")`; PMM N = `r format(analysis2_n_compare[["pmm"]], big.mark = ",")`
+  - Participants without Core cognitive testing classified from informant data (Jorm IQCODE): core algorithm Jorm fallback; PMM informant model
+  - Agreement-statistic samples: core algorithm N = `r format(analysis2_n_compare[["core_algorithm"]], big.mark = ",")`; PMM N = `r format(analysis2_n_compare[["pmm"]], big.mark = ",")`
   - [Provenance: R/MS_MAIN/MS_001_analysis_cohort.R; R_objects/A7_005_hrs16_merged.rds; R/A7_100-comparison_of_diagnoses.R; R/PMM_110_Comparison_of_Consensus_Langa_Weir.R]
 - Consensus panel subset
   - Validation-subsample design; inverse-probability weighting to account for selection into the consensus panel
@@ -18,9 +18,9 @@
     - Survey-weighted CFA; demographically normed cognitive score; cognitive/self-report/informant rules
     - [Provenance: R/A7_050-mplus_model.R; R/A7_055-norm_factor_score.R; R/A7_075-implement_algorithm.R]
   - PMM
-    - HRS/HCAP-calibrated probabilistic Normal/MCI/Dementia classification; combined cognition and Jorm models (i.e., two PMM models, one trained using cognition data, the other trained using informant data (Jorm IQCODE)).
+    - HRS/HCAP-calibrated probabilistic Normal/MCI/Dementia classification; combined cognition and informant models (i.e., two PMM models, one trained using cognition data, the other trained using informant data (Jorm IQCODE)).
     - _Limitation_: The HRS/HCAP IQCODE look back window is the past 10 years, the Core IQCODE has a look back window of 2 years.
-    - [Provenance: R/PMM_103_calibration_model.R; R/PMM_110_Comparison_of_Consensus_Langa_Weir.R]
+    - [Provenance: R/PMM_102_calibration_model.R; R/PMM_103_informant_model.R; R/PMM_110_Comparison_of_Consensus_Langa_Weir.R]
 
 #### Core algorithm
   - Single-factor Core cognition model
@@ -39,25 +39,37 @@
 #### PMM classification
 
 - HRS/HCAP calibration
-  - Known-class HRS/HCAP Algorithm classification; cognitive, functional, self-report, informant indicators
-  - No latent variables for overall cognition, individual tests used
-  - Calibration parameters fixed for scoring; scored in the same HRS/HCAP sample used for calibration (in-sample classification); not yet applied to the HRS Core sample outside HCAP
-  - [Provenance: R/PMM_100_norming_npb.R; R/PMM_103_calibration_model.R]
+  - Known-class Manly-Jones algorithm classification (training data; Muthén, 2002)
+  - Same inputs as core algorithm: 8 Core cognitive tests; self-rated memory (D102); Jorm IQCODE
+    - Not included: ADL/IADL items (reason for a limitation not asked; physical causes); immediate word recall (little beyond delayed recall; Jones et al., 2024)
+  - Cognition model, N = `r format(analysis2_pmm_n[["cognition"]], big.mark = ",")` (at least 1 test score or D102)
+    - General cognitive factor (GCP) on the 8 tests; GCP mean and variance by class (Normal: mean 0, variance 1)
+    - Loadings, intercepts, thresholds, residual variances equal across classes; D102 thresholds by class
+    - Test regressions on `r analysis2_pmm_n_cov_terms` sociodemographic terms fixed at robust norms group values
+  - Informant model, N = `r format(analysis2_pmm_n[["informant"]], big.mark = ",")` (IQCODE, no test score or D102)
+    - Jorm IQCODE only; mean by class
+  - Calibration parameters fixed for scoring; scored in the same HRS/HCAP sample used for calibration (in-sample classification); HRS Core 2016-2022 scoring in Analysis A3_2 (not reported here)
+  - [Provenance: R/PMM_100_norming_npb.R; R/PMM_102_calibration_model.R; R/PMM_103_informant_model.R; R/PMM_090_model_registry.R]
+- Choice of a general factor
+  - Tests correlate within class (robust norms group, after adjustment); model without GCP sets within-class correlation to 0, treats correlated tests as independent evidence
+  - GCP model: better fit, fewer parameters than no-factor model
+  - Class-specific test intercepts and thresholds: 10-fold cross-validation; higher kappa, lower log score; not adopted
+  - [Values not in a current results object; Provenance: References/SESSION_LOGS.md, 2026-10-22; R/Archive_PMM_2026-10-22/]
 - Class proportions (priors)
   - Class-specific parameters estimated with HCAP16WGTR; MLR estimation, Bayes-rule posterior classification (plug-in rule; McLachlan, 1992)
-  - Class proportions fixed at the HCAP16WGTR-weighted HRS/HCAP Algorithm distribution, computed outside Mplus; Mplus KNOWNCLASS estimates class proportions from unweighted counts
+  - Class proportions fixed at the HCAP16WGTR-weighted Manly-Jones algorithm distribution, computed outside Mplus; Mplus KNOWNCLASS estimates class proportions from unweighted counts
     - Cognition model: `r analysis2_pmm_priors[["cognition"]]`
-    - Jorm model: `r analysis2_pmm_priors[["jorm"]]`
-  - [Provenance: R/PMM_101_mplus_function.R; R/PMM_103_calibration_model.R; R/PMM_104_weight_check.R; mplus_output/pmm_103/pmm_hcap_103b.out; mplus_output/pmm_103_jorm/pmm_hcap_103b_jorm.out]
+    - Informant model: `r analysis2_pmm_priors[["jorm"]]`
+  - [Provenance: R/PMM_101_mplus_function.R; R/PMM_102_calibration_model.R; R/PMM_103_informant_model.R; R/Archive_PMM_2026-10-22/PMM_104_weight_check.R; scoring outputs in R/PMM_090_model_registry.R]
 - Combined classification
-  - Cognition-model probabilities; JORM-model probabilities when available
+  - Cognition-model probabilities; informant-model probabilities when IQCODE available
   - Probabilistic Normal/MCI/Dementia membership; replicated probability-weighted comparisons
   - More detail in **Appendix 2**
   - [Provenance: R/PMM_110_Comparison_of_Consensus_Langa_Weir.R]
 
 ### Comparison classifications and estimands
 
-- Primary comparator: HRS/HCAP Algorithm
+- Primary comparator: Manly-Jones algorithm
   - HCAP population weights: HCAP16WGTR
   - [Provenance: R/A7_100-comparison_of_diagnoses.R]
 - Secondary comparators

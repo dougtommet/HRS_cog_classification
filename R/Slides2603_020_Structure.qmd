@@ -7,49 +7,47 @@
 
 :::: {.columns}
 ::: {.column width="58%"}
-![](excalidraw/PMM-103-PMM-no-latent.excalidraw.svg){width="100%"}
+![](excalidraw/PMM-103-PMM-with-latent.excalidraw.svg){width="100%"}
 :::
 
 ::: {.column width="42%"}
 <div style="font-size: 0.33em; line-height: 1.0;">
-Separate models are trained for the cognitive and functional indicators, and the informant reports (Jorm IQCODE). The results of these models are then combined to generate a final classification for each person (N=3496). Recall that the Jorm informant reports are available only for those without cognitive data.
+The PMM has 2 parts. The cognition model applies to the `r fn(n_cog)` HRS/HCAP participants with at least 1 cognitive test score or a self-rating of memory. The informant model applies to the `r fn(n_inf)` participants with an informant report (Jorm IQCODE) and no test score or self-rating; its only indicator is the IQCODE. Each participant receives probabilities from 1 model (N = `r fn(n_hcap)`).
 
-`cg` is a latent class variable (a known class in the HRS/HCAP calibration sample, and an unknown class in the HRS Core application sample) that is predicted by a set of cognitive indicators (the nine indicators listed below) that are adjusted for sociodemographics using fixed parameters from the robust norms group. The classes correspond to normal cognition, MCI/CIND, and dementia.
+`cg` is a latent class variable (a known class in the HRS/HCAP calibration sample, and an unknown class in the HRS Core application sample). The classes correspond to normal cognition, MCI/CIND, and dementia.
 
-`K` is a matrix of fixed regression coefficients used to adjust cognitive indicators for sociodemographics. These parameters are estimated in the robust norms sample and then loaded into the classification model. For the nine cognitive indicators and fifteen sociodemographic terms, this contributes $9 \times 15 = 135$ coefficients. This normative reference group fixed-parameter regression is equivalent to the approach used by Manly et al (2022) (i.e., regression adjustment of cognitive domains using the normative reference group). 
+`GCP` (general cognitive performance) is a factor measured by the 8 cognitive tests. Its mean and variance differ by class (Normal class: mean 0, variance 1). The loadings, intercepts, thresholds, and residual variances of the tests are equal across classes, so the tests inform class only through GCP. The thresholds of self-rated memory differ by class.
 
-Cognitive indicators include `vdori`, Orientation to time; `vdlfl1z`, Animal naming; `vdlfl2`, naming two items; `vdlfl3`, President & vice-president; `vdcount`, Count backwards from 20; `vdsevens`, Serial sevens; `vdwdimmz`, Immediate word recall; `vdwddelz`, Delayed word recall; `vdexf7z`, Number series.
+`K` is a matrix of fixed regression coefficients used to adjust the tests for sociodemographics. These parameters are estimated in the robust norms sample and then loaded into the classification model: 8 tests $\times$ `r n_cov_terms` sociodemographic terms = `r 8 * n_cov_terms` coefficients. This fixed-parameter regression is equivalent to the approach used by Manly et al (2022) (regression adjustment of cognitive domains using the normative reference group).
 
+Cognitive tests: `vdori`, Orientation to date; `vdlfl1z`, Animal naming; `vdlfl2`, Object naming; `vdlfl3`, President & vice-president; `vdwddelz`, Delayed word recall; `vdexf7z`, Number series; `vdsevens`, Serial sevens; `vdcount`, Count backwards from 20.
 </div>
 :::
 ::::
 
-## PMM structure (where we started)
+## Why a general cognitive factor
 
-:::: {.columns}
-::: {.column width="58%"}
-![](excalidraw/PMM-012-Classification_Model.excalidraw.svg){width="100%"}
-:::
-
-::: {.column width="42%"}
-<div style="font-size: 0.3em; line-height: 0.9;">
-
-We started with a model that include a latent general cognitive performance factor (GCP), but that model resulted in poor classification (_entropy_ = 0.71, vs 0.83 for the model with cognitive indicators included separately), and after consideration, the use we had in mind did not require the parsimony of a general factor as long as it was only applied to core data (with the same cognitive indicators). 
-
-We also thought we could include the Jorm in this model, but the missing data pattern made that overly complicated. We address informant data (available only for those with no cognitive data) separately. We build a separate PMM for the informant data (a PMM model so we can have a probabilistic classification result), and then combine the results of the two PMMs using whichever is appropriate for the respondent.
-
-**_Entropy_** is a measure of classification model confidence, based on posterior probabilities. A model with higher entropy has better separation between classes, while a model with lower entropy has worse separation (lower entropy). Entropy provides a summary measure of classification uncertainty based on posterior class probabilities, with higher values indicating sharper separation between classes. Because entropy is a deterministic function of model-based probabilities and lacks a sampling distribution, it should not be used as a formal criterion for model selection but rather as a descriptive indicator of classification quality. Values greater than 0.70 are considered usable, and with values greater than 0.80 is considered strong classification and reliable class assignment.
+<div style="font-size: 0.6em; line-height: 1.2;">
+- Within each class, people differ in overall cognitive performance, so their test scores correlate. In the robust norms group, the continuous test scores correlate after demographic adjustment.
+- A model without the factor sets these within-class correlations to 0. It counts correlated evidence as if it were independent (a low delayed recall score and a low animal naming score each count fully toward impairment), and its probabilities are more extreme than the data justify.
+- The factor carries the within-class correlation with 1 set of loadings. The model with the factor fit the data better than the model without it, with fewer parameters.
+- We also tested letting each test's intercepts and thresholds differ by class. In 10-fold cross-validation, agreement with the HRS/HCAP Algorithm rose, but the accuracy of the probabilities (log score) fell. We kept the simpler model.
 </div>
 
-:::
-::::
+## Same inputs as the Core algorithm
+
+<div style="font-size: 0.6em; line-height: 1.2;">
+- The PMM uses the information the Core algorithm uses, so that differences in agreement with the HRS/HCAP Algorithm reflect the classification method and not access to different data.
+- Not included: limitations in activities of daily living (ADL) and instrumental activities of daily living (IADL). The Core items do not say why a limitation is present, and a limitation with a physical cause would raise the probability of dementia (for example, hip arthritis and difficulty dressing).
+- Not included: immediate word recall. It adds little beyond delayed recall (Jones et al., 2024) and is not part of the Core algorithm.
+</div>
 
 ## How our approach differs from LDA and QDA
 
 <div style="font-size: 0.6em; line-height: 1.0;">
 LDA and QDA (Linear and quadratic discriminant analysis, respectively) classify people from the joint distribution of multiple indicators, but they are usually framed for continuous Gaussian variables. In LDA, classes differ in their means, but they are assumed to share the same covariance matrix. In QDA, both the class means and the class-specific covariance matrices are allowed to differ. Our PMM is closer to a generative LDA/QDA family model than to a simple discriminative classifier, because it models the distribution of the indicators within class and then computes posterior class probabilities.
 
-For the cognitive indicators, PMM handles the indicator means through fixed sociodemographic adjustment terms estimated in the robust norms group, plus class-specific location shifts in the classification model. That means expected performance is anchored to the normative reference group rather than re-estimated in the target sample. For the indicator variances and covariances, the current PMM is LDA-like: residual variability is constrained to be equal across classes. A QDA-like extension would allow those residual variance-covariance parameters to differ by class. PMM is also more flexible than classical LDA or QDA because several indicators are ordinal or discrete, so class separation is represented through latent-response means, thresholds, and shared residual structure rather than only through multivariate Gaussian means and variances on the observed score scale.
+For the cognitive indicators, PMM handles the indicator means through fixed sociodemographic adjustment terms estimated in the robust norms group, plus class differences in the mean and variance of the general cognitive factor. That means expected performance is anchored to the normative reference group rather than re-estimated in the target sample. Because the factor variance differs by class, the implied covariance of the tests also differs by class, a structured form of QDA; the residual variances of the tests are equal across classes. PMM is also more flexible than classical LDA or QDA because several indicators are ordinal or discrete, so class separation is represented through latent-response means, thresholds, and a shared factor rather than only through multivariate Gaussian means and variances on the observed score scale.
 </div>
 
 ## How our approach differs from predictive modeling
@@ -58,7 +56,7 @@ For the cognitive indicators, PMM handles the indicator means through fixed soci
 Many predictive models are optimized to maximize classification accuracy in the sample at hand, even if that means learning direct associations of sociodemographics with class membership or relying on patterns that are difficult to transport or interpret. Our PMM is built for a different goal: it separates measurement from classification, anchors expected cognitive performance in a normative reference group, and then classifies people according to how their observed indicator pattern departs from that demographically adjusted expectation. In this sense the PMM approach is a measurement model rather than a prediction model.
 </div>
 
-## How our is similar to LDA, ML
+## How our approach is similar to LDA and machine learning
 
-- Unlike Manly et al (2022), there is no decision tree. 
-- The PMM takes as input cognitive indicators, functional and self-report (and informant) data, and outputs probabilities of class membership. LDA, machine learning classifiers would do the same.
+- Unlike Manly et al (2022), there is no decision tree.
+- The PMM takes as input the cognitive tests and self-rated memory (or an informant report), and outputs probabilities of class membership. LDA and machine learning classifiers would do the same.

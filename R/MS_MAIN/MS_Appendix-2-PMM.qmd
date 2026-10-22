@@ -20,7 +20,7 @@ $$
 P(Y = \text{Dementia} \mid X)
 $$
 
-For example, it could predict dementia from word recall, serial sevens, ADLs, and Jorm score. It estimates how each predictor changes the log-odds of each outcome category. In a multinomial logistic model, the usual form is:
+For example, it could predict dementia from word recall, serial sevens, self-rated memory, and Jorm score. It estimates how each predictor changes the log-odds of each outcome category. In a multinomial logistic model, the usual form is:
 
 $$
 \log \frac{P(Y=k \mid X)}{P(Y=\text{Normal} \mid X)}
@@ -31,7 +31,7 @@ The main modeling decision is the regression equation: which predictors, interac
 
 **PMM in this project**
 
-The PMM takes a generative approach. It asks: *If a person belongs to the Normal, MCI, or Dementia class, what pattern of cognitive-test, functional, self-report, and informant responses would we expect?* PMM models:
+The PMM takes a generative approach. It asks: *If a person belongs to the Normal, MCI, or Dementia class, what pattern of cognitive-test, self-report, and informant responses would we expect?* PMM models:
 
 $$
 P(X \mid C=k)
@@ -48,7 +48,7 @@ $$
 
 So, instead of directly predicting diagnosis from scores, it describes the characteristic response distribution within each diagnosis class and asks which class best accounts for a person's observed pattern.
 
-For the final PMM, the cognition model uses the individual test scores, functional items, and self-report item directly. It estimates class probabilities from that whole response pattern. The separate Jorm PMM does the analogous job for people with informant data rather than cognitive testing.
+For the final PMM, the cognition model uses a general cognitive factor measured by the 8 individual test scores, plus the self-rated memory item. The classes differ in the mean and variance of the factor, and the factor carries the correlation among the tests within each class. The model estimates class probabilities from that whole response pattern. The separate Jorm PMM does the analogous job for people with informant data rather than cognitive testing.
 
 **Practical distinctions**
 
@@ -59,10 +59,10 @@ For the final PMM, the cognition model uses the individual test scores, function
 - Logistic regression commonly treats predictors as explanatory variables with regression coefficients.
 - PMM treats the observed responses as indicators of an underlying class-specific response profile.
 - Logistic regression needs explicit interactions or nonlinear terms when the meaning of one score depends on another.
-- A PMM can represent distinct multivariate profiles through class-specific item distributions, although it still relies on assumptions about within-class dependence.
+- A PMM represents class differences through class-specific response distributions. In this project those differences act through the general cognitive factor, which also carries the dependence among the tests within each class.
 
-In this project, the important wrinkle is that the PMM is not purely exploratory latent class analysis. It is calibrated using the HRS/HCAP Algorithm classification as the known class in the HCAP sample, then scores the Core measures of the same HCAP participants with the calibrated parameters (including the class proportions) held fixed. That makes it a supervised, model-based classifier: conceptually closer to generative discriminant analysis than to an unsupervised profiling exercise.
+In this project, the important wrinkle is that the PMM is not purely exploratory latent class analysis. It is calibrated using the Manly-Jones (HCAP) algorithm classification as the known class in the HCAP sample, then scores the Core measures of the same HCAP participants with the calibrated parameters (including the class proportions) held fixed. That makes it a supervised, model-based classifier: conceptually closer to generative discriminant analysis than to an unsupervised profiling exercise.
 
 A concise manuscript description would be:
 
-> The PMM is a supervised, generative classifier that estimates the probability of each HRS/HCAP Algorithm class from the joint pattern of observed cognitive, functional, self-report, or informant responses.
+> The PMM is a supervised, generative classifier that estimates the probability of each Manly-Jones algorithm class from the joint pattern of observed cognitive, self-report, or informant responses.

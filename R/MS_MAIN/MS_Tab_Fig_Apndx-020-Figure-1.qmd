@@ -8,8 +8,24 @@
 
 
 ```{r}
-#| fig-cap: "Core algorithm"
+#| include: false
+# Cut points for the caption (2026-10-22). The schematic is Appendix 1 Figure A1;
+# it shows no counts, so it cannot go stale when the data change.
+fig1_alg <- readRDS(here::here("R_objects", "A7_075_algorithm_summary.rds"))
+fig1_cap <- paste0(
+  "HRS core algorithm decision structure. T: demographically adjusted T score, rounded to an integer; ",
+  "\u03c4~1~ = ", fig1_alg$cuts[["severe"]], " and \u03c4~2~ = ", fig1_alg$cuts[["moderate"]],
+  ": severe and moderate T-score cut points. IQCODE: Informant Questionnaire on Cognitive Decline in the Elderly ",
+  "(cut points ", sprintf("%.1f", fig1_alg$jorm_cuts[["mild"]]), " and ", sprintf("%.1f", fig1_alg$jorm_cuts[["severe"]]), "). ",
+  "Self-rated concerns is a rating of memory worse than 2 years ago, and the \"yes\" arm includes don't know, refused, and not ascertained. ",
+  "Participant counts by branch are in Appendix 1."
+)
+```
+
+```{r}
+#| fig-cap: !expr fig1_cap
 #| label: fig-core-algorithm
-knitr::include_graphics(here::here("Figures", "HRS-Core-Diagnostic-Algorithm-With-Ns-HRS-Sample-2026-04-22.png"))
+#| out-width: 6.5in
+knitr::include_graphics(here::here("Figures", "HRS-Core-Algorithm-2026-10-18.png"))
 ```
 

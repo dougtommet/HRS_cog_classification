@@ -6,6 +6,8 @@
 # probabilities agree. Part 1 compares the inputs variable by variable;
 # part 2 compares the probabilities.
 
+source(here::here("R", "PMM_090_model_registry.R"))
+
 a3_2       <- readRDS(here::here("R_objects", "A3_2_010_scoring_long.rds"))
 a3_2_probs <- readRDS(here::here("R_objects", "A3_2_pmm_probs_hrs16_22.rds"))
 pmm100     <- readRDS(here::here("R_objects", "PMM_100.RDS"))
@@ -51,8 +53,8 @@ read_cprob <- function(path) {
     janitor::clean_names() |>
     dplyr::select(id, cprob1, cprob2, cprob3)
 }
-a3_cog  <- read_cprob(here::here("mplus_output", "pmm_103", "pmm_hcap_103b.out"))
-a3_jorm <- read_cprob(here::here("mplus_output", "pmm_103_jorm", "pmm_hcap_103b_jorm.out"))
+a3_cog  <- read_cprob(pmm_models$cognition$scoring_out)
+a3_jorm <- read_cprob(pmm_models$informant$scoring_out)
 
 a3_probs <- a1_side |>
   dplyr::select(key, id) |>

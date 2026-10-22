@@ -1,8 +1,6 @@
 ```{r}
 #| include: false
 
-source(here::here("R", "PMM_112_Margins.R"))
-
 style_margins_slide_plot <- function(plot_obj) {
   plot_obj +
     ggplot2::theme_minimal(base_size = 20) +
@@ -26,7 +24,7 @@ style_margins_slide_table <- function(gt_tbl) {
 }
 ```
 
-## Combined-Model Class Probabilities
+## PMM class probabilities
 
 ```{r}
 #| fig-width: 10
@@ -36,7 +34,7 @@ style_margins_slide_plot(PMM_112$figure)
 
 ---
 
-## Combined-Model Class Membership 
+## PMM class membership
 
 <div style="font-size: 0.8em; line-height: 1.1;">
 According to most likely class membership. This is the value that would be used to generate a "predicted" class label for each participant in the HRS/HCAP sample.
@@ -48,5 +46,5 @@ style_margins_slide_table(PMM_112$table)
 
 
 <div style="font-size: 0.66em; line-height: 0.9;">
-By way of comparison, Manly et al. (2022) report that in the HCAP validation subsample, 68% of participants were classified as normal, 22% as MCI, and 10% as dementia according to the HRS/HCAP algorithm (weighted %, class assignments based on Bayesian Plausible Values for cognition scores). Langa-Weir classification of the HRS/HCAP sample classifies 75% as normal, 17% as MCI, and 8% as dementia (see PMM_Analysis_Report).
+By way of comparison (survey-weighted, all `r fn(n_hcap)` HRS/HCAP participants): the HRS/HCAP Algorithm classifies `r shares_text(ref_shares)` as Normal, MCI, and Dementia; the PMM probabilities average to `r shares_text(pmm_prob_shares)`; and Langa-Weir classifies `r shares_text(lw_shares)`. Manly et al. (2022) report 68%, 22%, and 10% for the HRS/HCAP Algorithm (weighted, class assignments based on Bayesian plausible values for cognition scores).
 </div>

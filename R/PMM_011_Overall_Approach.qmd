@@ -15,46 +15,42 @@
 
 # Overall approach 
 
-We will use a **_supervised latent profile model_** trained with known class labels in HRS/HCAP (results of the Manly-Jones algorithm in the N=3,496 sample) to predict cognitive status in the broader HRS cohort (age 65+, n = 9,972). The model preserves the actuarial approach to classification while introducing a parametric latent structure, item-level covariate adjustment, and probabilistic scoring. A cartoon of the approach is show in Figure 1. 
+We will use a **_supervised latent profile model_** trained with known class labels in HRS/HCAP (results of the Manly-Jones algorithm in the N=3,496 sample) to predict cognitive status in HRS/HCAP and, with every parameter fixed, in HRS Core respondents age 65 and older (Analysis A3_2). The model preserves the actuarial approach to classification while introducing a parametric latent structure, item-level covariate adjustment, and probabilistic scoring. A cartoon of the approach is show in Figure 1. 
 
 
-::: {#fig-fig1 layout-align="center" fig-cap="Calibration model - a supervised latent profile model"}
-![](excalidraw/PMM-011-Calibration_Model.excalidraw.svg){width="90%"}
-:::
-
-:::{.callout-note}
-**Final model.** The figures in this section include a latent cognition factor. This was our original design. The final model omits the factor, because the model without it agreed better with the criterion classifications. @fig-pmm-final, in the profile mixture model results, shows the final model.
+::: {#fig-pmm-model layout-align="center" fig-cap="Profile mixture model with a general cognitive factor"}
+![](excalidraw/PMM-103-PMM-with-latent.excalidraw.svg){width="90%"}
 :::
 
 where:
 
 |||
 |:----|:-----|
-|Latent Class (“c”)|Class membership fixed to HRS/HCAP classification during model calibration |
-|Latent cognition  | General cognitive performance (GCP), factor-analytic structure, we allow for class membership to be indicated by the mean and variance of the GCP, after limited control for the effect of sociodemographics.|
-|Dependent variables |Observed cognitive test scores (e.g., vdlflf1z, vdwdimmz), ADLs, self-report, informant
+|Latent Class (“cg” or "c")|Class membership fixed to HRS/HCAP classification during model calibration (when class is a known group, "cg") or estimated in a susquent model with unlabeled data ("c") |
+|Latent cognition ("f" and sometimes "gcp") | General cognitive performance (GCP), factor-analytic structure, we allow for class membership to be indicated by the mean and variance of the GCP, after limited control for the effect of sociodemographics.|
+|Dependent variables |Observed cognitive test scores (e.g., vdlfl1z, vdwddelz), self-report, informant
 |Sociodemographic Covariates|Centered and interacted, included only to adjust indicator means and not to directly inform class membership|
 |Missing data strategy|In general, missing data is handled analytically. The Jorm being observed only in those without cognitive performance data (and vice versa) indicator may require separate modeling of the Informant data.|
 
 We are building a supervised latent profile model for cognitive classification using:
 
 - **Latent Class Regression** with known class labels (from the HRS/HCAP actuarial classification).
-- **Multivariate cognitive and functional data** (profile indicators) to define latent class structure (Normal, MCI, Dementia).
+- **Multivariate cognitive, self-report, and informant data** (profile indicators) to define latent class structure (Normal, MCI, Dementia).
 - **Sociodemographic covariates** used not to predict class directly, but to adjust item means and thresholds.
 
 The model is:
 
 - Estimated in HRS/HCAP (with known class labels, n=3,496),
-- Applied to Core HRS (with unknown class labels) for classification (n = 9,972),
+- Applied to HRS Core respondents age 65 and older from 2016 to 2022 (with unknown class labels) for classification, in Analysis A3_2,
 - Designed to retain the structure and assumptions of actuarial classification, but expressed in a fully parametric latent variable modeling framework.
   
-In psychometric terms, our approach can be described as a **_supervised profile mixture model with structured measurement invariance_**. We estimate latent classes using multivariate cognitive and functional profiles (profile mixture model), use known classifications to supervise training (supervised), allow item means and thresholds to vary by sociodemographic covariates (structured measurement invariance).
+In psychometric terms, our approach can be described as a **_supervised profile mixture model with structured measurement invariance_**. We estimate latent classes using multivariate cognitive profiles (profile mixture model), use known classifications to supervise training (supervised), allow item means and thresholds to vary by sociodemographic covariates (structured measurement invariance).
 
 ## Notable features of model 
 
 ### Purposeful misspecification.
 
-We do not include, in our initial model, model parameters that allow for estimation of class membership on the basis of sociodemographics. This is a deliberate choice: we want class membership "predicted" only by cognitive, functional, self-report, and informant data. It is true we correct for measurement differences (in the means/thresholds) of individual cognitive indicators according to sociodemographics, but the effect of these covariates in the class variable is blocked at the cognitive performance variable level. This is a misspecification because we know from Manly et al (2022) Table 2 that sociodemographics are associated with membership in MCI and Dementia groups. This misspecification may make our model fit sub-optimal. But, our main goal is to develop a classification model that maintains fidelity to the spirit of the actuarial classification approach, rather that to achieve an optimally fitting model. 
+We do not include, in our initial model, model parameters that allow for estimation of class membership on the basis of sociodemographics. This is a deliberate choice: we want class membership "predicted" only by cognitive, self-report, and informant data. It is true we correct for measurement differences (in the means/thresholds) of individual cognitive indicators according to sociodemographics, but the effect of these covariates in the class variable is blocked at the cognitive performance variable level. This is a misspecification because we know from Manly et al (2022) Table 2 that sociodemographics are associated with membership in MCI and Dementia groups. This misspecification may make our model fit sub-optimal. But, our main goal is to develop a classification model that maintains fidelity to the spirit of the actuarial classification approach, rather that to achieve an optimally fitting model. 
 
 ### Covariate effects are fixed parameters estimated in a preliminary model.
 
@@ -62,13 +58,9 @@ A key component of the Jak/Bondi actuarial approach (and as used in Manly et al 
 
 The Jak/Bondi actuarial approach -- as used in Manly et al (2022) and elsewhere -- identifies "below the expected range for the individual" using regression adjustment and residuals obtained from a **_robust norms group_**. The definition of cognitive impairment using covariates is handled in data processing step: (a) robust norms group membership is defined, (b) regression models of performance on sociodemographic factors are estimated in the robust norms group, (c) the models and their parameters are used to generate estimates of expected performance given sociodemographic factors for each individual in the target sample, (d) impairment is defined by comparing observed and expected performance in the form of a scaled residual.
 
-::: {#fig-fig2 layout-align="center" fig-cap="Preliminary model for covariate effects estimated in robust norms sample"}
-![](excalidraw/PMM-012-Preliminary_Model.excalidraw.svg){width="90%"}
-:::
-
 In the proposed model, we do not use a data processing step to adjust cognitive performance indicators, the analytic model uses cognitive performance data as collected and minimally processed (response categories may be collapsed, performance may be normalized or standardized, but covariates are not used in these steps). To account for the dependence of the cognitive performance scores on sociodemographics in the robust norms group, we estimate a preliminary model restricted to the robust norms group and regress the cognitive performance variables on the sociodemographics. From this model we extract the regression coefficients and use them -- as fixed values -- in subsequent models. **_This is functionally equivalent to computing a residual using predicted values derived from parameter estimates from the robust norms group._** The three approaches illustrated below are approximately equivalent. Manly et al (2023) use the third panel approach (with additional scaling corrections, residuals are scaled by a factor of $\left(\sigma\sqrt{1-R^2}\right)^{-1}$, where $\sigma$ is the standard deviation of the cognitive performance variable in the robust norms group, and $R^2$ is the coefficient of determination from the regression model in the robust norms group: the correction factor accounts for "shrinkage" of the predicted value). 
 
-::: {#fig-fig3 layout-align="center" fig-cap="Approaches to constrained regression"}
+::: {#fig-constrained-regression layout-align="center" fig-cap="Approaches to constrained regression"}
 ![](excalidraw/PMM-013-Approaches_to_constrained_regression.excalidraw.svg){width="90%"}
 :::
 
@@ -99,29 +91,18 @@ glm resid zprice                     // regression of residual
 R users are in a bind because there is no easy way to constrain parameters in R. The easiest approximate solution is to specify starting values and limit the iterations to 0.
 :::
 
-**We don't use residuals because many of the cognitive indicators** (5 of 9 in Figure 1) are categorical indicators. We can't compute residuals for these, given sociodemographic variables, and have them retain their ordinal nature. So, we will have to extract the $9 \times 15 = 135$ regression coefficients for the $\mathbf{K}$ matrix and load them into the Mplus commands.
+```{r}
+# Number of sociodemographic terms in the norms regressions (PMM_100), 2026-10-22
+n_cov_terms <- length(unique(stringr::str_match_all(mplus_mod_norms, " on (x[0-9x]+) @")[[1]][, 2]))
+```
+
+**We don't use residuals because many of the cognitive indicators** (5 of the 8 tests in @fig-pmm-model) are categorical indicators. We can't compute residuals for these, given sociodemographic variables, and have them retain their ordinal nature. So, we extract the $8 \times `r n_cov_terms` = `r 8 * n_cov_terms`$ regression coefficients for the $\mathbf{K}$ matrix and load them into the Mplus commands as fixed values.
 
 ## Important differences from the Manly-Jones algorithm
 
 **No explicit decision tree.** The proposed model makes classifications analytically, and does not place a decision-tree like logic on the indicators to arrive at a classification. Parameters of the model are estimated (calibrated) to maximize agreement between the analytically-derived class assignments and the observed (knownclass) assignments derived from the Manly-Jones algorithm (aka the HRS/HCAP actuarial algorithm).
 
-**Missing data.** There is no imputation of missing data. Since the entirety of the classification is performed analytically, we rely upon the maximum likelihood and Bayesian parameter estimation procedures that provide unbiased estimates under the assumption that the missing data mechanism conforms to the conditionally missing at random assumption. This approach is superior to a single value imputation strategy, even if the imputations are drawn stochastically. 
+**Missing data.** There is no imputation of missing data. Since the entirety of the classification is performed analytically, we rely upon maximum likelihood estimation, which provides consistent estimates under the assumption that the missing data mechanism conforms to the conditionally missing at random assumption. This approach is superior to a single value imputation strategy, even if the imputations are drawn stochastically. 
 
 **Socio-demographic adjustment occurs at the indicator level** rather than the construct level. The Manly-Jones algorithm applies sociodemographic corrections at the domain level, implicitly assuming these corrections are appropriate for every sub test. Our approach implements these corrections (or their analytic analog) at the individual test level.
-
-## Classification model 
-
-Below is a cartoon of the classification model:
-
-::: {#fig-classification layout-align="center" fig-cap="Classification model"}
-![](excalidraw/PMM-012-Classification_Model.excalidraw.svg){width="90%"}
-:::
-
-When we use this model, either in cross-validation in the derivation sample (n = 3496) or in application to the full HRS 2016 age 65+ sample (n = 9972):
-
-**All parameters are fixed to presumed population values.** These are those estimated in a particular cross-fold estimation for the assessment of classification model reliability, or the full sample estimation for the final analysis. 
-
-**Known class assignment is not included.** The model will be applied to data sets where these assignments are not observed. 
-
-**Prepare a scoring grid.** We will generate a grid of all possible values for the variables included in the model, and run that grid through the classification model. The resulting data set of variable values and class probabilities will be a handy look-up table for exporting the algorithm to other data sets (i.e., HRS data from 2000 to 2022 for a prevalence and incidence paper). This grid will be immense but data storage is cheap. An important consideration for this is numeric data (e.g., z-scores for standardized cognitive indicators) need to be truncated to a reasonable degree of precision in the *Data management step*.
 

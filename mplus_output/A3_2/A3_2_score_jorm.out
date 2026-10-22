@@ -1,6 +1,6 @@
 Mplus VERSION 9 (Mac)
 MUTHEN & MUTHEN
-10/06/2026   2:04 PM
+10/22/2026   1:10 PM
 
 INPUT INSTRUCTIONS
 
@@ -9,16 +9,12 @@ INPUT INSTRUCTIONS
   DATA:
   FILE = "A3_2_score_jorm.dat";
   VARIABLE:
-  NAMES = sid nPG014 nPG021 nPG023 nPG030 nPG040 nPG041 nPG044 nPG047 nPG050 nPG059
-       jorm;
+  NAMES = sid jorm;
    MISSING=.;
-   categorical = nPG014 nPG021 nPG023 nPG030 nPG040 nPG041 nPG044 nPG047 nPG050
-    nPG059;
-  idvariable = sid;
+   idvariable = sid;
   classes = c (3);
   ANALYSIS:
   estimator = mlr;
-  ALGORITHM = INTEGRATION;
   TYPE = mixture;
   starts = 0;
   processors = 4;
@@ -32,44 +28,14 @@ INPUT INSTRUCTIONS
    %c#1%
 
    [ jorm @ 3.074] ;
-   [ npg014$1 @ 1.826] ;
-   [ npg021$1 @ 2.309] ;
-   [ npg023$1 @ 2.754] ;
-   [ npg030$1 @ 2.287] ;
-   [ npg040$1 @ 1.579] ;
-   [ npg041$1 @ 2.57] ;
-   [ npg044$1 @ 2.232] ;
-   [ npg047$1 @ 2.445] ;
-   [ npg050$1 @ 2.471] ;
-   [ npg059$1 @ 3.716] ;
 
    %c#2%
 
    [ jorm @ 3.666] ;
-   [ npg014$1 @ -0.112] ;
-   [ npg021$1 @ -0.261] ;
-   [ npg023$1 @ 0.582] ;
-   [ npg030$1 @ 0.205] ;
-   [ npg040$1 @ -0.568] ;
-   [ npg041$1 @ -0.303] ;
-   [ npg044$1 @ -0.439] ;
-   [ npg047$1 @ 0.168] ;
-   [ npg050$1 @ 0.271] ;
-   [ npg059$1 @ -0.036] ;
 
    %c#3%
 
    [ jorm @ 4.186] ;
-   [ npg014$1 @ -0.863] ;
-   [ npg021$1 @ -1.138] ;
-   [ npg023$1 @ 0.096] ;
-   [ npg030$1 @ 0.05] ;
-   [ npg040$1 @ -2.105] ;
-   [ npg041$1 @ -1.808] ;
-   [ npg044$1 @ -1.401] ;
-   [ npg047$1 @ -1.321] ;
-   [ npg050$1 @ -0.718] ;
-   [ npg059$1 @ -1.651] ;
 
 
   SAVEDATA:
@@ -79,11 +45,9 @@ INPUT INSTRUCTIONS
 
 
 *** WARNING in MODEL command
-  Variable is uncorrelated with all other variables within class:  JORM
-*** WARNING in MODEL command
-  At least one variable is uncorrelated with all other variables within class.
+  All variables are uncorrelated with all other variables within class.
   Check that this is what is intended.
-   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
 
 
 
@@ -95,7 +59,7 @@ SUMMARY OF ANALYSIS
 Number of groups                                                 1
 Number of observations                                        2283
 
-Number of dependent variables                                   11
+Number of dependent variables                                    1
 Number of independent variables                                  0
 Number of continuous latent variables                            0
 Number of categorical latent variables                           1
@@ -104,10 +68,6 @@ Observed dependent variables
 
   Continuous
    JORM
-
-  Binary and ordered categorical (ordinal)
-   NPG014      NPG021      NPG023      NPG030      NPG040      NPG041
-   NPG044      NPG047      NPG050      NPG059
 
 Categorical latent variables
    C
@@ -125,19 +85,19 @@ Continuous Outcomes
 Optimization Specifications for the EM Algorithm
   Maximum number of iterations                                 500
   Convergence criteria
-    Loglikelihood change                                 0.100D-02
-    Relative loglikelihood change                        0.100D-05
-    Derivative                                           0.100D-02
+    Loglikelihood change                                 0.100D-06
+    Relative loglikelihood change                        0.100D-06
+    Derivative                                           0.100D-05
 Optimization Specifications for the M step of the EM Algorithm for
 Categorical Latent Variables
   Number of M step iterations                                    1
-  M step convergence criterion                           0.100D-02
+  M step convergence criterion                           0.100D-05
   Basis for M step termination                           ITERATION
 Optimization Specifications for the M step of the EM Algorithm for
 Censored, Binary or Ordered Categorical (Ordinal), Unordered
 Categorical (Nominal) and Count Outcomes
   Number of M step iterations                                    1
-  M step convergence criterion                           0.100D-02
+  M step convergence criterion                           0.100D-05
   Basis for M step termination                           ITERATION
   Maximum value for logit thresholds                            15
   Minimum value for logit thresholds                           -15
@@ -145,13 +105,6 @@ Categorical (Nominal) and Count Outcomes
 Maximum number of iterations for H1                           2000
 Convergence criterion for H1                             0.100D-03
 Optimization algorithm                                         EMA
-Integration Specifications
-  Type                                                    STANDARD
-  Number of integration points                                  15
-  Dimensions of numerical integration                            0
-  Adaptive quadrature                                           ON
-Link                                                         LOGIT
-Cholesky                                                       OFF
 
 Input data file(s)
   A3_2_score_jorm.dat
@@ -160,78 +113,14 @@ Input data format  FREE
 
 SUMMARY OF DATA
 
-     Number of missing data patterns            89
+     Number of missing data patterns             1
      Number of y missing data patterns           1
-     Number of u missing data patterns          89
+     Number of u missing data patterns           0
 
 
 COVARIANCE COVERAGE OF DATA
 
 Minimum covariance coverage value   0.100
-
-
-     PROPORTION OF DATA PRESENT
-
-
-           Covariance Coverage
-              NPG014        NPG021        NPG023        NPG030        NPG040
-              ________      ________      ________      ________      ________
- NPG014         0.993
- NPG021         0.987         0.993
- NPG023         0.986         0.987         0.993
- NPG030         0.976         0.976         0.975         0.981
- NPG040         0.621         0.622         0.621         0.616         0.624
- NPG041         0.791         0.792         0.789         0.784         0.565
- NPG044         0.771         0.771         0.769         0.762         0.544
- NPG047         0.907         0.907         0.907         0.897         0.599
- NPG050         0.987         0.988         0.989         0.976         0.622
- NPG059         0.792         0.792         0.792         0.784         0.523
- JORM           0.993         0.993         0.993         0.981         0.624
-
-
-           Covariance Coverage
-              NPG041        NPG044        NPG047        NPG050        NPG059
-              ________      ________      ________      ________      ________
- NPG041         0.793
- NPG044         0.714         0.773
- NPG047         0.768         0.754         0.912
- NPG050         0.791         0.771         0.908         0.994
- NPG059         0.685         0.686         0.759         0.793         0.795
- JORM           0.793         0.773         0.912         0.994         0.795
-
-
-           Covariance Coverage
-              JORM
-              ________
- JORM           1.000
-
-
-     PROPORTION OF DATA PRESENT FOR U
-
-
-           Covariance Coverage
-              NPG014        NPG021        NPG023        NPG030        NPG040
-              ________      ________      ________      ________      ________
- NPG014         0.993
- NPG021         0.987         0.993
- NPG023         0.986         0.987         0.993
- NPG030         0.976         0.976         0.975         0.981
- NPG040         0.621         0.622         0.621         0.616         0.624
- NPG041         0.791         0.792         0.789         0.784         0.565
- NPG044         0.771         0.771         0.769         0.762         0.544
- NPG047         0.907         0.907         0.907         0.897         0.599
- NPG050         0.987         0.988         0.989         0.976         0.622
- NPG059         0.792         0.792         0.792         0.784         0.523
-
-
-           Covariance Coverage
-              NPG041        NPG044        NPG047        NPG050        NPG059
-              ________      ________      ________      ________      ________
- NPG041         0.793
- NPG044         0.714         0.773
- NPG047         0.768         0.754         0.912
- NPG050         0.791         0.771         0.908         0.994
- NPG059         0.685         0.686         0.759         0.793         0.795
 
 
      PROPORTION OF DATA PRESENT FOR Y
@@ -241,40 +130,6 @@ Minimum covariance coverage value   0.100
               JORM
               ________
  JORM           1.000
-
-
-UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
-
-    NPG014
-      Category 1    0.528         1197.000
-      Category 2    0.472         1069.000
-    NPG021
-      Category 1    0.498         1129.000
-      Category 2    0.502         1138.000
-    NPG023
-      Category 1    0.671         1522.000
-      Category 2    0.329          745.000
-    NPG030
-      Category 1    0.641         1435.000
-      Category 2    0.359          805.000
-    NPG040
-      Category 1    0.388          552.000
-      Category 2    0.612          872.000
-    NPG041
-      Category 1    0.453          820.000
-      Category 2    0.547          991.000
-    NPG044
-      Category 1    0.453          799.000
-      Category 2    0.547          965.000
-    NPG047
-      Category 1    0.509         1059.000
-      Category 2    0.491         1022.000
-    NPG050
-      Category 1    0.577         1310.000
-      Category 2    0.423          960.000
-    NPG059
-      Category 1    0.443          804.000
-      Category 2    0.557         1011.000
 
 
 
@@ -300,46 +155,14 @@ Number of Free Parameters                        0
 
 Loglikelihood
 
-          H0 Value                      -11640.473
+          H0 Value                       -2720.905
 
 Information Criteria
 
-          Akaike (AIC)                   23280.945
-          Bayesian (BIC)                 23280.945
-          Sample-Size Adjusted BIC       23280.945
+          Akaike (AIC)                    5441.810
+          Bayesian (BIC)                  5441.810
+          Sample-Size Adjusted BIC        5441.810
             (n* = (n + 2) / 24)
-
-Chi-Square Test of Model Fit for the Binary and Ordered Categorical
-(Ordinal) Outcomes**
-
-          Pearson Chi-Square
-
-          Value                           3381.550
-          Degrees of Freedom                  1012
-          P-Value                           0.0000
-
-          Likelihood Ratio Chi-Square
-
-          Value                           2479.473
-          Degrees of Freedom                  1012
-          P-Value                           0.0000
-
-** Of the 14692 cells in the latent class indicator table, 11
-   were deleted in the calculation of chi-square due to extreme values.
-
-Chi-Square Test for MCAR under the Unrestricted Latent Class Indicator Model
-
-          Pearson Chi-Square
-
-          Value                           5243.805
-          Degrees of Freedom                 13580
-          P-Value                           1.0000
-
-          Likelihood Ratio Chi-Square
-
-          Value                           2216.714
-          Degrees of Freedom                 13580
-          P-Value                           1.0000
 
 
 
@@ -360,9 +183,9 @@ BASED ON ESTIMATED POSTERIOR PROBABILITIES
     Latent
    Classes
 
-       1        828.99172          0.36312
-       2        416.96031          0.18264
-       3       1037.04797          0.45425
+       1        742.66744          0.32530
+       2        705.36429          0.30896
+       3        834.96827          0.36573
 
 
 FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
@@ -373,14 +196,14 @@ Class Counts and Proportions
     Latent
    Classes
 
-       1              830          0.36356
-       2              348          0.15243
-       3             1105          0.48401
+       1             1110          0.48620
+       2              264          0.11564
+       3              909          0.39816
 
 
 CLASSIFICATION QUALITY
 
-     Entropy                         0.750
+     Entropy                         0.194
 
 
 Average Latent Class Probabilities for Most Likely Latent Class Membership (Row)
@@ -388,9 +211,9 @@ by Latent Class (Column)
 
            1        2        3
 
-    1   0.963    0.036    0.001
-    2   0.085    0.726    0.189
-    3   0.000    0.122    0.878
+    1   0.543    0.328    0.129
+    2   0.309    0.395    0.297
+    3   0.064    0.261    0.674
 
 
 Classification Probabilities for the Most Likely Latent Class Membership (Column)
@@ -398,9 +221,9 @@ by Latent Class (Row)
 
            1        2        3
 
-    1   0.964    0.036    0.000
-    2   0.071    0.606    0.323
-    3   0.001    0.063    0.936
+    1   0.812    0.110    0.079
+    2   0.515    0.148    0.337
+    3   0.172    0.094    0.734
 
 
 Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
@@ -408,9 +231,9 @@ by Latent Class (Row)
 
               1        2        3
 
-    1      8.325    5.025    0.000
-    2     -1.511    0.631    0.000
-    3     -6.897   -2.691    0.000
+    1      2.333    0.332    0.000
+    2      0.425   -0.824    0.000
+    3     -1.451   -2.058    0.000
 
 
 MODEL RESULTS
@@ -423,18 +246,6 @@ Latent Class 1
  Means
     JORM               3.074      0.000    999.000    999.000
 
- Thresholds
-    NPG014$1           1.826      0.000    999.000    999.000
-    NPG021$1           2.309      0.000    999.000    999.000
-    NPG023$1           2.754      0.000    999.000    999.000
-    NPG030$1           2.287      0.000    999.000    999.000
-    NPG040$1           1.579      0.000    999.000    999.000
-    NPG041$1           2.570      0.000    999.000    999.000
-    NPG044$1           2.232      0.000    999.000    999.000
-    NPG047$1           2.445      0.000    999.000    999.000
-    NPG050$1           2.471      0.000    999.000    999.000
-    NPG059$1           3.716      0.000    999.000    999.000
-
  Variances
     JORM               0.426      0.000    999.000    999.000
 
@@ -443,18 +254,6 @@ Latent Class 2
  Means
     JORM               3.666      0.000    999.000    999.000
 
- Thresholds
-    NPG014$1          -0.112      0.000    999.000    999.000
-    NPG021$1          -0.261      0.000    999.000    999.000
-    NPG023$1           0.582      0.000    999.000    999.000
-    NPG030$1           0.205      0.000    999.000    999.000
-    NPG040$1          -0.568      0.000    999.000    999.000
-    NPG041$1          -0.303      0.000    999.000    999.000
-    NPG044$1          -0.439      0.000    999.000    999.000
-    NPG047$1           0.168      0.000    999.000    999.000
-    NPG050$1           0.271      0.000    999.000    999.000
-    NPG059$1          -0.036      0.000    999.000    999.000
-
  Variances
     JORM               0.426      0.000    999.000    999.000
 
@@ -462,18 +261,6 @@ Latent Class 3
 
  Means
     JORM               4.186      0.000    999.000    999.000
-
- Thresholds
-    NPG014$1          -0.863      0.000    999.000    999.000
-    NPG021$1          -1.138      0.000    999.000    999.000
-    NPG023$1           0.096      0.000    999.000    999.000
-    NPG030$1           0.050      0.000    999.000    999.000
-    NPG040$1          -2.105      0.000    999.000    999.000
-    NPG041$1          -1.808      0.000    999.000    999.000
-    NPG044$1          -1.401      0.000    999.000    999.000
-    NPG047$1          -1.321      0.000    999.000    999.000
-    NPG050$1          -0.718      0.000    999.000    999.000
-    NPG059$1          -1.651      0.000    999.000    999.000
 
  Variances
     JORM               0.426      0.000    999.000    999.000
@@ -496,145 +283,10 @@ LATENT CLASS INDICATOR MEANS AND PROBABILITIES FOR EACH LATENT CLASS
      MEAN/PROBABILITY PROFILES FOR C
                        Latent class
                      1      2      3
-     NPG014
-       Category 1  0.861  0.472  0.297
-       Category 2  0.139  0.528  0.703
-     NPG021
-       Category 1  0.910  0.435  0.243
-       Category 2  0.090  0.565  0.757
-     NPG023
-       Category 1  0.940  0.642  0.524
-       Category 2  0.060  0.358  0.476
-     NPG030
-       Category 1  0.908  0.551  0.512
-       Category 2  0.092  0.449  0.488
-     NPG040
-       Category 1  0.829  0.362  0.109
-       Category 2  0.171  0.638  0.891
-     NPG041
-       Category 1  0.929  0.425  0.141
-       Category 2  0.071  0.575  0.859
-     NPG044
-       Category 1  0.903  0.392  0.198
-       Category 2  0.097  0.608  0.802
-     NPG047
-       Category 1  0.920  0.542  0.211
-       Category 2  0.080  0.458  0.789
-     NPG050
-       Category 1  0.922  0.567  0.328
-       Category 2  0.078  0.433  0.672
-     NPG059
-       Category 1  0.976  0.491  0.161
-       Category 2  0.024  0.509  0.839
      JORM          0.000  0.000  0.000
 
 
-RESULTS IN PROBABILITY SCALE
-
-                                                    Two-Tailed
-                    Estimate       S.E.  Est./S.E.    P-Value
-
-Latent Class 1
-
- NPG014
-    Category 1         0.861      0.000      0.000      1.000
-    Category 2         0.139      0.000      0.000      1.000
- NPG021
-    Category 1         0.910      0.000      0.000      1.000
-    Category 2         0.090      0.000      0.000      1.000
- NPG023
-    Category 1         0.940      0.000      0.000      1.000
-    Category 2         0.060      0.000      0.000      1.000
- NPG030
-    Category 1         0.908      0.000      0.000      1.000
-    Category 2         0.092      0.000      0.000      1.000
- NPG040
-    Category 1         0.829      0.000      0.000      1.000
-    Category 2         0.171      0.000      0.000      1.000
- NPG041
-    Category 1         0.929      0.000      0.000      1.000
-    Category 2         0.071      0.000      0.000      1.000
- NPG044
-    Category 1         0.903      0.000      0.000      1.000
-    Category 2         0.097      0.000      0.000      1.000
- NPG047
-    Category 1         0.920      0.000      0.000      1.000
-    Category 2         0.080      0.000      0.000      1.000
- NPG050
-    Category 1         0.922      0.000      0.000      1.000
-    Category 2         0.078      0.000      0.000      1.000
- NPG059
-    Category 1         0.976      0.000      0.000      1.000
-    Category 2         0.024      0.000      0.000      1.000
-
-Latent Class 2
-
- NPG014
-    Category 1         0.472      0.000      0.000      1.000
-    Category 2         0.528      0.000      0.000      1.000
- NPG021
-    Category 1         0.435      0.000      0.000      1.000
-    Category 2         0.565      0.000      0.000      1.000
- NPG023
-    Category 1         0.642      0.000      0.000      1.000
-    Category 2         0.358      0.000      0.000      1.000
- NPG030
-    Category 1         0.551      0.000      0.000      1.000
-    Category 2         0.449      0.000      0.000      1.000
- NPG040
-    Category 1         0.362      0.000      0.000      1.000
-    Category 2         0.638      0.000      0.000      1.000
- NPG041
-    Category 1         0.425      0.000      0.000      1.000
-    Category 2         0.575      0.000      0.000      1.000
- NPG044
-    Category 1         0.392      0.000      0.000      1.000
-    Category 2         0.608      0.000      0.000      1.000
- NPG047
-    Category 1         0.542      0.000      0.000      1.000
-    Category 2         0.458      0.000      0.000      1.000
- NPG050
-    Category 1         0.567      0.000      0.000      1.000
-    Category 2         0.433      0.000      0.000      1.000
- NPG059
-    Category 1         0.491      0.000      0.000      1.000
-    Category 2         0.509      0.000      0.000      1.000
-
-Latent Class 3
-
- NPG014
-    Category 1         0.297      0.000      0.000      1.000
-    Category 2         0.703      0.000      0.000      1.000
- NPG021
-    Category 1         0.243      0.000      0.000      1.000
-    Category 2         0.757      0.000      0.000      1.000
- NPG023
-    Category 1         0.524      0.000      0.000      1.000
-    Category 2         0.476      0.000      0.000      1.000
- NPG030
-    Category 1         0.512      0.000      0.000      1.000
-    Category 2         0.488      0.000      0.000      1.000
- NPG040
-    Category 1         0.109      0.000      0.000      1.000
-    Category 2         0.891      0.000      0.000      1.000
- NPG041
-    Category 1         0.141      0.000      0.000      1.000
-    Category 2         0.859      0.000      0.000      1.000
- NPG044
-    Category 1         0.198      0.000      0.000      1.000
-    Category 2         0.802      0.000      0.000      1.000
- NPG047
-    Category 1         0.211      0.000      0.000      1.000
-    Category 2         0.789      0.000      0.000      1.000
- NPG050
-    Category 1         0.328      0.000      0.000      1.000
-    Category 2         0.672      0.000      0.000      1.000
- NPG059
-    Category 1         0.161      0.000      0.000      1.000
-    Category 2         0.839      0.000      0.000      1.000
-
-
-EQUALITY TESTS OF MEANS/PROBABILITIES ACROSS THE LATENT CLASSES
+EQUALITY TESTS OF MEANS ACROSS THE LATENT CLASSES
 
                     Chi-Square     P-Value   Degrees of Freedom
 
@@ -646,81 +298,6 @@ JORM
   Class 2 vs. 3  ************      0.000        1
 
 
-LATENT CLASS INDICATOR ODDS RATIOS FOR THE LATENT CLASSES
-
-                                                95% C.I.
-                    Estimate       S.E.  Lower 2.5% Upper 2.5%
-
-Latent Class 1 Compared to Latent Class 2
-
- NPG014
-    Category > 1       0.144      0.000      0.144      0.144
- NPG021
-    Category > 1       0.077      0.000      0.077      0.077
- NPG023
-    Category > 1       0.114      0.000      0.114      0.114
- NPG030
-    Category > 1       0.125      0.000      0.125      0.125
- NPG040
-    Category > 1       0.117      0.000      0.117      0.117
- NPG041
-    Category > 1       0.057      0.000      0.057      0.057
- NPG044
-    Category > 1       0.069      0.000      0.069      0.069
- NPG047
-    Category > 1       0.103      0.000      0.103      0.103
- NPG050
-    Category > 1       0.111      0.000      0.111      0.111
- NPG059
-    Category > 1       0.023      0.000      0.023      0.023
-
-Latent Class 1 Compared to Latent Class 3
-
- NPG014
-    Category > 1       0.068      0.000      0.068      0.068
- NPG021
-    Category > 1       0.032      0.000      0.032      0.032
- NPG023
-    Category > 1       0.070      0.000      0.070      0.070
- NPG030
-    Category > 1       0.107      0.000      0.107      0.107
- NPG040
-    Category > 1       0.025      0.000      0.025      0.025
- NPG041
-    Category > 1       0.013      0.000      0.013      0.013
- NPG044
-    Category > 1       0.026      0.000      0.026      0.026
- NPG047
-    Category > 1       0.023      0.000      0.023      0.023
- NPG050
-    Category > 1       0.041      0.000      0.041      0.041
- NPG059
-    Category > 1       0.005      0.000      0.005      0.005
-
-Latent Class 2 Compared to Latent Class 3
-
- NPG014
-    Category > 1       0.472      0.000      0.472      0.472
- NPG021
-    Category > 1       0.416      0.000      0.416      0.416
- NPG023
-    Category > 1       0.615      0.000      0.615      0.615
- NPG030
-    Category > 1       0.856      0.000      0.856      0.856
- NPG040
-    Category > 1       0.215      0.000      0.215      0.215
- NPG041
-    Category > 1       0.222      0.000      0.222      0.222
- NPG044
-    Category > 1       0.382      0.000      0.382      0.382
- NPG047
-    Category > 1       0.226      0.000      0.226      0.226
- NPG050
-    Category > 1       0.372      0.000      0.372      0.372
- NPG059
-    Category > 1       0.199      0.000      0.199      0.199
-
-
 SAVEDATA INFORMATION
 
 
@@ -729,16 +306,6 @@ SAVEDATA INFORMATION
 
   Order and format of variables
 
-    NPG014         F10.3
-    NPG021         F10.3
-    NPG023         F10.3
-    NPG030         F10.3
-    NPG040         F10.3
-    NPG041         F10.3
-    NPG044         F10.3
-    NPG047         F10.3
-    NPG050         F10.3
-    NPG059         F10.3
     JORM           F10.3
     CPROB1         F10.3
     CPROB2         F10.3
@@ -747,15 +314,15 @@ SAVEDATA INFORMATION
     SID            I6
 
   Save file format
-    15F10.3 I6
+    5F10.3 I6
 
   Save file record length    10000
 
   Save missing symbol        *
 
 
-     Beginning Time:  14:04:54
-        Ending Time:  14:04:54
+     Beginning Time:  13:10:20
+        Ending Time:  13:10:20
        Elapsed Time:  00:00:00
 
 

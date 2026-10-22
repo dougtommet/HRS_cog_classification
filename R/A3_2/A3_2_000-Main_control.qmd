@@ -31,6 +31,10 @@ source(here::here("R", "A3_2", "A3_2_030-check_hcap16.R"))
 a3_2   <- readRDS(here::here("R_objects", "A3_2_010_scoring_long.rds"))
 probs  <- readRDS(here::here("R_objects", "A3_2_pmm_probs_hrs16_22.rds"))
 check  <- readRDS(here::here("R_objects", "A3_2_030_hcap16_check.rds"))
+routing <- readRDS(here::here("R_objects", "A3_2_020_routing.rds"))
+n_not_scored  <- sum(routing$n_not_scored)
+pct_not_scored <- 100 * n_not_scored / sum(routing$n)
+n_both_inputs <- sum(routing$n_both_inputs)
 scoring <- a3_2$scoring
 waves   <- sort(unique(scoring$wave))
 
@@ -61,7 +65,7 @@ list_waves <- function(x) if (length(x) == 0) "none of the scored waves" else pa
 ::: {.page}
 
 ::: {.abstract}
-This analysis applies the profile mixture model (PMM) from Analysis A3 to the HRS Core samples of 2016, 2018, 2020, and 2022. We treat the model as a scoring machine. Every parameter, including the class proportions, is fixed at the value estimated in HRS/HCAP 2016. The model returns, for each person-wave, the probability of membership in the Normal, MCI, and Dementia classes. The scored sample is all respondents interviewed in a wave who were age 65 or older at that wave. The output file is `R_objects/A3_2_pmm_probs_hrs16_22.rds` (and `.dta`), with one row per person-wave.
+This analysis applies the profile mixture model (PMM) from Analysis A3 to the HRS Core samples of 2016, 2018, 2020, and 2022. We treat the model as a scoring machine. Every parameter, including the class proportions, is fixed at the value estimated in HRS/HCAP 2016. The model returns, for each person-wave, the probability of membership in the Normal, MCI, and Dementia classes. It has 2 parts: the cognition model (the 8 cognitive tests of the core interview and self-rated memory, with a general cognitive factor) and the informant model (the Jorm IQCODE). The sample is all respondents interviewed in a wave who were age 65 or older at that wave. Person-waves with an IQCODE are scored with the informant model and the others with the cognition model; the `r format(n_not_scored, big.mark = ",")` person-waves (`r sprintf("%.1f", pct_not_scored)`%) with no IQCODE and no cognition-model input are not scored. The output file is `R_objects/A3_2_pmm_probs_hrs16_22.rds` (and `.dta`), with one row per person-wave.
 :::
 
 ## Input variables by wave
@@ -93,7 +97,7 @@ knitr::kable(dplyr::bind_rows(n_row, tab_inputs), format = "html", align = c("l"
 
 ## Missing data in the model inputs
 
-The table shows the percent of scored person-waves missing each input. "Not administered" marks an input that is absent from that wave's Core data or missing for every respondent in that wave. These data are missing by design. Mplus treats these inputs as missing, and the model scores each respondent from the remaining inputs. Person-waves missing a covariate cannot be scored, because the model conditions the cognitive tests on the covariates. The bottom rows show which model scored each person-wave.
+The table shows the percent of scored person-waves missing each input. "Not administered" marks an input that is absent from that wave's Core data or missing for every respondent in that wave. These data are missing by design. Mplus treats these inputs as missing, and the model scores each respondent from the remaining inputs. Person-waves missing a covariate cannot be scored, because the model conditions the cognitive tests on the covariates. Person-waves with no cognitive test score, no self-rating of memory, and no IQCODE have no model input and are not scored. `r format(n_both_inputs, big.mark = ",")` person-waves have both an IQCODE and a cognition-model input; they are scored with the informant model, as in Analysis A3. The bottom rows show which model scored each person-wave.
 
 ::: {.compact}
 ```{r}
@@ -122,7 +126,7 @@ knitr::kable(dplyr::bind_rows(tab_miss, model_counts), format = "html",
 ```
 :::
 
-**Number series.** The HRS Core does not include the number series test in every wave, so its absence in some waves is by design. In the scored person-waves, number series scores are not available in `r list_waves(ns_absent)`, and are present in `r list_waves(ns_present)`. The HCAP 2016 calibration model includes number series. Person-waves without it are scored from the other cognitive tests and the functional and informant items. Their class probabilities rest on less information than those of person-waves with a number series score.
+**Number series.** The HRS Core does not include the number series test in every wave, so its absence in some waves is by design. In the scored person-waves, number series scores are not available in `r list_waves(ns_absent)`, and are present in `r list_waves(ns_present)`. The HCAP 2016 calibration model includes number series. Person-waves without it are scored from the other cognitive tests and self-rated memory. Their class probabilities rest on less information than those of person-waves with a number series score.
 
 :::
 

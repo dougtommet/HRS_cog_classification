@@ -1,4 +1,12 @@
-## Core algorithm
+## HRS core algorithm
 
-![](../../Figures/HRS-algorithm_2024-12-19.png){fig-align="center" height="580"}
+```{r}
+#| include: false
+a2_2_alg <- readRDS(here::here("R_objects", "A7_075_algorithm_summary.rds"))
+```
 
+![](../../Figures/HRS-Core-Algorithm-2026-10-18.png){fig-align="center" height="520"}
+
+<div style="font-size: 0.45em; line-height: 1.2;">
+T: demographically adjusted T score from the 8 core cognitive tests, rounded to an integer. Cut points: $\tau_1$ = `r a2_2_alg$cuts[["severe"]]` and $\tau_2$ = `r a2_2_alg$cuts[["moderate"]]`, selected by a rule fixed before any result was seen (match the weighted Manly-Jones dementia and MCI shares, then highest weighted dementia kappa). IQCODE cut points for respondents with no test score: `r sprintf("%.1f", a2_2_alg$jorm_cuts[["mild"]])` and `r sprintf("%.1f", a2_2_alg$jorm_cuts[["severe"]])`. Details in Appendix 1.
+</div>

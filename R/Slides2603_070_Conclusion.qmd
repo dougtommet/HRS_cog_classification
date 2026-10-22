@@ -1,36 +1,33 @@
 ## Conclusion
 
-<div style="font-size: 0.66em; line-height: 0.9;">
-|**Reference standard / Classification**|**Algorithmic diagnosis**|**Consensus panel diagnosis**|
-|:---------------------|:-----------------------|:-------------------------|
-|**3-way (normal, mci, dementia)** | The combined PMM model compares comparably to Langa-Weir ($\kappa_w$ = 0.51)† for the 3-way classification (normal, mci, dementia) | The combined PMM model is far more accurate ($\kappa_w$ = 0.53) than Langa-Weir ($\kappa_w$ = 0.10)|
-|**2-way (dementia, no dementia)** | The combined PMM model compares comparably to Langa-Weir ($\kappa$ = 0.44 combined PMM, 0.41 Langa-Weir).‡ |The Langa-Weir is more accurate ($\kappa$ = 0.74) than the combined PMM ($\kappa$ = 0.38) and the algorithmic diagnosis ($\kappa$ = 0.54).|
-</div>
+```{r}
+#| label: tbl-conclusion
+agree |>
+  dplyr::mutate(dplyr::across(c(alg3, alg2, con3, con2), ~ sprintf("%.2f", .x))) |>
+  gt::gt(rowname_col = "method") |>
+  gt::tab_spanner("HRS/HCAP Algorithm", c(alg3, alg2)) |>
+  gt::tab_spanner(stringr::str_c("Consensus panel (n = ", n_consensus, ")"), c(con3, con2)) |>
+  gt::cols_label(alg3 = "3-class", alg2 = "Dementia", con3 = "3-class", con2 = "Dementia") |>
+  gt::tab_source_note("Survey-weighted kappas (3-class: quadratic weighted). HCAP weights; consensus-panel weights for the consensus comparisons.") |>
+  gt::opt_stylize(6, color = "gray") |>
+  gt::tab_options(table.font.size = gt::px(22), source_notes.font.size = gt::px(14))
+```
 
-
-<div style="font-size: 0.66em; line-height: 1.1;">
-Given the team's preference for the algorithmic diagnosis as the reference standard, the combined PMM model is a small improvement over Langa-Weir for 2-way classification of dementia and comparable to Langa-Weir for 3-way classification of normal, mci, and dementia. Kappa values in the 0.4 to 0.5 range constitute "moderate" agreement beyond change (per Landis JR & Koch GG. Biometrics. 1977:33(1);159-74). **_However_**, considering the margins, the PMM combination classification does not produce comparable marginal distributions to the algorithmic diagnosis, and is particularly poor at classifying MCI.
-</div>
-
-<div style="font-size: 0.5em; line-height: 0.9;">
-† We reported a $\kappa_w$ of 0.52 for the 3-way classification relative to algorithmic diagnosis for the HCAP-approach-in-Core data April 2025 (last report), and ‡ we reported $\kappa$ of 0.44 for HCAP algorithm in core for 2-way classification. These previous calculations did not involve sample sample weights, but preliminarily the suggestion is the PMM approach is _not a net improvement over the previous approach_ (refactoring the HCAP algorithm to fit HRS Core data collection).
+<div style="font-size: 0.55em; line-height: 1.2;">
+- Agreement with the HRS/HCAP Algorithm: the highest 3-class kappa is for `r best_of("alg3")`, and the highest dementia kappa is for `r best_of("alg2")`. PMM `r f2(kappa_of("PMM", "alg3"))` and `r f2(kappa_of("PMM", "alg2"))`; Core algorithm `r f2(kappa_of("Core algorithm", "alg3"))` and `r f2(kappa_of("Core algorithm", "alg2"))`; Langa-Weir `r f2(kappa_of("Langa-Weir", "alg3"))` and `r f2(kappa_of("Langa-Weir", "alg2"))`.
+- Class shares: the PMM probabilities average to `r shares_text(pmm_prob_shares)` (HRS/HCAP Algorithm `r shares_text(ref_shares)`). Assigning each participant to the most likely class gives `r shares_text(pmm_modal_shares)`, `r if (pmm_modal_shares[2] < ref_shares[2]) "which undercounts MCI" else "which does not undercount MCI"`. The probabilities, not the assigned classes, carry the PMM's information.
+- The consensus comparisons rest on `r n_consensus` participants, so those kappas are imprecise.
+- All agreement is in-sample: the PMM was calibrated, and the Core algorithm's cut points were selected, in the same HRS/HCAP sample. Both are likely optimistic.
 </div>
 
 ## Next steps
 
-1. Return to HCAP-algorithm-in-Core analysis, update with sample weights, and compare to PMM approach.
-2. Evaluate machine learning / predictive modeling approaches to classification
-3. Manuscript: all three approaches, plus Langa-Weir, Hudomiet
+1. Manuscript (Analysis A2): Core algorithm, PMM, Langa-Weir, and Hudomiet compared with the HRS/HCAP Algorithm.
+2. Cross-validated agreement for both the PMM and the Core algorithm.
+3. PMM probabilities for HRS Core 2016 to 2022 (Analysis A3_2) for prevalence and incidence.
 
+## Resources
 
-## Resources 
-
-[This slide show (html)](https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides2603_2026-03-25.html)
-
-[PMM analysis report (html)](https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/PMM_Analysis_Report_2026-03-25.html)
-
-[HCAP in core slide show (Gslides)](https://docs.google.com/presentation/d/10Jsx5bdNrKA0TYQP0w4hCPZfcdVBGvi0CpvsMn6430Q/edit?usp=sharing)
-
-[HCAP in Core analysis report (html)](https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/HRS_cognition_2025-07-22.html)
+[Current reports (README)](https://github.com/dougtommet/HRS_cog_classification#readme)
 
 [Github repository](https://github.com/dougtommet/HRS_cog_classification)
