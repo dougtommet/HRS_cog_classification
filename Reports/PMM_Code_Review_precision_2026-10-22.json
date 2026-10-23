@@ -1,0 +1,39 @@
+{
+  "n": 3283,
+  "n_class_parameters_recovered_from_H5": 681,
+  "continuous_residual_variances": [
+    {
+      "header": "Residual.Variances",
+      "parameter": "VDLFL1Z",
+      "class": "1",
+      "printed": 0.004,
+      "exact": 0.0044592819177,
+      "percent_error": -10.2994591089
+    },
+    {
+      "header": "Residual.Variances",
+      "parameter": "VDWDDELZ",
+      "class": "1",
+      "printed": 0.026,
+      "exact": 0.025590669364,
+      "percent_error": 1.5995307917
+    },
+    {
+      "header": "Residual.Variances",
+      "parameter": "VDEXF7Z",
+      "class": "1",
+      "printed": 0.017,
+      "exact": 0.016897127032,
+      "percent_error": 0.60881928344
+    }
+  ],
+  "prior_class_order": ["Normal", "MCI", "Dementia"],
+  "posterior_pct_printed_parameters": [72.1639586699, 20.5216147358, 7.3144265943],
+  "posterior_pct_exact_parameters": [72.2080459135, 20.5010670128, 7.2908870737],
+  "max_absolute_probability_difference": 0.054395664181,
+  "mean_absolute_probability_difference": [0.0029586567506, 0.0020423057983, 0.0011914792429],
+  "n_modal_class_changes": 15,
+  "weighted_pct_modal_class_changes": 0.53826718995,
+  "scoring_free_parameters": 0,
+  "individual_results_location": "Temporary directory only; no individual records exported"
+}

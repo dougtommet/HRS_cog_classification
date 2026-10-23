@@ -1,0 +1,22 @@
+## Pairwise agreement among methods
+
+```{r}
+pairwise_values <- as.matrix(a2_2_pairwise[, -1])
+diag(pairwise_values) <- NA   # the 1s on the diagonal are left blank
+
+dplyr::bind_cols(a2_2_pairwise["method"], tibble::as_tibble(pairwise_values)) |>
+  gt::gt(rowname_col = "method") |>
+  gt::fmt(
+    columns = -method,
+    fns = function(x) sub("^(-?)0\\.", "\\1.", sprintf("%.2f", x))   # two decimals, no leading zero
+  ) |>
+  gt::sub_missing(missing_text = "") |>
+  gt::cols_align("center", columns = -method) |>
+  gt::cols_width(method ~ gt::px(230), dplyr::everything() ~ gt::px(115)) |>
+  a2_2_gt_style(font = 18, width = 100)
+```
+
+<div style="font-size: 0.42em; line-height: 1.2;">
+Three-class (Normal, MCI, Dementia) quadratic weighted kappa for each pair of methods, HRS/HCAP 2016 participants. The PMM appears twice: probability allocation (each person counts in every class in proportion to the class probabilities) and most likely class (each person counts in one class). Consensus comparisons use normalized HCAP16WGTR / samplingP weights; all others use HCAP16WGTR. 
+</div>
+

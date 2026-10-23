@@ -1,0 +1,14 @@
+## Limitations: PMM
+
+```{r}
+#| include: false
+a2_2_mm <- function(method, col) analysis2_marginal_matching[[col]][analysis2_marginal_matching$method == method]
+```
+
+<div style="font-size: 0.9em; line-height: 1.3;">
+
+- **Most likely class misleads.** Assigning each person to their most likely class gives MCI `r a2_2_dec(a2_2_mm("PMM: most likely class", "MCI"), 1)`%, against `r a2_2_dec(a2_2_mm("Manly-Jones algorithm", "MCI"), 1)`% for the Manly-Jones algorithm. 
+- **Lower three-class agreement.** Kappa with the Manly-Jones algorithm is `r a2_2_dec(a2_2_kappa_mj("PMM", "three_class_kappa"))` for the PMM (probability allocation) and `r a2_2_dec(a2_2_kappa_mj("Core algorithm", "three_class_kappa"))` for the core algorithm. Splitting each person across classes lowers kappa.
+
+</div>
+

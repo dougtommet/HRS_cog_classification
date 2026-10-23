@@ -1,0 +1,23 @@
+## Profile mixture modeling (1/2)
+
+<div style="font-size: 0.5em; line-height: 1.25;">
+A profile mixture model (PMM) describes the pattern of test scores and reports expected within each class (Normal, MCI, Dementia), then asks which class best accounts for a person's observed pattern.
+</div>
+
+<div style="font-size: 0.42em; line-height: 1.2;">
+
+| | **Logistic regression** | **Profile mixture model** |
+|:--|:--|:--|
+| Question | Given these scores, what is the probability of each class? | Which class most plausibly produced this pattern of scores and reports? |
+| What is modeled | $P(\text{class} \mid \text{scores})$ directly (discriminative) | $P(\text{scores} \mid \text{class})$ and $P(\text{class})$; $P(\text{class} \mid \text{scores})$ follows from Bayes' rule (generative) |
+| Role of the tests | Predictors with regression coefficients | Indicators of a class-specific response profile |
+| Dependence among tests | Handled only through the terms the analyst adds | Carried by a general cognitive factor within each class |
+| Class prevalence | Absorbed into the intercepts | Explicit class proportions |
+| Missing tests | Cases dropped or imputed | Missing tests drop out of the likelihood; probabilities come from the data the person has |
+| Main assumptions | The form of the regression equation | The form of the within-class distributions |
+
+</div>
+
+<div style="font-size: 0.42em; line-height: 1.2;">
+**In this project:** the PMM is supervised. In HRS-HCAP 2016, each participant's class is fixed to the Manly-Jones class (known-class calibration). Every parameter is then held fixed, the class is released, and each person is scored. This places it closer to discriminant analysis than to exploratory latent class analysis.
+</div>

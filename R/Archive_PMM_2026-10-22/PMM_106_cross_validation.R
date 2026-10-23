@@ -234,13 +234,14 @@ fit_and_score <- function(variant, label, train, test) {
     VARIABLE = variable_cal,
     ANALYSIS = analysis_cal,
     OUTPUT = "standardized;",
+    SAVEDATA = "H5RESULTS = calibration.h5;",
     usevariables = c("id", "vs1hcapdxeap", "HCAP16WGTR", "STRATUM", "SECU_mplus", use_items),
     rdata = train
   )
   cal_path <- run_mplus(cal_obj, dir, "cal")
   cal <- read_mplus_model_quietly(cal_path)
   cal_flags <- output_flags(cal_path)
-  ok <- !is.null(cal[["summaries"]][["LL"]]) && !cal_flags[["not_terminated"]]
+  ok <- !is.null(cal[["summaries"]][["LL"]]) && !any(cal_flags)
 
   run <- tibble::tibble(
     variant = variant, label = label,
@@ -257,7 +258,7 @@ fit_and_score <- function(variant, label, train, test) {
   }
   check_prior_sample(train, cal, stringr::str_c(variant, " ", label))
 
-  score_model <- write_lca_model(cal, mplus_mod_norms)
+  score_model <- write_lca_model(file.path(dir, "calibration.h5"), mplus_mod_norms)
   score_model <- sub("%OVERALL%",
                      stringr::str_c("%OVERALL% \n ",
                                     weighted_class_logits(train, "vs1hcapdxeap", "HCAP16WGTR")),
@@ -268,7 +269,7 @@ fit_and_score <- function(variant, label, train, test) {
     MODEL = score_model,
     VARIABLE = variable_score,
     ANALYSIS = analysis_score,
-    SAVEDATA = "SAVE = CPROBABILITIES; file = cprob.dat;",
+    SAVEDATA = "SAVE = CPROBABILITIES; file = cprob.dat; FORMAT = F20.12;",
     usevariables = c("id", use_items),
     rdata = add_placeholder_rows(test, train)
   )

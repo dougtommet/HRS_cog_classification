@@ -100,14 +100,3 @@ system2(
 pmm_results_plot_slide
 ```
 
-## Why no MCI probability is above one half
-
-<div style="font-size: 0.55em; line-height: 1.2;">
-- The largest MCI probability for any participant is `r f2(pmm_mci$max_p_mci)`; `r pmm_mci$n_mci_over_half` of `r fn(pmm_mci$n_scored)` participants scored by the cognition model exceed 0.50.
-- The tests inform class only through GCP, and the class distributions of GCP overlap: Normal mean `r f2(pmm_mci$gcp_mean[1])` (SD `r f2(pmm_mci$gcp_sd[1])`), MCI `r f2(pmm_mci$gcp_mean[2])` (`r f2(pmm_mci$gcp_sd[2])`), Dementia `r f2(pmm_mci$gcp_mean[3])` (`r f2(pmm_mci$gcp_sd[3])`), with priors `r shares_text(100 * pmm_mci$prior)`.
-- Even if GCP were known exactly, the largest possible MCI probability would be `r f2(pmm_mci$ceil_exact$p)` (`r f2(pmm_mci$ceil_equal$p)` with equal priors, so the priors are not the cause).
-- The 8 tests measure GCP with within-class reliability (omega) of about `r f2(pmm_mci$omega)`; with that much measurement error, the ceiling is about `r f2(pmm_mci$ceil_rel$p)`.
-- MCI is the most likely class for `r fn(pmm_mci$n_mci_modal)` participants, whose average probabilities are `r f2(pmm_mci$avg_mci_modal[1])` Normal, `r f2(pmm_mci$avg_mci_modal[2])` MCI, and `r f2(pmm_mci$avg_mci_modal[3])` Dementia.
-- The Core battery measures 1 dimension with error and has no informant report for tested respondents, while the HRS/HCAP Algorithm defines MCI from 5 domains and an informant report. An MCI probability near `r f2(pmm_mci$avg_mci_modal[2])` states this uncertainty.
-</div>
-

@@ -1,4 +1,5 @@
 source(here::here("R", "PMM_090_model_registry.R"))
+source(here::here("R", "PMM_109_probability_tools.R"))
 
 PMM_100 <- readRDS(here::here("R_objects", "PMM_100.RDS"))
 
@@ -80,6 +81,7 @@ margins_sample <- PMM_100 |>
   dplyr::transmute(
     id = as.integer(id),
     hcap_weight = HCAP16WGTR,
+    reference = factor(as.integer(haven::zap_labels(vs1hcapdxeap)), levels = 1:3, labels = class_labels),
     langa_weir = haven::zap_labels(cogfunction2016)
   ) |>
   dplyr::left_join(combined_probabilities, by = "id") |>
@@ -88,8 +90,30 @@ margins_sample <- PMM_100 |>
     combined_class = factor(c_combined, levels = 1:3, labels = class_labels, ordered = TRUE)
   )
 
+prob_cols <- c("cprob1_combined", "cprob2_combined", "cprob3_combined")
+if (anyDuplicated(combined_probabilities$id) ||
+    !setequal(combined_probabilities$id, margins_sample$id) ||
+    anyNA(margins_sample$reference) || any(!is.finite(margins_sample$hcap_weight)) ||
+    any(margins_sample$hcap_weight <= 0)) stop("Invalid or incomplete PMM margins sample.")
+margins_sample[, prob_cols] <- as.data.frame(pmm_normalize_probabilities(margins_sample[, prob_cols]))
+posterior_shares <- 100 * colSums(as.matrix(margins_sample[, prob_cols]) * margins_sample$hcap_weight) /
+  sum(margins_sample$hcap_weight)
+comparison_margin_data <- tibble::tibble(
+  Class = class_labels,
+  `Manly-Jones (%)` = as.numeric(pmm_weighted_shares(margins_sample$reference, margins_sample$hcap_weight)),
+  `PMM mean probability (%)` = as.numeric(posterior_shares),
+  `PMM modal class (%)` = as.numeric(pmm_weighted_shares(margins_sample$combined_class, margins_sample$hcap_weight))
+)
+comparison_margin_table <- comparison_margin_data |>
+  gt::gt() |> gt::fmt_number(columns = where(is.numeric), decimals = 2) |>
+  gt::tab_source_note(paste0("HCAP16WGTR; identical participants and denominator (N = ",
+    format(nrow(margins_sample), big.mark = ","), "). Probability averages and modal assignments are separate estimands."))
+
+# Normalized (sample-scaled) weights: HCAP16WGTR rescaled to sum to the
+# sample size, so bar heights are weighted counts on the sample scale.
 histogram_data <- margins_sample |>
-  dplyr::select(id, cprob1_combined, cprob2_combined, cprob3_combined) |>
+  dplyr::mutate(sample_weight = hcap_weight * dplyr::n() / sum(hcap_weight)) |>
+  dplyr::select(id, sample_weight, cprob1_combined, cprob2_combined, cprob3_combined) |>
   tidyr::pivot_longer(
     cols = c(cprob1_combined, cprob2_combined, cprob3_combined),
     names_to = "class_probability",
@@ -105,16 +129,22 @@ histogram_data <- margins_sample |>
 
 margin_plot <- ggplot2::ggplot(
   histogram_data,
-  ggplot2::aes(x = probability)
+  ggplot2::aes(x = probability, weight = sample_weight)
 ) +
+  # 30 bins of width 1/30 starting at 0, so the bins tile [0, 1] exactly.
+  # With bins = 30 alone, the end bins straddle 0 and 1 and are dropped by
+  # the x-axis limits, which removes probabilities near 0 and near 1.
   ggplot2::geom_histogram(
-    bins = 30,
+    binwidth = 1 / 30,
+    boundary = 0,
+    closed = "left",
     fill = "grey70",
     color = "white",
     linewidth = 0.2,
     show.legend = FALSE
   ) +
-  ggplot2::facet_wrap(~ class, nrow = 1) +
+  # Fixed scales: all panels share one y-axis range, set by the tallest bar.
+  ggplot2::facet_wrap(~ class, nrow = 1, scales = "fixed") +
   ggplot2::scale_x_continuous(
     limits = c(0, 1),
     breaks = seq(0, 1, by = 0.1),
@@ -125,11 +155,10 @@ margin_plot <- ggplot2::ggplot(
       TRUE ~ ""
     )
   ) +
-  ggplot2::scale_y_continuous(breaks = seq(0, 750, by = 250), expand = c(0, 0)) +
-  ggplot2::coord_cartesian(ylim = c(0, 750)) +
+  ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0, 0.05))) +
   ggplot2::labs(
     x = "PMM class probability",
-    y = "Count"
+    y = "Weighted count"
   ) +
   ggplot2::theme_minimal(base_size = 12) +
   ggplot2::theme(
@@ -195,10 +224,13 @@ langa_weir_margin_note <- paste(
 PMM_112 <- list(
   data = list(
     margins_sample = margins_sample,
+    comparison_margin_data = comparison_margin_data,
+    posterior_shares = posterior_shares,
     histogram_data = histogram_data,
     margin_table_data = margin_table_data,
     langa_weir_margin_table_data = langa_weir_margin_table_data
   ),
+  comparison_table = comparison_margin_table,
   figure = margin_plot,
   manuscript_figure = margin_plot_manuscript,
   table = add_margin_note(format_margin_table(margin_table_data), combined_margin_note),

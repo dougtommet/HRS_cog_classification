@@ -1,0 +1,40 @@
+```{r}
+# Values for "Why no participant has an MCI probability above one half"
+# (2026-10-22). Computed in R/PMM_114_mci_ceiling.R, shared with Slides2603.
+source(here::here("R", "PMM_114_mci_ceiling.R"))
+f2 <- function(x) sprintf("%.2f", x)
+gcp_mean <- pmm_mci$gcp_mean
+gcp_sd <- pmm_mci$gcp_sd
+cog_prior <- pmm_mci$prior
+omega_normal <- pmm_mci$omega
+ceil_exact <- pmm_mci$ceil_exact
+ceil_equal <- pmm_mci$ceil_equal
+ceil_rel <- pmm_mci$ceil_rel
+n_mci_modal <- pmm_mci$n_mci_modal
+pct_mci_modal <- pmm_mci$pct_mci_modal
+avg_mci_modal <- pmm_mci$avg_mci_modal
+max_p_mci <- pmm_mci$max_p_mci
+n_mci_over_half <- pmm_mci$n_mci_over_half
+```
+
+### Why no participant has an MCI probability above one half
+
+The largest MCI probability for any participant is `r f2(max_p_mci)`, and `r n_mci_over_half` of the `r format(pmm_mci$n_scored, big.mark = ",")` participants scored by the cognition model have an MCI probability above 0.50. This follows from the fitted model and the class priors, not from an error in the computation. The cognition model holds the measurement of each test equal across classes, so the 8 tests inform class membership only through the general cognitive factor. @tbl-gcp-classes shows the distribution of that factor in each class. The MCI distribution lies between the Normal distribution, whose prior is `r sprintf("%.1f", cog_prior[1] / cog_prior[2])` times larger, and the Dementia distribution, which is wider. If a participant's factor score were known without error, the largest possible MCI probability would be `r f2(ceil_exact$p)`, at a factor score of `r f2(ceil_exact$x)` (Normal `r f2(ceil_exact$p_normal)`, Dementia `r f2(ceil_exact$p_dementia)`). With equal priors it would be `r f2(ceil_equal$p)`, so the priors do not explain the ceiling.
+
+```{r}
+#| label: tbl-gcp-classes
+#| tbl-cap: "General cognitive factor by class: mean, standard deviation, and prior (weighted class share)"
+tibble::tibble(
+  Class = class_names,
+  Mean = gcp_mean,
+  SD = gcp_sd,
+  `Prior (%)` = 100 * cog_prior
+) |>
+  gt::gt() |>
+  gt::fmt_number(columns = c(Mean, SD), decimals = 2) |>
+  gt::fmt_number(columns = `Prior (%)`, decimals = 1)
+```
+
+Measurement error lowers the ceiling further, because the 8 tests measure the factor with error. The within-class reliability of the 8 tests in the Normal class (omega, from the standardized loadings) is about `r f2(omega_normal)`. With measurement error of this size, the largest possible MCI probability is about `r f2(ceil_rel$p)`. The scored probabilities agree. MCI is the most likely class for `r n_mci_modal` participants (`r sprintf("%.1f", pct_mci_modal)`%, unweighted), and their average probabilities are `r f2(avg_mci_modal[1])` for Normal, `r f2(avg_mci_modal[2])` for MCI, and `r f2(avg_mci_modal[3])` for Dementia. For these participants MCI is the most likely class, but it rarely holds a majority.
+
+The core battery gives little information to separate MCI from the other classes. The HRS/HCAP Algorithm defines MCI from 5 cognitive domains and an informant report. The core interview offers 8 tests that measure one dimension with error and no informant report for participants who completed cognitive testing. An MCI probability near `r f2(avg_mci_modal[2])` states this uncertainty. Assigning each participant to the most likely class converts the uncertainty into an undercount of MCI (see the class margins below), which is one reason to report class probabilities rather than assigned classes.

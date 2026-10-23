@@ -95,7 +95,8 @@ mod1 <- MplusAutomation::mplusObject(
   rdata = robust_norms
 
 )
-MplusAutomation::mplusModeler(mod1, modelout = "norm_npb.inp", run = 1, writeData = "always")
+source(here::here("R", "PMM_091_mplus_run_cache.R"))  # pmm_mplus_run(): reuse unchanged fits
+pmm_mplus_run(mod1, "norm_npb.inp", outputs = "norm_npb.h5")
 
 ## write the mplus code for the npb norming regressions
 # mplush5::mplus.view.results(here::here("mplus_output", "norm_npb", "norm_npb.h5"))
@@ -105,7 +106,7 @@ results <- mplush5::mplus.print.model.results(here::here("mplus_output", "norm_n
 mplus_mod_norms <- results %>%
   filter(!Section %in% c("Intercepts", "Residual Variances", "Thresholds")) %>%
   mutate(statement_lower = str_to_lower(Statement),
-         est = round(Estimate, 5),
+         est = sprintf("%.15g", Estimate),
          mod = str_c(statement_lower, " @ ", est, "; ")) %>%
   pull(mod) %>%
   str_c(collapse = " \n ")

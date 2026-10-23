@@ -1,0 +1,22 @@
+## PMM: general cognitive factor by class
+
+```{r}
+a2_2_pmm_gcp |>
+  dplyr::transmute(
+    Class = as.character(class),
+    Mean = est_Means,
+    SD = sd,
+    Variance = est_Variances
+  ) |>
+  gt::gt() |>
+  gt::fmt_number(columns = c(Mean, SD, Variance), decimals = 1) |>
+  gt::cols_align("center", columns = -Class) |>
+  a2_2_gt_style(font = 26, width = 70)
+```
+
+<div style="font-size: 0.6em; line-height: 1.3;">
+Model-implied mean and variance estimates reflect adjustment for sociodemographics at the indicator level.  
+
+`r a2_2_reflection_note`
+</div>
+

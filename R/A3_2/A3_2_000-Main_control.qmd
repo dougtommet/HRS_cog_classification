@@ -133,8 +133,8 @@ knitr::kable(dplyr::bind_rows(tab_miss, model_counts), format = "html",
 ```{r}
 #| label: a32-probit-wide
 # Temporary long-to-wide reshape for the cross-wave scatterplot matrices only.
-# Mplus saves posteriors to 3 decimals, so p is clamped to [0.0005, 0.9995]
-# (half the rounding unit) before the probit transform; |z| <= 3.29.
+# For the plot only, p is clamped to [0.0005, 0.9995]
+# before the probit transform; |z| <= 3.29.
 p_lo <- 0.0005
 p_hi <- 1 - p_lo
 z_bound <- stats::qnorm(p_hi)
@@ -181,7 +181,7 @@ z_dementia <- probit_wide("p_dementia")
 
 ## Class probabilities across waves
 
-The next three pages show one class each. Each matrix plots the same respondents' probit-transformed class probability, z = Φ⁻¹(p), across the four waves. A point appears in a panel when the respondent was scored in both waves. Mplus saves probabilities to three decimals, so values of 0.000 and 1.000 are set to 0.0005 and 0.9995 before the transform. This bounds z at ±`r sprintf("%.2f", z_bound)`, and points at the bounds mark respondents classified with near certainty. The table under each matrix gives Pearson correlations below the diagonal, the number of respondents scored in both waves above the diagonal, and the number scored in each wave on the diagonal.
+The next three pages show one class each. Each matrix plots the same respondents' probit-transformed class probability, z = Φ⁻¹(p), across the four waves. A point appears in a panel when the respondent was scored in both waves. For display, probabilities are bounded to [0.0005, 0.9995] before the transform; the exported probabilities retain twelve decimal places. This bounds z at ±`r sprintf("%.2f", z_bound)`, and points at the bounds mark respondents classified with near certainty. The table under each matrix gives Pearson correlations below the diagonal, the number of respondents scored in both waves above the diagonal, and the number scored in each wave on the diagonal.
 
 ### P(Normal)
 

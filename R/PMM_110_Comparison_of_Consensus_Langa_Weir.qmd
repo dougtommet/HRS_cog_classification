@@ -4,7 +4,9 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Weighted Comparison Tables
+## Probability-weighted comparison tables
+
+PMM cells use direct probability allocation. Agreement of the most likely PMM class is shown separately at the end of this section.
 
 Comparisons that involve the consensus diagnosis use the HRS/HCAP validation-subsample weights computed as `HCAP16WGTR * samplingP^(-1)`.
 
@@ -22,7 +24,7 @@ format_weighted_tab(
   PMM_110$tabs$three_class$lw_consensus,
   row_name = "langa_weir",
   stubhead = "Langa-Weir classification",
-  spanner = "Consensus panel diagnosis"
+  spanner = "Consensus panel diagnosis", units = "percent"
 )
 ```
 
@@ -200,3 +202,9 @@ PMM_110$tables$agreement_matrix_binary
 ::: {custom-style="Footnote text"}
 `r PMM_110$notes$matrix_binary`
 :::
+
+## Agreement of the most likely PMM class
+
+```{r}
+PMM_110$modal_agreement_table
+```

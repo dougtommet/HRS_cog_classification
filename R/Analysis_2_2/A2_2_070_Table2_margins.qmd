@@ -1,0 +1,30 @@
+## Classification margins by method
+
+```{r}
+a2_2_margin_data <- analysis2_class_margin_display |>
+  dplyr::filter(method != "Secondary comparators") |>
+  dplyr::mutate(group = dplyr::if_else(method %in% c("Langa-Weir", "Hudomiet"),
+                                       "Secondary comparators",
+                                       "Manly-Jones and the two core methods"))
+a2_2_margin_data |>
+  gt::gt(rowname_col = "method", groupname_col = "group") |>
+  gt::tab_spanner("Normal", columns = c(normal_n, normal_percent)) |>
+  gt::tab_spanner("MCI", columns = c(mci_n, mci_percent)) |>
+  gt::tab_spanner("Dementia", columns = c(dementia_n, dementia_percent)) |>
+  gt::cols_label(
+    normal_n = "N", normal_percent = "Weighted %",
+    mci_n = "N", mci_percent = "Weighted %",
+    dementia_n = "N", dementia_percent = "Weighted %"
+  ) |>
+  gt::fmt_number(columns = c(normal_n, mci_n, dementia_n),
+                 rows = method != "PMM (probability allocation)", decimals = 0) |>
+  gt::fmt_number(columns = c(normal_n, mci_n, dementia_n),
+                 rows = method == "PMM (probability allocation)", decimals = 1) |>
+  gt::cols_align("center", columns = c(normal_n, normal_percent, mci_n, mci_percent, dementia_n, dementia_percent)) |>
+  a2_2_gt_style(font = 20, width = 95)
+```
+
+<div style="font-size: 0.42em; line-height: 1.2;">
+HRS/HCAP 2016 participants. N values are unweighted counts, except PMM probability allocation, where N is the expected count (sum of class probabilities). Weighted percentages use HCAP16WGTR. PMM most likely class assigns each person to the class with the highest probability; probability allocation splits each person across classes by their probabilities. Same values as Table 2 of the tables document.
+</div>
+

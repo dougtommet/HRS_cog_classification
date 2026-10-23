@@ -13,10 +13,14 @@ a2_2_kappa <- function(method, column) {
 <div style="font-size: 0.75em; line-height: 1.3;">
 
 - Both core methods take their structure from the Manly-Jones algorithm: demographic adjustment set in a robust norms group, plus self-rated memory and informant data. Both use the same information (no ADL or IADL items, no immediate word recall).
-- Agreement with the Manly-Jones algorithm, three classes: core algorithm `r a2_2_kappa("Core algorithm", three_class_kappa)`; PMM `r a2_2_kappa("PMM", three_class_kappa)`.
-- Agreement for dementia vs. no dementia: core algorithm `r a2_2_kappa("Core algorithm", binary_kappa)`; PMM `r a2_2_kappa("PMM", binary_kappa)`.
+- Agreement with the Manly-Jones algorithm, three classes: core algorithm `r a2_2_kappa("Core algorithm", three_class_kappa)`; PMM (mean of class probabilities) `r a2_2_kappa("PMM", three_class_kappa)`; PMM (most likely class) `r a2_2_kappa("PMM (most likely class)", three_class_kappa)`.
+- Agreement for dementia vs. no dementia: core algorithm `r a2_2_kappa("Core algorithm", binary_kappa)`; PMM (mean of class probabilities) `r a2_2_kappa("PMM", binary_kappa)`; PMM (most likely class) `r a2_2_kappa("PMM (most likely class)", binary_kappa)`.
 - CAUTION: these agreement statistics are in-sample (HRS/HCAP used for derivation and evaluation of the core algorithm and the PMM).
 - The PMM also gives each person a probability for each class, which carries classification uncertainty into later analyses.
 
+</div>
+
+<div style="font-size: 0.45em; line-height: 1.2;">
+PMM (mean of class probabilities): each person counts in every class in proportion to their class probabilities. PMM (most likely class): each person counts in one class, the one with the highest probability.
 </div>
 

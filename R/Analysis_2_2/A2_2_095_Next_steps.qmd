@@ -1,0 +1,11 @@
+## Next steps
+
+<div style="font-size: 0.9em; line-height: 1.35;">
+
+- **Consider learning something from Hudomiet** who used longitudinal core cognitive data, among other differences.
+- **Out-of-sample check.** Compare both methods with the Manly-Jones algorithm among HRS-HCAP Wave 2 re-interviewees.
+- **Prevalence over time.** Compare 2016 to 2022 prevalence from the core algorithm and the PMM.
+- **Guidance for users.** Set out when to use assigned classes and when to use class probabilities (for example, as weights or as repeated draws).
+
+</div>
+

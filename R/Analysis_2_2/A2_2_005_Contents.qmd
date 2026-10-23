@@ -1,7 +1,8 @@
 ## Contents
 
-- Three classification algorithms: HRS/HCAP, Core, PMM
-- How the HRS core algorithm and the PMM work
-- Agreement of the core algorithm and the PMM with the Manly-Jones (HCAP) algorithm
+- Three classification algorithms in HRS/HCAP sample
+- Classification margins and agreement
+- Limitations and next steps
 - Summary
+
 

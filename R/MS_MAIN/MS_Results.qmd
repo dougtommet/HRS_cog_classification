@@ -10,16 +10,21 @@
   - HCAP16WGTR-weighted margins
     - Manly-Jones algorithm: `r analysis2_margin_text("Manly-Jones algorithm")`
     - Core algorithm: `r analysis2_margin_text("Core algorithm")`
-    - PMM: `r analysis2_margin_text("PMM")`
+    - PMM, most likely class: `r analysis2_margin_text("PMM")`
+    - PMM, direct probability allocation: `r analysis2_margin_text("PMM (probability allocation)")`
+- Table 2b: marginal-rate reproduction in the common comparison sample
+  - Core algorithm assignments; averaged PMM probabilities; modal PMM assignments
+  - Differences from Manly-Jones rates, percentage points
+  - PMM probability averages: `r analysis2_matching_text("PMM: mean probabilities")`
+  - Core algorithm differences: `r analysis2_matching_gap_text("Core algorithm")`
+  - PMM probability-average differences: `r analysis2_matching_gap_text("PMM: mean probabilities")`
+  - Descriptive calibration; overall margins alone insufficient for subgroup calibration
+  - [Provenance: R/MS_MAIN/MS_010_results_objects.R; Table 2b]
   - [Provenance: R/MS_MAIN/MS_010_results_objects.R]
 - Figure 1: Core algorithm
   - Classification rules and participant counts
   - [Provenance: R/MS_MAIN/MS_Tab_Fig_Apndx-020-Figure-1.qmd]
 - Figure 2: PMM class-probability distributions
-  - Largest MCI probability `r sprintf("%.2f", analysis2_pmm_mci$max_p_mci)`; `r analysis2_pmm_mci$n_mci_over_half` of `r format(analysis2_pmm_mci$n_scored, big.mark = ",")` above 0.50 (cognition model)
-  - Ceiling from GCP class distributions and priors: `r sprintf("%.2f", analysis2_pmm_mci$ceil_exact$p)` (GCP known); `r sprintf("%.2f", analysis2_pmm_mci$ceil_rel$p)` (within-class omega `r sprintf("%.2f", analysis2_pmm_mci$omega)`)
-  - Most likely class MCI: `r format(analysis2_pmm_mci$n_mci_modal, big.mark = ",")`; mean MCI probability `r sprintf("%.2f", analysis2_pmm_mci$avg_mci_modal[2])`
-  - [Provenance: R/PMM_114_mci_ceiling.R]
   - Probability separation; uncertainty near class boundaries
   - [Provenance: R/PMM_112_Margins.R]
 
@@ -38,5 +43,6 @@
   - Separate HCAP population and consensus-subsample estimands
   - Weight-dependent interpretation
   - [Provenance: R/MS_MAIN/MS_010_results_objects.R]
-- Table 4: A7 pairwise three-class agreement matrix
-  - [Provenance: R_objects/A7_100_hcap_tables.rds]
+- Table 4: pairwise three-class agreement matrix, including PMM direct probability allocation
+  - PMM versus core algorithm, Manly-Jones, consensus, Langa-Weir, and Hudomiet
+  - [Provenance: R_objects/A7_100_hcap_tables.rds; R/MS_MAIN/MS_010_results_objects.R; current A3 probabilities]

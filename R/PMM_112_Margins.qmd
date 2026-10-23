@@ -5,6 +5,11 @@ source(here::here("R", "PMM_112_Margins.R"))
 ```
 
 ```{r}
+#| tbl-cap: "Reference rates, PMM probability averages, and PMM modal assignments"
+PMM_112$comparison_table
+```
+
+```{r}
 #| fig-cap: "Histograms of PMM class probabilities in the HRS/HCAP sample"
 #| fig-width: 10
 #| fig-height: 4

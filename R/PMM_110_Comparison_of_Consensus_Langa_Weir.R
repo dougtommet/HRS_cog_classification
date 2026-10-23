@@ -1,4 +1,5 @@
 source(here::here("R", "PMM_090_model_registry.R"))
+source(here::here("R", "PMM_109_probability_tools.R"))
 
 PMM_100 <- readRDS(here::here("R_objects", "PMM_100.RDS"))
 
@@ -59,7 +60,18 @@ binary_kappa_from_tab <- function(tab) {
   )
 }
 
-format_weighted_tab <- function(tab, row_name, stubhead, spanner) {
+format_pmm_cells <- function(table, units) {
+  if (units == "percent") return(gt::fmt_number(table, columns = where(is.numeric), decimals = 1))
+  table |>
+    gt::fmt(columns = where(is.numeric), fns = function(x) {
+      v <- x / 1000
+      ifelse(v != 0 & abs(v) < 1, format(signif(v, 2), trim = TRUE, scientific = FALSE),
+             format(round(v), big.mark = ",", trim = TRUE, scientific = FALSE))
+    }) |>
+    gt::tab_source_note("Cell entries are survey-weighted population counts in thousands.")
+}
+
+format_weighted_tab <- function(tab, row_name, stubhead, spanner, units = "thousands") {
   tab_df <- tab |>
     as.data.frame.matrix() |>
     tibble::rownames_to_column(row_name)
@@ -76,10 +88,11 @@ format_weighted_tab <- function(tab, row_name, stubhead, spanner) {
   dplyr::bind_rows(tab_df, total_row) |>
     gt::gt(rowname_col = row_name) |>
     gt::tab_spanner(spanner, columns = 2:4) |>
-    gt::tab_stubhead(stubhead)
+    gt::tab_stubhead(stubhead) |>
+    format_pmm_cells(units)
 }
 
-format_binary_weighted_tab <- function(tab, row_name, stubhead, spanner) {
+format_binary_weighted_tab <- function(tab, row_name, stubhead, spanner, units = "thousands") {
   tab_df <- tab |>
     as.data.frame.matrix() |>
     tibble::rownames_to_column(row_name)
@@ -96,7 +109,8 @@ format_binary_weighted_tab <- function(tab, row_name, stubhead, spanner) {
   dplyr::bind_rows(tab_df, total_row) |>
     gt::gt(rowname_col = row_name) |>
     gt::tab_spanner(spanner, columns = 2:3) |>
-    gt::tab_stubhead(stubhead)
+    gt::tab_stubhead(stubhead) |>
+    format_pmm_cells(units)
 }
 
 build_agreement_matrix <- function(kappas, metric_name) {
@@ -202,6 +216,11 @@ jorm_cprob <- read_mplus_savedata_quietly(
   ) |>
   dplyr::select(id, cprob1_jorm, cprob2_jorm, cprob3_jorm, c_jorm)
 
+if (anyDuplicated(cognition_cprob$id) || anyDuplicated(jorm_cprob$id) ||
+    length(intersect(cognition_cprob$id, jorm_cprob$id))) {
+  stop("PMM outputs must have unique IDs and mutually exclusive scoring routes.")
+}
+
 combined_cprob <- cognition_cprob |>
   dplyr::full_join(jorm_cprob, by = "id") |>
   dplyr::mutate(
@@ -224,83 +243,28 @@ combined_cprob <- cognition_cprob |>
   ) |>
   dplyr::select(id, c_combined, cprob1_combined, cprob2_combined, cprob3_combined)
 
+expected_ids <- as.numeric(PMM_100$id[PMM_100$inHCAP == 1])
+if (!setequal(combined_cprob$id, expected_ids)) stop("Incomplete or unexpected HCAP scoring coverage.")
+prob_cols <- c("cprob1_combined", "cprob2_combined", "cprob3_combined")
+combined_cprob[, prob_cols] <- as.data.frame(pmm_normalize_probabilities(combined_cprob[, prob_cols]))
+
 hcap_sample_combined <- hcap_sample |>
   dplyr::inner_join(combined_cprob, by = "id")
 
 consensus_sample_combined <- consensus_sample |>
   dplyr::inner_join(combined_cprob, by = "id")
 
-hcap_sample_combined_rep <- hcap_sample_combined |>
-  dplyr::slice(rep(seq_len(dplyr::n()), each = 100)) |>
-  dplyr::group_by(id) |>
-  dplyr::mutate(
-    i = dplyr::row_number(),
-    p1 = cprob1_combined * 100,
-    p2 = cprob2_combined * 100 + p1,
-    combined_model = dplyr::case_when(
-      i <= p1 ~ 1L,
-      i <= p2 ~ 2L,
-      TRUE ~ 3L
-    ),
-    hcap_w100 = hcap_w / 100
-  ) |>
-  dplyr::ungroup() |>
-  dplyr::mutate(
-    combined_model = factor(combined_model, levels = 1:3, labels = class_labels, ordered = TRUE)
-  )
-
-consensus_sample_combined_rep <- consensus_sample_combined |>
-  dplyr::slice(rep(seq_len(dplyr::n()), each = 100)) |>
-  dplyr::group_by(id) |>
-  dplyr::mutate(
-    i = dplyr::row_number(),
-    p1 = cprob1_combined * 100,
-    p2 = cprob2_combined * 100 + p1,
-    combined_model = dplyr::case_when(
-      i <= p1 ~ 1L,
-      i <= p2 ~ 2L,
-      TRUE ~ 3L
-    ),
-    consensus_wt100 = consensus_wt / 100
-  ) |>
-  dplyr::ungroup() |>
-  dplyr::mutate(
-    combined_model = factor(combined_model, levels = 1:3, labels = class_labels, ordered = TRUE)
-  )
-
- hcap_sample_combined_binary <- make_binary_sample(hcap_sample_combined_rep) |>
-  dplyr::mutate(
-    combined_model_binary = factor(
-      dplyr::if_else(as.integer(combined_model) == 3L, 2L, 1L),
-      levels = 1:2,
-      labels = binary_labels,
-      ordered = TRUE
-    )
-  )
-
-consensus_sample_combined_binary <- make_binary_sample(consensus_sample_combined_rep) |>
-  dplyr::mutate(
-    combined_model_binary = factor(
-      dplyr::if_else(as.integer(combined_model) == 3L, 2L, 1L),
-      levels = 1:2,
-      labels = binary_labels,
-      ordered = TRUE
-    )
-  )
+# Probability allocation uses exact weighted sums, without synthetic records.
+hcap_sample_combined_binary <- make_binary_sample(hcap_sample_combined)
+consensus_sample_combined_binary <- make_binary_sample(consensus_sample_combined)
 
 tabs_3class <- list(
-  lw_consensus = xtabs(consensus_wt ~ langa_weir + consensus, data = consensus_sample) |>
-    round(1),
-  algorithmic_consensus = xtabs(consensus_wt ~ algorithmic + consensus, data = consensus_sample) |>
-    round(1),
-  algorithmic_lw = xtabs(hcap_w ~ algorithmic + langa_weir, data = hcap_sample) |>
-    round(1),
-  consensus_combined = xtabs(consensus_wt100 ~ consensus + combined_model, data = consensus_sample_combined_rep) |>
-    round(1),
-  algorithmic_combined = xtabs(hcap_w100 ~ algorithmic + combined_model, data = hcap_sample_combined_rep) |>
-    round(1),
-  lw_combined = xtabs(hcap_w100 ~ langa_weir + combined_model, data = hcap_sample_combined_rep) |>
-    round(1)
+  lw_consensus = xtabs(consensus_wt ~ langa_weir + consensus, data = consensus_sample),
+  algorithmic_consensus = xtabs(consensus_wt ~ algorithmic + consensus, data = consensus_sample),
+  algorithmic_lw = xtabs(hcap_w ~ algorithmic + langa_weir, data = hcap_sample),
+  consensus_combined = pmm_probability_table(consensus_sample_combined, "consensus", "consensus_wt"),
+  algorithmic_combined = pmm_probability_table(hcap_sample_combined, "algorithmic", "hcap_w"),
+  lw_combined = pmm_probability_table(hcap_sample_combined, "langa_weir", "hcap_w")
 )
 
 kappas_3class <- list(
@@ -313,18 +277,12 @@ kappas_3class <- list(
 )
 
 tabs_binary <- list(
-  lw_consensus = xtabs(consensus_wt ~ langa_weir_binary + consensus_binary, data = consensus_sample_binary) |>
-    round(1),
-  algorithmic_consensus = xtabs(consensus_wt ~ algorithmic_binary + consensus_binary, data = consensus_sample_binary) |>
-    round(1),
-  algorithmic_lw = xtabs(hcap_w ~ algorithmic_binary + langa_weir_binary, data = hcap_sample_binary) |>
-    round(1),
-  consensus_combined = xtabs(consensus_wt100 ~ consensus_binary + combined_model_binary, data = consensus_sample_combined_binary) |>
-    round(1),
-  algorithmic_combined = xtabs(hcap_w100 ~ algorithmic_binary + combined_model_binary, data = hcap_sample_combined_binary) |>
-    round(1),
-  lw_combined = xtabs(hcap_w100 ~ langa_weir_binary + combined_model_binary, data = hcap_sample_combined_binary) |>
-    round(1)
+  lw_consensus = xtabs(consensus_wt ~ langa_weir_binary + consensus_binary, data = consensus_sample_binary),
+  algorithmic_consensus = xtabs(consensus_wt ~ algorithmic_binary + consensus_binary, data = consensus_sample_binary),
+  algorithmic_lw = xtabs(hcap_w ~ algorithmic_binary + langa_weir_binary, data = hcap_sample_binary),
+  consensus_combined = pmm_probability_table(consensus_sample_combined_binary, "consensus_binary", "consensus_wt", binary = TRUE),
+  algorithmic_combined = pmm_probability_table(hcap_sample_combined_binary, "algorithmic_binary", "hcap_w", binary = TRUE),
+  lw_combined = pmm_probability_table(hcap_sample_combined_binary, "langa_weir_binary", "hcap_w", binary = TRUE)
 )
 
 kappas_binary <- list(
@@ -335,6 +293,30 @@ kappas_binary <- list(
   algorithmic_combined = binary_kappa_from_tab(tabs_binary$algorithmic_combined),
   lw_combined = binary_kappa_from_tab(tabs_binary$lw_combined)
 )
+
+modal_agreement <- function(data, reference, weight) {
+  d <- data
+  d$modal <- factor(d$c_combined, levels = 1:3, labels = class_labels)
+  ref <- d[[reference]]
+  w <- d[[weight]]
+  tab <- stats::xtabs(w ~ ref + modal, data = d)
+  dem_ref <- factor(as.integer(ref) == 3L, levels = c(FALSE, TRUE), labels = binary_labels)
+  dem_modal <- factor(d$c_combined == 3L, levels = c(FALSE, TRUE), labels = binary_labels)
+  tab_dem <- stats::xtabs(w ~ dem_ref + dem_modal, data = d)
+  c(three_class = weighted_kappa_from_tab(tab)$quadratic_weighted_kappa,
+    dementia = binary_kappa_from_tab(tab_dem)$kappa)
+}
+modal_kappas <- list(
+  Manly_Jones = modal_agreement(hcap_sample_combined, "algorithmic", "hcap_w"),
+  Langa_Weir = modal_agreement(hcap_sample_combined, "langa_weir", "hcap_w"),
+  Consensus = modal_agreement(consensus_sample_combined, "consensus", "consensus_wt")
+)
+modal_agreement_table <- tibble::tibble(
+  Comparator = c("Manly-Jones algorithm", "Langa-Weir", "Consensus diagnosis"),
+  `Three-class kappa` = vapply(modal_kappas, function(x) x[["three_class"]], numeric(1)),
+  `Dementia kappa` = vapply(modal_kappas, function(x) x[["dementia"]], numeric(1))
+) |> gt::gt() |> gt::fmt_number(columns = where(is.numeric), decimals = 3) |>
+  gt::tab_source_note("Most likely PMM class; HCAP16WGTR, or normalized consensus-sample weights for the consensus comparison.")
 
 agreement_matrix_3class <- build_agreement_matrix(kappas_3class, "quadratic_weighted_kappa")
 agreement_matrix_binary <- build_agreement_matrix(kappas_binary, "kappa")
@@ -360,12 +342,12 @@ PMM_110 <- list(
     consensus_sample = consensus_sample,
     consensus_sample_binary = consensus_sample_binary,
     hcap_sample_combined = hcap_sample_combined,
-    hcap_sample_combined_rep = hcap_sample_combined_rep,
     hcap_sample_combined_binary = hcap_sample_combined_binary,
     consensus_sample_combined = consensus_sample_combined,
-    consensus_sample_combined_rep = consensus_sample_combined_rep,
     consensus_sample_combined_binary = consensus_sample_combined_binary
   ),
+  modal_kappas = modal_kappas,
+  modal_agreement_table = modal_agreement_table,
   tabs = list(
     three_class = tabs_3class,
     binary = tabs_binary
@@ -383,13 +365,13 @@ PMM_110 <- list(
       tabs_3class$lw_consensus,
       row_name = "langa_weir",
       stubhead = "Langa-Weir classification",
-      spanner = "Consensus panel diagnosis"
+      spanner = "Consensus panel diagnosis", units = "percent"
     ),
     algorithmic_consensus = format_weighted_tab(
       tabs_3class$algorithmic_consensus,
       row_name = "algorithmic",
       stubhead = "Manly-Jones algorithm",
-      spanner = "Consensus panel diagnosis"
+      spanner = "Consensus panel diagnosis", units = "percent"
     ),
     algorithmic_lw = format_weighted_tab(
       tabs_3class$algorithmic_lw,
@@ -401,7 +383,7 @@ PMM_110 <- list(
       tabs_3class$consensus_combined,
       row_name = "consensus",
       stubhead = "Consensus panel diagnosis",
-      spanner = "PMM classification"
+      spanner = "PMM classification", units = "percent"
     ),
     algorithmic_combined = format_weighted_tab(
       tabs_3class$algorithmic_combined,
@@ -420,13 +402,13 @@ PMM_110 <- list(
       tabs_binary$lw_consensus,
       row_name = "langa_weir_binary",
       stubhead = "Langa-Weir classification",
-      spanner = "Consensus panel diagnosis"
+      spanner = "Consensus panel diagnosis", units = "percent"
     ),
     algorithmic_consensus_binary = format_binary_weighted_tab(
       tabs_binary$algorithmic_consensus,
       row_name = "algorithmic_binary",
       stubhead = "Manly-Jones algorithm",
-      spanner = "Consensus panel diagnosis"
+      spanner = "Consensus panel diagnosis", units = "percent"
     ),
     algorithmic_lw_binary = format_binary_weighted_tab(
       tabs_binary$algorithmic_lw,
@@ -438,7 +420,7 @@ PMM_110 <- list(
       tabs_binary$consensus_combined,
       row_name = "consensus_binary",
       stubhead = "Consensus panel diagnosis",
-      spanner = "PMM classification"
+      spanner = "PMM classification", units = "percent"
     ),
     algorithmic_combined_binary = format_binary_weighted_tab(
       tabs_binary$algorithmic_combined,
@@ -480,26 +462,25 @@ PMM_110 <- list(
     ),
     consensus_combined = paste(
       "Note: This comparison uses the HRS/HCAP validation subsample and the PMM classification.",
-      "PMM classifications are generated from the 100-replication sample implied by the PMM class probabilities.",
-      "The table weights are the consensus-sample weights HCAP16WGTR * samplingP^(-1), normalized within the consensus sample and divided by 100 across replications."
+      "Each PMM cell is the sum of the survey weight times the posterior class probability.",
+      "Weights are HCAP16WGTR * samplingP^(-1), normalized to sum to 100 within the consensus sample. Cells are weighted percentages."
     ),
     hcap_combined = paste(
       "Note: This comparison uses the HCAP sample and the PMM classification.",
-      "PMM classifications are generated from the 100-replication sample implied by the PMM class probabilities.",
-      "The table weights are the HCAP population weights HCAP16WGTR divided by 100 across replications.",
-      "This is not the same weighting used for the Langa-Weir versus algorithmic comparison, which uses the non-replicated HCAP weights."
+      "Each PMM cell is the sum of the survey weight times the posterior class probability.",
+      "Weights are HCAP16WGTR, as in the other full-HCAP comparisons."
     ),
     matrix_three = paste(
       "Note: This matrix combines pairwise quadratic weighted kappas computed under different weighting schemes.",
       "Entries involving the consensus diagnosis use consensus-sample weights HCAP16WGTR * samplingP^(-1), normalized within the validation subsample.",
       "Entries not involving the consensus diagnosis use HCAP population weights HCAP16WGTR.",
-      "Entries involving the PMM are computed on the 100-replication sample and therefore use replicated consensus-sample or replicated HCAP weights as appropriate."
+      "PMM entries use direct probability allocation with the corresponding survey weights; no replicated records."
     ),
     matrix_binary = paste(
       "Note: This matrix combines pairwise kappas for dementia versus non-dementia computed under different weighting schemes.",
       "Entries involving the consensus diagnosis use consensus-sample weights HCAP16WGTR * samplingP^(-1), normalized within the validation subsample.",
       "Entries not involving the consensus diagnosis use HCAP population weights HCAP16WGTR.",
-      "Entries involving the PMM are computed on the 100-replication sample and therefore use replicated consensus-sample or replicated HCAP weights as appropriate."
+      "PMM entries use direct probability allocation with the corresponding survey weights; no replicated records."
     )
   ),
   labels = list(

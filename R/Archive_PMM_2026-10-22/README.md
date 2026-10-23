@@ -20,3 +20,7 @@ running it.
 
 Details and results: `References/SESSION_LOGS.md`, entry of 2026-10-22.
 Full pre-change snapshot (code and outputs): `_snapshots/2026-10-22_pre_noADL/`.
+
+Retired after code review: PMM_114_mci_ceiling.R and PMM_114_retired_explanation.qmd. The Gaussian-error surrogate was not a ceiling for the fitted model; the associated A3, A2, A2_2, and A9 explanation was removed. Direct marginal-rate comparisons replace it.
+
+The archived change1 CV was not adopted; fold_05 had quality flags. Its historical figures do not establish that the alternative is ruled out.

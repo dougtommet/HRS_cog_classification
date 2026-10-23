@@ -1,6 +1,6 @@
 Mplus VERSION 9 (Mac)
 MUTHEN & MUTHEN
-10/22/2026   1:10 PM
+10/22/2026   3:41 PM
 
 INPUT INSTRUCTIONS
 
@@ -24,255 +24,256 @@ INPUT INSTRUCTIONS
   processors = 4;
   MODEL:
   %OVERALL%
-   [ c#1 @ 2.2898740 c#2 @ 1.0419327 ];
-   vdori on x1 @ -0.07577;
-   vdori on x2 @ 0.39087;
-   vdori on x3 @ -1.64662;
-   vdori on x4 @ 0.76033;
-   vdori on x5 @ -0.03052;
-   vdori on x6 @ -0.204;
-   vdori on x7 @ 0.14628;
-   vdori on x1x4 @ 0.00741;
-   vdori on x1x5 @ 0.13772;
-   vdori on x1x6 @ 0.08192;
-   vdori on x1x7 @ -0.00996;
-   vdori on x2x4 @ -0.27294;
-   vdori on x2x5 @ -1.06735;
-   vdori on x2x6 @ -1.06488;
-   vdori on x2x7 @ 0.02926;
-   vdori on x3x4 @ 1.1322;
-   vdori on x3x5 @ 4.98186;
-   vdori on x3x6 @ 9.34042;
-   vdori on x3x7 @ -0.09049;
-   vdori on x4x5 @ 1.01366;
-   vdori on x4x6 @ -0.10614;
-   vdori on x4x7 @ -0.05426;
-   vdori on x5x7 @ -0.01297;
-   vdori on x6x7 @ -0.08127;
-   vdlfl1z on x1 @ -0.00588;
-   vdlfl1z on x2 @ 0.01561;
-   vdlfl1z on x3 @ -0.04161;
-   vdlfl1z on x4 @ 0.00118;
-   vdlfl1z on x5 @ -0.02776;
-   vdlfl1z on x6 @ -0.03255;
-   vdlfl1z on x7 @ 0.00902;
-   vdlfl1z on x1x4 @ 0.00324;
-   vdlfl1z on x1x5 @ 0.00114;
-   vdlfl1z on x1x6 @ 0.00262;
-   vdlfl1z on x1x7 @ 0.00068;
-   vdlfl1z on x2x4 @ -0.01514;
-   vdlfl1z on x2x5 @ 0.00164;
-   vdlfl1z on x2x6 @ -0.00214;
-   vdlfl1z on x2x7 @ -0.00408;
-   vdlfl1z on x3x4 @ 0.04738;
-   vdlfl1z on x3x5 @ -0.0222;
-   vdlfl1z on x3x6 @ -0.04808;
-   vdlfl1z on x3x7 @ 0.01431;
-   vdlfl1z on x4x5 @ -0.0099;
-   vdlfl1z on x4x6 @ 0.0219;
-   vdlfl1z on x4x7 @ 0.00273;
-   vdlfl1z on x5x7 @ -0.00192;
-   vdlfl1z on x6x7 @ -0.00428;
-   vdlfl2 on x1 @ -0.06891;
-   vdlfl2 on x2 @ -0.54444;
-   vdlfl2 on x3 @ 3.34408;
-   vdlfl2 on x4 @ -0.78296;
-   vdlfl2 on x5 @ -1.33212;
-   vdlfl2 on x6 @ -0.65768;
-   vdlfl2 on x7 @ 0.20568;
-   vdlfl2 on x1x4 @ -0.10094;
-   vdlfl2 on x1x5 @ 0.30866;
-   vdlfl2 on x1x6 @ 0.48712;
-   vdlfl2 on x1x7 @ 0.03102;
-   vdlfl2 on x2x4 @ 1.71355;
-   vdlfl2 on x2x5 @ -2.12852;
-   vdlfl2 on x2x6 @ -3.44743;
-   vdlfl2 on x2x7 @ -0.22588;
-   vdlfl2 on x3x4 @ -7.02607;
-   vdlfl2 on x3x5 @ 10.39535;
-   vdlfl2 on x3x6 @ 14.01562;
-   vdlfl2 on x3x7 @ 1.29551;
-   vdlfl2 on x4x5 @ -0.66766;
-   vdlfl2 on x4x6 @ 1.0128;
-   vdlfl2 on x4x7 @ -0.01821;
-   vdlfl2 on x5x7 @ 0.31556;
-   vdlfl2 on x6x7 @ 0.12677;
-   vdlfl3 on x1 @ -0.07963;
-   vdlfl3 on x2 @ 0.28982;
-   vdlfl3 on x3 @ -1.42361;
-   vdlfl3 on x4 @ -0.27192;
-   vdlfl3 on x5 @ -0.92143;
-   vdlfl3 on x6 @ -1.13182;
-   vdlfl3 on x7 @ 0.06457;
-   vdlfl3 on x1x4 @ 0.13961;
-   vdlfl3 on x1x5 @ 0.05532;
-   vdlfl3 on x1x6 @ -0.02109;
-   vdlfl3 on x1x7 @ -0.00015;
-   vdlfl3 on x2x4 @ -0.81005;
-   vdlfl3 on x2x5 @ -0.10642;
-   vdlfl3 on x2x6 @ 0.46564;
-   vdlfl3 on x2x7 @ 0.02551;
-   vdlfl3 on x3x4 @ 4.15654;
-   vdlfl3 on x3x5 @ 0.19483;
-   vdlfl3 on x3x6 @ -2.93524;
-   vdlfl3 on x3x7 @ -0.18483;
-   vdlfl3 on x4x5 @ 0.03168;
-   vdlfl3 on x4x6 @ 0.33396;
-   vdlfl3 on x4x7 @ 0.11012;
-   vdlfl3 on x5x7 @ 0.20389;
-   vdlfl3 on x6x7 @ 0.09777;
-   vdwddelz on x1 @ -0.00575;
-   vdwddelz on x2 @ 0.00753;
-   vdwddelz on x3 @ -0.0664;
-   vdwddelz on x4 @ 0.06074;
-   vdwddelz on x5 @ -0.08568;
-   vdwddelz on x6 @ 0.00633;
-   vdwddelz on x7 @ 0.02084;
-   vdwddelz on x1x4 @ 0.00769;
-   vdwddelz on x1x5 @ 0.00486;
-   vdwddelz on x1x6 @ -0.00805;
-   vdwddelz on x1x7 @ -0.00038;
-   vdwddelz on x2x4 @ -0.03761;
-   vdwddelz on x2x5 @ -0.04983;
-   vdwddelz on x2x6 @ 0.00619;
-   vdwddelz on x2x7 @ -5e-04;
-   vdwddelz on x3x4 @ 0.16873;
-   vdwddelz on x3x5 @ 0.23583;
-   vdwddelz on x3x6 @ 0.04749;
-   vdwddelz on x3x7 @ -0.00171;
-   vdwddelz on x4x5 @ 0.01172;
-   vdwddelz on x4x6 @ -0.02782;
-   vdwddelz on x4x7 @ 0.00289;
-   vdwddelz on x5x7 @ -0.00617;
-   vdwddelz on x6x7 @ -0.01278;
-   vdexf7z on x1 @ -0.003;
-   vdexf7z on x2 @ -0.01032;
-   vdexf7z on x3 @ 0.06604;
-   vdexf7z on x4 @ -0.03005;
-   vdexf7z on x5 @ -0.19101;
-   vdexf7z on x6 @ -0.11448;
-   vdexf7z on x7 @ 0.02637;
-   vdexf7z on x1x4 @ -0.00213;
-   vdexf7z on x1x5 @ 3e-05;
-   vdexf7z on x1x6 @ 0.00747;
-   vdexf7z on x1x7 @ 0;
-   vdexf7z on x2x4 @ 0.01641;
-   vdexf7z on x2x5 @ -0.00421;
-   vdexf7z on x2x6 @ -0.05405;
-   vdexf7z on x2x7 @ -0.00055;
-   vdexf7z on x3x4 @ -0.08691;
-   vdexf7z on x3x5 @ 0.05906;
-   vdexf7z on x3x6 @ 0.28258;
-   vdexf7z on x3x7 @ 0.0039;
-   vdexf7z on x4x5 @ 0.06247;
-   vdexf7z on x4x6 @ -3e-04;
-   vdexf7z on x4x7 @ -0.00248;
-   vdexf7z on x5x7 @ 0.01046;
-   vdexf7z on x6x7 @ -0.00611;
-   vdsevens on x1 @ -0.05427;
-   vdsevens on x2 @ -0.00687;
-   vdsevens on x3 @ 0.53066;
-   vdsevens on x4 @ -0.67969;
-   vdsevens on x5 @ -1.81474;
-   vdsevens on x6 @ -0.46003;
-   vdsevens on x7 @ 0.1658;
-   vdsevens on x1x4 @ 0.01226;
-   vdsevens on x1x5 @ 0.07585;
-   vdsevens on x1x6 @ 0.19839;
-   vdsevens on x1x7 @ 0.01148;
-   vdsevens on x2x4 @ 0.11088;
-   vdsevens on x2x5 @ -0.5275;
-   vdsevens on x2x6 @ -1.10884;
-   vdsevens on x2x7 @ -0.04247;
-   vdsevens on x3x4 @ -0.88452;
-   vdsevens on x3x5 @ 1.56373;
-   vdsevens on x3x6 @ 6.66169;
-   vdsevens on x3x7 @ 0.16223;
-   vdsevens on x4x5 @ 0.60637;
-   vdsevens on x4x6 @ -0.56344;
-   vdsevens on x4x7 @ 0.01066;
-   vdsevens on x5x7 @ 0.15896;
-   vdsevens on x6x7 @ -0.07309;
-   vdcount on x1 @ -0.05817;
-   vdcount on x2 @ -0.09183;
-   vdcount on x3 @ 0.42448;
-   vdcount on x4 @ -0.34935;
-   vdcount on x5 @ -0.89147;
-   vdcount on x6 @ 1.84413;
-   vdcount on x7 @ 0.22145;
-   vdcount on x1x4 @ 0.21317;
-   vdcount on x1x5 @ -0.156;
-   vdcount on x1x6 @ 0.05448;
-   vdcount on x1x7 @ 0.01183;
-   vdcount on x2x4 @ -0.9239;
-   vdcount on x2x5 @ 1.13758;
-   vdcount on x2x6 @ 0.28176;
-   vdcount on x2x7 @ -0.01086;
-   vdcount on x3x4 @ 3.66699;
-   vdcount on x3x5 @ -5.2572;
-   vdcount on x3x6 @ -3.89815;
-   vdcount on x3x7 @ -0.18348;
-   vdcount on x4x5 @ -0.04162;
-   vdcount on x4x6 @ -2.15391;
-   vdcount on x4x7 @ -0.11826;
-   vdcount on x5x7 @ -0.00288;
-   vdcount on x6x7 @ 0.08216;
-   vdwddelz with vdlfl1z @ 0.00226;
-   vdexf7z with vdlfl1z @ 0.00157;
-   vdexf7z with vdwddelz @ 0.00503;
-   gcp by vdori @ 0.707;
-   gcp by vdlfl1z @ 0.022;
-   gcp by vdlfl2 @ 1.281;
-   gcp by vdlfl3 @ 0.783;
-   gcp by vdwddelz @ 0.073;
-   gcp by vdexf7z @ 0.059;
-   gcp by vdsevens @ 0.713;
-   gcp by vdcount @ 0.565;
-   vdwddelz with vdlfl1z @ 0;
-   vdwddelz with vdexf7z @ 0;
-   vdexf7z with vdlfl1z @ 0;
-   [ vdlfl1z @ 0.186] ;
-   [ vdwddelz @ 0.45] ;
-   [ vdexf7z @ 0.635] ;
-   [ vdori$1 @ -5.774] ;
-   [ vdori$2 @ -4.915] ;
-   [ vdori$3 @ -3.852] ;
-   [ vdori$4 @ -1.81] ;
-   [ vdlfl2$1 @ -9.43] ;
-   [ vdlfl2$2 @ -5.116] ;
-   [ vdlfl3$1 @ -5.063] ;
-   [ vdlfl3$2 @ -1.355] ;
-   [ vdsevens$1 @ -3.473] ;
-   [ vdsevens$2 @ -2.23] ;
-   [ vdsevens$3 @ -1.579] ;
-   [ vdsevens$4 @ -0.82] ;
-   [ vdsevens$5 @ 0.172] ;
-   [ vdcount$1 @ -3.726] ;
-   vdlfl1z @ 0.004 ;
-   vdwddelz @ 0.026 ;
-   vdexf7z @ 0.017 ;
-   %c#1%
-
-   [ gcp @ 0] ;
-   [ pd102$1 @ -4.198] ;
-   [ pd102$2 @ 1.18] ;
-   gcp @ 1 ;
-   %c#2%
-
-   [ gcp @ -1.393] ;
-   [ pd102$1 @ -3.789] ;
-   [ pd102$2 @ 0.778] ;
-   gcp @ 1.507 ;
-   %c#3%
-
-   [ gcp @ -3.037] ;
-   [ pd102$1 @ -3.14] ;
-   [ pd102$2 @ 0.624] ;
-   gcp @ 2.313 ;
-
+   [ c#1 @ 2.28987399555998 c#2 @ 1.0419327498578 ];
+  vdori on x1 @ -0.0757739990949631;
+   vdori on x2 @ 0.390866488218307;
+   vdori on x3 @ -1.64662384986877;
+   vdori on x4 @ 0.760329306125641;
+   vdori on x5 @ -0.0305204950273037;
+   vdori on x6 @ -0.204002529382706;
+   vdori on x7 @ 0.146275103092194;
+   vdori on x1x4 @ 0.00741078797727823;
+   vdori on x1x5 @ 0.137718588113785;
+   vdori on x1x6 @ 0.0819185301661491;
+   vdori on x1x7 @ -0.00996165536344051;
+   vdori on x2x4 @ -0.272941827774048;
+   vdori on x2x5 @ -1.06735110282898;
+   vdori on x2x6 @ -1.06488215923309;
+   vdori on x2x7 @ 0.0292584169656038;
+   vdori on x3x4 @ 1.13220000267029;
+   vdori on x3x5 @ 4.98185586929321;
+   vdori on x3x6 @ 9.34041500091553;
+   vdori on x3x7 @ -0.0904862955212593;
+   vdori on x4x5 @ 1.01366126537323;
+   vdori on x4x6 @ -0.106136649847031;
+   vdori on x4x7 @ -0.0542595349252224;
+   vdori on x5x7 @ -0.0129672326147556;
+   vdori on x6x7 @ -0.0812695175409317;
+   vdlfl1z on x1 @ -0.00588454119861126;
+   vdlfl1z on x2 @ 0.0156117808073759;
+   vdlfl1z on x3 @ -0.0416113324463367;
+   vdlfl1z on x4 @ 0.0011776143219322;
+   vdlfl1z on x5 @ -0.0277594141662121;
+   vdlfl1z on x6 @ -0.032550860196352;
+   vdlfl1z on x7 @ 0.00902254413813353;
+   vdlfl1z on x1x4 @ 0.00323630427010357;
+   vdlfl1z on x1x5 @ 0.00113662541843951;
+   vdlfl1z on x1x6 @ 0.00262077688239515;
+   vdlfl1z on x1x7 @ 0.000681863573845476;
+   vdlfl1z on x2x4 @ -0.0151355182752013;
+   vdlfl1z on x2x5 @ 0.00163927429821342;
+   vdlfl1z on x2x6 @ -0.00214052223600447;
+   vdlfl1z on x2x7 @ -0.0040763895958662;
+   vdlfl1z on x3x4 @ 0.0473787188529968;
+   vdlfl1z on x3x5 @ -0.022196913138032;
+   vdlfl1z on x3x6 @ -0.0480807423591614;
+   vdlfl1z on x3x7 @ 0.0143142407760024;
+   vdlfl1z on x4x5 @ -0.00989859364926815;
+   vdlfl1z on x4x6 @ 0.0218995343893766;
+   vdlfl1z on x4x7 @ 0.00272533716633916;
+   vdlfl1z on x5x7 @ -0.00191540061496198;
+   vdlfl1z on x6x7 @ -0.004282605368644;
+   vdlfl2 on x1 @ -0.0689094364643097;
+   vdlfl2 on x2 @ -0.544439017772675;
+   vdlfl2 on x3 @ 3.344078540802;
+   vdlfl2 on x4 @ -0.782962322235107;
+   vdlfl2 on x5 @ -1.33212459087372;
+   vdlfl2 on x6 @ -0.657680332660675;
+   vdlfl2 on x7 @ 0.205675289034843;
+   vdlfl2 on x1x4 @ -0.100937329232693;
+   vdlfl2 on x1x5 @ 0.308663576841354;
+   vdlfl2 on x1x6 @ 0.487118303775787;
+   vdlfl2 on x1x7 @ 0.0310153421014547;
+   vdlfl2 on x2x4 @ 1.71354615688324;
+   vdlfl2 on x2x5 @ -2.12852120399475;
+   vdlfl2 on x2x6 @ -3.447425365448;
+   vdlfl2 on x2x7 @ -0.225883394479752;
+   vdlfl2 on x3x4 @ -7.02606582641602;
+   vdlfl2 on x3x5 @ 10.3953495025635;
+   vdlfl2 on x3x6 @ 14.0156154632568;
+   vdlfl2 on x3x7 @ 1.29550683498383;
+   vdlfl2 on x4x5 @ -0.66765683889389;
+   vdlfl2 on x4x6 @ 1.01279902458191;
+   vdlfl2 on x4x7 @ -0.0182140823453665;
+   vdlfl2 on x5x7 @ 0.315562725067139;
+   vdlfl2 on x6x7 @ 0.126768410205841;
+   vdlfl3 on x1 @ -0.0796344429254532;
+   vdlfl3 on x2 @ 0.28982338309288;
+   vdlfl3 on x3 @ -1.42361009120941;
+   vdlfl3 on x4 @ -0.271918833255768;
+   vdlfl3 on x5 @ -0.921428501605988;
+   vdlfl3 on x6 @ -1.13182139396667;
+   vdlfl3 on x7 @ 0.064569778740406;
+   vdlfl3 on x1x4 @ 0.139608383178711;
+   vdlfl3 on x1x5 @ 0.0553183071315289;
+   vdlfl3 on x1x6 @ -0.021088557317853;
+   vdlfl3 on x1x7 @ -0.000150844061863609;
+   vdlfl3 on x2x4 @ -0.810048043727875;
+   vdlfl3 on x2x5 @ -0.106417447328568;
+   vdlfl3 on x2x6 @ 0.465641885995865;
+   vdlfl3 on x2x7 @ 0.0255111288279295;
+   vdlfl3 on x3x4 @ 4.15653657913208;
+   vdlfl3 on x3x5 @ 0.194833502173424;
+   vdlfl3 on x3x6 @ -2.93523836135864;
+   vdlfl3 on x3x7 @ -0.184828743338585;
+   vdlfl3 on x4x5 @ 0.0316753685474396;
+   vdlfl3 on x4x6 @ 0.33396452665329;
+   vdlfl3 on x4x7 @ 0.110115192830563;
+   vdlfl3 on x5x7 @ 0.203889712691307;
+   vdlfl3 on x6x7 @ 0.0977705046534538;
+   vdwddelz on x1 @ -0.00574849499389529;
+   vdwddelz on x2 @ 0.00753045687451959;
+   vdwddelz on x3 @ -0.0663975477218628;
+   vdwddelz on x4 @ 0.0607440769672394;
+   vdwddelz on x5 @ -0.0856803506612778;
+   vdwddelz on x6 @ 0.00632543861865997;
+   vdwddelz on x7 @ 0.0208416040986776;
+   vdwddelz on x1x4 @ 0.00769313145428896;
+   vdwddelz on x1x5 @ 0.00485774362459779;
+   vdwddelz on x1x6 @ -0.00804909504950047;
+   vdwddelz on x1x7 @ -0.000380371668143198;
+   vdwddelz on x2x4 @ -0.0376094281673431;
+   vdwddelz on x2x5 @ -0.0498285256326199;
+   vdwddelz on x2x6 @ 0.0061922799795866;
+   vdwddelz on x2x7 @ -0.000496154418215156;
+   vdwddelz on x3x4 @ 0.168725609779358;
+   vdwddelz on x3x5 @ 0.235828325152397;
+   vdwddelz on x3x6 @ 0.0474929511547089;
+   vdwddelz on x3x7 @ -0.00170533428899944;
+   vdwddelz on x4x5 @ 0.0117152780294418;
+   vdwddelz on x4x6 @ -0.0278197228908539;
+   vdwddelz on x4x7 @ 0.00288905040360987;
+   vdwddelz on x5x7 @ -0.00616537313908339;
+   vdwddelz on x6x7 @ -0.012777934782207;
+   vdexf7z on x1 @ -0.00300231482833624;
+   vdexf7z on x2 @ -0.0103212706744671;
+   vdexf7z on x3 @ 0.0660413652658463;
+   vdexf7z on x4 @ -0.0300519298762083;
+   vdexf7z on x5 @ -0.191010683774948;
+   vdexf7z on x6 @ -0.114484295248985;
+   vdexf7z on x7 @ 0.0263652466237545;
+   vdexf7z on x1x4 @ -0.00212927930988371;
+   vdexf7z on x1x5 @ 2.79606119875098e-05;
+   vdexf7z on x1x6 @ 0.00747261475771666;
+   vdexf7z on x1x7 @ -4.38541792391334e-06;
+   vdexf7z on x2x4 @ 0.0164055097848177;
+   vdexf7z on x2x5 @ -0.0042118551209569;
+   vdexf7z on x2x6 @ -0.0540498495101929;
+   vdexf7z on x2x7 @ -0.000554685946553946;
+   vdexf7z on x3x4 @ -0.0869095325469971;
+   vdexf7z on x3x5 @ 0.0590637028217316;
+   vdexf7z on x3x6 @ 0.28257817029953;
+   vdexf7z on x3x7 @ 0.00390247697941959;
+   vdexf7z on x4x5 @ 0.0624694228172302;
+   vdexf7z on x4x6 @ -0.000298404338536784;
+   vdexf7z on x4x7 @ -0.00247617345303297;
+   vdexf7z on x5x7 @ 0.0104637313634157;
+   vdexf7z on x6x7 @ -0.00611129077151418;
+   vdsevens on x1 @ -0.054266694933176;
+   vdsevens on x2 @ -0.00687072845175862;
+   vdsevens on x3 @ 0.530656576156616;
+   vdsevens on x4 @ -0.679686069488525;
+   vdsevens on x5 @ -1.81474339962006;
+   vdsevens on x6 @ -0.460026204586029;
+   vdsevens on x7 @ 0.16579569876194;
+   vdsevens on x1x4 @ 0.0122570442035794;
+   vdsevens on x1x5 @ 0.0758480355143547;
+   vdsevens on x1x6 @ 0.198386922478676;
+   vdsevens on x1x7 @ 0.0114758173003793;
+   vdsevens on x2x4 @ 0.110876441001892;
+   vdsevens on x2x5 @ -0.527504622936249;
+   vdsevens on x2x6 @ -1.10883688926697;
+   vdsevens on x2x7 @ -0.042470533400774;
+   vdsevens on x3x4 @ -0.884516656398773;
+   vdsevens on x3x5 @ 1.56372964382172;
+   vdsevens on x3x6 @ 6.66169023513794;
+   vdsevens on x3x7 @ 0.162227660417557;
+   vdsevens on x4x5 @ 0.60637241601944;
+   vdsevens on x4x6 @ -0.563437104225159;
+   vdsevens on x4x7 @ 0.0106632309034467;
+   vdsevens on x5x7 @ 0.158962264657021;
+   vdsevens on x6x7 @ -0.0730884149670601;
+   vdcount on x1 @ -0.0581717044115067;
+   vdcount on x2 @ -0.0918327271938324;
+   vdcount on x3 @ 0.424480587244034;
+   vdcount on x4 @ -0.349350154399872;
+   vdcount on x5 @ -0.891465425491333;
+   vdcount on x6 @ 1.84412825107574;
+   vdcount on x7 @ 0.221448957920074;
+   vdcount on x1x4 @ 0.213167935609818;
+   vdcount on x1x5 @ -0.155995488166809;
+   vdcount on x1x6 @ 0.0544793829321861;
+   vdcount on x1x7 @ 0.0118262246251106;
+   vdcount on x2x4 @ -0.923899233341217;
+   vdcount on x2x5 @ 1.13757848739624;
+   vdcount on x2x6 @ 0.281758069992065;
+   vdcount on x2x7 @ -0.0108606424182653;
+   vdcount on x3x4 @ 3.66699457168579;
+   vdcount on x3x5 @ -5.25719976425171;
+   vdcount on x3x6 @ -3.89814686775208;
+   vdcount on x3x7 @ -0.183481052517891;
+   vdcount on x4x5 @ -0.0416240952908993;
+   vdcount on x4x6 @ -2.15390634536743;
+   vdcount on x4x7 @ -0.118262410163879;
+   vdcount on x5x7 @ -0.00287838745862246;
+   vdcount on x6x7 @ 0.0821617767214775;
+   vdwddelz with vdlfl1z @ 0.00226361327804625;
+   vdexf7z with vdlfl1z @ 0.00156891066581011;
+   vdexf7z with vdwddelz @ 0.00503019616007805;
+  gcp by vdori @ -0.706912398338318;
+  gcp by vdlfl1z @ -0.0221566446125507;
+  gcp by vdlfl2 @ -1.28169620037079;
+  gcp by vdlfl3 @ -0.782705903053284;
+  gcp by vdwddelz @ -0.073176234960556;
+  gcp by vdexf7z @ -0.0591073520481586;
+  gcp by vdsevens @ -0.712620735168457;
+  gcp by vdcount @ -0.565330028533936;
+  vdwddelz with vdlfl1z @ 0;
+  vdwddelz with vdexf7z @ 0;
+  vdexf7z with vdlfl1z @ 0;
+  [ gcp @ 0 ];
+  [ vdlfl1z @ 0.185930967330933 ];
+  [ vdwddelz @ 0.44954788684845 ];
+  [ vdexf7z @ 0.635146975517273 ];
+  [ vdori$1 @ -5.77371788024902 ];
+  [ vdori$2 @ -4.91447162628174 ];
+  [ vdori$3 @ -3.85182619094849 ];
+  [ vdori$4 @ -1.81027114391327 ];
+  [ vdlfl2$1 @ -9.42987537384033 ];
+  [ vdlfl2$2 @ -5.11623477935791 ];
+  [ vdlfl3$1 @ -5.06280326843262 ];
+  [ vdlfl3$2 @ -1.3548436164856 ];
+  [ vdsevens$1 @ -3.47324442863464 ];
+  [ vdsevens$2 @ -2.23015761375427 ];
+  [ vdsevens$3 @ -1.57863664627075 ];
+  [ vdsevens$4 @ -0.819990515708923 ];
+  [ vdsevens$5 @ 0.172012507915497 ];
+  [ vdcount$1 @ -3.725501537323 ];
+  [ pd102$1 @ -4.19821691513062 ];
+  [ pd102$2 @ 1.18026661872864 ];
+  gcp @ 1;
+  vdlfl1z @ 0.00446216808632016;
+  vdwddelz @ 0.0255870707333088;
+  vdexf7z @ 0.0168962199240923;
+  %c#1%
+  [ gcp @ 0 ];
+  [ pd102$1 @ -4.19821691513062 ];
+  [ pd102$2 @ 1.18026661872864 ];
+  gcp @ 1;
+  %c#2%
+  [ gcp @ 1.3928257226944 ];
+  [ pd102$1 @ -3.78898119926453 ];
+  [ pd102$2 @ 0.778018236160278 ];
+  gcp @ 1.50668168067932;
+  %c#3%
+  [ gcp @ 3.03694891929626 ];
+  [ pd102$1 @ -3.13960361480713 ];
+  [ pd102$2 @ 0.623624861240387 ];
+  gcp @ 2.31256175041199;
   SAVEDATA:
   SAVE = CPROBABILITIES;
   FILE = cprob_A3_2_score_cog.dat;
+  FORMAT = F20.12;
 
 
 
@@ -796,13 +797,13 @@ Number of Free Parameters                        0
 
 Loglikelihood
 
-          H0 Value                      -94700.776
+          H0 Value                      -93986.468
 
 Information Criteria
 
-          Akaike (AIC)                  189401.551
-          Bayesian (BIC)                189401.551
-          Sample-Size Adjusted BIC      189401.551
+          Akaike (AIC)                  187972.936
+          Bayesian (BIC)                187972.936
+          Sample-Size Adjusted BIC      187972.936
             (n* = (n + 2) / 24)
 
 
@@ -824,9 +825,9 @@ BASED ON ESTIMATED POSTERIOR PROBABILITIES
     Latent
    Classes
 
-       1      24821.52938          0.73118
-       2       6746.14227          0.19873
-       3       2379.32835          0.07009
+       1      24817.29458          0.73106
+       2       6749.60691          0.19883
+       3       2380.09851          0.07011
 
 
 FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
@@ -837,14 +838,14 @@ Class Counts and Proportions
     Latent
    Classes
 
-       1            30260          0.89139
-       2             2494          0.07347
-       3             1193          0.03514
+       1            30269          0.89165
+       2             2484          0.07317
+       3             1194          0.03517
 
 
 CLASSIFICATION QUALITY
 
-     Entropy                         0.464
+     Entropy                         0.463
 
 
 Average Latent Class Probabilities for Most Likely Latent Class Membership (Row)
@@ -852,9 +853,9 @@ by Latent Class (Column)
 
            1        2        3
 
-    1   0.794    0.174    0.031
-    2   0.288    0.453    0.259
-    3   0.053    0.294    0.654
+    1   0.794    0.174    0.032
+    2   0.288    0.453    0.260
+    3   0.053    0.294    0.653
 
 
 Classification Probabilities for the Most Likely Latent Class Membership (Column)
@@ -863,8 +864,8 @@ by Latent Class (Row)
            1        2        3
 
     1   0.969    0.029    0.003
-    2   0.781    0.168    0.052
-    3   0.401    0.272    0.328
+    2   0.781    0.167    0.052
+    3   0.401    0.271    0.328
 
 
 Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
@@ -872,9 +873,9 @@ by Latent Class (Row)
 
               1        2        3
 
-    1      5.947    2.435    0.000
-    2      2.710    1.172    0.000
-    3      0.200   -0.188    0.000
+    1      5.937    2.421    0.000
+    2      2.711    1.165    0.000
+    3      0.203   -0.190    0.000
 
 
 MODEL RESULTS
@@ -885,14 +886,14 @@ MODEL RESULTS
 Latent Class 1
 
  GCP      BY
-    VDORI              0.707      0.000    999.000    999.000
-    VDLFL1Z            0.022      0.000    999.000    999.000
-    VDLFL2             1.281      0.000    999.000    999.000
-    VDLFL3             0.783      0.000    999.000    999.000
-    VDWDDELZ           0.073      0.000    999.000    999.000
-    VDEXF7Z            0.059      0.000    999.000    999.000
-    VDSEVENS           0.713      0.000    999.000    999.000
-    VDCOUNT            0.565      0.000    999.000    999.000
+    VDORI             -0.707      0.000    999.000    999.000
+    VDLFL1Z           -0.022      0.000    999.000    999.000
+    VDLFL2            -1.282      0.000    999.000    999.000
+    VDLFL3            -0.783      0.000    999.000    999.000
+    VDWDDELZ          -0.073      0.000    999.000    999.000
+    VDEXF7Z           -0.059      0.000    999.000    999.000
+    VDSEVENS          -0.713      0.000    999.000    999.000
+    VDCOUNT           -0.565      0.000    999.000    999.000
 
  VDORI      ON
     X1                -0.076      0.000    999.000    999.000
@@ -1013,7 +1014,7 @@ Latent Class 1
     X2X4              -0.038      0.000    999.000    999.000
     X2X5              -0.050      0.000    999.000    999.000
     X2X6               0.006      0.000    999.000    999.000
-    X2X7              -0.001      0.000    999.000    999.000
+    X2X7               0.000      0.000    999.000    999.000
     X3X4               0.169      0.000    999.000    999.000
     X3X5               0.236      0.000    999.000    999.000
     X3X6               0.047      0.000    999.000    999.000
@@ -1063,7 +1064,7 @@ Latent Class 1
     X1X6               0.198      0.000    999.000    999.000
     X1X7               0.011      0.000    999.000    999.000
     X2X4               0.111      0.000    999.000    999.000
-    X2X5              -0.527      0.000    999.000    999.000
+    X2X5              -0.528      0.000    999.000    999.000
     X2X6              -1.109      0.000    999.000    999.000
     X2X7              -0.042      0.000    999.000    999.000
     X3X4              -0.885      0.000    999.000    999.000
@@ -1119,7 +1120,7 @@ Latent Class 1
 
  Thresholds
     VDORI$1           -5.774      0.000    999.000    999.000
-    VDORI$2           -4.915      0.000    999.000    999.000
+    VDORI$2           -4.914      0.000    999.000    999.000
     VDORI$3           -3.852      0.000    999.000    999.000
     VDORI$4           -1.810      0.000    999.000    999.000
     VDLFL2$1          -9.430      0.000    999.000    999.000
@@ -1146,14 +1147,14 @@ Latent Class 1
 Latent Class 2
 
  GCP      BY
-    VDORI              0.707      0.000    999.000    999.000
-    VDLFL1Z            0.022      0.000    999.000    999.000
-    VDLFL2             1.281      0.000    999.000    999.000
-    VDLFL3             0.783      0.000    999.000    999.000
-    VDWDDELZ           0.073      0.000    999.000    999.000
-    VDEXF7Z            0.059      0.000    999.000    999.000
-    VDSEVENS           0.713      0.000    999.000    999.000
-    VDCOUNT            0.565      0.000    999.000    999.000
+    VDORI             -0.707      0.000    999.000    999.000
+    VDLFL1Z           -0.022      0.000    999.000    999.000
+    VDLFL2            -1.282      0.000    999.000    999.000
+    VDLFL3            -0.783      0.000    999.000    999.000
+    VDWDDELZ          -0.073      0.000    999.000    999.000
+    VDEXF7Z           -0.059      0.000    999.000    999.000
+    VDSEVENS          -0.713      0.000    999.000    999.000
+    VDCOUNT           -0.565      0.000    999.000    999.000
 
  VDORI      ON
     X1                -0.076      0.000    999.000    999.000
@@ -1274,7 +1275,7 @@ Latent Class 2
     X2X4              -0.038      0.000    999.000    999.000
     X2X5              -0.050      0.000    999.000    999.000
     X2X6               0.006      0.000    999.000    999.000
-    X2X7              -0.001      0.000    999.000    999.000
+    X2X7               0.000      0.000    999.000    999.000
     X3X4               0.169      0.000    999.000    999.000
     X3X5               0.236      0.000    999.000    999.000
     X3X6               0.047      0.000    999.000    999.000
@@ -1324,7 +1325,7 @@ Latent Class 2
     X1X6               0.198      0.000    999.000    999.000
     X1X7               0.011      0.000    999.000    999.000
     X2X4               0.111      0.000    999.000    999.000
-    X2X5              -0.527      0.000    999.000    999.000
+    X2X5              -0.528      0.000    999.000    999.000
     X2X6              -1.109      0.000    999.000    999.000
     X2X7              -0.042      0.000    999.000    999.000
     X3X4              -0.885      0.000    999.000    999.000
@@ -1371,7 +1372,7 @@ Latent Class 2
     VDLFL1Z            0.000      0.000    999.000    999.000
 
  Means
-    GCP               -1.393      0.000    999.000    999.000
+    GCP                1.393      0.000    999.000    999.000
 
  Intercepts
     VDLFL1Z            0.186      0.000    999.000    999.000
@@ -1380,7 +1381,7 @@ Latent Class 2
 
  Thresholds
     VDORI$1           -5.774      0.000    999.000    999.000
-    VDORI$2           -4.915      0.000    999.000    999.000
+    VDORI$2           -4.914      0.000    999.000    999.000
     VDORI$3           -3.852      0.000    999.000    999.000
     VDORI$4           -1.810      0.000    999.000    999.000
     VDLFL2$1          -9.430      0.000    999.000    999.000
@@ -1407,14 +1408,14 @@ Latent Class 2
 Latent Class 3
 
  GCP      BY
-    VDORI              0.707      0.000    999.000    999.000
-    VDLFL1Z            0.022      0.000    999.000    999.000
-    VDLFL2             1.281      0.000    999.000    999.000
-    VDLFL3             0.783      0.000    999.000    999.000
-    VDWDDELZ           0.073      0.000    999.000    999.000
-    VDEXF7Z            0.059      0.000    999.000    999.000
-    VDSEVENS           0.713      0.000    999.000    999.000
-    VDCOUNT            0.565      0.000    999.000    999.000
+    VDORI             -0.707      0.000    999.000    999.000
+    VDLFL1Z           -0.022      0.000    999.000    999.000
+    VDLFL2            -1.282      0.000    999.000    999.000
+    VDLFL3            -0.783      0.000    999.000    999.000
+    VDWDDELZ          -0.073      0.000    999.000    999.000
+    VDEXF7Z           -0.059      0.000    999.000    999.000
+    VDSEVENS          -0.713      0.000    999.000    999.000
+    VDCOUNT           -0.565      0.000    999.000    999.000
 
  VDORI      ON
     X1                -0.076      0.000    999.000    999.000
@@ -1535,7 +1536,7 @@ Latent Class 3
     X2X4              -0.038      0.000    999.000    999.000
     X2X5              -0.050      0.000    999.000    999.000
     X2X6               0.006      0.000    999.000    999.000
-    X2X7              -0.001      0.000    999.000    999.000
+    X2X7               0.000      0.000    999.000    999.000
     X3X4               0.169      0.000    999.000    999.000
     X3X5               0.236      0.000    999.000    999.000
     X3X6               0.047      0.000    999.000    999.000
@@ -1585,7 +1586,7 @@ Latent Class 3
     X1X6               0.198      0.000    999.000    999.000
     X1X7               0.011      0.000    999.000    999.000
     X2X4               0.111      0.000    999.000    999.000
-    X2X5              -0.527      0.000    999.000    999.000
+    X2X5              -0.528      0.000    999.000    999.000
     X2X6              -1.109      0.000    999.000    999.000
     X2X7              -0.042      0.000    999.000    999.000
     X3X4              -0.885      0.000    999.000    999.000
@@ -1632,7 +1633,7 @@ Latent Class 3
     VDLFL1Z            0.000      0.000    999.000    999.000
 
  Means
-    GCP               -3.037      0.000    999.000    999.000
+    GCP                3.037      0.000    999.000    999.000
 
  Intercepts
     VDLFL1Z            0.186      0.000    999.000    999.000
@@ -1641,7 +1642,7 @@ Latent Class 3
 
  Thresholds
     VDORI$1           -5.774      0.000    999.000    999.000
-    VDORI$2           -4.915      0.000    999.000    999.000
+    VDORI$2           -4.914      0.000    999.000    999.000
     VDORI$3           -3.852      0.000    999.000    999.000
     VDORI$4           -1.810      0.000    999.000    999.000
     VDLFL2$1          -9.430      0.000    999.000    999.000
@@ -1686,34 +1687,34 @@ LATENT CLASS INDICATOR MEANS AND PROBABILITIES FOR EACH LATENT CLASS
      VDORI
        Category 1  0.006  0.016  0.058
        Category 2  0.007  0.020  0.055
-       Category 3  0.021  0.053  0.117
-       Category 4  0.149  0.263  0.347
-       Category 5  0.817  0.648  0.424
+       Category 3  0.021  0.053  0.116
+       Category 4  0.149  0.263  0.346
+       Category 5  0.817  0.648  0.425
      VDLFL2
        Category 1  0.004  0.012  0.049
-       Category 2  0.040  0.125  0.289
-       Category 3  0.956  0.863  0.662
+       Category 2  0.040  0.126  0.289
+       Category 3  0.956  0.862  0.661
      VDLFL3
        Category 1  0.019  0.049  0.133
        Category 2  0.248  0.411  0.526
-       Category 3  0.733  0.540  0.341
+       Category 3  0.734  0.540  0.340
      VDSEVENS
        Category 1  0.065  0.147  0.316
        Category 2  0.094  0.158  0.206
        Category 3  0.080  0.110  0.110
        Category 4  0.120  0.139  0.115
        Category 5  0.185  0.171  0.113
-       Category 6  0.455  0.276  0.139
+       Category 6  0.455  0.276  0.140
      VDCOUNT
-       Category 1  0.048  0.101  0.218
-       Category 2  0.952  0.899  0.782
+       Category 1  0.048  0.101  0.219
+       Category 2  0.952  0.899  0.781
      PD102
-       Category 1  0.015  0.022  0.041
+       Category 1  0.015  0.022  0.042
        Category 2  0.750  0.663  0.610
        Category 3  0.235  0.315  0.349
-     VDLFL1Z       0.183  0.149  0.107
-     VDWDDELZ      0.439  0.331  0.206
-     VDEXF7Z       0.625  0.535  0.431
+     VDLFL1Z       0.183  0.148  0.106
+     VDWDDELZ      0.438  0.331  0.206
+     VDEXF7Z       0.625  0.535  0.430
 
 
 RESULTS IN PROBABILITY SCALE
@@ -1735,7 +1736,7 @@ Latent Class 1
  VDLFL3
     Category 1         0.019
     Category 2         0.248
-    Category 3         0.733
+    Category 3         0.734
  VDSEVENS
     Category 1         0.065
     Category 2         0.094
@@ -1761,8 +1762,8 @@ Latent Class 2
     Category 5         0.648
  VDLFL2
     Category 1         0.012
-    Category 2         0.125
-    Category 3         0.863
+    Category 2         0.126
+    Category 3         0.862
  VDLFL3
     Category 1         0.049
     Category 2         0.411
@@ -1787,29 +1788,29 @@ Latent Class 3
  VDORI
     Category 1         0.058
     Category 2         0.055
-    Category 3         0.117
-    Category 4         0.347
-    Category 5         0.424
+    Category 3         0.116
+    Category 4         0.346
+    Category 5         0.425
  VDLFL2
     Category 1         0.049
     Category 2         0.289
-    Category 3         0.662
+    Category 3         0.661
  VDLFL3
     Category 1         0.133
     Category 2         0.526
-    Category 3         0.341
+    Category 3         0.340
  VDSEVENS
     Category 1         0.316
     Category 2         0.206
     Category 3         0.110
     Category 4         0.115
     Category 5         0.113
-    Category 6         0.139
+    Category 6         0.140
  VDCOUNT
-    Category 1         0.218
-    Category 2         0.782
+    Category 1         0.219
+    Category 2         0.781
  PD102
-    Category 1         0.041
+    Category 1         0.042
     Category 2         0.610
     Category 3         0.349
 
@@ -1865,7 +1866,7 @@ Latent Class 1 Compared to Latent Class 2
  VDCOUNT
     Category > 1       1.000      0.000      1.000      1.000
  PD102
-    Category > 1       1.505      0.000      1.505      1.505
+    Category > 1       1.506      0.000      1.506      1.506
     Category > 2       0.669      0.000      0.669      0.669
 
 Latent Class 1 Compared to Latent Class 3
@@ -1890,7 +1891,7 @@ Latent Class 1 Compared to Latent Class 3
  VDCOUNT
     Category > 1       1.000      0.000      1.000      1.000
  PD102
-    Category > 1       2.881      0.000      2.881      2.881
+    Category > 1       2.882      0.000      2.882      2.882
     Category > 2       0.573      0.000      0.573      0.573
 
 Latent Class 2 Compared to Latent Class 3
@@ -1944,7 +1945,7 @@ Latent Class 1
     X2X7               1.030      0.000      1.030      1.030
     X3X4               3.102      0.000      3.102      3.102
     X3X5             145.745      0.000    145.745    145.745
-    X3X6           11389.188      0.000  11389.188  11389.188
+    X3X6           11389.134      0.000  11389.134  11389.134
     X3X7               0.913      0.000      0.913      0.913
     X4X5               2.756      0.000      2.756      2.756
     X4X6               0.899      0.000      0.899      0.899
@@ -1969,7 +1970,7 @@ Latent Class 1
     X2X6               0.032      0.000      0.032      0.032
     X2X7               0.798      0.000      0.798      0.798
     X3X4               0.001      0.000      0.001      0.001
-    X3X5           32707.197      0.000  32707.197  32707.197
+    X3X5           32707.166      0.000  32707.166  32707.166
     X3X6           *********      0.000  *********  *********
     X3X7               3.653      0.000      3.653      3.653
     X4X5               0.513      0.000      0.513      0.513
@@ -2076,7 +2077,7 @@ Latent Class 2
     X2X7               1.030      0.000      1.030      1.030
     X3X4               3.102      0.000      3.102      3.102
     X3X5             145.745      0.000    145.745    145.745
-    X3X6           11389.188      0.000  11389.188  11389.188
+    X3X6           11389.134      0.000  11389.134  11389.134
     X3X7               0.913      0.000      0.913      0.913
     X4X5               2.756      0.000      2.756      2.756
     X4X6               0.899      0.000      0.899      0.899
@@ -2101,7 +2102,7 @@ Latent Class 2
     X2X6               0.032      0.000      0.032      0.032
     X2X7               0.798      0.000      0.798      0.798
     X3X4               0.001      0.000      0.001      0.001
-    X3X5           32707.197      0.000  32707.197  32707.197
+    X3X5           32707.166      0.000  32707.166  32707.166
     X3X6           *********      0.000  *********  *********
     X3X7               3.653      0.000      3.653      3.653
     X4X5               0.513      0.000      0.513      0.513
@@ -2208,7 +2209,7 @@ Latent Class 3
     X2X7               1.030      0.000      1.030      1.030
     X3X4               3.102      0.000      3.102      3.102
     X3X5             145.745      0.000    145.745    145.745
-    X3X6           11389.188      0.000  11389.188  11389.188
+    X3X6           11389.134      0.000  11389.134  11389.134
     X3X7               0.913      0.000      0.913      0.913
     X4X5               2.756      0.000      2.756      2.756
     X4X6               0.899      0.000      0.899      0.899
@@ -2233,7 +2234,7 @@ Latent Class 3
     X2X6               0.032      0.000      0.032      0.032
     X2X7               0.798      0.000      0.798      0.798
     X3X4               0.001      0.000      0.001      0.001
-    X3X5           32707.197      0.000  32707.197  32707.197
+    X3X5           32707.166      0.000  32707.166  32707.166
     X3X6           *********      0.000  *********  *********
     X3X7               3.653      0.000      3.653      3.653
     X4X5               0.513      0.000      0.513      0.513
@@ -2474,55 +2475,55 @@ SAVEDATA INFORMATION
 
   Order and format of variables
 
-    VDORI          F10.3
-    VDLFL2         F10.3
-    VDLFL3         F10.3
-    VDSEVENS       F10.3
-    VDCOUNT        F10.3
-    PD102          F10.3
-    VDLFL1Z        F10.3
-    VDWDDELZ       F10.3
-    VDEXF7Z        F10.3
-    X1             F10.3
-    X2             F10.3
-    X3             F10.3
-    X4             F10.3
-    X5             F10.3
-    X6             F10.3
-    X7             F10.3
-    X1X4           F10.3
-    X1X5           F10.3
-    X1X6           F10.3
-    X1X7           F10.3
-    X2X4           F10.3
-    X2X5           F10.3
-    X2X6           F10.3
-    X2X7           F10.3
-    X3X4           F10.3
-    X3X5           F10.3
-    X3X6           F10.3
-    X3X7           F10.3
-    X4X5           F10.3
-    X4X6           F10.3
-    X4X7           F10.3
-    X5X7           F10.3
-    X6X7           F10.3
-    CPROB1         F10.3
-    CPROB2         F10.3
-    CPROB3         F10.3
-    MLCC           F10.3
+    VDORI          F20.12
+    VDLFL2         F20.12
+    VDLFL3         F20.12
+    VDSEVENS       F20.12
+    VDCOUNT        F20.12
+    PD102          F20.12
+    VDLFL1Z        F20.12
+    VDWDDELZ       F20.12
+    VDEXF7Z        F20.12
+    X1             F20.12
+    X2             F20.12
+    X3             F20.12
+    X4             F20.12
+    X5             F20.12
+    X6             F20.12
+    X7             F20.12
+    X1X4           F20.12
+    X1X5           F20.12
+    X1X6           F20.12
+    X1X7           F20.12
+    X2X4           F20.12
+    X2X5           F20.12
+    X2X6           F20.12
+    X2X7           F20.12
+    X3X4           F20.12
+    X3X5           F20.12
+    X3X6           F20.12
+    X3X7           F20.12
+    X4X5           F20.12
+    X4X6           F20.12
+    X4X7           F20.12
+    X5X7           F20.12
+    X6X7           F20.12
+    CPROB1         F20.12
+    CPROB2         F20.12
+    CPROB3         F20.12
+    MLCC           F20.12
     SID            I6
 
   Save file format
-    37F10.3 I6
+    37F20.12 I6
 
   Save file record length    10000
 
   Save missing symbol        *
 
 
-     Beginning Time:  13:10:13
-        Ending Time:  13:10:19
+     Beginning Time:  15:41:14
+        Ending Time:  15:41:20
        Elapsed Time:  00:00:06
 
 

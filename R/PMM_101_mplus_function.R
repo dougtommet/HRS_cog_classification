@@ -1,186 +1,87 @@
+# Parameter transfer uses H5RESULTS only (References/Mplus_Rules.md).
+# The pure table-to-syntax helper also supports tests with synthetic tables.
+format_mplus_number <- function(x) sprintf("%.15g", x)
 
-
-# pmm_102 <- MplusAutomation::readModels(here::here("mplus_output", "pmm_102", "pmm_hcap_102.out"))
-# write_lca_model(pmm_102, mplus_mod_norms)
-
-write_lca_model <- function(mod, mplus_mod_norms) {
-# Reading in the parameter estimates
-  par_est <- mod[["parameters"]][["unstandardized"]] %>%
-    as_tibble()
-
-  par_est <- par_est %>%
-    mutate(paramHeader = stringr::str_to_lower(paramHeader),
-           paramHeader = stringr::str_replace(paramHeader, "\\.", " "),
-           param = stringr::str_to_lower(param))
-
-
-  # Filtering out the robust norms parameters.  Will use the model statement that's
-  # already created
-  par_est <- par_est %>%
-    filter(!grepl("x[1-7]", param)) %>%
-    select(paramHeader, param, est, LatentClass)
-
-  # Making a wide version of estimates by latent class
-  par_est1 <- par_est %>%
-    filter(LatentClass==1) %>%
-    rename(est1 = est) %>%
-    select(-LatentClass)
-
-  par_est2 <- par_est %>%
-    filter(LatentClass==2) %>%
-    rename(est2 = est) %>%
-    select(-LatentClass)
-
-  par_est3 <- par_est %>%
-    filter(LatentClass==3) %>%
-    rename(est3 = est) %>%
-    select(-LatentClass)
-
-  par_est_wide <- par_est1 %>%
-    left_join(par_est2, by = c("paramHeader", "param")) %>%
-    left_join(par_est3, by = c("paramHeader", "param"))
-
-  # Many of the parameters are the same across class
-  # Creating an indicator if they are equal
-  par_est_wide <- par_est_wide %>%
-    mutate(all_equal_12 = est1==est2,
-           all_equal_23 = est2==est3,
-           overall_class = all_equal_12 == TRUE & all_equal_23==TRUE) %>%
-    select(-all_equal_12, -all_equal_23)
-
-  # Writing a model statement for the gcp portion of the model, overall and by class
-  mod_gcp_overall <- par_est_wide %>%
-    filter(overall_class==TRUE) %>%
-    filter(!paramHeader %in% c("means", "intercepts", "thresholds", "variances", "residual variances")) %>%
-    mutate(mod = str_c(paramHeader, " ", param, " @ ", est1, "; ")) %>%
-    pull(mod) %>%
-    str_c(collapse = " \n ")
-
-  mod_gcp_1 <- par_est_wide %>%
-    filter(overall_class==FALSE) %>%
-    filter(!paramHeader %in% c("means", "intercepts", "thresholds", "variances", "residual variances")) %>%
-    mutate(mod = str_c(paramHeader, " ", param, " @ ", est1, "; ")) %>%
-    pull(mod) %>%
-    str_c(collapse = " \n ")
-
-  mod_gcp_2 <- par_est_wide %>%
-    filter(overall_class==FALSE) %>%
-    filter(!paramHeader %in% c("means", "intercepts", "thresholds", "variances", "residual variances")) %>%
-    mutate(mod = str_c(paramHeader, " ", param, " @ ", est2, "; ")) %>%
-    pull(mod) %>%
-    str_c(collapse = " \n ")
-
-  mod_gcp_3 <- par_est_wide %>%
-    filter(overall_class==FALSE) %>%
-    filter(!paramHeader %in% c("means", "intercepts", "thresholds", "variances", "residual variances")) %>%
-    mutate(mod = str_c(paramHeader, " ", param, " @ ", est3, "; ")) %>%
-    pull(mod) %>%
-    str_c(collapse = " \n ")
-
-  # Writing a model statement for the means, overall and by class
-  mod_means_overall <- par_est_wide %>%
-    filter(overall_class==TRUE) %>%
-    filter(paramHeader %in% c("means", "intercepts", "thresholds")) %>%
-    mutate(mod = str_c("[ ", param, " @ ", est1, "] ; ")) %>%
-    pull(mod) %>%
-    str_c(collapse = " \n ")
-
-  mod_means_1 <- par_est_wide %>%
-    filter(overall_class==FALSE) %>%
-    filter(paramHeader %in% c("means", "intercepts", "thresholds")) %>%
-    mutate(mod = str_c("[ ", param, " @ ", est1, "] ; ")) %>%
-    pull(mod) %>%
-    str_c(collapse = " \n ")
-
-  mod_means_2 <- par_est_wide %>%
-    filter(overall_class==FALSE) %>%
-    filter(paramHeader %in% c("means", "intercepts", "thresholds")) %>%
-    mutate(mod = str_c("[ ", param, " @ ", est2, "] ; ")) %>%
-    pull(mod) %>%
-    str_c(collapse = " \n ")
-
-  mod_means_3 <- par_est_wide %>%
-    filter(overall_class==FALSE) %>%
-    filter(paramHeader %in% c("means", "intercepts", "thresholds")) %>%
-    mutate(mod = str_c("[ ", param, " @ ", est3, "] ; ")) %>%
-    pull(mod) %>%
-    str_c(collapse = " \n ")
-
-  # Writing a model statement for the variances, overall and by class
-  mod_variances_overall <- par_est_wide %>%
-    filter(overall_class==TRUE) %>%
-    filter(paramHeader %in% c("variances", "residual variances")) %>%
-    mutate(mod = str_c(param, " @ ", est1, " ; ")) %>%
-    pull(mod) %>%
-    str_c(collapse = " \n ")
-
-  mod_variances_1 <- par_est_wide %>%
-    filter(overall_class==FALSE) %>%
-    filter(paramHeader %in% c("variances", "residual variances")) %>%
-    mutate(mod = str_c(param, " @ ", est1, " ; ")) %>%
-    pull(mod) %>%
-    str_c(collapse = " \n ")
-
-  mod_variances_2 <- par_est_wide %>%
-    filter(overall_class==FALSE) %>%
-    filter(paramHeader %in% c("variances", "residual variances")) %>%
-    mutate(mod = str_c(param, " @ ", est2, " ; ")) %>%
-    pull(mod) %>%
-    str_c(collapse = " \n ")
-
-  mod_variances_3 <- par_est_wide %>%
-    filter(overall_class==FALSE) %>%
-    filter(paramHeader %in% c("variances", "residual variances")) %>%
-    mutate(mod = str_c(param, " @ ", est3, " ; ")) %>%
-    pull(mod) %>%
-    str_c(collapse = " \n ")
-
-
-  mplus_mod_fixed <- str_c("%OVERALL%", " \n ",
-                           mplus_mod_norms, " \n ",
-                           mod_gcp_overall, " \n ",
-                           mod_means_overall, " \n ",
-                           mod_variances_overall, " \n ",
-                           "%c#1% ", " \n ",
-                           mod_gcp_1, " \n ",
-                           mod_means_1, " \n ",
-                           mod_variances_1, " \n ",
-                           "%c#2% ", " \n ",
-                           mod_gcp_2, " \n ",
-                           mod_means_2, " \n ",
-                           mod_variances_2, " \n ",
-                           "%c#3% ", " \n ",
-                           mod_gcp_3, " \n ",
-                           mod_means_3, " \n ",
-                           mod_variances_3, " \n "
-  )
-
-  mplus_mod_fixed
-}
-
-
-# write_class_logits(pmm_103)
-# Returns an Mplus statement that fixes the class logits of the fixed-parameter
-# model at the known-class estimates, e.g. "[ c#1 @ 1.819 c#2 @ 0.768 ];".
-# Without this, Mplus re-estimates the class proportions by EM in the scoring
-# sample, and the posterior class probabilities no longer use the calibration
-# priors (plug-in Bayes rule; McLachlan, 1992).
-write_class_logits <- function(mod, known_class = "cg", fixed_class = "c") {
-  logits <- mod[["parameters"]][["unstandardized"]] %>%
-    as_tibble() %>%
-    filter(tolower(paramHeader) == "means",
-           grepl(str_c("^", known_class, "#"), param, ignore.case = TRUE)) %>%
-    mutate(param = str_replace(str_to_lower(param),
-                               str_c("^", str_to_lower(known_class)),
-                               fixed_class))
-
-  if (nrow(logits) == 0 || anyNA(logits$est)) {
-    stop("No class logits found for known class '", known_class, "'.")
+# Normalize H5 parameter tables for report formatting, without parsing .out.
+pmm_h5_parameter_table <- function(results) {
+  d <- tibble::as_tibble(results)
+  cl <- trimws(as.character(d$Class))
+  keep <- grepl("^Latent Class [123]( |$)", cl)
+  d <- d[keep, , drop = FALSE]
+  section <- tolower(trimws(as.character(d$Section)))
+  section[is.na(section)] <- ""
+  statement <- toupper(gsub("[[:space:]]+", " ", trimws(d$Statement)))
+  header <- ifelse(nzchar(section), section, sub(" [^ ]+$", "", statement))
+  parameter <- ifelse(nzchar(section), statement, sub("^.* ", "", statement))
+  estimate_column <- names(d)[tolower(gsub("[[:space:].]", "", names(d))) %in%
+                               c("estimate", "stdyxestimate")]
+  if (length(estimate_column) != 1L || !all(c("S.E.", "Estimate/S.E.") %in% names(d))) {
+    stop("Unexpected H5 parameter-table schema.")
   }
-
-  str_c("[ ", str_c(logits$param, " @ ", logits$est, collapse = " "), " ];")
+  header <- vapply(strsplit(tolower(header), " +"), function(x) {
+    paste0(toupper(substring(x, 1, 1)), substring(x, 2), collapse = ".")
+  }, character(1))
+  # MplusAutomation-compatible labels used by existing report selectors.
+  header <- sub("\\.By$", ".BY", header)
+  header <- sub("\\.On$", ".ON", header)
+  header <- sub("\\.With$", ".WITH", header)
+  tibble::tibble(paramHeader = header, param = parameter,
+    est = d[[estimate_column]], se = d[["S.E."]], est_se = d[["Estimate/S.E."]],
+    LatentClass = sub("^Latent Class ([123]).*", "\\1", cl[keep]))
 }
 
+pmm_fixed_model_from_h5_results <- function(results, mplus_mod_norms = "") {
+  required <- c("Class", "Section", "Statement", "Estimate")
+  if (!all(required %in% names(results))) stop("H5 model results lack required columns.")
+  cl <- trimws(as.character(results$Class))
+  keep <- grepl("^Latent Class [123]( |$)", cl)
+  # Accept the H5 labels 'Latent Class 1' and 'Latent Class 1 (1)'.
+  d <- results[keep, , drop = FALSE]
+  d$class <- as.integer(sub("^Latent Class ([123]).*", "\\1", cl[keep]))
+  d$Section <- tolower(trimws(as.character(d$Section)))
+  d$Statement <- tolower(gsub("[[:space:]]+", " ", trimws(d$Statement)))
+  d$Section[is.na(d$Section)] <- ""
+  # Reuse the fixed normative regressions; retain H5 loadings, residual
+  # covariances, means, thresholds, and variances at full available precision.
+  d <- d[!grepl(" on x[1-7](x[1-7])?$", d$Statement), , drop = FALSE]
+  if (!setequal(unique(d$class), 1:3) || any(!is.finite(d$Estimate))) {
+    stop("H5 results must contain finite parameters for classes 1, 2, and 3.")
+  }
+  allowed <- c("", "means", "intercepts", "thresholds", "variances", "residual variances")
+  if (any(!d$Section %in% allowed)) stop("Unsupported section in H5 model results.")
+  d$key <- paste(d$Section, d$Statement)
+  if (anyDuplicated(paste(d$class, d$key))) stop("Duplicate class parameters in H5 results.")
+  keys <- lapply(1:3, function(k) sort(d$key[d$class == k]))
+  if (!identical(keys[[1]], keys[[2]]) || !identical(keys[[1]], keys[[3]])) {
+    stop("H5 class parameter sets differ; fixed scoring would be incomplete.")
+  }
+  value <- format_mplus_number(d$Estimate)
+  bracket <- d$Section %in% c("means", "intercepts", "thresholds")
+  d$syntax <- ifelse(bracket,
+    paste0("[ ", d$Statement, " @ ", value, " ];"),
+    paste0(d$Statement, " @ ", value, ";"))
+  # Declare the factor and complete baseline model in OVERALL. Mplus needs
+  # the BY structure there; differing class values then override the baseline.
+  baseline <- d[d$class == 1, , drop = FALSE]
+  varies <- vapply(baseline$key, function(key) {
+    length(unique(d$Estimate[d$key == key])) > 1L
+  }, logical(1))
+  varying_keys <- baseline$key[varies]
+  blocks <- vapply(1:3, function(k) {
+    statements <- d$syntax[d$class == k & d$key %in% varying_keys]
+    if (!length(statements)) return("")
+    paste(c(paste0("%c#", k, "%"), statements), collapse = "\n")
+  }, character(1))
+  paste(c("%OVERALL%", mplus_mod_norms, baseline$syntax, blocks), collapse = "\n")
+}
+
+write_lca_model <- function(h5_path, mplus_mod_norms = "") {
+  if (!is.character(h5_path) || length(h5_path) != 1L || !file.exists(h5_path)) {
+    stop("write_lca_model() requires an existing H5RESULTS path, not an .out model object.")
+  }
+  results <- mplush5::mplus.print.model.results(h5_path)
+  pmm_fixed_model_from_h5_results(results, mplus_mod_norms)
+}
 
 # weighted_class_logits(inhcap, "vs1hcapdxeap", "HCAP16WGTR")
 # Returns an Mplus statement that fixes the class logits at the survey-weighted
@@ -189,6 +90,10 @@ write_class_logits <- function(mod, known_class = "cg", fixed_class = "c") {
 # Used because Mplus KNOWNCLASS estimates of the class logits reproduce the
 # unweighted class proportions even when WEIGHT is specified.
 weighted_class_logits <- function(data, class_var, weight_var, fixed_class = "c") {
+  w <- data[[weight_var]]
+  if (any(!is.finite(w)) || any(w <= 0) || anyNA(data[[class_var]])) {
+    stop("Class priors require complete labels and finite positive weights.")
+  }
   props <- data %>%
     filter(!is.na(.data[[class_var]]), !is.na(.data[[weight_var]])) %>%
     group_by(class = .data[[class_var]]) %>%
@@ -196,14 +101,15 @@ weighted_class_logits <- function(data, class_var, weight_var, fixed_class = "c"
     arrange(class) %>%
     mutate(p = w / sum(w))
 
-  if (nrow(props) < 2 || any(props$p <= 0)) {
-    stop("Weighted class proportions must be positive for every class.")
+  if (!identical(as.numeric(haven::zap_labels(props$class)), as.numeric(1:3)) ||
+      any(!is.finite(props$w)) || any(props$w <= 0)) {
+    stop("Expected class codes 1, 2, 3 with finite positive class weight totals.")
   }
 
   k <- nrow(props)
   logits <- log(props$p[-k] / props$p[k])
   str_c("[ ", str_c(fixed_class, "#", seq_len(k - 1), " @ ",
-                    format(logits, digits = 8), collapse = " "), " ];")
+                    format_mplus_number(logits), collapse = " "), " ];")
 }
 
 
@@ -222,5 +128,41 @@ check_prior_sample <- function(prior_data, mod, label) {
     stop(label, ": priors computed on ", nrow(prior_data),
          " participants, but Mplus analyzed ", n_mplus, ".")
   }
+  invisible(TRUE)
+}
+
+# Validate each fixed scoring run independently of printed parameter precision.
+pmm_check_h5_parameter_transfer <- function(calibration, scoring, tolerance = 1e-7) {
+  key_table <- function(d) {
+    cl <- trimws(as.character(d$Class))
+    keep <- grepl("^Latent Class [123]( |$)", cl)
+    section <- tolower(trimws(as.character(d$Section[keep])))
+    section[is.na(section)] <- ""
+    key <- paste(sub("^Latent Class ([123]).*", "\\1", cl[keep]), section,
+                 tolower(gsub("[[:space:]]+", " ", trimws(d$Statement[keep]))))
+    if (!length(key) || anyDuplicated(key)) stop("Invalid H5 parameter keys.")
+    stats::setNames(d$Estimate[keep], key)
+  }
+  a <- key_table(calibration)
+  b <- key_table(scoring)
+  if (!setequal(names(a), names(b))) stop("Calibration and scoring H5 parameter sets differ.")
+  b <- b[names(a)]
+  if (any(!is.finite(a)) || any(!is.finite(b)) ||
+      any(abs(a - b) > tolerance * pmax(1, abs(a)))) {
+    stop("Fixed scoring did not preserve the H5 calibration parameters.")
+  }
+  invisible(TRUE)
+}
+
+check_fixed_scoring_run <- function(path, expected_n, calibration_h5, scoring_h5) {
+  output <- readLines(path, warn = FALSE)
+  mod <- suppressWarnings(MplusAutomation::readModels(path, what = "summaries"))
+  if (!any(grepl("THE MODEL ESTIMATION TERMINATED NORMALLY", output, fixed = TRUE)) ||
+      !identical(as.numeric(mod$summaries$Parameters), 0) ||
+      !identical(as.numeric(mod$summaries$Observations), as.numeric(expected_n))) {
+    stop("Fixed scoring failed, estimated parameters, or analyzed an unexpected sample: ", path)
+  }
+  pmm_check_h5_parameter_transfer(mplush5::mplus.print.model.results(calibration_h5),
+                                  mplush5::mplus.print.model.results(scoring_h5))
   invisible(TRUE)
 }

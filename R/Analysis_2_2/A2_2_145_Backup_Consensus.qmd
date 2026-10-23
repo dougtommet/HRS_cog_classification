@@ -1,0 +1,17 @@
+## HRS-HCAP clinical consensus classification
+
+<div style="font-size: 0.45em; line-height: 1.3;">
+
+- **Purpose.** Compare the Manly-Jones algorithm with a clinical consensus diagnosis in HRS-HCAP 2016.
+- **Case selection.** 50 participants, sampled on purpose for diagnostic uncertainty. Participants with no neuropsychological assessment (n = 467) were excluded. Every other participant had a nonzero but unequal chance of selection, set by how close their MMSE score was to the scores that were borderline between normal and impaired in ADAMS (for example, 7% at an MMSE of 21 against 0.1% at 30).
+- **Panel.** 5 clinicians (cognitive neuroscientists, a neuropsychologist, and general internists). Each reviewed 30 cases, so each case had at least 3 independent reviews. Reviewers did not know the algorithm's classification.
+- **Information reviewed.** Demographic background, informant reports, raw HRS-HCAP 2016 neuropsychological test scores, and core HRS cognition and self- or proxy-reported ADL/IADL limitations from 2012, 2014, 2016, and 2018. A structured form followed the NIA-AA criteria and the Clinical Dementia Rating. Discordant cases later also received interviewer comments and self-reported vision and hearing.
+- **Adjudication.** Cases with any disagreement among reviewers went to a full panel meeting: 28 cases across 3 meetings; 22 needed no further review.
+- **Result against the Manly-Jones algorithm.** 70% exact agreement (35 of 50), with most disagreement involving MCI. Unweighted kappa 0.56, quadratic weighted kappa 0.75, using inverse-sampling-probability weights.
+- **How we use it.** Consensus comparisons in Tables 3 and 4 rest on these 50 cases, weighted by HCAP16WGTR / samplingP and normalized. 
+
+</div>
+
+<div style="font-size: 0.3em; line-height: 1.1;">
+Source: Farron, M., Ryan, L. H., Manly, J. J., Levine, D. A., Plassman, B. L., Giordani, B. J., Jones, R. N., & Langa, K. M. (2025). Assessing cognitive impairment in the Health and Retirement Study Harmonized Cognitive Assessment Protocol Project: Comparing a diagnostic algorithm with a diagnostic consensus panel. *Journal of Aging and Health*. https://doi.org/10.1177/08982643251335370 (pp. 1 to 3).
+</div>

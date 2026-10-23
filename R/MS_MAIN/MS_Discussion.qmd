@@ -15,5 +15,7 @@
   - Classification agreement; no clinical diagnostic validation outside HCAP consensus subset
   - MCI boundary; model-dependent and threshold-dependent assignments
   - PMM agreement with the Manly-Jones algorithm is in-sample (apparent error rate; McLachlan, 1992); expected to be optimistic relative to application in new samples
-  - MCI: Core battery, 1 dimension measured with error, no informant report for tested respondents; PMM MCI probabilities rarely above 0.50 (Results, Figure 2)
-  - [Provenance: analysis design; inference; R/PMM_102_calibration_model.R; R/PMM_114_mci_ceiling.R]
+  - Marginal-rate reproduction: probability averages and assigned classes; separate targets (Table 2b)
+  - Overall marginal agreement; subgroup calibration and transport across waves still to be evaluated
+  - PMM probability-allocation kappa and modal-class kappa; separate estimands (Table 3)
+  - [Provenance: analysis design; inference; Tables 2b and 3]

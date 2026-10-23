@@ -1,0 +1,29 @@
+## Langa-Weir classification 
+
+<div style="font-size: 0.34em; line-height: 1.15;">
+
+| | **Langa-Weir** | **HRS core algorithm** | **PMM** |
+|:--|:--|:--|:--|
+| Reference | ADAMS (2001 to 2003): the population shares of dementia, CIND, and normal cognition among adults aged 70+ | Manly-Jones algorithm, HRS-HCAP 2016 | Manly-Jones algorithm, HRS-HCAP 2016 |
+| How the reference is used | Cut points chosen so the HRS distribution matches the ADAMS distribution (equipercentile equating); population shares only | Cut points chosen to match the weighted Manly-Jones shares, then the highest dementia kappa | Known-class calibration: each participant's class is fixed to the Manly-Jones class |
+| Data used to classify | One core wave | One core wave | One core wave |
+| Self-respondents | Sum score, 0 to 27: immediate and delayed word recall (0 to 20), serial 7s (0 to 5), backward counting (0 to 2). Orientation and naming are left out so the score works under age 65 | 8 core tests in a single-factor model (includes orientation and naming; no immediate recall), as a T score | Same 8 tests through a general factor, plus self-rated memory |
+| Proxy interviews | Sum score, 0 to 11: proxy rating of memory (0 to 4), IADL limitations (0 to 5), interviewer assessment of cognitive limitation (0 to 2) | IQCODE cut points | IQCODE (informant model) |
+| ADL/IADL and immediate recall | Immediate recall in the self score; IADLs in the proxy score | Not used | Not used |
+| Self-rated memory | Not used | Second criterion in the rules | Indicator with class-specific thresholds |
+| Demographics | None: raw sum scores | Removed by norms from the robust norms group | Adjust each test (fixed norms coefficients) |
+| Classification rule | Self: 0 to 6 dementia, 7 to 11 CIND, 12 to 27 normal. Proxy: 6 to 11 dementia, 3 to 5 CIND, 0 to 2 normal | Integer T cut points plus self-rated memory | Posterior probability of each class; most likely class optional |
+
+</div>
+
+<div style="font-size: 0.3em; line-height: 1.25;">
+
+- **Like the core algorithm:** cut points on a single cognitive score, chosen to reproduce a reference prevalence, with a separate route for proxy interviews. Like both core methods, it classifies one wave at a time.
+- **Unlike both:** no demographic adjustment, so at the same raw score, people with less education or of older age are more often classified as impaired. The reference is the ADAMS population distribution (age 70+, around 2001 to 2003), not individual Manly-Jones classes in HRS-HCAP 2016. It uses immediate recall, and IADLs for proxies. It does not use self-rated memory.
+- **For our comparisons:** we treat CIND as equivalent to MCI. Langa-Weir differs from the core methods in its reference, its inputs, and its lack of demographic adjustment.
+
+</div>
+
+<div style="font-size: 0.3em; line-height: 1.1;">
+Sources: Crimmins, E. M., Kim, J. K., Langa, K. M., & Weir, D. R. (2011). Assessment of cognition using surveys and neuropsychological assessment. *Journals of Gerontology Series B, 66B*(S1), i162–i171 (pp. i164, i166). Langa, K. M., Weir, D. R., Kabeto, M., & Sonnega, A. (2023). Langa-Weir Classification of Cognitive Function (1995-2020), data description. Our 2016 variable: `cogfunction2016` (R/A0_017-recode_classification.R).
+</div>

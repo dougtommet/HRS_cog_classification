@@ -37,7 +37,7 @@ Workflows depend on derived data written by earlier workflows. Rebuild upstream 
    - A9 (Slides2603) also reads A7 results (`R_objects/A7_075_algorithm_summary.rds`, `A7_100_hcap_tables.rds`), so run it after A7.
    - A5 reads `R_objects/PMM_045.RDS` from A3.
    - A3_2 (PMM scoring of HRS Core 2016–2022) runs after A3 and A0. It reads the A3 fixed-parameter Mplus inputs (through the registry) and `R_objects/A0_030_hrs16_22_merged.rds`.
-3. **Manuscript:** A2 last. It reads A7 results (`R_objects/A7_*.rds`) and re-sources the PMM comparison, margins, and MCI-ceiling scripts (`PMM_110`, `PMM_112`, `PMM_114`), which read the A3 Mplus outputs.
+3. **Manuscript:** A2 last. It reads A7 results (`R_objects/A7_*.rds`) and re-sources the PMM comparison and margins scripts (`PMM_110`, `PMM_112`), which read the A3 Mplus outputs.
    - A2_2 (summary slides for A2) reads the same inputs as A2 and `Figures/Slides2603_results_class_probabilities.png` from A9 (Slides2603), so run A9 before A2_2.
 
 A4 (Stata) reads `R_objects/025_hrs16_cog.dta` from A1. A6 is ad hoc debugging. A10 runs after A0 and A7 and reads the shared file `Data/Dx_for_LK-2026-07-10.csv`, which is gitignored and must be saved locally.
@@ -90,7 +90,8 @@ Links under "Final rendered output" point to the most recent report committed to
 
 - Purpose:
   - Manuscript (outline mode), tables and figures document, and Appendices 1–3. All reported values are computed from saved Analysis A7 and PMM results at render time.
-  - The shared cohort maps the 2016 Core IQCODE field `rPjorm` to `jorm` for Table 1. The tables document includes Tables 1–4 (including the A7 pairwise agreement matrix) and Figures 1–2.
+  - Table 2b compares the Manly-Jones reference rates, core algorithm assignments, PMM probability averages, and PMM modal assignments in a common sample, with percentage-point differences; Table 3 distinguishes probability-allocation and modal PMM agreement. Values are computed locally at render time.
+  - The shared cohort maps the 2016 Core IQCODE field `rPjorm` to `jorm` for Table 1. The tables document includes Tables 1–4 (Table 2 has modal and direct probability-allocation PMM margins; Table 4 adds PMM probability allocation to the pairwise agreement matrix) and Figures 1–2. Table 2 percentages are displayed to one decimal; probability-allocation counts are expected participant counts.
 - Driver: `./Analysis2_Driver.R`
 - Control:
   - `./R/MS_MAIN/MS_Main_Control.qmd`
@@ -123,11 +124,12 @@ Links under "Final rendered output" point to the most recent report committed to
 ### Analysis A2_2: Summary slide deck for Analysis A2
 
 - Purpose:
-  - Revealjs deck summarizing Analysis A2: glossary of the three algorithms (Manly-Jones (HCAP) algorithm, HRS core algorithm, PMM), algorithm and PMM figures, and agreement of the core algorithm and the PMM with the Manly-Jones algorithm. Same format, theme, and title-slide background as Analyses A8 and A9.
+  - Revealjs deck presenting both core methods (expanded 2026-10-22 for the working-group overview): glossary of the three algorithms (Manly-Jones (HCAP) algorithm, HRS core algorithm, PMM); steps, decision rules, and factor model results for the core algorithm; steps, model, STDYX loadings and general-factor means and SDs by class, and class-probability figures for the PMM; Table 2 margins, agreement with the Manly-Jones algorithm, and the Table 4 kappa matrix; limitations of each method, next steps, summary, and back-up slides (ADL/IADL exclusion, PMM probabilities vs. most likely class, cut-point stability, core vs. Manly-Jones cross-tabulation). Same format, theme, and title-slide background as Analyses A8 and A9.
 - Driver: `./Analysis2_2_Driver.R`
 - Control: `./R/Analysis_2_2/A2_2_000_Control.qmd`
   - One included `A2_2_###_*.qmd` file per slide, numbered in steps of 5; reorder slides by reordering the include lines in the control file.
   - Computes values from `./R/MS_MAIN/MS_010_results_objects.R`, the same results objects as Analysis A2.
+  - Slide-only objects: `./R/Analysis_2_2/A2_2_001_slide_objects.R` (Appendix 1 objects from `./R/MS_MAIN/MS_020_appendix1_objects.R`, loaded in a separate environment; PMM cognition-model parameters from the calibration H5 file).
 - Rebuild command:
   - `Rscript Analysis2_2_Driver.R`
 - Final rendered output:
@@ -135,7 +137,8 @@ Links under "Final rendered output" point to the most recent report committed to
   - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides_A2summary_2026-10-22.html
 - Data inputs:
   - Analysis A2 inputs: `./R_objects/A7_100_hcap_tables.rds`, `A7_075_algorithm_summary.rds` (Analysis A7); `./R_objects/PMM_100.RDS` and the PMM model outputs named in `./R/PMM_090_model_registry.R` (Analysis A3)
-  - Figures: `./Figures/HCAP-algorithm.png`, `./Figures/HRS-Core-Algorithm-2026-10-18.png`, `./Figures/Slides2603_results_class_probabilities.png` (written by Analysis A9); `./R/excalidraw/PMM-103-PMM-with-latent.excalidraw.svg`, `PMM-013-Approaches_to_constrained_regression.excalidraw.svg`
+  - Analysis A7 summaries read by Appendix 1: `./R_objects/A7_050_cfa_summary.rds`, `A7_055_norm_summary.rds`, `A7_070_threshold_calibration.rds`, `A7_075_hrs16_hcap.rds`, `A7_090_function_check.rds`
+  - Figures: `./Figures/HCAP-algorithm.png`, `./Figures/MS_Main-Figure-2-PMM-Class-Probabilities.png` (written by `R/PMM_112_Margins.R`), `./Figures/HRS-Core-Algorithm-2026-10-18.png`, `./Figures/Slides2603_results_class_probabilities.png` (written by Analysis A9); `./R/excalidraw/PMM-103-PMM-with-latent.excalidraw.svg`, `PMM-013-Approaches_to_constrained_regression.excalidraw.svg`
 - Main derived data products:
   - None
 - Date initiated: 2026-10-07
@@ -144,13 +147,14 @@ Links under "Final rendered output" point to the most recent report committed to
 ### Analysis A3: PMM profile mixture modeling analysis report
 
 - Purpose:
-  - Calibrates a known-class profile mixture model (PMM) to the Manly-Jones algorithm in HCAP and scores HCAP participants to obtain Normal/MCI/Dementia probabilities. Two models: the cognition model (a general cognitive factor measured by the 8 core cognitive tests, plus self-rated memory; participants with at least 1 test score or D102) and the informant model (Jorm IQCODE only). The PMM uses the same inputs as the core algorithm: no ADL/IADL items and no immediate word recall (decided 2026-10-22). Class proportions are fixed at the survey-weighted shares of each model's sample. Every render refits the Mplus models.
+  - Calibrates a known-class profile mixture model (PMM) to the Manly-Jones algorithm in HCAP and scores HCAP participants to obtain Normal/MCI/Dementia probabilities. Two models: the cognition model (a general cognitive factor measured by the 8 core cognitive tests, plus self-rated memory; participants with at least 1 test score or D102) and the informant model (Jorm IQCODE only). The PMM uses the same inputs as the core algorithm: no ADL/IADL items and no immediate word recall (decided 2026-10-22). Class proportions are fixed at the survey-weighted shares of each model's sample. Each render rewrites the Mplus inputs but refits a model only when its syntax or data changed since its last successful fit, or when an output file is missing; otherwise it reuses the saved output (`R/PMM_091_mplus_run_cache.R`, decided 2026-10-22). `--refit` refits all five models.
 - Driver: `./Analysis3_Driver.R`
 - Control: `./R/PMM_000_Analysis_Report_Control.qmd`
-  - Source programs: `./R/PMM_027_custom_functions.R`; `./R/PMM_031_Pull_data.R` through `./R/PMM_045_Data_generation_tables_analyses.R`; `./R/PMM_100_norming_npb.R` (norms model); `./R/PMM_101_mplus_function.R`; `./R/PMM_090_model_registry.R` (paths of the models used for classification); `./R/PMM_102_calibration_model.R` (cognition model); `./R/PMM_103_informant_model.R` (informant model); `./R/PMM_110_Comparison_of_Consensus_Langa_Weir.R`; `./R/PMM_112_Margins.R`; `./R/PMM_114_mci_ceiling.R`; `./R/PMM_011_*.qmd` through `./R/PMM_888_References.qmd`
+  - Source programs: `./R/PMM_027_custom_functions.R`; `./R/PMM_031_Pull_data.R` through `./R/PMM_045_Data_generation_tables_analyses.R`; `./R/PMM_100_norming_npb.R` (norms model); `./R/PMM_101_mplus_function.R`; `./R/PMM_091_mplus_run_cache.R` (reuses unchanged Mplus fits); `./R/PMM_090_model_registry.R` (paths of the models used for classification); `./R/PMM_102_calibration_model.R` (cognition model); `./R/PMM_103_informant_model.R` (informant model); `./R/PMM_109_probability_tools.R` (direct weighting); `./R/PMM_110_Comparison_of_Consensus_Langa_Weir.R`; `./R/PMM_112_Margins.R`; `./R/PMM_011_*.qmd` through `./R/PMM_888_References.qmd`
   - Retired code (no-factor model, weight check, cross-validation, and the old chapters) is in `./R/Archive_PMM_2026-10-22/` with a README. Its outputs remain in `./mplus_output/pmm_103/`, `pmm_104_weightcheck/`, `pmm_106/`.
 - Rebuild command:
   - `Rscript Analysis3_Driver.R`
+  - `Rscript Analysis3_Driver.R --refit` (refit all Mplus models)
 - Final rendered output:
   - `./Reports/PMM_Analysis_Report_[date].html`
   - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/PMM_Analysis_Report_2026-10-22.html
@@ -294,7 +298,7 @@ Links under "Final rendered output" point to the most recent report committed to
 ### Analysis A9: PMM slide deck (Slides2603)
 
 - Purpose:
-  - Revealjs deck on the PMM: the HRS core algorithm (previous work), PMM structure, why a general cognitive factor, same inputs as the core algorithm, covariate adjustment, class probabilities, why MCI probabilities stay below one half, margins, agreement matrices, and a conclusion comparing the PMM, core algorithm, and Langa-Weir. All values are computed at render time.
+  - Revealjs deck on the PMM: the HRS core algorithm (previous work), PMM structure, why a general cognitive factor, same inputs as the core algorithm, covariate adjustment, class probabilities, margins, agreement matrices, and a conclusion comparing the PMM, core algorithm, and Langa-Weir. All values are computed at render time.
 - Driver: `./Slides2603_Driver.R`
 - Control: `./R/Slides2603_Control.qmd`
   - One included `Slides2603_*.qmd` file per slide; shared setup, theme, and revealjs options stay in the control file; add slides by appending include statements.
@@ -304,7 +308,7 @@ Links under "Final rendered output" point to the most recent report committed to
   - `./Reports/Slides2603_[date].html`
   - Most recent: https://raw.githack.com/dougtommet/HRS_cog_classification/main/Reports/Slides2603_2026-10-22.html
 - Data inputs:
-  - Analysis A3 outputs (`./R_objects/PMM_*.RDS` and the model outputs named in `./R/PMM_090_model_registry.R`), via `R/PMM_110_Comparison_of_Consensus_Langa_Weir.R`, `R/PMM_112_Margins.R`, and `R/PMM_114_mci_ceiling.R`
+  - Analysis A3 outputs (`./R_objects/PMM_*.RDS` and the model outputs named in `./R/PMM_090_model_registry.R`), via `R/PMM_110_Comparison_of_Consensus_Langa_Weir.R`, `R/PMM_112_Margins.R`
   - Analysis A7 outputs: `./R_objects/A7_075_algorithm_summary.rds`, `A7_100_hcap_tables.rds`
 - Main derived data products:
   - `./Figures/Slides2603_results_class_probabilities.png` and `.pdf` (all HRS/HCAP participants; used by Analysis A2_2)
@@ -351,6 +355,14 @@ Links under "Final rendered output" point to the most recent report committed to
 - When a change drops model indicators, check which participants still have at least 1 observed indicator: Mplus drops cases with every indicator missing, which changes the analysis sample and any join of model output to data.
 - If a workflow produces multiple final artifacts, the driver may render multiple control files.
 - After rendering and staging new outputs, run `python3 tools/update_readme.py` to refresh the README links and dates and sync the Project Overview here. Do not edit the "Most recent" or "Date last updated" lines by hand.
+
+## Participant-data access (Rich, 2026-10-22)
+
+- Agents inspect source code and permitted outputs (including HTML, DOCX, Markdown, Mplus .out files, and logs). Model H5 parameter/result tables are outputs; never inspect individual-data arrays.
+- Agents must not read participant-level DTA, RData, RDS, SAV, SAS7BDAT, CSV, or other participant-data files, including Mplus input or individual saved-data files. Do not run scripts that read them, even to return only aggregates or to perform temporary scoring checks.
+- Rich runs analyses and report rebuilds locally. Agents may parse code and run tests on entirely synthetic fixtures without opening project participant data.
+- If a CSV's status is uncertain, ask; reading its first row is permitted only to establish whether it contains participant data.
+- Follow References/Mplus_Rules.md for H5 extraction. Preserve this project's existing output folders and established variable names rather than moving existing workflows to the generic example layout.
 
 ## Reporting Rules
 

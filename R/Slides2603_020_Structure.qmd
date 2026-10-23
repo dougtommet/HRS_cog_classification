@@ -31,7 +31,7 @@ Cognitive tests: `vdori`, Orientation to date; `vdlfl1z`, Animal naming; `vdlfl2
 - Within each class, people differ in overall cognitive performance, so their test scores correlate. In the robust norms group, the continuous test scores correlate after demographic adjustment.
 - A model without the factor sets these within-class correlations to 0. It counts correlated evidence as if it were independent (a low delayed recall score and a low animal naming score each count fully toward impairment), and its probabilities are more extreme than the data justify.
 - The factor carries the within-class correlation with 1 set of loadings. The model with the factor fit the data better than the model without it, with fewer parameters.
-- We also tested letting each test's intercepts and thresholds differ by class. In 10-fold cross-validation, agreement with the HRS/HCAP Algorithm rose, but the accuracy of the probabilities (log score) fell. We kept the simpler model.
+- An exploratory comparison allowed test intercepts and thresholds to differ by class. That alternative was not adopted. The archived comparison includes a flagged fit and does not rule out the alternative.
 </div>
 
 ## Same inputs as the Core algorithm

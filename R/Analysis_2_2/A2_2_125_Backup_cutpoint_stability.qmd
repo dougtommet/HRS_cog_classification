@@ -1,0 +1,24 @@
+## Choosing the core algorithm cut points
+
+```{r}
+#| include: false
+a2_2_boot_text <- if (is.null(a1_boot)) "" else paste0(
+  "- **Stability.** In ", a1_boot$n_boot, " bootstrap samples drawn by the HRS sampling design, ",
+  "the rule chose the same pair in ", a1_pct(a1_boot$pct_same_pair, 0),
+  "% and a pair within 1 point of both cut points in ", a1_pct(a1_boot$pct_within_1, 0), "%."
+)
+```
+
+<div style="font-size: 0.6em; line-height: 1.35;">
+
+- **Rule, fixed before any result was seen.** Among all pairs of integer cut points, keep those whose weighted dementia and MCI shares fall within `r a1_pts(a1_spec$tol_dementia)` and `r a1_pts(a1_spec$tol_mci)` percentage points of the Manly-Jones shares. Among those, take the pair with the highest weighted dementia kappa.
+- **Result.** `r a1_n_eligible` of `r a1_n(a1_n_candidates)` pairs qualified`r if (a1_cal$selection_stage == "as specified") "" else " after the tolerances were widened"`. The rule chose $\tau_1$ = `r a1_cut(a1_cut_severe)` and $\tau_2$ = `r a1_cut(a1_cut_moderate)` (dementia kappa `r a1_dec(a1_used$kappa_binary)`, three-class kappa `r a1_dec(a1_used$kappa_3class)`).
+`r a2_2_boot_text`
+- **Why the exact pair moves.** Next to the chosen cut points, a 1-point change in $\tau_1$ moves weighted dementia prevalence by `r a1_pts(a1_step_dem)` points, and a 1-point change in $\tau_2$ moves MCI prevalence by `r a1_pts(a1_step_mci)` points. Small sampling shifts can move a pair into or out of the qualifying set.
+
+</div>
+
+<div style="font-size: 0.4em; line-height: 1.2;">
+HRS-HCAP Wave 1 (n = `r a1_n(a1_cal$n_sample)`). Appendix 1, Step 3.
+</div>
+

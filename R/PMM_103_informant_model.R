@@ -81,14 +81,17 @@ mod1 <- MplusAutomation::mplusObject(
   rdata = inhcap_jorm
 
 )
-MplusAutomation::mplusModeler(mod1, modelout = "pmm_hcap_103_jorm.inp", run = 1, writeData = "always")
+source(here::here("R", "PMM_091_mplus_run_cache.R"))  # pmm_mplus_run(): reuse unchanged fits
+pmm_mplus_run(mod1, "pmm_hcap_103_jorm.inp", outputs = "model_103_jorm.h5")
 
 # mplush5::mplus.view.results(here::here("mplus_output", "pmm_103", "model_103.h5"))
 # mplush5::mplus.print.results.in.probability.scale(here::here("mplus_output", "pmm_103", "model_103.h5"))
 
 pmm_103_jorm <- read_mplus_model_quietly(here::here("mplus_output", "pmm_103_jorm", "pmm_hcap_103_jorm.out"))
 
-mplus_mod_fixed_jorm <- write_lca_model(pmm_103_jorm, "")
+check_prior_sample(inhcap_jorm, pmm_103_jorm, "informant model")
+
+mplus_mod_fixed_jorm <- write_lca_model(pmm_models$informant$calibration_h5, "")
 # Fix class logits at the survey-weighted class proportions of the Jorm sample.
 mplus_mod_fixed_jorm <- sub("%OVERALL%",
                             str_c("%OVERALL% \n ",
@@ -114,7 +117,7 @@ mod_fixed <- MplusAutomation::mplusObject(
   ANALYSIS = mplus_analysis_fixed_jorm,
   OUTPUT = mplus_output_103_jorm,
   SAVEDATA = "H5RESULTS = model_103b_jorm.h5;
-  SAVE = CPROBABILITIES; file = cprob_jorm.dat;",
+  SAVE = CPROBABILITIES; file = cprob_jorm.dat; FORMAT = F20.12;",
   usevariables = c("id", "HCAP16WGTR", "STRATUM", "SECU_mplus",
                    "jorm"
 
@@ -122,6 +125,9 @@ mod_fixed <- MplusAutomation::mplusObject(
   rdata = inhcap_jorm
 
 )
-MplusAutomation::mplusModeler(mod_fixed, modelout = "pmm_hcap_103b_jorm.inp", run = 1, writeData = "always")
+pmm_mplus_run(mod_fixed, "pmm_hcap_103b_jorm.inp", outputs = c("model_103b_jorm.h5", "cprob_jorm.dat"))
 
 pmm_103b_jorm <- read_mplus_model_quietly(here::here("mplus_output", "pmm_103_jorm", "pmm_hcap_103b_jorm.out"))
+
+check_fixed_scoring_run(pmm_models$informant$scoring_out, nrow(inhcap_jorm),
+                        pmm_models$informant$calibration_h5, pmm_models$informant$scoring_h5)

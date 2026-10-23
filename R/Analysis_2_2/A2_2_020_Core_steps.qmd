@@ -1,0 +1,11 @@
+## HRS core algorithm: steps
+
+<div style="font-size: 0.7em; line-height: 1.3;">
+
+1. **One cognition score.** Fit a single-factor model (CFA) to the 8 core cognitive tests in HRS 2016 respondents aged 65 or older (N = `r a1_n(a1_cfa$n_obs)`), with HRS-HCAP weights (effective N = 3,496).
+2. **Demographic norms.** Compare each factor score with the score expected for a person of the same age, sex, race, ethnicity, and education in the HRS-HCAP robust norms group (n = `r a1_n(a1_norm$n_norm)`). Rescale to a T score (mean 50, SD 10 in the norms group).
+3. **Cut points.** Choose 2 T-score cut points ($\tau_1$ = `r a1_cut(a1_cut_severe)`, $\tau_2$ = `r a1_cut(a1_cut_moderate)`) using a specified rule: match the weighted Manly-Jones dementia and MCI prevalence, then take the highest weighted dementia kappa.
+4. **Classify.** Combine the T-score range with self-rated memory (worse than 2 years ago). Respondents with no T score (proxy interviews) are classified by the informant IQCODE.
+
+</div>
+

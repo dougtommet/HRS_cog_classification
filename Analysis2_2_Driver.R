@@ -24,3 +24,7 @@ if (fs::file_exists(final_output)) {
 fs::file_move(rendered_output, final_output)
 
 message("Rendered Analysis A2_2 slides to: ", final_output)
+
+# Opens the slides in the default browser once rendering has finished.
+# To turn this off (e.g., when the driver runs as part of the workflow), comment out the next line.
+utils::browseURL(final_output)

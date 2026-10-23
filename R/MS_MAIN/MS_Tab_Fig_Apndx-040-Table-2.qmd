@@ -5,3 +5,10 @@
 ```{r}
 analysis2_class_margin_table
 ```
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+```{r}
+analysis2_marginal_matching_table
+```

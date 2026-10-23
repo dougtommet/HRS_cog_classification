@@ -1,0 +1,49 @@
+## Agreement with Manly-Jones
+
+```{r}
+analysis2_agreement |>
+  dplyr::filter(
+    classification_2 == "Manly-Jones algorithm",
+    classification_1 %in% c("Core algorithm", "PMM", "PMM (most likely class)")
+  ) |>
+  dplyr::mutate(
+    n = dplyr::if_else(
+      classification_1 == "Core algorithm",
+      analysis2_n_compare[["core_algorithm"]],
+      analysis2_n_compare[["pmm"]]
+    ),
+    classification_1 = dplyr::recode(
+      classification_1,
+      "PMM" = "PMM (mean of class probabilities)"
+    ),
+    classification_1 = factor(
+      classification_1,
+      levels = c("Core algorithm", "PMM (mean of class probabilities)", "PMM (most likely class)")
+    )
+  ) |>
+  dplyr::arrange(classification_1) |>
+  dplyr::mutate(classification_1 = as.character(classification_1)) |>
+  dplyr::select(classification_1, n, three_class_kappa, binary_kappa) |>
+  gt::gt(rowname_col = "classification_1") |>
+  gt::tab_stubhead("Compared with Manly-Jones algorithm") |>
+  gt::cols_label(
+    n = "N",
+    three_class_kappa = "Normal, MCI, Dementia (weighted kappa)",
+    binary_kappa = "Dementia vs. no dementia (kappa)"
+  ) |>
+  gt::fmt_integer(columns = n) |>
+  gt::fmt_number(columns = c(three_class_kappa, binary_kappa), decimals = 2) |>
+  gt::opt_stylize(6, color = "gray") |>
+  gt::tab_options(
+    table.width = gt::pct(90),
+    table.font.size = gt::px(26),
+    column_labels.font.size = gt::px(22),
+    stub.font.size = gt::px(24),
+    data_row.padding = gt::px(6)
+  )
+```
+
+<div style="font-size: 0.5em; line-height: 1.2;">
+HRS/HCAP 2016 participants. Kappa measures agreement beyond chance (0 = chance, 1 = perfect). The three-class kappa uses quadratic weights, so a Normal vs. MCI disagreement counts less than a Normal vs. Dementia disagreement. All kappas use HCAP population weights (HCAP16WGTR). Both the core algorithm and the PMM are calibrated and scored in the same sample, so their agreement is an in-sample estimate. The PMM is shown two ways: kappa computed from each person's class probabilities (each person counts in every class in proportion to the probabilities) and from each person's single most likely class.
+</div>
+

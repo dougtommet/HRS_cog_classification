@@ -53,7 +53,8 @@
 - Choice of a general factor
   - Tests correlate within class (robust norms group, after adjustment); model without GCP sets within-class correlation to 0, treats correlated tests as independent evidence
   - GCP model: better fit, fewer parameters than no-factor model
-  - Class-specific test intercepts and thresholds: 10-fold cross-validation; higher kappa, lower log score; not adopted
+  - Class-specific test intercepts and thresholds: exploratory cross-validation; not adopted
+    - Archived comparison includes a flagged fit; no claim that the alternative is ruled out
   - [Values not in a current results object; Provenance: References/SESSION_LOGS.md, 2026-10-22; R/Archive_PMM_2026-10-22/]
 - Class proportions (priors)
   - Class-specific parameters estimated with HCAP16WGTR; MLR estimation, Bayes-rule posterior classification (plug-in rule; McLachlan, 1992)
@@ -63,7 +64,8 @@
   - [Provenance: R/PMM_101_mplus_function.R; R/PMM_102_calibration_model.R; R/PMM_103_informant_model.R; R/Archive_PMM_2026-10-22/PMM_104_weight_check.R; scoring outputs in R/PMM_090_model_registry.R]
 - Combined classification
   - Cognition-model probabilities; informant-model probabilities when IQCODE available
-  - Probabilistic Normal/MCI/Dementia membership; replicated probability-weighted comparisons
+  - Probabilistic Normal/MCI/Dementia membership; direct probability-weighted cross-tables
+  - Modal-class agreement reported separately; full precision retained through computation
   - More detail in **Appendix 2**
   - [Provenance: R/PMM_110_Comparison_of_Consensus_Langa_Weir.R]
 
@@ -80,4 +82,6 @@
   - 3-class quadratic weighted kappa
   - Dementia versus non-dementia kappa
   - Marginal Normal/MCI/Dementia distributions
+    - Common participants and HCAP16WGTR denominator for core assignments, PMM probability averages, PMM modal assignments
+    - Percentage-point differences from Manly-Jones rates; descriptive comparison (Table 2b)
   - [Provenance: R/MS_MAIN/MS_010_results_objects.R]

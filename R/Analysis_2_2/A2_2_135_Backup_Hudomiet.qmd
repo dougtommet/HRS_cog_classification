@@ -1,0 +1,30 @@
+## Hudomiet algorithm
+
+<div style="font-size: 0.3em; line-height: 1.1;">
+
+| | **Hudomiet (Bayesian latent variable model)** | **HRS core algorithm** | **PMM** |
+|:--|:--|:--|:--|
+| Reference classification | ADAMS clinical diagnosis (dementia, CIND, normal); 856 diagnosed in ADAMS wave 1 | Manly-Jones algorithm, HRS-HCAP 2016 | Manly-Jones algorithm, HRS-HCAP 2016 |
+| Data used to classify | HRS core 2000 to 2016, age 65+, 21,442 participants; all of a person's waves at once | One core wave at a time | One core wave at a time |
+| Latent cognition | Continuous, with a person-specific intercept and age slope (growth curve) | One general factor from a CFA, turned into a demographically adjusted T score | One general factor; its mean and variance differ by class |
+| Indicators | 7 composites: immediate recall; delayed recall; serial 7s; mental status (backward counting, date, President, cactus, scissors); subjective limitations (self-rated memory, IADLs, self-rated health); interviewer assessment; proxy-reported problems | 8 core tests; self-rated memory in the rules; IQCODE for proxies | Same 8 tests plus self-rated memory; IQCODE in the informant model |
+| ADL/IADL and immediate recall | Included (IADLs within subjective limitations) | Not used | Not used |
+| Demographics | Adjust each test **and** shift the mean of latent cognition (cubic age, sex, race and ethnicity, nativity, education, Social Security income, marital status, stroke, birth-year interactions) | Removed from the score by norms from the robust norms group; cut points apply to the residual | Adjust each test (fixed norms coefficients); do **not** change the class proportions |
+| Classification rule | Fixed thresholds on latent cognition: below 0 dementia, 0 to 1 CIND (normalizations) | Integer T cut points plus self-rated memory; IQCODE cut points | Posterior probability of each class; most likely class optional |
+| Other model parts | Proxy-interview selection, survival (Gompertz) linked to the random effects, missing-test selection, ADAMS sampling and refusal | None | None |
+| Estimation and output | MCMC, 2 million draws (about 3 weeks); posterior probabilities of normal, CIND, dementia per person-wave | Rules applied to the T score | Mplus maximum likelihood; class probabilities |
+
+</div>
+
+<div style="font-size: 0.3em; line-height: 1.1;">
+
+- **Like the PMM:** a latent variable model calibrated to a reference classification that yields posterior probabilities, with each test adjusted for covariates. Our Hudomiet variable is the most likely of their 2016 probabilities, the same rule as the PMM's most likely class.
+- **Like the core algorithm:** classes come from thresholds on a continuous cognition scale. Hudomiet fixes the thresholds at 0 and 1 and calibrates the scale through the ADAMS diagnoses; the core algorithm chooses its cut points by matching Manly-Jones prevalence.
+- **Unlike both:** demographics also move the latent mean. Two people with the same test results but different age, education, or income get different probabilities, so the classification reflects absolute risk, not standing relative to demographic peers. The 2016 classification also draws on earlier waves and on survival. Both methods rest on the same kind of assumption: the link between the tests and dementia status does not change over time.
+- **For our comparisons:** Hudomiet differs in its reference standard (clinical diagnosis vs. the Manly-Jones algorithm) and in its information (longitudinal, functional items), so its agreement with the Manly-Jones algorithm is not a like-for-like benchmark for the core methods.
+
+</div>
+
+<div style="font-size: 0.3em; line-height: 1.1;">
+Source: Hudomiet, P., Hurd, M. D., & Rohwedder, S. (2022). Trends in inequalities in the prevalence of dementia in the United States. *PNAS, 119*(46), e2212205119. Methods p. 8; SI Appendix pp. 2 to 4 (PDF pp. 11 to 13). Our 2016 variable: R/A0_017-recode_classification.R.
+</div>

@@ -1,0 +1,13 @@
+## PMM: steps
+
+<div style="font-size: 0.62em; line-height: 1.3;">
+
+1. **Norms.** In the HRS-HCAP robust norms group, regress each core cognitive test on `r analysis2_pmm_n_cov_terms` sociodemographic terms. Fix these coefficients for every later step.
+2. **Calibrate.** In the HRS-HCAP sample, fit a known-class model in HRS-HCAP: each participant's class is fixed to the Manly-Jones class. The model estimates how the general cognitive factor and self-rated memory differ by class. Class proportions are fixed at the weighted Manly-Jones prevalence.
+   - Cognition model: `r format(analysis2_pmm_n[["cognition"]], big.mark = ",")` participants with a HRS core test score or a memory self-rating
+   - Informant model (IQCODE only): `r format(analysis2_pmm_n[["informant"]], big.mark = ",")` participants without HRS core cognitive test scores
+3. **Score.** Fix every parameter and compute each person's probability of Normal, MCI, and Dementia.
+4. **Use the probabilities.** Average probabilities for estimated prevalence, and use the most likely class for individual classification. 
+
+</div>
+

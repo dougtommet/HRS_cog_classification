@@ -3,5 +3,5 @@
 ```
 
 ```{r}
-analysis2_a7_agreement_matrix_table
+analysis2_agreement_matrix_table
 ```

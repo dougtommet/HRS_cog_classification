@@ -5,7 +5,7 @@
 ```
 
 ```{r}
-#| fig-cap: "PMM class probabilities in HRS/HCAP"
+#| fig-cap: "PMM class probabilities in HRS/HCAP. Each participant contributes one probability per class, from the informant model when an IQCODE is present and otherwise from the cognition model. Bar heights are weighted counts: HCAP16WGTR rescaled to sum to the sample size. All panels share one y-axis."
 #| label: fig-pmm-class-probabilities
 knitr::include_graphics(
   here::here("Figures", "MS_Main-Figure-2-PMM-Class-Probabilities.png")

@@ -55,6 +55,8 @@ invisible(
       source(here::here("R", "MS_MAIN", "A1_002-folder_paths.R"))
       source(here::here("R", "MS_MAIN", "MS_001_analysis_cohort.R"))
       source(here::here("R", "MS_MAIN", "MS_010_results_objects.R"))
+      # Slide-only objects: Appendix 1 results (a1_*) and PMM parameters from H5.
+      source(here::here("R", "Analysis_2_2", "A2_2_001_slide_objects.R"))
     })
   )
 )
@@ -64,9 +66,40 @@ invisible(
 {{< include A2_2_005_Contents.qmd >}}
 {{< include A2_2_010_Key_terms.qmd >}}
 {{< include A2_2_015_HRS_HCAP_algorithm.qmd >}}
-{{< include A2_2_020_Core_algorithm.qmd >}}
-{{< include A2_2_022_PMM_structure.qmd >}}
-{{< include A2_2_030_PMM_covariate_adjustment.qmd >}}
-{{< include A2_2_040_PMM_class_probabilities.qmd >}}
-{{< include A2_2_045_Agreement_with_HRS_HCAP.qmd >}}
-{{< include A2_2_050_Summary.qmd >}}
+
+<!-- HRS core algorithm -->
+{{< include A2_2_025_Core_algorithm.qmd >}}
+{{< include A2_2_020_Core_steps.qmd >}}
+{{< include A2_2_030_Core_factor_model.qmd >}}
+
+<!-- PMM -->
+{{< include A2_2_040_PMM_structure.qmd >}}
+{{< include A2_2_035_PMM_steps.qmd >}}
+{{< include A2_2_045_PMM_covariate_adjustment.qmd >}}
+{{< include A2_2_050_PMM_loadings.qmd >}}
+{{< include A2_2_055_PMM_factor_means.qmd >}}
+{{< include A2_2_060_PMM_class_probabilities.qmd >}}
+{{< include A2_2_065_PMM_probability_histogram.qmd >}}
+
+<!-- Results -->
+{{< include A2_2_070_Table2_margins.qmd >}}
+{{< include A2_2_075_Agreement_with_HRS_HCAP.qmd >}}
+{{< include A2_2_080_Table4_pairwise.qmd >}}
+
+<!-- Limitations, next steps, summary -->
+{{< include A2_2_085_Limitations_core.qmd >}}
+{{< include A2_2_090_Limitations_PMM.qmd >}}
+{{< include A2_2_095_Next_steps.qmd >}}
+{{< include A2_2_100_Summary.qmd >}}
+{{< include A2_2_105_Fin.qmd >}}
+
+<!-- Back-up slides -->
+{{< include A2_2_115_Backup_ADL_IADL.qmd >}}
+{{< include A2_2_120_Backup_probabilities_vs_modal.qmd >}}
+{{< include A2_2_125_Backup_cutpoint_stability.qmd >}}
+{{< include A2_2_130_Backup_core_vs_MJ.qmd >}}
+{{< include A2_2_135_Backup_Hudomiet.qmd >}}
+{{< include A2_2_140_Backup_Langa_Weir.qmd >}}
+{{< include A2_2_145_Backup_Consensus.qmd >}}
+{{< include A2_2_150_Backup_PMM_overview_1.qmd >}}
+{{< include A2_2_155_Backup_PMM_overview_2.qmd >}}

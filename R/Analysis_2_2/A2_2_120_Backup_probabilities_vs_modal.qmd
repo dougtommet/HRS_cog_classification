@@ -1,0 +1,26 @@
+## PMM probabilities vs. most likely class
+
+```{r}
+analysis2_marginal_matching |>
+  gt::gt(rowname_col = "method") |>
+  gt::tab_spanner("Weighted %", columns = c(Normal, MCI, Dementia)) |>
+  gt::tab_spanner("Difference from Manly-Jones (points)", columns = c(normal_gap, mci_gap, dementia_gap)) |>
+  gt::cols_label(normal_gap = "Normal", mci_gap = "MCI", dementia_gap = "Dementia") |>
+  gt::fmt_number(columns = c(Normal, MCI, Dementia), decimals = 1) |>
+  gt::fmt_number(columns = c(normal_gap, mci_gap, dementia_gap), decimals = 2) |>
+  gt::cols_align("center", columns = -method) |>
+  a2_2_gt_style(font = 22, width = 95)
+```
+
+<div style="font-size: 0.5em; line-height: 1.25;">
+
+- Averaging the PMM probabilities reproduces the Manly-Jones class rates, because the model was calibrated to them.
+- Taking each person's most likely class does not. A person with probabilities of 0.55 Normal and 0.45 MCI counts as fully Normal. MCI carries a large share of the total probability but is rarely any one person's most likely class, so MCI shrinks and Normal grows.
+- Use the probabilities for prevalence and the most likely class only where a single label is needed.
+
+</div>
+
+<div style="font-size: 0.4em; line-height: 1.2;">
+Common comparison sample, N = `r format(nrow(analysis2_matching_sample), big.mark = ",")`; HCAP16WGTR. Same values as Table 2b of the tables document.
+</div>
+

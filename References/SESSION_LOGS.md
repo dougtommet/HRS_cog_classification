@@ -1,5 +1,133 @@
 # Session Logs
 
+## 2026-10-23 (morning, cont.): A2_2 slide edits at Rich's direction; debugging
+
+- Agent/model: Claude (configured as claude-sonnet-5.5).
+- Debugging, A3: the Jorm histogram failed (`seq_len()` error) because the cognition and informant models no longer share participants (3,283 and 213; the 213 have no cognition-model indicator once vdwdimmz is dropped), so `left_join(cognition, jorm)` left every Jorm probability NA. Fixed with `full_join` in the PMM_103 chapter, PMM_110, and PMM_112; the "combined model" tables now filter on `c_dt`, and the cognition-vs-Jorm cross-tab was replaced by a note.
+- Debugging, PMM_106: held-out folds that lack an ordinal category (fold 6, `vdlfl2`) made Mplus reject the fixed thresholds ("Unknown threshold value"); added placeholder rows for the missing categories, dropped after scoring.
+- Debugging, A2_2: an unclosed `<div>` in `A2_2_060` swallowed later slides and made Reveal.js jump to the title slide after slide 055. Every `A2_2_*.qmd` now has balanced `<div>` tags.
+- `Analysis2_2_Driver.R` opens the rendered deck in the default browser after rendering (`utils::browseURL`); comment out that line when the driver runs as part of the workflow.
+- Slide changes (all values computed at render time):
+  - 030: dropped the WLSMV loading column (the footnote still gives the WLSMV fit).
+  - 050, 055: if every STDYX loading is negative, the factor is reflected (loadings and class means change sign; nothing changes when any loading is positive), with a footnote saying so. 055 shows Mean, SD, Variance to 1 decimal, no SEs.
+  - 075: PMM shown as "PMM (mean of class probabilities)" and "PMM (most likely class)".
+  - 080: pairwise matrix has both PMM rows and columns (`a2_2_pairwise` in `A2_2_001_slide_objects.R`; the PMM-probability vs PMM-modal cell, kappa 0.52, is new); kappas to 2 decimals, no leading zero, diagonal blank.
+  - 100: Summary gives both PMM versions for the three-class and dementia kappas, with a short definition.
+- Confirmed facts: PMM vs Manly-Jones kappas, three-class / dementia: core 0.50 / 0.34; PMM mean of class probabilities 0.37 / 0.31; PMM most likely class 0.51 / 0.43. The Limitations: PMM slide (090) still says three-class agreement is lower; that holds only for the probability version.
+- Note: `A2_2_110_Backup_divider.qmd` is no longer in the folder or the control file (it was there on 2026-10-22). Not recorded in earlier entries; presumed to be Rich's edit.
+- Open: re-render A2_2 to check the 7-column pairwise table width (slide 080) and the footnote on slide 090. The A2 manuscript Table 4 still has only the probability-allocation PMM row and column.
+
+## 2026-10-23 (morning, cont.): A2_2 back-up slides on profile mixture modeling
+
+- Agent/model: Claude (configured as claude-opus-5-5).
+- Added `A2_2_150_Backup_PMM_overview_1.qmd` and `A2_2_155_Backup_PMM_overview_2.qmd`, titled "Profile mixture modeling (1/2)" and "(2/2)", at the end of the back-up slides (Rich's placement).
+- Slide 1: PMM vs. logistic regression (question, what is modeled, role of tests, dependence among tests, prevalence, missing tests, assumptions), following Appendix 2; note on known-class calibration.
+- Slide 2: derivation of posterior probabilities: class-specific likelihood integrating over the general factor, prior fixed at the weighted Manly-Jones shares, Bayes' rule; informant model analog.
+- Confirmed from model code: self-rated memory (PD102) is not on the factor and has class-specific thresholds (Normal class uses the overall thresholds); informant model gives the IQCODE a class-specific mean with variance equal across classes (Mplus default).
+- Discussion: Rich removed the consensus-slide sentence saying consensus kappas do not describe the population; agreed that inverse-probability weighting with known selection probabilities makes them population estimates. Remaining caveats raised: the 467 participants without neuropsychological assessment had zero selection probability, so the target is HRS-HCAP participants with an assessment; precision is low (50 cases, weights varying about 70-fold). No change made.
+
+## 2026-10-23 (morning, cont.): A2_2 back-up slides on Langa-Weir and the consensus classification
+
+- Agent/model: Claude (configured as claude-opus-5-5).
+- Added `A2_2_140_Backup_Langa_Weir.qmd` (same format as the Hudomiet slide: comparison with the core algorithm and the PMM) and `A2_2_145_Backup_Consensus.qmd` (high-level description, no comparison), after the Hudomiet slide in the control file.
+- Sources: Crimmins et al. (2011), pp. i164 and i166 (References/llm_out/Crimmins_2011); Langa et al. (2023) data description as cited in Table 2; Farron et al. (2025), pp. 1 to 3 (References/Farron_2025.pdf, read directly because no llm_out extraction exists).
+- Confirmed facts: Langa-Weir self score is immediate plus delayed recall, serial 7s, and backward counting (0 to 27; 0 to 6 dementia, 7 to 11 CIND); proxy score is memory rating, IADL limitations, and interviewer assessment (0 to 11; 6+ dementia, 3 to 5 CIND); cut points set by equipercentile equating to the ADAMS distribution; no demographic adjustment. Consensus panel: 50 cases sampled for diagnostic uncertainty (MMSE near the ADAMS borderline), 5 clinicians, at least 3 blinded reviews per case, NIA-AA and CDR form, 28 cases adjudicated at meetings; kappa with Manly-Jones 0.56 unweighted, 0.75 quadratic weighted. Our consensus comparisons use HCAP16WGTR / samplingP, normalized; the slide computes the number of panel cases in our comparison sample at render time.
+- Open: References/Farron_2025.pdf has no llm_out extraction; consider running the extraction tool so later sessions can cite it from text. Rich to render and check slide density.
+
+## 2026-10-23 (morning): A2_2 back-up slide on the Hudomiet algorithm; discussion notes
+
+- Agent/model: Claude (configured as claude-opus-5-5).
+- Added `R/Analysis_2_2/A2_2_135_Backup_Hudomiet.qmd` as the last slide (control file updated). It compares Hudomiet, the core algorithm, and the PMM on reference classification, data, latent cognition, indicators, ADL/IADL use, demographics, classification rule, other model parts, and estimation, then lists similarities and differences. Sources: Hudomiet et al. (2022) methods p. 8 and SI pp. 2 to 4 (References/llm_out/Hudomiet_2022, PDF pp. 8, 11 to 13); R/A8_010_Introduction.qmd; R/A0_017-recode_classification.R.
+- Confirmed facts: our Hudomiet variable is the most likely class from their 2016 (wave 13) posterior probabilities (PrNorm, PrCIND, PrDem). In Hudomiet's model, demographics adjust each test (eq. 3) and also shift the mean of latent cognition (eq. 1); thresholds are fixed at 0 and 1 and calibrated through ADAMS diagnoses.
+- Confirmed facts (PMM scoring .out files, weighted counts): most-likely-class MCI comes mostly from the cognition model (269 of 294), not the informant model (25). The informant model assigns MCI at 11.8% and dementia at 35.5%. Average MCI probability among those assigned MCI: 0.46 (cognition), 0.40 (informant).
+- Discussion (no code change): class-specific STDYX loadings fall relative to pooled loadings because class means are removed from the factor variance (Lawley selection; Meredith, 1993); cross-sectional loadings carry no information about variation within a person. Suggested a back-up computing pooled STDYX loadings from the PMM H5 parameters, and testing the equal-loadings constraint across classes. PMM is a generative (Bayes) classifier, not a prediction model; suggested wording "posterior class probability."
+- Note: Rich edited A2_2_095_Next_steps.qmd (Hudomiet item); the agent's earlier copy is out of date and was not reused.
+- Open: Rich to render A2_2 and check the Hudomiet slide's density (the table font is 0.34em).
+
+## 2026-10-22 (evening, cont.): A2_2 deck expanded for the working-group overview
+
+- Agent/model: Claude (configured as claude-opus-5-5).
+- Request (Rich): add slides to A2_2 for an overview of both methods on 2026-10-23; keep the existing slides; one QMD per slide.
+- Decisions (Rich): one steps slide per method; PMM factor table uses model parameters (GCP mean and SD = sqrt(variance) by class, from H5), not EAP score averages; back-ups on ADL/IADL exclusion, PMM probabilities vs. most likely class, cut-point stability, and core vs. Manly-Jones cross-tab; Summary goes after Next steps.
+- New slides: core steps (020), core factor model (030, Table A1 loadings and WLSMV fit), PMM steps (035), PMM STDYX loadings by class (050), GCP mean and SD by class (055), weighted probability histogram (065, Figure 2), Table 2 margins without references (070), Table 4 kappa matrix (080), core limitations (085, from Appendix 1), PMM limitations (090, drafted), next steps (095, drafted), fin (105), back-up divider and 4 back-ups (110 to 130). Contents (005) updated.
+- Renamed existing slides to fit the new order, content unchanged: 020 to 025 (core algorithm), 022 to 040 (PMM structure), 030 to 045 (covariate adjustment), 040 to 060 (class probabilities), 045 to 075 (agreement), 050 to 100 (summary).
+- New `R/Analysis_2_2/A2_2_001_slide_objects.R`, sourced in the control setup after MS_010. It loads MS_020 (Appendix 1 objects) in a separate environment, because A7_060 redefines `weighted_kappa_from_tab()` and `binary_kappa_from_tab()`, then copies the a1_* objects. It reads PMM STDYX loadings and GCP means and variances from the cognition-model calibration H5 file, and stops with a message if the expected rows are missing.
+- Every number is computed at render time. Tables use the deck's gt style.
+- Checks: all R chunks and inline expressions parse; helper tested with stand-in mplush5 output and stub Appendix 1 objects (loadings by class, fixed Normal mean and variance, delta-method SE of SD, kappa functions not overwritten). gt is not installed in the cloud workspace, so table rendering and layout are unverified.
+- Open: Rich to run A3, then A9, then `Rscript Analysis2_2_Driver.R`, and check slide layout (tables 2 and 4 are wide). Review the drafted PMM limitations and next steps. If the H5 factor name or section labels differ from the A3 report's, the helper stops with a message naming the problem.
+
+## 2026-10-22 (evening, cont.): A3 reuses unchanged Mplus fits
+
+- Agent/model: Claude (configured as claude-opus-5-5).
+- Correction: run order for the histogram change is A3 (`Rscript Analysis3_Driver.R`), then A9 (`Rscript Slides2603_Driver.R`), then A2 (`Rscript Analysis2_Driver.R`) and A2_2. My earlier note listed A2 first.
+- Decisions (Rich): A3 should not refit Mplus on every render. Refit a model only when its syntax or data changed; `--refit` forces all five. The first run after this change refits once to record fingerprints.
+- Changes: new `R/PMM_091_mplus_run_cache.R` with `pmm_mplus_run()`. It writes the .inp and .dat (`mplusModeler(run = 0)`), compares MD5 hashes of the .inp and its DATA file with `<model>.fingerprint` from the last successful fit, checks that the .out, .h5, and saved-data files exist, and calls `runModels()` only when needed. A fingerprint is written only when the .out has no `*** ERROR` and every required output was rewritten. The five `mplusModeler(run = 1)` calls in PMM_100, PMM_102 (102, 102b), and PMM_103 (103_jorm, 103b_jorm) now use it. `Analysis3_Driver.R` reads `--refit` and passes it to the render through the environment variable `PMM_REFIT`. README and References/instructions.md updated.
+- Checks: 10 cases with a stand-in MplusAutomation package and synthetic data (first fit, reuse, data change, syntax change, missing output, --refit, Mplus error, recovery); all passed. Edited files parse. The real MplusAutomation and Mplus were not run here.
+- Open: Rich to run `Rscript Analysis3_Driver.R` (refits once, about the usual time), then run it again to confirm the messages say "reusing saved output". Decide whether to commit the `.fingerprint` files in mplus_output/ (small text files; committing lets a fresh clone with the same outputs skip refits). A3_2 still refits its scoring runs on every render; not changed.
+
+## 2026-10-22 (evening): PMM class-probability histogram weighted; binning bug fixed
+
+- Agent/model: Claude (configured as claude-opus-5-5).
+- Confirmed facts: A3 takes PMM parameters from H5RESULTS (`write_lca_model()`, `pmm_check_h5_parameter_transfer()`); `.out` files are read only for run summaries and to locate saved data. Posterior class probabilities are not in H5; they come from `SAVE = CPROBABILITIES` files (`cprob.dat`, `cprob_jorm.dat`) read through `readModels()[["savedata"]]`, joined by `idvariable` (`id` in A3, `sid` in A3_2). The histogram combines both models, one row per participant: informant model when an IQCODE is present, otherwise cognition model.
+- Problems found in `margin_plot` (R/PMM_112_Margins.R), shared by manuscript Figure 2 (A2), the A3 report, and the A9 margins slide: (1) unweighted counts; (2) y-axis capped at 750 with `coord_cartesian()`, cutting off the Dementia bar nearest 0; (3) `bins = 30` with x limits 0 to 1 centered the end bins on 0 and 1, so ggplot dropped them and probabilities below about 0.017 or above about 0.983 were not drawn. Found in a synthetic test.
+- Decisions (Rich): weight the histogram with normalized (sample-scaled) weights, HCAP16WGTR rescaled to sum to the sample size; no bar cut off; one y-axis range for all panels; apply to all three outputs.
+- Changes: `aes(weight = sample_weight)`; `binwidth = 1/30, boundary = 0, closed = "left"`; `facet_wrap(scales = "fixed")`; removed the 750 cap and fixed breaks; y label "Weighted count". Updated the Figure 2 caption (MS_Tab_Fig_Apndx-060-Figure-2.qmd) and the A2 figure-object caption (MS_010_results_objects.R) to state the weighting. The A9 per-participant stacked bar figure (Slides2603_040_Results.qmd) has no binning and is unchanged.
+- Checks: synthetic data only (cloud workspace, no project files): weights sum to N in each panel, the y-axis covers the tallest bar, no bins fall outside 0 to 1, and probabilities of exactly 0 and 1 are counted.
+- Open: Rich to rebuild A3 (`Rscript Analysis3_Driver.R`) or A2 (`Rscript Analysis2_Driver.R`, which re-sources PMM_112 and rewrites the PNG), then A9 (`Rscript Slides2603_Driver.R`), and check the figure. The Normal and Dementia panels may change shape because the end bins now appear.
+
+## 2026-10-22 (late afternoon): A2 table rounding fix and Table 3 PMM placement
+
+- Agent/model: Claude (configured as claude-opus-5-5). Read References/instructions.md, Mplus_Rules.md, and the two newest log entries from the linked folder (no CLAUDE.md or AGENTS.md at the top level).
+- Problem found: the 2026-10-22 16:12 render had the requested ordering but not the requested precision. `flextable::colformat_num(digits = ...)` ignores `digits`, so Table 2b, Table 4, and the Table 2 N columns printed unrounded values (for example 69.39191, 0.50136471, 2,313.00).
+- Fix in R/MS_MAIN/MS_010_results_objects.R: replaced every `colformat_num()` with `colformat_double()`. Table 2b rates show 1 decimal and Δ columns 2 decimals; Table 4 kappas 3 decimals; Table 2 unweighted N whole numbers and the PMM probability-allocation row 1 decimal.
+- Decisions (Rich): manuscript inline text for Table 2b matches the table (rates 1 decimal via `analysis2_matching_text()`; gaps already 2 decimals). Table 3 keeps the two PMM rows together after the core algorithm: Manly-Jones, Core, PMM (probability allocation), PMM (most likely class), Langa-Weir, Hudomiet, Consensus. Table 4 first column header is "Method". Table 4 order is unchanged.
+- Checks: formatting and order checked on made-up values only (flextable 0.9.4 in the cloud workspace). No participant files read, no project files copied, no analysis or render run.
+- Rich restated the data rule: never load DTA, RData, RDS, SAV, or SAS7BDAT files to Claude's servers; ask about each CSV individually.
+- Open: Rich to rebuild with `Rscript Analysis2_Driver.R` and confirm Tables 2, 2b, 3, and 4 in Reports/MS_Tab_Fig_Apndx_<date>.docx; then run `python3 tools/update_readme.py`.
+
+## 2026-10-22: A2 table precision and ordering clarification
+
+- Agent/model: Codex, based on GPT-6 (exact variant not exposed).
+- Rich clarified Table 2b precision: class rates to one decimal, delta columns to two decimals. Table 2 retains its existing one-decimal percentages. Table 4 kappas retain three decimals.
+- Shared primary order for Tables 3 and 4: Manly-Jones algorithm, Core algorithm, PMM (probability allocation), Langa-Weir, Hudomiet. Consensus is retained last in Table 4. Table 3 retains modal PMM comparisons after the five primary methods and before consensus.
+- Table 3 now places the earlier-listed method in Classification 1 and sorts Classification 1 groups and Classification 2 entries by the shared order. Kappa is symmetric, so reversing a pair changes its display orientation only. Added PMM-core comparisons (direct allocation and most likely class) so Table 3 includes the core-PMM comparison already shown in Table 4.
+- Synthetic-only checks passed for identical Table 4 row/column order and symmetry, Table 3 canonical pair ordering with unchanged kappa values, and existing probability/margin calculations. No participant files read; no analysis or report render executed.
+- Local rebuild: `Rscript Analysis2_Driver.R` only; refreshed reports under Reports/. Existing local outputs were left in place.
+
+## 2026-10-22: A2 table follow-up after local rebuild
+
+- Agent/model: Codex, based on GPT-6 (exact variant not exposed).
+- Rich requested PMM representation in Table 4 and a PMM probability-allocation line in Table 2. He clarified that the request for percentages to the nearest tenth applied to Table 2, not Table 3; kappa values retain their usual scale.
+- Table 2 now includes PMM most likely class and PMM probability allocation. Allocation uses direct sums of probabilities, the exact replacement for the former 100-record approximation; its N entries are expected participant counts, shown to one decimal, rather than counts of replicated records. All Table 2 percentages use one decimal. Secondary-comparator separator styling now follows its row label rather than a fixed index. Table 2b rates and percentage-point gaps also use one decimal.
+- Table 4 now includes a PMM probability-allocation row and column against consensus, Manly-Jones, Langa-Weir, the core algorithm, and Hudomiet. PMM-core kappa is computed directly from aligned local probabilities and core assignments; all other PMM cells use the same results as Table 3. Matrix entries are quadratic weighted kappas, symmetric, displayed to three decimals; table width is fixed for the document page. Table 3 is unchanged.
+- Checks: synthetic expected-count totals and weighted margins; one-decimal percentage strings; separator row placement; six-method symmetric matrix and correct PMM method mapping. No participant files opened or analysis/report rebuild executed. Existing local outputs preserved.
+- Rebuild only A2 for these table edits: `Rscript Analysis2_Driver.R`. Outputs are refreshed under Reports/, including MS_Tab_Fig_Apndx_<run-date>.docx and the combined PDF; A3, A3_2, and slide workflows do not need rerunning for this follow-up.
+
+## 2026-10-22: authorized PMM corrections; local-only participant analysis
+
+- Agent/model: Codex, based on GPT-6. The exact model variant identifier is not exposed in this session.
+- Pre-rebuild status: implementation complete; Rich has not yet rebuilt these changes. Existing rendered reports and numerical results still precede the corrections. Source parsing (147 files, chunks, and inline expressions), synthetic-only regression checks, documentation synchronization, and whitespace checks passed; model execution and rendered layout remain unverified until Rich's local run.
+- Rich specified that agents may inspect source, reports, DOCX/MD/HTML, Mplus .out files, and logs, but must not read participant data or run analyses on them. The restriction includes DTA, RData, RDS, SAV, SAS7BDAT, and participant CSV files; it also covers Mplus input/individual saved-data files. A CSV first row may be inspected only to establish its status, or ask. Persisted in instructions.md and README. Prior review scripts now require a --local-data flag and are marked user-run only.
+- Read References/Mplus_Rules.md. write_lca_model() now takes an H5RESULTS path, extracts with mplush5, validates all three class parameter sets, and writes fifteen significant digits. Normative coefficients also retain H5 precision. Existing project directories and variable names preserved. Registry now names calibration and scoring H5 files. Report parameter tables also read H5; scoring verifies H5-to-H5 parameter equality.
+- A3 and A3_2 posterior files request F20.12. Fixed scoring checks termination, expected N, and zero free parameters. Priors require class codes 1/2/3 and finite positive weights.
+- PMM_110 now uses direct probability-weighted tables and computes kappa before display rounding. No replicated records. A2 PMM-Hudomiet migrated to the same helper. Modal PMM agreement is reported separately in A3 and A2 Table 3. Population cross-table cells display thousands; consensus tables display weighted percentages.
+- PMM_112 now shows reference, averaged-probability, and modal rates together. A2 Table 2b compares the reference, core assignments, PMM probability averages, and PMM modal assignments using common participants and the same HCAP16WGTR denominator. Differences from the reference are reported in percentage points; manuscript outline additions use render-time values.
+- Retired PMM_114_mci_ceiling.R and its A3 explanation into Archive_PMM_2026-10-22; removed live A3, A2, A2_2, and A9 dependencies and ceiling claims. Change1 remains unadopted; wording notes the archived comparison's flagged fit. The archived CV now uses H5 transfer, precise saved probabilities, and all recorded calibration flags in its eligibility gate if revived.
+- Validation: tools/test_pmm_review_fixes.R uses synthetic fixtures only to check H5 precision, invalid schemas/priors, direct tables, probability conservation, binary collapse, modal agreement, and the A2 common-sample table. Source R/chunks/inline expressions parse. No participant files opened, no Mplus execution, no production report render during these edits. Rich will rebuild locally: A3 -> A3_2 -> A9 -> A2 -> A2_2; A7 need not be rerun for these changes.
+- Exact local rebuild commands, in order: `Rscript Analysis3_Driver.R`; `Rscript Analysis3_2_Driver.R`; `Rscript Slides2603_Driver.R`; `Rscript Analysis2_Driver.R`; `Rscript Analysis2_2_Driver.R`. Refreshed reports go to Reports/; A3_2 also refreshes its probability exports in R_objects/. Review the local outputs before relying on revised estimates or report layout.
+
+## 2026-10-22: independent A3 code review and marginal-rate audit
+
+- Request: thorough review of Analysis3_Driver.R and downstream PMM analyses, prompted by poor reproduction of marginal impairment rates. Review artifact: Reports/PMM_Code_Review_2026-10-22.md.
+- Current fixed logits are correct. Across all 3,496 HCAP participants, weighted reference Normal/MCI/Dementia rates are 69.392/21.393/9.215%; averaged saved probabilities are 69.651/21.221/9.130%; modal assignments are 85.535/8.627/5.839%. The large modal deficit is not a failure to reproduce posterior marginal rates.
+- Confirmed scoring defect: write_lca_model() reads three-decimal printed calibration estimates. Animal-naming residual variance is 0.004459282 in calibration H5 but fixed at 0.004 in scoring. Two isolated, zero-free-parameter cognition scoring runs (current versus H5 parameter precision, both with twelve-decimal posterior output) showed a maximum individual probability difference of 0.054396 and 15 changed modal assignments; marginal rates barely changed. Production fits and scoring output were not overwritten.
+- Confirmed allocation defect: the 100-record threshold allocation floors cumulative probabilities. In current full HCAP results it moves about 0.473 percentage points out of Normal and adds 0.456 points to Dementia. Direct normalized probability allocation changes Manly-Jones kappas from 0.36981/0.30239 to 0.37430/0.30899 (three-class/dementia).
+- PMM_114's omega/Gaussian-error calculation is an illustration, not a bound for the mixed-indicator scoring model; it also omits PD102's separate class likelihood. The supplied report itself has two cognition probabilities above 0.50 (maximum 0.506), despite its fixed heading saying none.
+- Descriptive cognition-model calibration concern: age 85+ reference dementia 19.385% versus predicted 14.317%; number-series-missing reference dementia 24.603% versus predicted 19.369%. No new uncertainty estimates or significance tests were performed. Overall marginal matching does not establish subgroup calibration.
+- Archived CV change1 fold_05 records untrustworthy-SE and non-replicated-solution flags, but its eligibility gate checks only termination. Norms coefficients were held fixed across folds. Higher-precision scoring and quality-gate enforcement are needed before treating that comparison as final; no model-selection decision was changed.
+- New reproducible audit scripts: tools/review_pmm_2026-10-22.R and tools/review_pmm_precision_2026-10-22.R. Aggregate outputs: Reports/PMM_Code_Review_diagnostics_2026-10-22.json and Reports/PMM_Code_Review_precision_2026-10-22.json. No participant records exported to the review artifacts.
+- A3/A3_2 production source and existing outputs unchanged. No production rerender, commit, or push. Recommendations and downstream rebuild order are in the review.
+
 ## 2026-10-22 (afternoon): general-factor PMM carried through A3, A3_2, A9, A2, A2_2; terminology
 
 Decisions are recorded in the new `References/decisions.md` (D-2026-10-22-1 to -9).

@@ -1,6 +1,6 @@
 Mplus VERSION 9 (Mac)
 MUTHEN & MUTHEN
-10/22/2026   1:10 PM
+10/22/2026   3:41 PM
 
 INPUT INSTRUCTIONS
 
@@ -20,27 +20,20 @@ INPUT INSTRUCTIONS
   processors = 4;
   MODEL:
   %OVERALL%
-   [ c#1 @ -0.14665973 c#2 @ -0.14869742 ];
+   [ c#1 @ -0.14665972547003 c#2 @ -0.148697417679029 ];
 
-
-
-   jorm @ 0.426 ;
-   %c#1%
-
-   [ jorm @ 3.074] ;
-
-   %c#2%
-
-   [ jorm @ 3.666] ;
-
-   %c#3%
-
-   [ jorm @ 4.186] ;
-
-
+  [ jorm @ 3.07371926307678 ];
+  jorm @ 0.426452159881592;
+  %c#1%
+  [ jorm @ 3.07371926307678 ];
+  %c#2%
+  [ jorm @ 3.66610360145569 ];
+  %c#3%
+  [ jorm @ 4.18556547164917 ];
   SAVEDATA:
   SAVE = CPROBABILITIES;
   FILE = cprob_A3_2_score_jorm.dat;
+  FORMAT = F20.12;
 
 
 
@@ -155,13 +148,13 @@ Number of Free Parameters                        0
 
 Loglikelihood
 
-          H0 Value                       -2720.905
+          H0 Value                       -2721.062
 
 Information Criteria
 
-          Akaike (AIC)                    5441.810
-          Bayesian (BIC)                  5441.810
-          Sample-Size Adjusted BIC        5441.810
+          Akaike (AIC)                    5442.124
+          Bayesian (BIC)                  5442.124
+          Sample-Size Adjusted BIC        5442.124
             (n* = (n + 2) / 24)
 
 
@@ -183,9 +176,9 @@ BASED ON ESTIMATED POSTERIOR PROBABILITIES
     Latent
    Classes
 
-       1        742.66744          0.32530
-       2        705.36429          0.30896
-       3        834.96827          0.36573
+       1        742.41827          0.32519
+       2        705.49199          0.30902
+       3        835.08974          0.36579
 
 
 FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
@@ -211,9 +204,9 @@ by Latent Class (Column)
 
            1        2        3
 
-    1   0.543    0.328    0.129
-    2   0.309    0.395    0.297
-    3   0.064    0.261    0.674
+    1   0.543    0.327    0.130
+    2   0.308    0.395    0.297
+    3   0.064    0.262    0.674
 
 
 Classification Probabilities for the Most Likely Latent Class Membership (Column)
@@ -231,9 +224,9 @@ by Latent Class (Row)
 
               1        2        3
 
-    1      2.333    0.332    0.000
-    2      0.425   -0.824    0.000
-    3     -1.451   -2.058    0.000
+    1      2.332    0.331    0.000
+    2      0.424   -0.825    0.000
+    3     -1.448   -2.057    0.000
 
 
 MODEL RESULTS
@@ -292,7 +285,7 @@ EQUALITY TESTS OF MEANS ACROSS THE LATENT CLASSES
 
 
 JORM
-  Overall test   62086398.920      0.000        2
+  Overall test   62075983.894      0.000        2
   Class 1 vs. 2  ************      0.000        1
   Class 1 vs. 3  ************      0.000        1
   Class 2 vs. 3  ************      0.000        1
@@ -306,23 +299,23 @@ SAVEDATA INFORMATION
 
   Order and format of variables
 
-    JORM           F10.3
-    CPROB1         F10.3
-    CPROB2         F10.3
-    CPROB3         F10.3
-    MLCC           F10.3
+    JORM           F20.12
+    CPROB1         F20.12
+    CPROB2         F20.12
+    CPROB3         F20.12
+    MLCC           F20.12
     SID            I6
 
   Save file format
-    5F10.3 I6
+    5F20.12 I6
 
   Save file record length    10000
 
   Save missing symbol        *
 
 
-     Beginning Time:  13:10:20
-        Ending Time:  13:10:20
+     Beginning Time:  15:41:21
+        Ending Time:  15:41:21
        Elapsed Time:  00:00:00
 
 

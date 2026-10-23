@@ -1,0 +1,17 @@
+## HRS core algorithm: factor model
+
+```{r}
+a1_table_items_data |>
+  dplyr::select(-Scoring, -`Loading (WLSMV)`) |>
+  gt::gt() |>
+  gt::cols_label(
+    `Loading (MLR, used for scoring)` = "Standardized Loading (MLR)"
+  ) |>
+  gt::cols_align("center", columns = -Item) |>
+  a2_2_gt_style(font = 22, width = 80)
+```
+
+<div style="font-size: 0.5em; line-height: 1.2;">
+Single-factor model of the 8 core cognitive tests, HRS 2016 respondents aged 65 or older (N = `r a1_n(a1_cfa$n_obs)`), HRS-HCAP weights. Loadings are standardized (STDYX). WLSMV fit: RMSEA = `r a1_dec(a1_fit$RMSEA_Estimate, 3)`, CFI = `r a1_dec(a1_fit$CFI, 3)`, TLI = `r a1_dec(a1_fit$TLI, 3)`, SRMR = `r a1_dec(a1_fit$SRMR, 3)`. Guides for good fit: RMSEA below 0.05, CFI and TLI 0.95 or above, SRMR 0.08 or below. MLR (maximum likelihood) uses every available item response and gives the parameters used for scoring. Immediate word recall is left out because it adds little beyond delayed recall.
+</div>
+

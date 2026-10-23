@@ -1,0 +1,23 @@
+## Core algorithm vs. Manly-Jones
+
+```{r}
+a1_crosstab_data(a1_tab_mj_core, "Core") |>
+  dplyr::rename_with(~ sub("^Comparator class: ", "Core: ", .x)) |>
+  gt::gt(rowname_col = "Manly-Jones class") |>
+  gt::tab_stubhead("Manly-Jones class") |>
+  gt::cols_align("center") |>
+  a2_2_gt_style(font = 22, width = 90)
+```
+
+<div style="font-size: 0.5em; line-height: 1.25;">
+
+- Of participants with dementia by the Manly-Jones algorithm, `r a1_pct(a1_agree$capture_core, 0)`% have dementia by the core algorithm.
+- Of participants with dementia by the core algorithm, `r a1_pct(a1_agree$ppv_core, 0)`% have dementia by the Manly-Jones algorithm.
+- Kappa: three-class `r a1_dec(a1_agree$kappa_core)`; dementia vs. not `r a1_dec(a1_agree$kappa_core_bin)`.
+
+</div>
+
+<div style="font-size: 0.4em; line-height: 1.2;">
+`r a2_2_weighted_thousands_note` Row percentages in parentheses. N = `r a1_n(a1_n_agree)` HRS-HCAP Wave 1 participants with both classifications (HCAP16WGTR). Appendix 1, Tables A4 and A5.
+</div>
+

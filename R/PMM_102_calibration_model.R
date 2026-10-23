@@ -89,7 +89,8 @@ mod1 <- MplusAutomation::mplusObject(
   rdata = inhcap
 
 )
-MplusAutomation::mplusModeler(mod1, modelout = "pmm_hcap_102.inp", run = 1, writeData = "always")
+source(here::here("R", "PMM_091_mplus_run_cache.R"))  # pmm_mplus_run(): reuse unchanged fits
+pmm_mplus_run(mod1, "pmm_hcap_102.inp", outputs = "model_102.h5")
 
 # mplush5::mplus.view.results(here::here("mplus_output", "pmm_102", "model1_wt.h5"))
 # mplush5::mplus.print.results.in.probability.scale(here::here("mplus_output", "pmm_102", "model1_wt.h5"))
@@ -98,7 +99,7 @@ pmm_102 <- MplusAutomation::readModels(here::here("mplus_output", "pmm_102", "pm
 check_prior_sample(inhcap_cog, pmm_102, "pmm_102")
 
 
-mplus_mod_fixed <- write_lca_model(pmm_102, mplus_mod_norms)
+mplus_mod_fixed <- write_lca_model(pmm_models$cognition$calibration_h5, mplus_mod_norms)
 # Fix class logits at the survey-weighted HCAP class proportions, as in PMM_103,
 # so that the posterior class probabilities use the weighted calibration priors.
 mplus_mod_fixed <- sub("%OVERALL%",
@@ -127,7 +128,7 @@ mod_fixed <- MplusAutomation::mplusObject(
   ANALYSIS = mplus_analysis_fixed,
   OUTPUT = mplus_output_102,
   SAVEDATA = "H5RESULTS = model_102b.h5;
-  SAVE = CPROBABILITIES; file = cprob.dat;",
+  SAVE = CPROBABILITIES; file = cprob.dat; FORMAT = F20.12;",
   usevariables = c("id", "HCAP16WGTR", "STRATUM", "SECU_mplus",
                    "vdori", "vdlfl1z", "vdlfl2", "vdlfl3",
                    "vdwddelz", "vdexf7z", "vdsevens", "vdcount",
@@ -142,5 +143,8 @@ mod_fixed <- MplusAutomation::mplusObject(
   rdata = inhcap
 
 )
-MplusAutomation::mplusModeler(mod_fixed, modelout = "pmm_hcap_102b.inp", run = 1, writeData = "always")
+pmm_mplus_run(mod_fixed, "pmm_hcap_102b.inp", outputs = c("model_102b.h5", "cprob.dat"))
 
+
+check_fixed_scoring_run(pmm_models$cognition$scoring_out, nrow(inhcap_cog),
+                        pmm_models$cognition$calibration_h5, pmm_models$cognition$scoring_h5)

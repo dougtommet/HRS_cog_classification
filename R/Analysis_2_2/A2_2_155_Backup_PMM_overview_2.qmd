@@ -1,0 +1,31 @@
+## Profile mixture modeling (2/2)
+
+<div style="font-size: 0.4em; line-height: 1.1;">
+
+**1. Class-specific likelihood (cognition model).** How well class $k$ accounts for person $i$'s responses:
+
+$$
+L_k(\mathbf{x}_i) = P(m_i \mid C = k) \int \prod_{j=1}^{8} f_j(x_{ij} \mid \eta, \mathbf{z}_i)\, \phi(\eta;\, \mu_k, \sigma^2_k)\, d\eta
+$$
+
+- $x_{ij}$: score on test $j$; $f_j$ uses the same loading, intercept or thresholds in every class, plus the fixed norms coefficients for the demographic terms $\mathbf{z}_i$.
+- $\eta$: the general cognitive factor, normal within class $k$ with mean $\mu_k$ and variance $\sigma^2_k$ (Normal: 0 and 1). Integrating over $\eta$ allows for the person's unknown factor level.
+- $m_i$: self-rated memory, with class-specific thresholds.
+- A missing test drops out of the product.
+
+**2. Prior.** $\pi_k = P(C = k)$, fixed at the weighted Manly-Jones class shares in the model's calibration sample.
+
+**3. Bayes' rule.** The posterior probability of class $k$:
+
+$$
+P(C = k \mid \mathbf{x}_i) = \frac{\pi_k \, L_k(\mathbf{x}_i)}{\sum_{l} \pi_l \, L_l(\mathbf{x}_i)}
+$$
+
+- Each class's likelihood is weighted by its prior, then divided by the total so the three probabilities sum to 1.
+- A pattern that is likely under Dementia and unlikely under Normal or MCI gives a high Dementia probability. A pattern that fits several classes about equally well gives spread-out probabilities.
+
+**Informant model:** the same steps, with $L_k$ the class-specific distribution of the IQCODE.
+
+Mplus evaluates the integral numerically and saves the posterior probabilities (CPROBABILITIES) for each person.
+
+</div>

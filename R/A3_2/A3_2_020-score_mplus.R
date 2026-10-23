@@ -97,7 +97,7 @@ run_scoring <- function(data, model, categorical, usevars, stem, integration = T
                               if (integration) "ALGORITHM = INTEGRATION;\n" else "",
                               "TYPE = mixture;\nstarts = 0;\nprocessors = 4;"),
     MODEL    = model,
-    SAVEDATA = stringr::str_c("SAVE = CPROBABILITIES;\nFILE = cprob_", stem, ".dat;"),
+    SAVEDATA = stringr::str_c("SAVE = CPROBABILITIES;\nFILE = cprob_", stem, ".dat;\nFORMAT = F20.12;"),
     usevariables = usevars,
     rdata    = as.data.frame(data[, usevars])
   )
@@ -113,6 +113,9 @@ run_scoring <- function(data, model, categorical, usevars, stem, integration = T
   output <- readLines(out_file, warn = FALSE)
   if (!any(grepl("THE MODEL ESTIMATION TERMINATED NORMALLY", output, fixed = TRUE))) {
     stop("A3_2_020: Mplus did not terminate normally in ", stem, ".out")
+  }
+  if (!identical(as.numeric(out$summaries$Parameters), 0)) {
+    stop("A3_2_020: scoring must have zero free parameters in ", stem)
   }
   errors <- as.character(out$errors)
   brant_error <- grepl(

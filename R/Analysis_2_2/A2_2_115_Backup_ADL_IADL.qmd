@@ -1,0 +1,28 @@
+## Why no ADL or IADL items?
+
+```{r}
+a1_fn$floor_by_mj |>
+  dplyr::transmute(
+    `Manly-Jones class` = as.character(group),
+    n = a1_n(n),
+    `None, %` = a1_pct(pct_none), `1, %` = a1_pct(pct_one),
+    `2 or more, %` = a1_pct(pct_twoplus), `Missing, %` = a1_pct(pct_missing)
+  ) |>
+  gt::gt() |>
+  gt::tab_spanner("Self-reported ADL or IADL limitations, 2016 core", columns = -c(`Manly-Jones class`, n)) |>
+  gt::cols_align("center", columns = -`Manly-Jones class`) |>
+  a2_2_gt_style(font = 22, width = 85)
+```
+
+<div style="font-size: 0.5em; line-height: 1.25;">
+
+- Every participant with dementia by the Manly-Jones algorithm has an informant report of functional impairment, yet `r a1_pct(a1_fn_none_mj("Dementia"))`% (weighted) reported no ADL or IADL limitation in the core interview. A rule of 1 or more limitations misses at least that share, and no threshold on the count can do better.
+- With the cut points fixed, the three-class kappa with the Manly-Jones algorithm was `r a1_dec(a1_fn_var("memory", "kappa_3class"))` using self-rated memory and `r a1_dec(a1_fn_var("function", "kappa_3class"))` using function.
+- The core items are self-reports. They do not ask why a limitation is present or whether it is new, whereas HRS-HCAP uses an informant's report of change.
+
+</div>
+
+<div style="font-size: 0.4em; line-height: 1.2;">
+HRS-HCAP Wave 1 participants with a core T score (n = `r a1_n(a1_fn$n_with_T)`). Limitations counted on the `r a1_fn$n_limit_items` ADL and IADL items asked in every core wave from 2016 to 2022. Percentages are weighted (HCAP16WGTR). Appendix 1, Endnote and Table A9.
+</div>
+

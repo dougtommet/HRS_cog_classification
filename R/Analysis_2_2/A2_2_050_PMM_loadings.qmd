@@ -1,0 +1,47 @@
+## PMM: standardized loadings by class
+
+```{r}
+a2_2_pmm_loadings |>
+  gt::gt() |>
+  gt::cols_label(item = "Test") |>
+  gt::fmt_number(columns = dplyr::all_of(a2_2_class_names), decimals = 2) |>
+  gt::tab_spanner("Loading on the general cognitive factor (STDYX)", columns = dplyr::all_of(a2_2_class_names)) |>
+  gt::cols_align("center", columns = dplyr::all_of(a2_2_class_names)) |>
+  a2_2_gt_style(font = 22, width = 80)
+```
+
+<div style="font-size: 0.45em; line-height: 1.2;">
+PMM cognition model, known-class calibration in HRS-HCAP (N = `r format(analysis2_pmm_n[["cognition"]], big.mark = ",")`). **_The unstandardized loadings are equal across classes._** The model includes fixed contributions from sociodemographic variables defined separately in the normative reference group (and held constant across classes). The standardized loadings differ by class because the variance of the general factor differs by class (next slide). A larger factor variance gives larger standardized loadings. 
+</div>
+
+<!--
+The informant model has no factor (the IQCODE is its only indicator). Source: calibration H5 file named in R/PMM_090_model_registry.R.`r a2_2_reflection_note`
+-->
+
+<!--
+It's interesting to contrast the single group factor loadings and the class-specific factor loadings (which are held constant in the unstandardized space). It shows that factor loadings have a between persons component. Maybe it's all between persons and there is no within-person variability at all that contributes to a factor loading? Paging Denny Borsboom?
+
+The contrast is real, but I think it shows a between-class component, not a between-person one. A cross-sectional design cannot tell us whether any within-person variability contributes to a loading.
+
+**Classes split the person-to-person variance.** In a single-group model, the factor variance pools two sources: how much people vary within a class, and how far apart the class means sit. With the unstandardized loading λ held fixed, the standardized loading is λσ / √(λ²σ² + θ), where σ² is the factor variance and θ is the test's residual variance. So any drop in σ² lowers the standardized loading. Take the PMM's own parameterization. The pooled factor variance is roughly the weighted average of the class variances plus the spread of the class means around their overall mean. Remove the class-mean spread and the standardized loadings shrink, which is the pattern you see. Every term in that sum is still variation between people: people in different classes, and people in the same class. The contrast splits variation between people into two parts. Variation within one person never enters.
+
+**Cross-sectional loadings say nothing about change within a person.** Each HCAP participant gives one occasion of data. Every covariance the model fits, and so every loading, is computed across people. "There is no within-person contribution" is therefore not a finding we could reach or reject. These data cannot carry that information. This is the point Borsboom, Mellenbergh, and van Heerden (2003) make: a factor model fit across people supports a between-person causal account, and it does not imply that the same structure operates within any one person. Molenaar (2004) sharpens it with ergodicity. Between-person and within-person structures match only when every person has the same structure and that structure does not change over time, which is unlikely in an aging sample with decline under way.
+
+**The PMM does answer a nearby question.** You could also read "all between" as "all between classes": the general factor would then exist only because class means differ, with no common variance among people in the same class. A latent profile model and a factor model can produce the same covariance matrix (Molenaar & von Eye, 1994), so the question is a fair one. In the calibration run, class membership is fixed to the Manly-Jones class, and the Normal-class factor variance is fixed at 1. The unstandardized loadings therefore come largely from how the tests covary within classes. If the tests shared no variance within a class, those loadings would be near zero. The class-specific STDYX loadings are well above zero (the slide shows them), so the tests share variance among people in the same class. In these data, the factor is not purely a by-product of class differences.
+
+**One caution on the comparison itself.** The core CFA and the PMM differ in more than class structure, so their loadings are not directly comparable. The core CFA is fit to all HRS 2016 respondents aged 65 or older, with no covariates and a probit link. The PMM is fit to the HCAP sample, with logit thresholds, and each test is first regressed on the sociodemographic terms. That last step matters most. The PMM's standardized loadings describe each test's variance left after removing demographic effects, which takes out more variation between people. Part of the drop you see comes from that step, not from the classes.
+
+**A cleaner test needs no new data.** We could compute pooled standardized loadings from the PMM's own H5 parameters. Combine the class proportions, class means, and class variances into one marginal factor variance, then standardize the shared loadings by it. Placed beside the class-specific loadings, that isolates the class-mean component with the sample, covariates, and link all held constant. I can add it as a back-up slide if you want it today.
+
+**To get at variation within a person.** The HRS core waves from 2016 to 2022 give up to four occasions per person. A two-level CFA, with occasions nested within persons, would estimate separate within-person and between-person loadings. There are confounds to settle first: two-year spacing, practice effects, and decline make it hard to separate short-term fluctuation from a person's trajectory. With four waves, you might want to model the trajectory and fit the factor to the residuals around it. That design question would be worth deciding before anyone fits the model.
+
+References
+
+Borsboom, D., Mellenbergh, G. J., & van Heerden, J. (2003). The theoretical status of latent variables. *Psychological Review, 110*(2), 203–219. https://doi.org/10.1037/0033-295X.110.2.203
+
+Molenaar, P. C. M. (2004). A manifesto on psychology as idiographic science: Bringing the person back into scientific psychology, this time forever. *Measurement: Interdisciplinary Research and Perspectives, 2*(4), 201–218. https://doi.org/10.1207/s15366359mea0204_1
+
+Molenaar, P. C. M., & von Eye, A. (1994). On the arbitrary nature of latent variables. In A. von Eye & C. C. Clogg (Eds.), *Latent variables analysis: Applications for developmental research* (pp. 226–242). Sage.
+
+I cited these from memory and did not look them up in this session, so please check the page numbers and DOIs before reusing them.
+-->
